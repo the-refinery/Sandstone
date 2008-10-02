@@ -1,0 +1,5 @@
+//Close the Detail DIV and show the list.
+{$ControlName}_CloseDetail_OnClick();
+
+//Fade out the Message Summary
+new Effect.Fade('{$ControlName}_MessagesSummary_Item_{$OldMessageID}', {queue:'end'});

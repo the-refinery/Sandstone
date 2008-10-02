@@ -1,0 +1,16 @@
+function {$ControlName}_AutoComplete_Callback(element, entry)
+{
+	var returnValue;
+
+	returnValue = entry + "&target={$ControlName}&method=autocomplete";
+
+	//Clear any existing selection
+	$('{$ControlName}').value = '';
+
+	return returnValue;
+}
+
+function {$ControlName}_AutoComplete_afterUpdateElement(text, li)
+{
+	$('{$ControlName}').value = li.id;
+}

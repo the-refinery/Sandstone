@@ -1,0 +1,19 @@
+<div id="{$ControlName}_MessagesList" class="messages_list" >
+	{$MessageList}
+</div>
+
+<div id="{$ControlName}_MessageDetail" class="messages_detail" style="display:none;" >
+    <h2>Loading...</h2>
+</div>
+
+<div id="{$ControlName}_AddMessage" class="messages_addmessage"  style="display:none;">
+	<form id="{$ControlName}_AddMessageForm">
+	<h2>Add a Message</h2>
+	{+NewMessageSubject}
+	{+NewMessageContent}
+	{+NewMessageSubmit}
+	<a href="javascript:void(0);" id="{$ControlName}_CancelAddMessage">Cancel</a>
+	</form>
+</div>
+
+{+ActiveCommentID}

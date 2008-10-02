@@ -1,0 +1,28 @@
+{+NewMessageSubject}
+{+NewMessageContent}
+{+NewMessageSubmit}
+
+function {$ControlName}_CancelAddMessage_OnClick()
+{
+	new Effect.BlindUp('{$ControlName}_AddMessage', {queue:'end'});
+	new Effect.BlindDown('{$ControlName}_MessagesList', {queue:'end', afterFinish: {$ControlName}_ClearNewMessageFields});
+}
+
+function {$ControlName}_NewMessageSubmit_OnClick()
+{
+	FullFormAJAX("{$ControlName}", "AddMessage", '{$ControlName}_AddMessageForm');
+}
+
+function {$ControlName}_ClearNewMessageFields()
+{
+	//Clear the subject, and reset the title text box
+	$('{$ControlName}_NewMessageSubject').value = '';
+	{$ControlName}_NewMessageSubject_OnBlur();
+
+	//Clear the content
+	$('{$ControlName}_NewMessageContent').value = '';
+
+	//Clear any messages
+	SetControlMessage('{$ControlName}_NewMessageSubject','');
+	SetControlMessage('{$ControlName}_NewMessageContent','');
+}

@@ -1,0 +1,42 @@
+<routing>
+
+	<default>
+		<url></url>
+		<page>home</page>
+	</default>
+
+	<application>
+		<url>application</url>
+		<page></page>
+	</application>
+
+	<directpagereference>
+		<url></url>
+		<page></page>
+	</directpagereference>
+
+	<javascript>
+		<url>javascript/{library}</url>
+		<page>javascript</page>
+	</javascript>
+
+	<scriptaculous>
+		<url>scriptaculous</url>
+		<page>scriptaculous</page>
+	</scriptaculous>
+
+	<KnowledgebaseArticle>
+		<url>knowledgebase/{seopagename}</url>
+		<page>knowledgebaseview</page>
+		<class>knowledgebasearticle</class>
+		<action>view</action>
+	</KnowledgebaseArticle>
+
+	<searchresults>
+		<url>searchresults</url>
+		<page>searchresults</page>
+		<class>search</class>
+		<action>view</action>
+	</searchresults>
+
+</routing>

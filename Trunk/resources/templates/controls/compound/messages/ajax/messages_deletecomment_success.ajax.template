@@ -1,0 +1,5 @@
+//Fade the DIV out
+new Effect.Fade('{$ControlName}_Comments_Item_{$OldCommentID}', {queue:'end'});
+
+//Clear the active comment id
+$('{$ControlName}_ActiveCommentID').value = '';

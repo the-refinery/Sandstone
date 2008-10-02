@@ -1,0 +1,12 @@
+{!tags_deletetag_success.ajax.template}
+
+if ($('{$ControlName}_NoData'))
+{
+	new Element.show('{$ControlName}_NoData', {queue:'end'});
+}
+else
+{
+	Insertion.Bottom('{$ControlName}', '{!taglist_nodata_item.htm.template}');
+}
+
+new Effect.Highlight('{$ControlName}_NoData', {queue:'end'});

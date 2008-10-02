@@ -1,0 +1,14 @@
+//Insert the new DIV
+new Insertion.After('{$ControlName}_TopAddMessage', '{$NewSummaryDIV}');
+
+//Turn off the disply of our new message summary
+new Element.hide('{$ControlName}_MessagesSummary_Item_{$NewMessageID}');
+
+//Register the Handlers
+Event.observe('{$ControlName}_MessagesSummary_Item_{$NewMessageID}_ViewDetail', 'click', {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick);
+
+//Close the Add Message DIV
+{$ControlName}_CancelAddMessage_OnClick();
+
+//Highlight the new message
+new Effect.Appear('{$ControlName}_MessagesSummary_Item_{$NewMessageID}', {queue:'end'});

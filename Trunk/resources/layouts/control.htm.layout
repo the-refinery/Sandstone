@@ -1,0 +1,7 @@
+<div id="{$MasterControlDOMid}" {$ControlStyle->Classes} {$ControlStyle->Style}>
+
+	<div id="{$ControlName}_Message" class="control_message" {$MessageDisplayStyle}>{$ValidationMessage}</div>
+
+	{Content}
+
+</div>

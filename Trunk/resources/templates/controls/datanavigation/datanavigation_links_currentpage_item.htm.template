@@ -1,0 +1,1 @@
+<li class="datanavigation_currentpage">{$Element->Text}</li>

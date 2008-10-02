@@ -1,0 +1,6 @@
+<fieldset {$BodyStyle->Classes} {$BodyStyle->Style}>
+    <legend>{$LabelText}</legend>
+    <ul>
+        {$Elements}
+    </ul>
+</fieldset>

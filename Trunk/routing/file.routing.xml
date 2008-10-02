@@ -1,0 +1,17 @@
+<routing>
+
+    <file>
+        <url>files/#fileid#/{filename}</url>
+        <page>file</page>
+        <class>file</class>
+        <action>download</action>
+    </file>
+
+    <fileversion>
+        <url>files/#fileid#/versions/#fileversion#/{filename}</url>
+        <page>file</page>
+        <class>fileversion</class>
+        <action>download</action>
+    </fileversion>
+
+</routing>

@@ -1,0 +1,109 @@
+<h1>D-I Barcode Generator</h1>
+
+<h2>Usage</h2>
+
+<h3>URL</h3>
+<p>/barcode/<em>[FormatCode]</em>/<em>[Value]</em>.<em>[ImageType]</em></p>
+
+<h3>Valid Formats</h3>
+<table>
+    <tr>
+        <th>Format Name</th>
+        <th>Format Code</th>
+        <th>Valid Characters in Value</th>
+        <th>Notes</th>
+    </tr>
+    <tr>
+        <td>Code 39</td>
+        <td>c39</td>
+        <td>0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%</td>
+        <td>Text will be converted to uppercase</td>
+    </tr>
+    <tr>
+        <td>Code 128-A</td>
+        <td>c128a</td>
+        <td>!\"#$%&amp; ()*+&acute;-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_</td>
+        <td>Text will be converted to uppercase</td>
+    </tr>
+    <tr>
+        <td>Code 128-B</td>
+        <td>c128b</td>
+        <td>!\"#$%&amp; '()*+&acute;-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{ }~</td>
+    </tr>
+    <tr>
+        <td>Code 128-C</td>
+        <td>c128c</td>
+        <td>0123456789</td>
+        <td>Odd length values will be left zero padded</td>
+    </tr>
+
+    <tr>
+        <td>Interleaved 2 of 5</td>
+        <td>i2of5</td>
+        <td>0123456789</td>
+        <td>Odd length values will be left zero padded</td>
+    </tr>
+
+</table>
+
+<h3>Valid Image Types</h3>
+<ul>
+    <li>png</li>
+    <li>jpeg</li>
+    <li>jpg</li>
+    <li>gif</li>
+</ul>
+
+<h3>Options</h3>
+<table>
+    <tr>
+        <th>Option</th>
+        <th>Valid Input</th>
+        <th>Default Value</th>
+        <th>Notes</th>
+    </tr>
+    <tr>
+        <td>Width</td>
+        <td>Integer</td>
+        <td>{$DefaultWidth}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Height</td>
+        <td>Integer</td>
+        <td>{$DefaultHeight}</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Resolution</td>
+        <td>1 - 5</td>
+        <td>{$DefaultResolution}</td>
+        <td>Controls width of the individual bars</td>
+    </tr>
+    <tr>
+        <td>IsTextDrawn</td>
+        <td>1 (True)</td>
+        <td>False</td>
+        <td>Indicates if value text is drawn below barcode.  Omit for False</td>
+    </tr>
+    <tr>
+        <td>TextSize</td>
+        <td>1 - 5</td>
+        <td>{$DefaultFontSize}</td>
+        <td>Controls size of value text font. Applicable only if IsTextDrawn = 1</td>
+    </tr>
+    <tr>
+        <td>IsBorderDrawn</td>
+        <td>1 (True)</td>
+        <td>False</td>
+        <td>Indicates if a 1px border is drawn around the entire image.  Omit for False</td>
+    </tr>
+    <tr>
+        <td>IsReverseColor</td>
+        <td>1 (True)</td>
+        <td>False</td>
+        <td>Indicates if the image should be drawn white on black.  Omit for False</td>
+    </tr>
+
+
+</table>

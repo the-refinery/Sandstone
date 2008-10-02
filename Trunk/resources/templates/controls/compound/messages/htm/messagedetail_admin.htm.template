@@ -1,0 +1,2 @@
+<img src="images/trash.gif" id="{$ControlName}_DeleteMessage" alt="Delete Message:{$MessageID}"/>
+{!messagedetail.htm.template}

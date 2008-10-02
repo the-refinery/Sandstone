@@ -1,0 +1,18 @@
+$('{$ControlName}_MessageDetail').innerHTML = '{$MessageDetail}';
+
+Event.observe('{$ControlName}_CloseDetail', 'click', {$ControlName}_CloseDetail_OnClick);
+
+if ($('{$ControlName}_DeleteMessage'))
+{
+	Event.observe('{$ControlName}_DeleteMessage', 'click', {$ControlName}_DeleteMessage_OnClick);
+}
+
+{$CommentDeleteObservers}
+
+if ($('{$ControlName}_NewCommentSubmit'))
+{
+	Event.observe('{$ControlName}_NewCommentSubmit', 'click', {$ControlName}_NewCommentSubmit_OnClick);
+}
+
+new Effect.BlindUp('{$ControlName}_MessagesList', {queue:'end'});
+new Effect.BlindDown('{$ControlName}_MessageDetail', {queue:'end'});

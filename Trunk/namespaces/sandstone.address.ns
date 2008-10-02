@@ -1,0 +1,6 @@
+codebase/entityclasses/address/address.class.php
+codebase/entityclasses/address/country.class.php
+codebase/entityclasses/address/province.class.php
+codebase/entityclasses/address/county.class.php
+codebase/entityclasses/address/city.class.php
+codebase/entityclasses/address/postalcode.class.php

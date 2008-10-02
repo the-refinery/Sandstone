@@ -1,0 +1,10 @@
+@media screen
+{
+	label
+	{
+		font-family:Arial, verdana, sans-serif;
+		font-size:0.8em;
+		font-weight:bold;
+		display:block;
+	}
+}

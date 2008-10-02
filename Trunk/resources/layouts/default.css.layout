@@ -1,0 +1,7 @@
+{!header.css.template}
+{!controls.css.template}
+{!application.css.template}
+
+{Content}
+
+{!footer.css.template}

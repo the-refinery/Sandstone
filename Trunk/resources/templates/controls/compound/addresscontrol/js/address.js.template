@@ -1,0 +1,12 @@
+{+Street}
+{+CityStateZip}
+{+PickList}
+
+function {$ControlName}_ClosePickList()
+{
+	if ($('{$ControlName}_PickList'))
+	{
+		$('{$ControlName}_PickList').remove();
+	}
+
+}

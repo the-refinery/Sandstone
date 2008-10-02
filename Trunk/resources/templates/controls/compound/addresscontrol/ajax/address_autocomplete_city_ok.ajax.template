@@ -1,0 +1,2 @@
+{$ControlName}_ClosePickList();
+SetControlMessage('{$ControlName}', "");

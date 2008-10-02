@@ -1,0 +1,1 @@
+SetControlMessage('{$ParentContainerName}_NewTagText','{$ValidationMessage}');

@@ -1,0 +1,3 @@
+<ul id="{$ControlName}" {$BodyStyle->Classes} {$BodyStyle->Style}>
+	<li>{$NoActionsText}</li>
+</ul>

@@ -1,0 +1,9 @@
+if (!$('AJAXerror'))
+{
+	Insertion.Top(document.body, '<div id="AJAXerror" style="border: 5px solid red; padding: 10px;"></div>');
+}
+
+$('AJAXerror').innerHTML ='<h1>AJAX Error</h1>{$ErrorMessage}';
+
+new Effect.Highlight('AJAXerror', {queue:'end', startcolor:'FF0000'});
+

@@ -1,0 +1,5 @@
+	if ($('{$ControlName}').value == '{$LabelText}')
+	{
+		$('{$ControlName}').removeClassName('titletextbox_blank');
+		$('{$ControlName}').value = '';
+	}

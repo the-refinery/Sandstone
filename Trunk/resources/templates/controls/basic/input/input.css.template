@@ -1,0 +1,16 @@
+@media screen
+{
+	input.textbox_body
+	{
+		padding:3px;
+		background:#fff;
+		border:1px solid;
+		border-color:#848484 #dbdbdb #dbdbdb #848484;
+		font-size:1em;
+	}
+
+	input.textbox_body:focus, input.textbox_body:hover
+	{
+		background-color:#ffc;
+	}
+}

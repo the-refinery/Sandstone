@@ -1,0 +1,2 @@
+{!label.htm.template}
+{+Month}{+Day}{+Year}

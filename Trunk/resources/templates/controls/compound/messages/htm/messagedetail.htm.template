@@ -1,0 +1,8 @@
+{!messagedetail_readonly.htm.template}
+
+<form id="{$ControlName}_NewCommentForm">
+	{+NewCommentContent}
+	{+NewCommentSubmit}
+	{+ActiveMessageID}
+	{+ActiveCommentID}
+</form>

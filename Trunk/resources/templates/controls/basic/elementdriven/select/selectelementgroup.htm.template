@@ -1,0 +1,3 @@
+<optgroup label="{$GroupName}">
+	{$Elements}
+</optgroup>

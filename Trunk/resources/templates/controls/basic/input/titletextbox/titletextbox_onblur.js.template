@@ -1,0 +1,5 @@
+	if ($('{$ControlName}').value == '')
+	{
+		$('{$ControlName}').addClassName('titletextbox_blank');
+		$('{$ControlName}').value = '{$LabelText}';
+	}
