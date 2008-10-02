@@ -183,7 +183,10 @@ class NameSpace extends Module
 
 				if (strlen($NameSpaceEnvironments[$tempNameSpace]) > 0)
 				{
-					$environmentBase .= $NameSpaceEnvironments[$tempNameSpace] . "/";
+					if (strtolower($NameSpaceEnvironments[$tempNameSpace]) != "trunk")
+					{
+						$environmentBase .= $NameSpaceEnvironments[$tempNameSpace] . "/";
+					}
 				}
 
 				//Set the namespace root
