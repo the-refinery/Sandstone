@@ -168,6 +168,21 @@ class BaseLicense extends EntityBase
 		return true;
 	}
 
+	static public function FormatValidAccountName($AccountName)
+	{
+
+		$returnValue = strtolower($AccountName);
+
+		$returnValue = StringFunc::RemovePunctuation($returnValue);
+
+		if (strlen($returnValue) > 75)
+		{
+			$returnValue = substr($returnValue, 0, 75);
+		}
+
+		return $returnValue;
+	}
+
 	static public function ValidateUniqueAccountName($NewAccountName)
 	{
 
