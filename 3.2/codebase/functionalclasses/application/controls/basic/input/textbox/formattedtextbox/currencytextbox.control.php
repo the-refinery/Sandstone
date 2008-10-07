@@ -16,7 +16,7 @@ class CurrencyTextBoxControl extends FormattedTextBoxControl
 
 	protected function FormatDisplayValue($Value)
 	{
-		if ($Value)
+		if (strlen($Value) > 0)
 		{
 			$returnValue = "\$" . number_format($Value, 2);
 		}

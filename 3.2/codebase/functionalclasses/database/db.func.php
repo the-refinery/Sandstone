@@ -13,7 +13,6 @@ Defaults to MySQL.
 */
 function GetConnection($ConfigArray = null)
 {
-
 	if (is_array($ConfigArray) || $ConfigArray instanceof DIarray)
 	{
 		//We were passed an array - use it.
