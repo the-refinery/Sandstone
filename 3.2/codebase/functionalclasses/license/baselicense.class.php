@@ -8,6 +8,7 @@ BaseLicense Class File
 
 NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Merchant");
+Namespace::Using("Sandstone.Utilities.String");
 
 class BaseLicense extends EntityBase
 {
