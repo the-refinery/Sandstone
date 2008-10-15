@@ -29,16 +29,18 @@ class CreditCard extends Module
 
 	protected $_acceptedCardTypes;
 
-	protected $_conn;
-
-	public function __construct($ID = null, $conn=null)
+	public function __construct($ID = null)
 	{
 		if (is_set($ID))
 		{
 			if (is_array($ID))
-				$this->Load($ID, $conn);
+			{
+				$this->Load($ID);
+			}
 			else
-				$this->LoadByID($ID, $conn);
+			{
+				$this->LoadByID($ID);
+			}
 		}
 	}
 
@@ -310,13 +312,10 @@ class CreditCard extends Module
 		return $returnValue;
 	}
 
-	public function Load($dr, $conn=null)
+	public function Load($dr)
 	{
 
-		if (is_set($conn) == false)
-		{
-			$conn = GetConnection();
-		}
+		$conn = GetConnection();
 
 		$this->_creditCardID = $dr['CreditCardID'];
 
@@ -337,20 +336,14 @@ class CreditCard extends Module
 
 		$this->_expirationDate = new date($dr['ExpirationDate']);
 
-		//Save this connection in case we need it to load part B
-		$this->_conn = $conn;
-
 		$this->_isLoaded = true;
 
 		return true;
 	}
 
-	public function LoadByID($ID, $conn=null)
+	public function LoadByID($ID)
 	{
-		if (is_set($conn) == false)
-		{
-			$conn = GetConnection();
-		}
+		$conn = GetConnection();
 
 		$query = "	SELECT 	CreditCardID,
 							PartA,
@@ -369,7 +362,7 @@ class CreditCard extends Module
 		if ($ds && $ds->RecordCount() > 0)
 		{
 			$dr = $ds->FetchRow();
-			$returnValue = $this->Load($dr, $conn);
+			$returnValue = $this->Load($dr);
 		}
 		else
 		{
@@ -461,12 +454,14 @@ class CreditCard extends Module
 		if (is_numeric($this->_partB) == false)
 		{
 
+			$conn = GetConnection();
+
 			$query = "	SELECT 	SecurityCode
 						FROM	core_TransactionCodeMaster
 						WHERE	TransactionID = {$this->_creditCardID}";
 
 
-			$ds = $this->_conn->Execute($query);
+			$ds = $conn->Execute($query);
 
 			if ($ds && $ds->RecordCount() > 0)
 			{
@@ -488,27 +483,23 @@ class CreditCard extends Module
 
 	}
 
-	public function Save($conn = null)
+	public function Save()
 	{
-
-		if (is_set($conn) == false)
-		{
-			$conn = GetConnection();
-		}
-
 		//Only save a new record if this is valid card info.
 		//We do not save any updates.
 		if ($this->getIsValid())
 		{
-			$this->SaveNewRecord($conn);
-			$this->SavePartB($conn);
+			$this->SaveNewRecord();
+			$this->SavePartB();
 			$this->_isLoaded = true;
 		}
 
 	}
 
-	protected function SaveNewRecord($conn)
+	protected function SaveNewRecord()
 	{
+
+		$conn = GetConnection();
 
 		$tempNumberLength = strlen($this->_partA . $this->_partB . $this->_partC);
 
@@ -550,10 +541,12 @@ class CreditCard extends Module
 
 	}
 
-	protected function SavePartB($conn)
+	protected function SavePartB()
 	{
 		if (is_numeric($this->_partB))
 		{
+			$conn = GetConnection();
+
 			//Clear any existing records
 			$query = "	DELETE
 						FROM	core_TransactionCodeMaster

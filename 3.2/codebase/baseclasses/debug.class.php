@@ -106,7 +106,14 @@ class Debug extends Component
             }
             elseif (is_object($value))
             {
-                $returnValue .= $value->__toString();
+            	if (method_exists($value, "__toString"))
+            	{
+            		$returnValue .= $value->__toString();
+            	}
+            	else
+            	{
+            		$returnValue .= get_class($value) . " object";
+            	}
             }
             else
             {
