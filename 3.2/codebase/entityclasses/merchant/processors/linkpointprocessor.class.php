@@ -13,22 +13,79 @@ NameSpace::Using("Sandstone.Utilities.XML");
 class LinkPointProcessor extends ProcessorBase
 {
 
-	public function ProcessCharge($Amount, $AuthTransaction = null)
-	{
+	protected $_apiURL;
+	protected $_pemFileSpec;
 
+    public function __construct($Parameters)
+    {
+        parent::__construct($Parameters);
+
+        //If the test mode flag exists (and is true), we'll use DI's test account
+        //against the test API URL
+        if ($this->_parameters["testmode"] == 1)
+        {
+            $this->_apiURL = "https://staging.linkpt.net:1129/LSGSXML";
+        }
+        else
+        {
+            $this->_apiURL = "https://secure.linkpt.net:1129/LSGSXML";
+        }
+
+        $this->_pemFileSpec = Application::Registry()->MerchantAssetsPath . $this->_parameters['StoreNumber'] . '.pem';
+
+    }
+
+    public function ProcessAuthorization($Amount)
+    {
 		$this->_amount = $Amount;
 
-		//Build our call parameters in XML
-		$xmlRequest = $this->BuildXMLrequest();
+		//Build our call parameters
+		$requestArray = $this->BuildRequestArray('PREAUTH');
 
 		//Send the process request
-		$xmlResult = $this->SendProcessRequest($xmlRequest);
+		$xmlResult = $this->SendRequest($requestArray);
 
 		//Did we get results back?
 		if (is_set($xmlResult))
 		{
 			//We did, process them into a transaction
-			$returnValue = $this->ProcessXMLresult($xmlResult);
+			$returnValue = $this->ProcessResult($xmlResult, CreditCardTransaction::AUTHORIZATION_TRANSACTION_TYPE, $AuthTransaction);
+		}
+		else
+		{
+			//Some system error, return null
+			$returnValue = null;
+		}
+
+		return $returnValue;
+
+    }
+
+	public function ProcessCharge($Amount, $AuthTransaction = null)
+	{
+
+		$this->_amount = $Amount;
+
+		//Build our call parameters
+		if ($AuthTransaction instanceof CreditCardTransaction && $AuthTransaction->IsLoaded)
+		{
+			$requestArray = $this->BuildRequestArray('POSTAUTH');
+
+			$requestArray = $this->AddOrderID($requestArray, $AuthTransaction);
+		}
+		else
+		{
+			$requestArray = $this->BuildRequestArray('SALE');
+		}
+
+		//Send the process request
+		$xmlResult = $this->SendRequest($requestArray);
+
+		//Did we get results back?
+		if (is_set($xmlResult))
+		{
+			//We did, process them into a transaction
+			$returnValue = $this->ProcessResult($xmlResult, CreditCardTransaction::CHARGE_TRANSACTION_TYPE, $AuthTransaction);
 		}
 		else
 		{
@@ -40,23 +97,48 @@ class LinkPointProcessor extends ProcessorBase
 
 	}
 
-	protected function BuildXMLrequest()
-	{
-		$order['orderoptions'] = $this->BuildOrderOptions();
-		$order['merchantinfo'] = $this->BuildMerchantInfo();
-		$order['creditcard'] = $this->BuildCreditCard();
-		$order['billing'] = $this->BuildBilling();
-		$order['payment'] = $this->BuildPayment();
+    public function ProcessCredit($Amount, $ChargeTransaction = null)
+    {
+		$this->_amount = $Amount;
 
-		$returnValue = DIxml::ArrayToXML($order, "order");
+		//Build our call parameters
+		$requestArray = $this->BuildRequestArray('CREDIT');
+		$requestArray = $this->AddOrderID($requestArray, $ChargeTransaction);
+
+		//Send the process request
+		$xmlResult = $this->SendRequest($requestArray);
+
+		//Did we get results back?
+		if (is_set($xmlResult))
+		{
+			//We did, process them into a transaction
+			$returnValue = $this->ProcessResult($xmlResult, CreditCardTransaction::CREDIT_TRANSACTION_TYPE, $AuthTransaction);
+		}
+		else
+		{
+			//Some system error, return null
+			$returnValue = null;
+		}
+
+		return $returnValue;
+
+    }
+
+	protected function BuildRequestArray($OrderType)
+	{
+		$returnValue['orderoptions'] = $this->BuildOrderOptions($OrderType);
+		$returnValue['merchantinfo'] = $this->BuildMerchantInfo();
+		$returnValue['creditcard'] = $this->BuildCreditCard();
+		$returnValue['billing'] = $this->BuildBilling();
+		$returnValue['payment'] = $this->BuildPayment();
 
 		return $returnValue;
 	}
 
-	protected function BuildOrderOptions()
+	protected function BuildOrderOptions($OrderType)
 	{
 		$returnValue['result'] = 'LIVE';
-		$returnValue['ordertype'] = 'SALE';
+		$returnValue['ordertype'] = strtoupper($OrderType);
 
 		return $returnValue;
 	}
@@ -99,36 +181,31 @@ class LinkPointProcessor extends ProcessorBase
 		return $returnValue;
 	}
 
-	protected function SendProcessRequest($XMLrequest)
+	protected function AddOrderID($RequestArray, $Transaction)
 	{
 
-		GLOBAL $IS_ADMIN_BILLING;
-
-		$LICENSE = Application::License();
-
-		if ($IS_ADMIN_BILLING)
+		if ($Transaction instanceof CreditCardTransaction && $Transaction->IsLoaded)
 		{
-			$pemFilespec = "/home/bacdata/accounts/0000/assets/" . $this->_parameters['StoreNumber'] . '.pem';
-		}
-		else
-		{
-			$pemFilespec = $LICENSE->AssetsPath . $this->_parameters['StoreNumber'] . '.pem';
+			$RequestArray['transactiondetails']['oid'] = $Transaction->MerchantTransactionID;
 		}
 
-		$hostString = "https://" . $this->_parameters['APIhost'] . ":" . $this->_parameters['APIport'] . "/LSGSXML";
+		return $RequestArray;
+	}
+
+	protected function SendRequest($RequestArray)
+	{
+
+		$requestXML = DIxml::ArrayToXML($RequestArray, "order");
 
 		# use PHP built-in curl functions
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$hostString);
+		curl_setopt($ch, CURLOPT_URL, $this->_apiURL);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $XMLrequest);
-		curl_setopt($ch, CURLOPT_SSLCERT, $pemFilespec);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $requestXML);
+		curl_setopt($ch, CURLOPT_SSLCERT, $this->_pemFileSpec);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-		//curl_setopt ($ch, CURLOPT_VERBOSE, 1);	// optional - verbose debug output
-													// not for production use
 
 		#send the string to LSGS
 		$returnValue = curl_exec($ch);
@@ -146,15 +223,19 @@ class LinkPointProcessor extends ProcessorBase
 
 	}
 
-	protected function ProcessXMLresult($XMLresult)
+	protected function ProcessResult($XMLresult, $TransactionTypeID, $RelatedTransaction = null)
 	{
 
 		$resultsArray = DIxml::XMLtoArray($XMLresult);
 
 		$returnValue = new CreditCardTransaction();
 
-		$returnValue->CreditCardID = $this->_creditCardID;
-		$returnValue->Timestamp = new Date($resultsArray['r_time']);
+		$returnValue->MerchantAccount = Application::License()->ActiveMerchantAccount;
+		$returnValue->CreditCardTransactionTypeID = $TransactionTypeID;
+		$returnValue->RelatedTransaction = $RelatedTransaction;
+
+        $returnValue->CreditCard = new CreditCard($this->_creditCardID);
+        $returnValue->Timestamp = new Date();
 		$returnValue->Amount = $this->_amount;
 		$returnValue->MerchantTransactionID = $resultsArray['r_ordernum'];
 
