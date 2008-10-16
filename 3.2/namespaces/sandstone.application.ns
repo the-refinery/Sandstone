@@ -6,3 +6,4 @@ codebase/functionalclasses/utilities/applicationgeneral.func.php
 codebase/functionalclasses/application/ajaxprocessor.class.php
 codebase/entityclasses/seo/seopage.class.php
 codebase/entityclasses/seo/seokeyword.class.php
+codebase/functionalclasses/systemmessage/systemmessage.class.php

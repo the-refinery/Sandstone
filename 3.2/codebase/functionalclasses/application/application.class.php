@@ -216,6 +216,19 @@ class Application extends Module
 		return $App->IsLicenseCheckComplete;
 	}
 
+	static public function CurrentSystemMessage()
+	{
+		$returnValue = new SystemMessage();
+		$returnValue->LoadCurrentMessage();
+
+		if ($returnValue->IsLoaded == false)
+		{
+			$returnValue = false;
+		}
+
+		return $returnValue;
+	}
+
 	/*
 	License property
 	*/
