@@ -376,19 +376,19 @@ class FileUploadControl extends BaseControl
 			$versionFileSpec = $this->GenerateVersionFileSpec($newFileName);
 
 			//Get the contents of the remote file
-//			$this->_fileContents = file_get_contents($this->FileURL->Value);
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_URL, $this->FileURL->Value);
+			$this->_fileContents = curl_exec($c);
+			curl_close($c);
 
-$c = curl_init();
-curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($c, CURLOPT_URL, $this->FileURL->Value);
-$this->_fileContents = curl_exec($c);
-curl_close($c);
-
-header("Content-type: image/jpeg;");
-di_echo($this->_fileContents);
+			//Build a local copy of the file
+			$fp = fopen($this->_localFileSpec, 'w');
+			fwrite($fp, $this->_fileContents);
+			fclose($fp);
 
 			//Save the file and version records
-			$returnValue = $this->SaveFileAndVersion($FileObject, $originalFileName, $newFileName, $newFileSpec, $newFileType, $newFileSize);
+			$returnValue = $this->SaveFileAndVersion($FileObject, $originalFileName, $newFileName, $versionFileSpec, $newFileType, $newFileSize);
 
 			// Create the new file and save the file contents, if this AWS isn't active
 			if (Application::Registry()->AWSisActive)

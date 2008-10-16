@@ -305,7 +305,6 @@ class Image extends EntityBase
 
 	protected function GenerateThumbnail($Height, $Width)
 	{
-
 		//First, if only one dimension is passed, calculate the other
 		if ($Height > 0 && (is_set($Width) == false || $Width == 0))
 		{
@@ -317,7 +316,6 @@ class Image extends EntityBase
 			// Only Width was specified, scale Height
 			$Height = round(($Width / $this->_width) * $this->_height);
 		}
-
 
 		//Create new Image (actual file data), and fill with white
 		$newThumbnailFileData = imagecreatetruecolor($Width, $Height);
@@ -341,6 +339,7 @@ class Image extends EntityBase
 
         if (Application::Registry()->AWSisActive)
 		{
+
 			//Get the file's contents from S3
 			$s3conn = new S3;
 			$bucket = Application::Registry()->AWSbucket;
