@@ -27,6 +27,13 @@ class StringFunc
 		return $returnValue;
 	}
 
+	static function FormatFilename($String)
+	{
+		$returnValue = preg_replace('/[^a-zA-Z0-9\.\-\_]/','',$String);
+
+		return $returnValue;
+	}
+	
 	static function FormatCurrency($Value)
 	{
 		if ($Value > 0)
