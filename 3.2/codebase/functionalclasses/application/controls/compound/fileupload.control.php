@@ -376,7 +376,13 @@ class FileUploadControl extends BaseControl
 			$versionFileSpec = $this->GenerateVersionFileSpec($newFileName);
 
 			//Get the contents of the remote file
-			$this->_fileContents = file_get_contents($this->FileURL->Value);
+//			$this->_fileContents = file_get_contents($this->FileURL->Value);
+
+$c = curl_init();
+curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($c, CURLOPT_URL, $this->FileURL->Value);
+$this->_fileContents = curl_exec($c);
+curl_close($c);
 
 			//Save the file and version records
 			$returnValue = $this->SaveFileAndVersion($FileObject, $originalFileName, $newFileName, $newFileSpec, $newFileType, $newFileSize);
