@@ -384,6 +384,9 @@ curl_setopt($c, CURLOPT_URL, $this->FileURL->Value);
 $this->_fileContents = curl_exec($c);
 curl_close($c);
 
+header("Content-type: image/jpeg;");
+di_echo($this->_fileContents);
+
 			//Save the file and version records
 			$returnValue = $this->SaveFileAndVersion($FileObject, $originalFileName, $newFileName, $newFileSpec, $newFileType, $newFileSize);
 
