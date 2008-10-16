@@ -556,6 +556,9 @@ class FileUploadControl extends BaseControl
 				$returnValue = "{$fileSpecDecode['FileName']}-{$fileCount}.{$fileSpecDecode['Extension']}";
 			}
 		}
+		
+		// Remove spaces from the filename
+		$returnValue = StringFunc::FormatFilename($returnValue);
 
 		return $returnValue;
 	}
