@@ -74,7 +74,7 @@ class CreditCardTransaction extends EntityBase
 
 	public function setMerchantAccount($Value)
 	{
-		if ($Value instanceof ActiveMerchantAccount && $Value->IsLoaded)
+		if ($Value instanceof MerchantAccount && $Value->IsLoaded)
 		{
 			$this->_merchantAccount = $Value;
 			$this->_transactionFee = $Value->TransactionFee;

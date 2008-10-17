@@ -38,7 +38,6 @@ class BaseLicense extends EntityBase
 
 		$this->AddProperty("AccountID","integer","AccountID",true,false,true,false,false,null);
 		$this->AddProperty("Name","string","Name",false,true,false,false,false,null);
-		$this->AddProperty("ActiveMerchantAccount","ActiveMerchantAccount",null,false,false,false,true,true,"LoadActiveMerchantAccount");
 
 		parent::SetupProperties();
 	}
@@ -54,53 +53,17 @@ class BaseLicense extends EntityBase
 		return $this->IsLoaded;
 	}
 
-	public function setActiveMerchantAccount($Value)
+	public function getActiveMerchantAccount()
 	{
-		if ($Value instanceof ActiveMerchantAccount && $Value->IsLoaded && $Value->IsAvailable)
+		$returnValue = new MerchantAccount();
+		$returnValue->LoadActive();
+
+		if ($returnValue->IsLoaded == false)
 		{
-			$this->_activeMerchantAccount = $Value;
-
-			$this->_activeMerchantAccount->Save();
-		}
-		else
-		{
-			$this->_activeMerchantAccount = null;
-
-			ActiveMerchantAccount::ClearActiveMerchantAccount();
-		}
-	}
-
-	public function LoadActiveMerchantAccount()
-	{
-		$returnValue = false;
-
-		$this->_activeMerchantAccount = null;
-
-		$conn = GetConnection();
-
-		$selectClause = ActiveMerchantAccount::GenerateBaseSelectClause();
-		$fromClause = ActiveMerchantAccount::GenerateBaseFromClause();
-
-		$whereClause = "WHERE	AccountID = {$this->_accountID} ";
-
-		$query = $selectClause . $fromClause . $whereClause;
-
-		$ds = $conn->Execute($query);
-
-		if ($ds)
-		{
-			if ($ds->RecordCount() > 0)
-			{
-				$dr = $ds->FetchRow();
-
-				$this->_activeMerchantAccount = new ActiveMerchantAccount($dr);
-			}
-
-			$returnValue = true;
+			$returnValue = false;
 		}
 
 		return $returnValue;
-
 	}
 
 	public function LookupByName($AccountName)
