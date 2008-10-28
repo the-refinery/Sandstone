@@ -340,6 +340,8 @@ class BasePage extends ControlContainer
 
 		$returnValue = new EventResults();
 
+		$session = Application::Session();
+
 		//Set the Header Content Type
 		switch ($EventParameters['filetype'])
 		{
@@ -375,12 +377,20 @@ class BasePage extends ControlContainer
 				header('HTTP/1.1 404 Not Found');
 				break;
 
+			case "cron":
+				//For cron processes - make sure they come in via the
+				//cron.php entry point.  Otherwise just die
+				if (array_key_exists("IsCronEntryPoint", $session) == false)
+				{
+					die();
+				}
+				break;
+
 			default:
 				break;
 		}
 
 		//Get any Notification Message that's been set, and push it into a template variable
-		$session = Application::Session();
 		$this->_template->NotificationMessage = $session['notificationmessage'];
 
 		//Do we have a specific file type processor?
@@ -460,7 +470,7 @@ class BasePage extends ControlContainer
 
 		//First thing we should do is validate the posted form
 		$isFormValid = $this->ValidatePostedForm();
-		
+
 		if ($isFormValid)
 		{
 			//By standard, we will set the form's redirect target

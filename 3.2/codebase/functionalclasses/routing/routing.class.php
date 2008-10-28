@@ -126,7 +126,6 @@ class Routing extends Module
 
 		//Start off pulling the parameters from the GET array
 		$returnValue = $this->ParseGETparameters();
-
 		//Do we have a routing element?
 		if (array_key_exists("routing", $returnValue) == false)
 		{
@@ -137,7 +136,6 @@ class Routing extends Module
 		$routingRules = $this->EvaluateRoutingRules($returnValue['routing']);
 
 		$returnValue = array_merge($returnValue, $routingRules);
-
 
 		//Now that we have routing complete, parse the FILE parameters
 		$file = $this->ParseFILESparameters();
@@ -255,6 +253,7 @@ class Routing extends Module
 				if (is_set($allowedRootSEOpageClasses) && count($allowedRootSEOpageClasses) > 0)
 				{
 					//Check for an SEO page
+
 					$seoPage = new SEOpage();
 					$isSEOpageFound = $seoPage->LoadByName($returnValue['routingstring']);
 

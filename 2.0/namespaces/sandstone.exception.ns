@@ -1,0 +1,5 @@
+codebase/functionalclasses/exception/invalidpropertyexception.class.php
+codebase/functionalclasses/exception/filenotfoundexception.class.php
+codebase/functionalclasses/exception/invaliduploadexception.class.php
+codebase/functionalclasses/exception/invalidsystemexception.class.php
+codebase/functionalclasses/exception/invalidactionexception.class.php

@@ -667,7 +667,15 @@ class EntityBase extends Module
 
 	public function getAccountID()
 	{
-		return Application::License()->AccountID;
+
+		$currentLicense = Application::License();
+
+		if (is_set($currentLicense))
+		{
+			$returnValue = Application::License()->AccountID;
+		}
+
+		return $returnValue;
 	}
 
 	/*
@@ -1100,7 +1108,16 @@ class EntityBase extends Module
 	static public function GenerateBaseWhereClause()
 	{
 
-		$returnValue = "	WHERE	a.AccountID = " . Application::License()->AccountID . " ";
+		$session = Application::Session();
+
+		if (array_key_exists("IsAccountLimitOverride", $session) && $session['IsAccountLimitOverride'] == true)
+		{
+			$returnValue = "	WHERE	a.AccountID = a.AccountID ";
+		}
+		else
+		{
+			$returnValue = "	WHERE	a.AccountID = " . Application::License()->AccountID . " ";
+		}
 
 		return $returnValue;
 	}

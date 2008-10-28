@@ -1,0 +1,5 @@
+codebase/3rdparty/adodb/adodb-exceptions.inc.php
+codebase/3rdparty/adodb/adodb.inc.php
+codebase/functionalclasses/database/db.func.php
+codebase/functionalclasses/database/db.const.php
+codebase/functionalclasses/database/connection.class.php

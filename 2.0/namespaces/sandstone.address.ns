@@ -1,0 +1,5 @@
+codebase/entityclasses/address/address.class.php
+codebase/entityclasses/address/addresses.class.php
+codebase/entityclasses/address/country.class.php
+codebase/entityclasses/address/state.class.php
+codebase/entityclasses/address/zipcode.class.php

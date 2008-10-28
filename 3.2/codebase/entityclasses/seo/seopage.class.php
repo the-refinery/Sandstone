@@ -94,9 +94,11 @@ class SEOpage extends EntityBase
 
 	public function LoadByName($Name)
 	{
+
 		$conn = GetConnection();
 
 		$Name = strtolower($Name);
+
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();

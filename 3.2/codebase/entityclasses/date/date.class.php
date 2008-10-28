@@ -259,7 +259,6 @@ class Date extends Module
 	/*
 	Test whether this date is in the past or future
 	*/
-
 	public function getIsInPast()
 	{
 		return $this->_dateStamp < time();
@@ -268,6 +267,21 @@ class Date extends Module
 	public function getIsInFuture()
 	{
 		return $this->_dateStamp > time();
+	}
+
+	public function getAge()
+	{
+		$ageInSeconds = time() - $this->_dateStamp;
+		$secondsInAYear = 31556926;
+
+		$age = floor($ageInSeconds / $secondsInAYear);
+
+		return $age;
+	}
+
+	public function getMonthName()
+	{
+		return $this->FormatDate('F');
 	}
 
 	public function FormatDate($dateFormat = null)
@@ -471,18 +485,9 @@ class Date extends Module
 	{
 		$tempDate = new Date("{$MonthNumber}/1/2007");
 
-		return $tempDate->Month;
+		return $tempDate->FormatDate('F');
 	}
 
-	public function getAge()
-	{
-		$ageInSeconds = time() - $this->_dateStamp;
-		$secondsInAYear = 31556926;
-
-		$age = floor($ageInSeconds / $secondsInAYear);
-
-		return $age;
-	}
 }
 
 ?>

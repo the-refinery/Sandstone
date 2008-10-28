@@ -1,0 +1,5 @@
+codebase/3rdparty/smarty/Smarty.class.php
+codebase/3rdpartyextensions/smarty/dismarty.class.php
+codebase/3rdpartyextensions/smarty/plugins/diescape.func.php
+codebase/3rdpartyextensions/smarty/plugins/smartyhelper.class.php
+codebase/3rdpartyextensions/smarty/plugins/smartyactionbase.class.php

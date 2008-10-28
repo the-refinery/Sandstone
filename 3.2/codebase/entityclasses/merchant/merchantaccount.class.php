@@ -6,6 +6,7 @@ MerchantAccount Class File
 @subpackage Merchant
  */
 
+NameSpace::Using("Sandstone.Action");
 NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.CreditCard");
 
