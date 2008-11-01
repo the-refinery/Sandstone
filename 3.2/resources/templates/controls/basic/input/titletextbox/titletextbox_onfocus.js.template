@@ -3,3 +3,8 @@
 		$('{$ControlName}').removeClassName('titletextbox_blank');
 		$('{$ControlName}').value = '';
 	}
+	
+	if (typeof {$ControlName}_OnFocusCallback=="function")
+	{
+		{$ControlName}_OnFocusCallback();
+	}
