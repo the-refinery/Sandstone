@@ -1,0 +1,21 @@
+@media screen
+{
+	div.datepicker_general
+	{
+		height:50px;
+		clear:both;
+	}
+
+	div.datepicker_monthitem, div.datepicker_dayitem, div.datepicker_yearitem
+	{
+		float:left;
+		padding-right:5px;
+	}
+
+	/* Hide labels except for main control label */
+
+	div.datepicker_general div label
+	{
+		display:none;
+	}
+}

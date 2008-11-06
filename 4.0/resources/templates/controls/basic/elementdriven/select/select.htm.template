@@ -1,0 +1,4 @@
+{!label.htm.template}
+<select id="{$ControlName}" name="{$Name}" {$Multiple} {$BodyStyle->Classes} {$BodyStyle->Style}>
+	{$Elements}
+</select>

@@ -1,0 +1,7 @@
+<h1>Search Results Page</h1>
+
+<p>You searched for "{$SearchTerm}"</p>
+
+{+Results}
+
+{+Search}

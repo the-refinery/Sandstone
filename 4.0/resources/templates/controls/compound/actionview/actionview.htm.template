@@ -1,0 +1,7 @@
+<div id="{$MasterControlDOMid}" {$ControlStyle->Classes} {$ControlStyle->Style}>
+
+	{!label.htm.template}
+	{+ActionList}
+
+</div>
+

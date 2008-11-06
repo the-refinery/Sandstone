@@ -1,0 +1,42 @@
+@media screen
+{
+	div.tags_general ul
+	{
+		display:inline;
+		line-height:30px;
+	}
+	
+	div.tags_general ul li
+	{
+		display:inline;
+		padding:5px;
+		background:#ddd;
+		border-right:1px solid #bbb;
+		border-bottom:1px solid #bbb;
+		margin-right:10px;
+	}
+	
+	div.tags_general ul li img
+	{
+		margin-left:3px;
+		cursor:pointer;
+	}
+	
+	div.tags_general p
+	{
+		display:inline;
+	}
+	
+	div.tags_general div.titletextbox_general
+	{
+		display:inline;
+	}
+	
+	div.tags_general input.titletextbox_body
+	{
+		font-size:14px;
+		display:inline;
+		width:80px;
+	}
+} 
+

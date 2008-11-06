@@ -1,0 +1,19 @@
+@media screen
+{
+	div.boolean_general
+	{
+		padding:5px;
+		margin-bottom:0;
+	}
+	
+	div.boolean_general input
+	{
+		margin-right:5px;
+	}
+	
+	div.boolean_general label
+	{
+		display:inline;
+		font-weight:normal;
+	}
+}

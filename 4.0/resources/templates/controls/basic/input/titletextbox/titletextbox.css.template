@@ -1,0 +1,13 @@
+@media screen
+{
+	input.titletextbox_body
+	{
+		color:#000;
+		font-size:1.8em;
+	}
+
+	input.titletextbox_blank
+	{
+		color:#aaa;
+	}
+}

@@ -1,0 +1,36 @@
+@media screen
+{
+	div.control_general
+	{
+		margin-bottom:10px;
+	}
+}
+
+{!label.css.template}
+
+{!group.css.template}
+
+{!input.css.template}
+{!inputandlabel.css.template}
+{!titletextbox.css.template}
+
+{!button.css.template}
+
+{!select.css.template}
+
+{!textarea.css.template}
+
+{!address.css.template}
+
+{!error.css.template}
+
+{!datepicker.css.template}
+{!boolean.css.template}
+
+{!messages.css.template}
+{!tags.css.template}
+{!actionlist.css.template}
+{!autocomplete.css.template}
+{!datanavigation.css.template}
+
+{!creditcard.css.template}

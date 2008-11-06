@@ -1,0 +1,10 @@
+	if ($('{$ControlName}').value == '')
+	{
+		$('{$ControlName}').addClassName('titletextbox_blank');
+		$('{$ControlName}').value = '{$LabelText}';
+	}
+	
+	if (typeof {$ControlName}_OnBlurCallback=="function")
+	{
+		{$ControlName}_OnBlurCallback();
+	}

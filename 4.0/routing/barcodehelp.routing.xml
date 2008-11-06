@@ -1,0 +1,48 @@
+<routing>
+
+    <code39help>
+        <url>barcode/c39</url>
+        <page>barcode</page>
+        <eventparameters>
+            <type>c39</type>
+            <help>1</help>
+        </eventparameters>
+    </code39help>
+
+    <code128ahelp>
+        <url>barcode/c128a</url>
+        <page>barcode</page>
+        <eventparameters>
+            <type>c128a</type>
+            <help>1</help>
+        </eventparameters>
+    </code128ahelp>
+
+    <code128bhelp>
+        <url>barcode/c128b</url>
+        <page>barcode</page>
+        <eventparameters>
+            <type>c128b</type>
+            <help>1</help>
+        </eventparameters>
+    </code128bhelp>
+
+    <code128chelp>
+        <url>barcode/c128c</url>
+        <page>barcode</page>
+        <eventparameters>
+            <type>c128c</type>
+            <help>1</help>
+        </eventparameters>
+    </code128chelp>
+
+    <interleaved2of5help>
+        <url>barcode/i2of5</url>
+        <page>barcode</page>
+        <eventparameters>
+            <type>i2of5</type>
+            <help>1</help>
+        </eventparameters>
+    </interleaved2of5help>
+
+</routing>

@@ -1,0 +1,4 @@
+$('{$ControlName}_CityStateZip').value = '{$CityStateZip}';
+$('{$ControlName}_CountryCode').value = '{$CountryCode}';
+{$ControlName}_ClosePickList();
+SetControlMessage('{$ControlName}', "");

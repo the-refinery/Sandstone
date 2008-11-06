@@ -1,0 +1,23 @@
+function {$ControlName}_Item_DeleteTag_OnClick(e)
+{
+	var clickedImage;
+	var altParts;
+	var tagID;
+	var parameters;
+
+	clickedImage = GetEventTarget(e);
+
+	altParts = clickedImage.alt.split(':');
+
+	tagID = altParts[1];
+
+	confirmation = confirm("Are you sure you want to delete this tag?");
+
+	if (confirmation)
+	{
+		parameters = "TargetTagID=" + tagID;
+
+		RaiseAJAXevent("{$ParentContainerName}", "DeleteTag", parameters);
+	}
+
+}

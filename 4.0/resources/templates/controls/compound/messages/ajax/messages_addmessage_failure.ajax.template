@@ -1,0 +1,2 @@
+SetControlMessage('{$ControlName}_NewMessageSubject','{$SubjectValidationMessage}');
+SetControlMessage('{$ControlName}_NewMessageContent','{$ContentValidationMessage}');

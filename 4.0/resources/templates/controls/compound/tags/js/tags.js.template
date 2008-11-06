@@ -1,0 +1,25 @@
+{+TagList}
+{+NewTagText}
+{+NewTagSubmit}
+
+
+function {$ControlName}_AddTag_OnClick()
+{
+	new Effect.BlindUp('{$ControlName}_AddTag_Paragraph', {queue:'end'});
+	new Effect.BlindDown('{$ControlName}_NewTag', {queue:'end'});
+}
+
+
+function {$ControlName}_NewTagSubmit_OnClick()
+{
+    FullFormAJAX("{$ControlName}", "AddTag", '{$ControlName}_AddTagForm');
+}
+
+function {$ControlName}_CancelAddTag_OnClick()
+{
+	$('{$ControlName}_NewTagText').value = '';
+	{$ControlName}_NewTagText_OnBlur();
+
+	new Effect.BlindUp('{$ControlName}_NewTag', {queue:'end'});
+	new Effect.BlindDown('{$ControlName}_AddTag_Paragraph', {queue:'end'});
+}

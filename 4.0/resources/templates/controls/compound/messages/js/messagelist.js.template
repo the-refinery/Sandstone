@@ -1,0 +1,28 @@
+function {$ControlName}_ShowAddMessage()
+{
+	new Effect.BlindUp('{$ControlName}_MessagesList', {queue:'end'});
+	new Effect.BlindDown('{$ControlName}_AddMessage', {queue:'end'});
+}
+
+function {$ControlName}_TopAddMessage_OnClick()
+{
+	{$ControlName}_ShowAddMessage();
+}
+
+function {$ControlName}_BottomAddMessage_OnClick()
+{
+	{$ControlName}_ShowAddMessage();
+}
+
+function {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick(e)
+{
+	var clickedLink;
+	var parameters;
+
+	clickedLink = GetEventTarget(e);
+
+	parameters = "&messageid=" + clickedLink.rel;
+
+	RaiseAJAXevent("{$ControlName}", "DisplayMessage", parameters);
+
+}

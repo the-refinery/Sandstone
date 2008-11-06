@@ -1,0 +1,24 @@
+if ($('{$ControlName}_NoData'))
+{
+	$('{$ControlName}_NoData').remove();
+}
+
+if ($('{$ControlName}_Item_{$NewTagID}'))
+{
+	new Element.show('{$ControlName}_Item_{$NewTagID}', {queue:'end'});
+}
+else
+{
+	Insertion.Bottom('{$ControlName}', '{$NewTagItem}');
+
+	//Render an observer for the delete image, if any
+	if ($('{$ControlName}_Item_{$NewTagID}_DeleteTag'))
+	{
+		Event.observe('{$ControlName}_Item_{$NewTagID}_DeleteTag', 'click', {$ControlName}_Item_DeleteTag_OnClick);
+	}
+}
+
+new Effect.Highlight('{$ControlName}_Item_{$NewTagID}', {queue:'end'});
+
+$('{$ParentContainerName}_NewTagText').value = '';
+$('{$ParentContainerName}_NewTagText').focus();

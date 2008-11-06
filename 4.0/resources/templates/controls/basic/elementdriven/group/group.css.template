@@ -1,0 +1,21 @@
+@media screen
+{
+	fieldset.group_body
+	{
+		border:1px solid #777;
+		padding:10px;
+	}
+
+	fieldset.group_body legend
+	{
+		font-weight:bold;
+		padding:0 5px;
+	}
+	
+	fieldset.group_body ul
+	{
+		list-style:none;
+	}
+}
+
+{!groupelement.css.template}

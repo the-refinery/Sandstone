@@ -1,0 +1,2 @@
+SetControlMessage('{$ControlName}',  "Please use either 'City, State Zip' format or just the Zip");
+{$ControlName}_ClosePickList();

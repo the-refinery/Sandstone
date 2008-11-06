@@ -1,0 +1,45 @@
+input.autocomplete_textbox
+{
+	padding:3px;
+	background:#fff;
+	border:1px solid;
+	border-color:#848484 #dbdbdb #dbdbdb #848484;
+	font-size:1em;
+}
+
+input.autocomplete_textbox:focus, input.autocomplete_textbox:hover
+{
+	background-color:#ffc;
+}
+
+div.autocomplete_matches
+{
+  position:absolute;
+  width:250px;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete_matches ul
+{
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete_matches ul li.selected
+{
+	background-color: #ffb;
+}
+
+div.autocomplete_matches ul li
+{
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  height:32px;
+  cursor:pointer;
+}

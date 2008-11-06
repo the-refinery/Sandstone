@@ -1,0 +1,39 @@
+function FullFormAJAX(Target, Method, FormID)
+{
+
+	var FormParameters = Form.serialize(FormID);
+
+	RaiseAJAXevent(Target, Method, FormParameters);
+
+}
+
+function SingleElementAJAX(Target, Method, ElementID)
+{
+	var ElementParameter = ElementID + "=" + $F(ElementID);
+
+	RaiseAJAXevent(Target, Method, ElementParameter);
+
+}
+
+function NoValueAJAX(Target, Method)
+{
+	RaiseAJAXevent(Target, Method, '');
+}
+
+function RaiseAJAXevent(Target, Method, PostParameters)
+{
+
+	PostParameters = PostParameters + "&target=" + Target + "&method=" + Method;
+
+	new Ajax.Request('{$PageAJAXurl}', {method:'post', asynchronous:true, postBody:PostParameters, onSuccess:AJAXsuccess, onFailure:AJAXfailure})
+}
+
+function AJAXsuccess(t)
+{
+	eval(t.responseText);
+}
+
+function AJAXfailure(t)
+{
+	alert('An AJAX error has happened!');
+}

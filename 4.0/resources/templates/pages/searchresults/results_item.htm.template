@@ -1,0 +1,1 @@
+<li><a href="{$Element->SearchResultsURL}">{$Element->SearchResultsText}</a> ({$Element->SearchResultsSignalStregnth})</li>

@@ -1,0 +1,4 @@
+<div id="{$ControlName}" class="messages_detailcomment" style="{$DIVstyle}">
+	<img src="images/trash.gif" id="{$ControlName}_DeleteComment" alt="Delete Comment:{$CommentID}" class="DeleteComment"/>
+	{!messagedetail_comment_base.htm.template}
+</div>

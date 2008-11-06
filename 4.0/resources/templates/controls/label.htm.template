@@ -1,0 +1,1 @@
+<label id="{$ControlName}_Label" for="{$MasterControlDOMid}">{$LabelText}</label>

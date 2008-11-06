@@ -1,0 +1,52 @@
+function SetControlMessage(ControlName, MessageText)
+{
+
+	var messageDOM = $(ControlName + '_Message');
+	var existingMessageLength = messageDOM.innerHTML.length;
+
+
+	if (MessageText.length == 0 && existingMessageLength > 0)
+	{
+		// We had a message, but not it has been cleared
+		new Effect.BlindUp(messageDOM,
+			{
+				afterFinish:function(){messageDOM.innerHTML = MessageText;}
+			});
+
+	}
+	else if (MessageText.length > 0)
+	{
+		messageDOM.innerHTML = MessageText;
+
+		if (existingMessageLength == 0)
+		{
+			// We did not have a message, but now we do
+			new Effect.BlindDown(messageDOM);
+		}
+		else
+		{
+			// We had a message, but it has changed
+			new Effect.Shake(messageDOM);
+		}
+	}
+}
+
+function SelectDropdownItem(DomID, Value)
+{
+    var i;
+
+    $(DomID)[0].selected = true;
+
+    for (i = 0; i < $(DomID).length; i++)
+    {
+        if ( $(DomID)[i].value == Value )
+        {
+            $(DomID)[i].selected = true;
+        }
+    }
+}
+
+function SetCheckboxChecked(DomID, IsChecked)
+{
+	$(DomID).checked = IsChecked;
+}

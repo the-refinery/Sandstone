@@ -1,0 +1,31 @@
+function {$ControlName}_OnFocus()
+{
+	{!titletextbox_onfocus.js.template}
+}
+
+function {$ControlName}_OnBlur()
+{
+
+	var isEntered;
+
+	if ($('{$ControlName}').value == '')
+	{
+		isEntered = false;
+	}
+	else
+	{
+		isEntered = true;
+	}
+
+	{!titletextbox_onblur.js.template}
+
+	if (isEntered)
+	{
+		SingleElementAJAX('{$ParentControlName}', 'autocomplete', '{$ControlName}');
+	}
+}
+
+function {$ControlName}_OnLoad()
+{
+	{!titletextbox_onload.js.template}
+}

@@ -1,0 +1,17 @@
+@media screen
+{
+	textarea.textarea_body
+	{
+		padding:3px;
+		background:#fff;
+		border:1px solid;
+		border-color:#848484 #dbdbdb #dbdbdb #848484;
+		font-size:1.2em;
+		line-height:1.5em;
+	}
+
+	textarea.textarea_body:focus, textarea.textarea_body:hover
+	{
+		background-color:#ffc;
+	}
+}

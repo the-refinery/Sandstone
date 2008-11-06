@@ -1,0 +1,7 @@
+<form id="{$FormName}" action="{$RequestedURL}" method="post" {$Target} {$EncType} >
+
+{Content}
+
+<input id="{$FormName}_FormName" type="hidden" name="FormName" value="{$FormName}" />
+
+</form>

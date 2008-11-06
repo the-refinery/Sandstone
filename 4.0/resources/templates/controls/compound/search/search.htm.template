@@ -1,0 +1,7 @@
+<form id="{$ControlName}_Form" action="[=>SearchResults]" method="post" >
+	{+SearchText}
+	{+Submit}
+	{+SearchTypes}
+	<input id="{$ControlName}_ControlName" type="hidden" name="ControlName" value="{$ControlName}" />
+	<input id="{$ControlName}_LabelText" type="hidden" name="LabelText" value="{$ControlLabelText}" />
+</form>

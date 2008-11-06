@@ -1,0 +1,1 @@
+<li id="{$ControlName}">{$Element->Text}<img src="images/trash.gif" id="{$ControlName}_DeleteTag" alt="Delete Tag:{$Element->TagID}" class="DeleteTag"/></li>
