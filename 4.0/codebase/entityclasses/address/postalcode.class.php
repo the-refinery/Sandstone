@@ -6,8 +6,6 @@ PostalCode Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class PostalCode extends CodeTableEntityBase
 {
     protected function SetupProperties()

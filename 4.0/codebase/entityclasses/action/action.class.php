@@ -5,7 +5,6 @@ Action Class File
 @subpackage Action
 */
 
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Email");
 NameSpace::Using("Sandstone.Email.Message");
 

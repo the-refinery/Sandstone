@@ -6,7 +6,7 @@ Email Class File
 @subpackage Email
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+NameSpace::Using("Sandstone.Database");
 
 class Email extends EntityBase
 {
@@ -36,8 +36,7 @@ class Email extends EntityBase
 	{
 		if ($this->CheckValidEmail($Email))
 		{
-
-			$conn = GetConnection();
+			$query = new Query();
 
 			$Email = strtolower($Email);
 

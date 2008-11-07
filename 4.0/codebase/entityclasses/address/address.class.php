@@ -6,8 +6,6 @@ Address Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Address extends EntityBase
 {
     protected function SetupProperties()

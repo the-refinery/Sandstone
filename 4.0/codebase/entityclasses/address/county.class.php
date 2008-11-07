@@ -6,8 +6,6 @@ County Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class County extends CodeTableEntityBase
 {
     protected function SetupProperties()

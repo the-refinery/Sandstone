@@ -6,8 +6,6 @@ City Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class City extends CodeTableEntityBase
 {
     protected function SetupProperties()

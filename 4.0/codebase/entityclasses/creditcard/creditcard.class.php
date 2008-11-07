@@ -6,7 +6,7 @@ Credit Card Class
 @subpackage CreditCard
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+NameSpace::Using("Sandstone.Database");
 NameSpace::Using("Sandstone.Address");
 NameSpace::Using("Sandstone.Date");
 NameSpace::Using("Sandstone.Merchant");

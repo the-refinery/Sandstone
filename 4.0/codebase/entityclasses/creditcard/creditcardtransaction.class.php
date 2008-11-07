@@ -6,7 +6,6 @@ CreditCardTransaction Class File
 @subpackage CreditCard
  */
 
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Date");
 
 class CreditCardTransaction extends EntityBase
