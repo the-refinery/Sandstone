@@ -6,8 +6,6 @@ FileVersion Class File
 @subpackage File
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class FileVersion extends EntityBase
 {
 	protected function SetupProperties()
@@ -37,35 +35,35 @@ class FileVersion extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		if (is_set($this->_uploadUser))
 		{
 			$userID = $this->_uploadUser->UserID;
 		}
 
-		$query = "	INSERT INTO core_FileVersions
-							(
-								FileID,
-								Version,
-								FileSpec,
-								FileSize,
-								UploadTimestamp,
-								UploadUserID,
-								DownloadCount
-							)
-							VALUES
-							(
-								{$this->_file->FileID},
-								{$this->_version},
-								{$conn->SetTextField($this->_fileSpec)},
-								{$this->_fileSize},
-								{$conn->SetNullDateField($this->_uploadTimestamp)},
-								{$conn->SetNullNumericField($userID)},
-								0
-							)";
+		$query->SQL = "	INSERT INTO core_FileVersions
+						(
+							FileID,
+							Version,
+							FileSpec,
+							FileSize,
+							UploadTimestamp,
+							UploadUserID,
+							DownloadCount
+						)
+						VALUES
+						(
+							{$this->_file->FileID},
+							{$this->_version},
+							{$query->SetTextField($this->_fileSpec)},
+							{$this->_fileSize},
+							{$query->SetNullDateField($this->_uploadTimestamp)},
+							{$query->SetNullNumericField($userID)},
+							0
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -98,15 +96,15 @@ class FileVersion extends EntityBase
 		}
 
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Now remove the file version record
-		$query = "	DELETE
-					FROM	core_FileVersions
-					WHERE 	FileID = {$this->_file->FileID}
-					AND		Version = {$this->Version} ";
+		$query->SQL = "	DELETE
+						FROM	core_FileVersions
+						WHERE 	FileID = {$this->_file->FileID}
+						AND		Version = {$this->Version} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 	}
 
@@ -120,48 +118,48 @@ class FileVersion extends EntityBase
 			$userID = Application::CurrentUser()->UserID;
 		}
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Create the download log record
-		$query = "	INSERT INTO core_FileDownloadLog
-					(
-						AccountID,
-						Timestamp,
-						FileID,
-						Version,
-						FileSpec,
-						FileSize,
-						UserID,
-						UserIPaddress
-					)
-					VALUES
-					(
-						{$this->AccountID},
-						NOW(),
-						{$this->_file->FileID},
-						{$this->_version},
-						{$conn->SetTextField($this->_fileSpec)},
-						{$conn->SetNullNumericField($this->_fileSize)},
-						{$conn->SetNullNumericField($userID)},
-						{$conn->SetNullTextField($remoteIP)}
-					)";
+		$query->SQL = "	INSERT INTO core_FileDownloadLog
+						(
+							AccountID,
+							Timestamp,
+							FileID,
+							Version,
+							FileSpec,
+							FileSize,
+							UserID,
+							UserIPaddress
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							NOW(),
+							{$this->_file->FileID},
+							{$this->_version},
+							{$query->SetTextField($this->_fileSpec)},
+							{$query->SetNullNumericField($this->_fileSize)},
+							{$query->SetNullNumericField($userID)},
+							{$query->SetNullTextField($remoteIP)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Update the download count for this version
-		$query = "	UPDATE core_FileVersions SET
-						DownloadCount = DownloadCount + 1
-					WHERE 	FileID = {$this->_file->FileID}
-					AND		Version = {$this->_version}";
+		$query->SQL = "	UPDATE core_FileVersions SET
+							DownloadCount = DownloadCount + 1
+						WHERE 	FileID = {$this->_file->FileID}
+						AND		Version = {$this->_version}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Update the download count for this file
-		$query = "	UPDATE core_FileMaster SET
-						DownloadCount = DownloadCount + 1
-					WHERE FileID = {$this->_file->FileID}";
+		$query->SQL = "	UPDATE core_FileMaster SET
+							DownloadCount = DownloadCount + 1
+						WHERE FileID = {$this->_file->FileID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return $returnValue;
 	}

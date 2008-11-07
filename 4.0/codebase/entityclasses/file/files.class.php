@@ -6,8 +6,6 @@ Files Collective Class
 @subpackage File
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Files extends CollectiveBase
 {
 
@@ -25,13 +23,12 @@ class Files extends CollectiveBase
 
 			$this->_elements->Clear();
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
 
 			$selectClause = File::GenerateBaseSelectClause();
-			$selectClause .= ",	b.PhoneTypeID ";
 
 			$fromClause = File::GenerateBaseFromClause();
 			$fromClause .= "	INNER JOIN core_EntityFile b ON b.FileID = a.FileID ";
@@ -39,27 +36,15 @@ class Files extends CollectiveBase
 			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$tempFile = new File($dr);
-					$this->_elements[$tempFile->FileID] = $tempFile;
-				}
+			$query->LoadEntityArray($this->_elements, "File", "FileID");
 
-				$returnValue = true;
+			$returnValue = true;
 
-				$this->_isLoaded = true;
-
-			}
-			else
-			{
-				$returnValue = false;
-			}
+			$this->_isLoaded = true;
 
 		}
 		else
@@ -74,46 +59,44 @@ class Files extends CollectiveBase
 	{
 
 		//Add the new File
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	INSERT INTO core_EntityFile
-					(
-						AssociatedEntityType,
-						AssociatedEntityID,
-						FileID
-					)
-					VALUES
-					(
-						{$conn->SetTextField($associatedEntityType)},
-						{$associatedEntityID},
-						{$NewElement->FileID}
-					)";
+		$query->SQL = "	INSERT INTO core_EntityFile
+						(
+							AssociatedEntityType,
+							AssociatedEntityID,
+							FileID
+						)
+						VALUES
+						(
+							{$query->SetTextField($associatedEntityType)},
+							{$associatedEntityID},
+							{$NewElement->FileID}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = true;
-
-		return $returnValue;
+		return true;
 	}
 
 	protected function ProcessOldElement($OldElement)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityFile
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		FileID = {$OldElement->FileID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityFile
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		FileID = {$OldElement->FileID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -121,17 +104,17 @@ class Files extends CollectiveBase
 
 	protected function ProcessClearElements()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityFile
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityFile
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}

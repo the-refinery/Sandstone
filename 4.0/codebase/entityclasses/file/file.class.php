@@ -6,8 +6,6 @@ File Class File
 @subpackage File
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class File extends EntityBase
 {
 
@@ -41,12 +39,14 @@ class File extends EntityBase
 	public function LoadVersions()
 	{
 
+		$returnValue = false;
+
 		$this->_versions->Clear();
 		$this->_currentVersion = null;
 
 		if ($this->IsLoaded)
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
 			$selectClause = FileVersion::GenerateBaseSelectClause();
 
@@ -54,94 +54,69 @@ class File extends EntityBase
 
 			$whereClause = "WHERE	a.FileID = {$this->_fileID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$orderByClause = "ORDER BY a.Version ";
 
-			$ds = $conn->Execute($query);
+			$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
 
-			if ($ds)
-			{
-				$maxVersionID = 0;
+			$query->Execute();
 
-				//Load the companies
-				while ($dr = $ds->FetchRow())
-				{
-					$tempVersion = new FileVersion($dr);
+			$query->LoadEntityArray($this->_versions, "FileVersion", "Version", $this, "LoadVersionsCallback");
 
-					$tempVersion->File = $this;
-
-					$this->_versions[$tempVersion->Version] = $tempVersion;
-
-					if ($tempVersion->Version > $maxVersionID)
-					{
-						$maxVersionID = $tempVersion->Version;
-					}
-				}
-
-				if (count($this->_versions) > 0)
-				{
-					$this->_currentVersion = $this->_versions[$maxVersionID];
-				}
-
-				$returnValue = true;
-			}
-			else
-			{
-				$returnValue = false;
-			}
+			$returnValue = true;
 		}
-		else
-		{
-			$returnValue = false;
-		}
+
 		return $returnValue;
 
+	}
 
+	public function LoadVersionsCallback($Version)
+	{
+		$Version->File = $this;
+
+		$this->_currentVersion = $Version;
+
+		return $Version;
 	}
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_FileMaster
-							(
-								AccountID,
-								FileName,
-								FileType,
-								Description,
-								DownloadCount,
-								PhysicalFileName
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$conn->SetTextField($this->_fileName)},
-								{$conn->SetTextField($this->_fileType)},
-								{$conn->SetNullTextField($this->_description)},
-								0,
-								{$conn->SetTextField($this->_physicalFileName)}
-							)";
+		$query->SQL = "	INSERT INTO core_FileMaster
+						(
+							AccountID,
+							FileName,
+							FileType,
+							Description,
+							DownloadCount,
+							PhysicalFileName
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$query->SetTextField($this->_fileName)},
+							{$query->SetTextField($this->_fileType)},
+							{$query->SetNullTextField($this->_description)},
+							0,
+							{$query->SetTextField($this->_physicalFileName)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_FileMaster SET
-								Description = {$conn->SetNullTextField($this->_description)}
+		$query->SQL = "	UPDATE core_FileMaster SET
+								Description = {$query->SetNullTextField($this->_description)}
 							WHERE FileID = {$this->_fileID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -203,14 +178,14 @@ class File extends EntityBase
 			$tempVersion->Delete();
 		}
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Now remove the file record
-		$query = "	DELETE
-					FROM	core_FileMaster
-					WHERE FileID = {$this->_fileID}";
+		$query->SQL = "	DELETE
+						FROM	core_FileMaster
+						WHERE FileID = {$this->_fileID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Clean up this object
 		$this->_fileID = null;
@@ -247,19 +222,17 @@ class File extends EntityBase
 	static public function LookupFilenameCount($FileName)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT	Count(*) FileCount
-					FROM	core_FileMaster
-					WHERE	FileName = '{$FileName}'";
+		$query->SQL = "	SELECT	Count(*) FileCount
+						FROM	core_FileMaster
+						WHERE	FileName = '{$query->SetTextField($FileName)}' ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds)
+		if ($query->SelectedRows > 0)
 		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $dr['FileCount'];
+			$returnValue = $query->SingleRowResult['FileCount'];
 		}
 		else
 		{
