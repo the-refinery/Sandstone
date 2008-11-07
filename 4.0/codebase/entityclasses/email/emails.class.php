@@ -6,8 +6,6 @@ Emails Collective Class
 @subpackage Email
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Emails extends CollectiveBase
 {
 
@@ -94,7 +92,7 @@ class Emails extends CollectiveBase
 			$this->_elements->Clear();
 			$this->_emailsByType->Clear();
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
@@ -109,35 +107,15 @@ class Emails extends CollectiveBase
 			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$tempEmail = new Email($dr);
-					$this->_elements[$tempEmail->EmailID] = $tempEmail;
+			$query->LoadEntityArray($this->_elements, "Email", "EmailID", $this, "LoadCallback");
 
-					$this->_emailsByType[$tempEmail->EmailType->EmailTypeID] = $tempEmail;
+			$returnValue = true;
 
-					if ($tempEmail->IsPrimary)
-					{
-						$this->_primaryEmail = $tempEmail;
-					}
-
-				}
-
-				$returnValue = true;
-
-				$this->_isLoaded = true;
-
-			}
-			else
-			{
-				$returnValue = false;
-			}
+			$this->_isLoaded = true;
 
 		}
 		else
@@ -146,6 +124,16 @@ class Emails extends CollectiveBase
 		}
 
 		return $returnValue;
+	}
+
+	public function LoadCallback($Email)
+	{
+		$this->_emailsByType[$Email->EmailType->EmailTypeID] = $Email;
+
+		if ($Email->IsPrimary)
+		{
+			$this->_primaryEmail = $Email;
+		}
 	}
 
 	protected function ProcessNewElement($NewElement)
@@ -171,29 +159,29 @@ class Emails extends CollectiveBase
 			}
 
 			//Now add the new email
-			$conn = GetConnection();
+			$query = new Query();
 
 			$associatedEntityType = get_class($this->_parentEntity);
 			$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-			$query = "	INSERT INTO core_EntityEmail
-						(
-							AssociatedEntityType,
-							AssociatedEntityID,
-							EmailID,
-							EmailTypeID,
-							IsPrimary
-						)
-						VALUES
-						(
-							{$conn->SetTextField($associatedEntityType)},
-							{$associatedEntityID},
-							{$NewElement->EmailID},
-							{$NewElement->EmailType->EmailTypeID},
-							{$conn->SetBooleanField($NewElement->IsPrimary)}
-						)";
+			$query->SQL = "	INSERT INTO core_EntityEmail
+							(
+								AssociatedEntityType,
+								AssociatedEntityID,
+								EmailID,
+								EmailTypeID,
+								IsPrimary
+							)
+							VALUES
+							(
+								{$query->SetTextField($associatedEntityType)},
+								{$associatedEntityID},
+								{$NewElement->EmailID},
+								{$NewElement->EmailType->EmailTypeID},
+								{$query->SetBooleanField($NewElement->IsPrimary)}
+							)";
 
-			$conn->Execute($query);
+			$query->Execute();
 
 			$returnValue = true;
 
@@ -209,18 +197,18 @@ class Emails extends CollectiveBase
 	protected function ProcessOldElement($OldElement)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityEmail
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		EmailID = {$OldElement->EmailID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityEmail
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		EmailID = {$OldElement->EmailID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -228,17 +216,17 @@ class Emails extends CollectiveBase
 
 	protected function ProcessClearElements()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityEmail
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityEmail
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$this->_primaryEmail = null;
 		$this->_emailsByType->Clear();
@@ -248,19 +236,19 @@ class Emails extends CollectiveBase
 
 	protected function ProcessSaveElement($CurrentElement)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	UPDATE core_EntityEmail SET
-						EmailTypeID = {$CurrentElement->EmailType->EmailTypeID},
-						IsPrimary = {$conn->SetBooleanField($CurrentElement->IsPrimary)}
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		EmailID = {$CurrentElement->EmailID} ";
+		$query->SQL = "	UPDATE core_EntityEmail SET
+							EmailTypeID = {$CurrentElement->EmailType->EmailTypeID},
+							IsPrimary = {$query->SetBooleanField($CurrentElement->IsPrimary)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		EmailID = {$CurrentElement->EmailID} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 

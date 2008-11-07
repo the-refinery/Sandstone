@@ -6,8 +6,6 @@ Email Class File
 @subpackage Email
  */
 
-NameSpace::Using("Sandstone.Database");
-
 class Email extends EntityBase
 {
 	protected function SetupProperties()
@@ -45,22 +43,13 @@ class Email extends EntityBase
 			$fromClause = Email::GenerateBaseFromClause();
 
 			$whereClause = Email::GenerateBaseWhereClause();
-			$whereClause .= "AND	LOWER(Address) = {$conn->SetTextField($Email)}";
+			$whereClause .= "AND	LOWER(Address) = {$query->SetTextField($Email)}";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds && $ds->RecordCount() > 0)
-			{
-				$dr = $ds->FetchRow();
-
-				$returnValue = $this->Load($dr);
-			}
-			else
-			{
-				$returnValue = false;
-			}
+			$returnValue = $query->LoadEntity($this);
 		}
 		else
 		{
@@ -73,40 +62,35 @@ class Email extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_EmailMaster
-							(
-								AccountID,
-								Address
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$conn->SetTextField($this->_address)}
-							)";
+		$query->SQL = "	INSERT INTO core_EmailMaster
+						(
+							AccountID,
+							Address
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$query->SetTextField($this->_address)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_EmailMaster SET
-								Address = {$conn->SetTextField($this->_address)}
-							WHERE EmailID = {$this->_emailID}";
+		$query->SQL = "	UPDATE core_EmailMaster SET
+							Address = {$conn->SetTextField($this->_address)}
+						WHERE EmailID = {$this->_emailID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -209,16 +193,16 @@ class Email extends EntityBase
 
 	static protected function PerformSearch($WhereClause)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "Email", "EmailID");
+		$returnValue = new ObjectSet($query, "Email", "EmailID");
 
 		return $returnValue;
 	}
