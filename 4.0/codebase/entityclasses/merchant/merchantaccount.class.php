@@ -67,23 +67,20 @@ class MerchantAccount extends EntityBase
 
 		$returnValue = false;
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = MerchantAccount::GenerateBaseSelectClause();
 
 		$fromClause = MerchantAccount::GenerateBaseFromClause();
 		$fromClause = str_replace("LEFT JOIN", "INNER JOIN", $fromClause);
 
-		$query = $selectClause . $fromClause;
+		$query->SQL = $selectClause . $fromClause;
+
+		$query->Execute();
 
 		$ds = $conn->Execute($query);
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 
@@ -106,19 +103,19 @@ class MerchantAccount extends EntityBase
 				break;
 		}
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT	ParameterName,
-							ParameterValue
-					FROM	core_MerchantAccountParameters
-					WHERE	AccountID = {$this->AccountID}
-					AND		MerchantAccountID = {$this->_merchantAccountID}";
+		$query->SQL = "	SELECT	ParameterName,
+								ParameterValue
+						FROM	core_MerchantAccountParameters
+						WHERE	AccountID = {$this->AccountID}
+						AND		MerchantAccountID = {$this->_merchantAccountID}";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			while ($dr = $ds->FetchRow())
+			foreach ($query->Results as $dr)
 			{
 				$tempKey = $dr['ParameterName'];
 				$tempValue = $dr['ParameterValue'];
@@ -165,16 +162,16 @@ class MerchantAccount extends EntityBase
 		if ($this->_isActive)
 		{
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			//Update the Transaction Fee & Discount Percent
-			$query = "	UPDATE 	core_ActiveMerchantAccount SET
-							TransactionFee = {$conn->SetNullNumericField($this->_transactionFee)},
-							DiscountPercent = {$conn->SetNullNumericField($this->_discountPercent)}
+			$query->SQL = "	UPDATE 	core_ActiveMerchantAccount SET
+							TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
+							DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)}
 						WHERE 	MerchantAccountID = {$this->_merchantAccountID}
 						AND		AccountID = {$this->AccountID}";
 
-			$conn->Execute($query);
+			$query->Execute();
 
 			//Make sure our parameters are Loaded
 			$this->LoadParameters();
@@ -187,22 +184,22 @@ class MerchantAccount extends EntityBase
 			{
 				if (is_set($value))
 				{
-					$query = "	INSERT INTO core_MerchantAccountParameters
-								(
-									AccountID,
-									MerchantAccountID,
-									ParameterName,
-									ParameterValue
-								)
-								VALUES
-								(
-									{$this->AccountID},
-									{$this->_merchantAccountID},
-									{$conn->SetTextField($key)},
-									{$conn->SetTextField($value)}
-								)";
+					$query->SQL = "	INSERT INTO core_MerchantAccountParameters
+									(
+										AccountID,
+										MerchantAccountID,
+										ParameterName,
+										ParameterValue
+									)
+									VALUES
+									(
+										{$this->AccountID},
+										{$this->_merchantAccountID},
+										{$query->SetTextField($key)},
+										{$query->SetTextField($value)}
+									)";
 
-					$conn->Execute($query);
+					$query->Execute();
 				}
 			}
 
@@ -214,14 +211,14 @@ class MerchantAccount extends EntityBase
 
 	protected function ClearParameters()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	DELETE
-                    FROM	core_MerchantAccountParameters
-					WHERE	AccountID = {$this->AccountID}
-					AND		MerchantAccountID = {$this->_merchantAccountID}";
+		$query->SQL = "	DELETE
+	                    FROM	core_MerchantAccountParameters
+						WHERE	AccountID = {$this->AccountID}
+						AND		MerchantAccountID = {$this->_merchantAccountID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 	}
 
@@ -232,24 +229,24 @@ class MerchantAccount extends EntityBase
 
 		if ($this->_isActive == false)
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
 			//Delete any existing active merchant account
 			$this->ClearActiveMerchantAccount();
 
 			//Insert a new record
-			$query = "	INSERT INTO core_ActiveMerchantAccount
-						(
-							AccountID,
-							MerchantAccountID
-						)
-						VALUES
-						(
-							{$this->AccountID},
-							{$this->_merchantAccountID}
-						)";
+			$query->SQL = "	INSERT INTO core_ActiveMerchantAccount
+							(
+								AccountID,
+								MerchantAccountID
+							)
+							VALUES
+							(
+								{$this->AccountID},
+								{$this->_merchantAccountID}
+							)";
 
-			$conn->Execute($query);
+			$query->Execute();
 
 			$this->_isActive = true;
 
@@ -262,14 +259,14 @@ class MerchantAccount extends EntityBase
 
 	protected function ClearActiveMerchantAccount()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Delete any existing active merchant account
-		$query = "	DELETE
-					FROM	core_ActiveMerchantAccount
-					WHERE	AccountID = {$this->AccountID}";
+		$query->SQL = "	DELETE
+						FROM	core_ActiveMerchantAccount
+						WHERE	AccountID = {$this->AccountID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 	}
 
 	public function Deactivate()
