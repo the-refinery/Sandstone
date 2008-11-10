@@ -53,22 +53,20 @@ class KnowledgebaseArticle extends EntityBase
 	{
 		if ($this->IsLoaded)
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
 			$selectClause = SEOpage::GenerateBaseSelectClause();
 			$fromClause = SEOpage::GenerateBaseFromClause();
 			$whereClause = "WHERE	AssociatedEntityType = 'KnowledgebaseArticle'
 							AND		AssociatedEntityID = {$this->_articleID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds && $ds->RecordCount() > 0)
+			if ($query->SelectedRows > 0)
 			{
-				$dr = $ds->FetchRow();
-
-				$this->_seoPage = new SEOpage($dr);
+				$this->_seoPage = new SEOpage($query->SingleRowResult);
 
 				$returnValue = true;
 			}
@@ -87,35 +85,30 @@ class KnowledgebaseArticle extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_KnowledgebaseArticleMaster
-							(
-								SectionID,
-								Title,
-								ShortDescription,
-								HTML,
-								SearchContent,
-								IsPublished
-							)
-							VALUES
-							(
-								{$this->_section->SectionID},
-								{$conn->SetTextField($this->_title)},
-								{$conn->SetNullTextField($this->_shortDescription)},
-								{$conn->SetTextField($this->_html)},
-								{$conn->SetNullTextField($this->_searchContent)},
-								{$conn->SetBooleanField($this->_isPublished)}
-							)";
+		$query->SQL = "	INSERT INTO core_KnowledgebaseArticleMaster
+						(
+							SectionID,
+							Title,
+							ShortDescription,
+							HTML,
+							SearchContent,
+							IsPublished
+						)
+						VALUES
+						(
+							{$this->_section->SectionID},
+							{$query->SetTextField($this->_title)},
+							{$query->SetNullTextField($this->_shortDescription)},
+							{$query->SetTextField($this->_html)},
+							{$query->SetNullTextField($this->_searchContent)},
+							{$query->SetBooleanField($this->_isPublished)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		//Now create an SEOpage for this article
 		$this->_seoPage = new SEOpage();
@@ -130,18 +123,18 @@ class KnowledgebaseArticle extends EntityBase
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_KnowledgebaseArticleMaster SET
+		$query->SQL = "	UPDATE core_KnowledgebaseArticleMaster SET
 								SectionID = {$this->_section->SectionID},
-								Title = {$conn->SetTextField($this->_title)},
-								ShortDescription = {$conn->SetNullTextField($this->_shortDescription)},
-								HTML = {$conn->SetTextField($this->_html)},
-								SearchContent = {$conn->SetNullTextField($this->_searchContent)},
-								IsPublished = {$conn->SetBooleanField($this->_isPublished)}
+								Title = {$query->SetTextField($this->_title)},
+								ShortDescription = {$query->SetNullTextField($this->_shortDescription)},
+								HTML = {$query->SetTextField($this->_html)},
+								SearchContent = {$query->SetNullTextField($this->_searchContent)},
+								IsPublished = {$query->SetBooleanField($this->_isPublished)}
 							WHERE ArticleID = {$this->_articleID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -200,16 +193,16 @@ class KnowledgebaseArticle extends EntityBase
 
 	static protected function PerformSearch($WhereClause)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "KnowledgebaseArticle", "ArticleID");
+		$returnValue = new ObjectSet($query, "KnowledgebaseArticle", "ArticleID");
 
 		return $returnValue;
 	}

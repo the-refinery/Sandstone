@@ -37,102 +37,81 @@ class KnowledgebaseSection extends EntityBase
 
 		$this->_articles->Clear();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = KnowledgebaseArticle::GenerateBaseSelectClause();
 		$fromClause = KnowledgebaseArticle::GenerateBaseFromClause();
 		$whereClause = "WHERE 	a.SectionID = {$this->_sectionID}
 						AND		a.IsPublished = 1 ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds)
-		{
-			while ($dr = $ds->FetchRow())
-			{
-				$tempArticle = new KnowledgebaseArticle($dr);
-				$tempArticle->Section = $this;
+		$query->LoadEntityArray($this->_articles, "KnowledgebaseArticle", "ArticleID", $this, "LoadArticlesCallback");
 
-				$this->_articles[$tempArticle->ArticleID] = $tempArticle;
-			}
+		return true;
+	}
 
-			$returnValue = true;
-		}
-		else
-		{
-			$returnValue = false;
-		}
+	public function LoadArticlesCallback($Article)
+	{
 
-		return $returnValue;
+		$Article->Section = $this;
+
+		return $Article;
 	}
 
 	public function LoadByName($Name)
 	{
 		$Name = strtolower($Name);
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
-		$whereClause = "WHERE LOWER(a.Name) = '{$Name}' ";
+		$whereClause = "WHERE LOWER(a.Name) = {$query->SetTextField($Name)}";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 	}
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_KnowledgebaseSectionMaster
-							(
-								Name,
-								Description
-							)
-							VALUES
-							(
-								{$conn->SetTextField($this->_name)},
-								{$conn->SetNullTextField($this->_description)}
-							)";
+		$query->SQL = "	INSERT INTO core_KnowledgebaseSectionMaster
+						(
+							Name,
+							Description
+						)
+						VALUES
+						(
+							{$query->SetTextField($this->_name)},
+							{$query->SetNullTextField($this->_description)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_KnowledgebaseSectionMaster SET
-								Name = {$conn->SetTextField($this->_name)},
-								Description = {$conn->SetNullTextField($this->_description)}
-							WHERE SectionID = {$this->_sectionID}";
+		$query->SQL = "	UPDATE core_KnowledgebaseSectionMaster SET
+							Name = {$query->SetTextField($this->_name)},
+							Description = {$query->SetNullTextField($this->_description)}
+						WHERE SectionID = {$this->_sectionID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -191,16 +170,16 @@ class KnowledgebaseSection extends EntityBase
 
 	static protected function PerformSearch($WhereClause)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "KnowledgebaseSection", "SectionID");
+		$returnValue = new ObjectSet($query, "KnowledgebaseSection", "SectionID");
 
 		return $returnValue;
 	}
