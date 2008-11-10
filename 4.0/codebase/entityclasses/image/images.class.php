@@ -79,7 +79,7 @@ class Images extends CollectiveBase
 
 			$this->_elements->Clear();
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
@@ -93,34 +93,13 @@ class Images extends CollectiveBase
 			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$tempImage = new Image($dr);
-					$this->_elements[$tempImage->ImageID] = $tempImage;
+			$query->LoadEntityArray($this->_elements, "Image", "ImageID", $this, "LoadCallback");
 
-					if ($tempImage->IsPrimary)
-					{
-						$this->_primaryImage = $tempImage;
-					}
-
-				}
-
-				$returnValue = true;
-
-				$this->_isLoaded = true;
-
-			}
-			else
-			{
-				$returnValue = false;
-			}
-
+			$returnValue = true;
 		}
 		else
 		{
@@ -128,6 +107,14 @@ class Images extends CollectiveBase
 		}
 
 		return $returnValue;
+	}
+
+	public function LoadCallback($Image)
+	{
+		if ($Image->IsPrimary)
+		{
+			$this->_primaryImage = $Image;
+		}
 	}
 
 	protected function ProcessNewElement($NewElement)
@@ -143,48 +130,46 @@ class Images extends CollectiveBase
 		}
 
 		//Now add the new image
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	INSERT INTO core_EntityImage
-					(
-						AssociatedEntityType,
-						AssociatedEntityID,
-						ImageID,
-						IsPrimary
-					)
-					VALUES
-					(
-						{$conn->SetTextField($associatedEntityType)},
-						{$associatedEntityID},
-						{$NewElement->ImageID},
-						{$conn->SetBooleanField($NewElement->IsPrimary)}
-					)";
+		$query->SQL = "	INSERT INTO core_EntityImage
+						(
+							AssociatedEntityType,
+							AssociatedEntityID,
+							ImageID,
+							IsPrimary
+						)
+						VALUES
+						(
+							{$query->SetTextField($associatedEntityType)},
+							{$associatedEntityID},
+							{$NewElement->ImageID},
+							{$query->SetBooleanField($NewElement->IsPrimary)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = true;
-
-		return $returnValue;
+		return true;
 	}
 
 	protected function ProcessOldElement($OldElement)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityImage
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		ImageID = {$OldElement->ImageID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityImage
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		ImageID = {$OldElement->ImageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -192,17 +177,17 @@ class Images extends CollectiveBase
 
 	protected function ProcessClearElements()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityImage
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityImage
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$this->_primaryEmail = null;
 		$this->_emailsByType->Clear();
@@ -212,18 +197,18 @@ class Images extends CollectiveBase
 
 	protected function ProcessSaveElement($CurrentElement)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	UPDATE core_EntityImage SET
-						IsPrimary = {$conn->SetBooleanField($CurrentElement->IsPrimary)}
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		ImageID = {$CurrentElement->ImageID} ";
+		$query->SQL = "	UPDATE core_EntityImage SET
+							IsPrimary = {$query->SetBooleanField($CurrentElement->IsPrimary)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		ImageID = {$CurrentElement->ImageID} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 

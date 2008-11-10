@@ -35,48 +35,43 @@ class ImageThumbnail extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_ThumbnailMaster
-							(
-								AccountID,
-								ImageID,
-								Height,
-								Width,
-								FileID
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$this->_image->ImageID},
-								{$this->_height},
-								{$this->_width},
-								{$this->_file->FileID}
-							)";
+		$query->SQL = "	INSERT INTO core_ThumbnailMaster
+						(
+							AccountID,
+							ImageID,
+							Height,
+							Width,
+							FileID
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$this->_image->ImageID},
+							{$this->_height},
+							{$this->_width},
+							{$this->_file->FileID}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_ThumbnailMaster SET
+		$query->SQL = "	UPDATE core_ThumbnailMaster SET
 								Height = {$this->_height},
 								Width = {$this->_width},
 								FileID = {$this->_file->FileID}
-							WHERE ThumbnailID = {$this->_thumbnailID}";
+						WHERE ThumbnailID = {$this->_thumbnailID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -84,14 +79,14 @@ class ImageThumbnail extends EntityBase
 	public function Delete()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Delete the database record
-		$query = "	DELETE
-					FROM	core_ThumbnailMaster
-					WHERE 	ThumbnailID = {$this->_thumbnailID}";
+		$query->SQL = "	DELETE
+						FROM	core_ThumbnailMaster
+						WHERE 	ThumbnailID = {$this->_thumbnailID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Delete my file
 		if (is_set($this->_file))

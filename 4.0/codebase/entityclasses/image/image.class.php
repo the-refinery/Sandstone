@@ -5,7 +5,6 @@ Image Class File
 @subpackage Image
 */
 
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.File");
 NameSpace::Using("Sandstone.AWS");
 
@@ -28,7 +27,7 @@ class Image extends EntityBase
 	public function LoadByFileID($FileID)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 
@@ -36,20 +35,11 @@ class Image extends EntityBase
 
 		$whereClause = "WHERE a.FileID = {$FileID} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 	}
@@ -57,57 +47,37 @@ class Image extends EntityBase
 	public function LoadThumbnails()
 	{
 
+		$returnValue = false;
+
 		if ($this->IsLoaded)
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
 			$this->_thumbnails->Clear();
 
-			$query = "	SELECT	ThumbnailID,
-								ImageID,
-								Height,
-								Width,
-								FileID
-						FROM	core_ThumbnailMaster
-						WHERE	ImageID = {$this->_imageID}";
+			$query->SQL = "	SELECT	ThumbnailID,
+									ImageID,
+									Height,
+									Width,
+									FileID
+							FROM	core_ThumbnailMaster
+							WHERE	ImageID = {$this->_imageID}";
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds && $ds->RecordCount() > 0)
-			{
-				//Set the return value to failure, then set it to true as soon as we are able to
-				//successfully load one.
-				$returnValue = false;
+			$query->LoadEntityArray($this->_thumbnails, "ImageThumbnail", "ThumbnailID", $this, "LoadThumbnailsCallback");
 
-				while ($dr = $ds->FetchRow())
-				{
-
-					$tempThumbnail = new ImageThumbnail($dr);
-
-					if ($tempThumbnail->IsLoaded)
-					{
-						$tempThumbnail->Image = $this;
-						$this->_thumbnails[$tempThumbnail->ThumbnailID] = $tempThumbnail;
-
-						$returnValue = true;
-					}
-
-				}
-
-			}
-			else
-			{
-				//No thumbnails isn't an issue.
-				$returnValue = true;
-			}
+			$returnValue = true;
 		}
-		else
-		{
-			$returnValue = false;
-		}
-
 
 		return $returnValue;
+	}
+
+	public function LoadThumbnailsCallback($Thumbnail)
+	{
+		$Thumbnail->Image = $this;
+
+		return $Thumbnail;
 	}
 
 	public function Save()
@@ -125,52 +95,47 @@ class Image extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_ImageMaster
-							(
-								AccountID,
-								FileID,
-								AlternateText,
-								Width,
-								Height,
-								Description
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$this->_file->FileID},
-								{$conn->SetNullTextField($this->_alternateText)},
-								{$conn->SetNullNumericField($this->_width)},
-								{$conn->SetNullNumericField($this->_height)},
-								{$conn->SetNullTextField($this->_description)}
-							)";
+		$query->SQL = "	INSERT INTO core_ImageMaster
+						(
+							AccountID,
+							FileID,
+							AlternateText,
+							Width,
+							Height,
+							Description
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$this->_file->FileID},
+							{$query->SetNullTextField($this->_alternateText)},
+							{$query->SetNullNumericField($this->_width)},
+							{$query->SetNullNumericField($this->_height)},
+							{$query->SetNullTextField($this->_description)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_ImageMaster SET
+		$query->SQL = "	UPDATE core_ImageMaster SET
 								FileID = {$this->_file->FileID},
-								AlternateText = {$conn->SetNullTextField($this->_alternateText)},
-								Width = {$conn->SetNullNumericField($this->_width)},
-								Height = {$conn->SetNullNumericField($this->_height)},
-								Description = {$conn->SetNullTextField($this->_description)}
+								AlternateText = {$query->SetNullTextField($this->_alternateText)},
+								Width = {$query->SetNullNumericField($this->_width)},
+								Height = {$query->SetNullNumericField($this->_height)},
+								Description = {$query->SetNullTextField($this->_description)}
 							WHERE ImageID = {$this->_imageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -190,14 +155,14 @@ class Image extends EntityBase
 
 	public function Delete()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		//Delete the image record
-		$query = "	DELETE
-					FROM	core_ImageMaster
-					WHERE 	ImageID = {$this->_imageID}";
+		$query->SQL = "	DELETE
+						FROM	core_ImageMaster
+						WHERE 	ImageID = {$this->_imageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Delete my file
 		if (is_set($this->_file))
