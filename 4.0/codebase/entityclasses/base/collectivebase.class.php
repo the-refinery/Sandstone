@@ -6,6 +6,8 @@ Collective Base Class File
 @subpackage EntityBase
 */
 
+NameSpace::Using("Sandstone.Database");
+
 class CollectiveBase extends Module
 {
 

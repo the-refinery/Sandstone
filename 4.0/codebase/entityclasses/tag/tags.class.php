@@ -6,8 +6,6 @@ Tags Class File
 @subpackage Tag
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Tags extends CollectiveBase
 {
 	public function __construct($Name = null, $ParentEntity = null)
@@ -24,7 +22,7 @@ class Tags extends CollectiveBase
 
 			$this->_elements->Clear();
 
-			$conn = GetConnection();
+			$query - new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
@@ -39,28 +37,15 @@ class Tags extends CollectiveBase
 			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$tempTag = new Tag($dr);
-					$this->_elements[$tempTag->TagID] = $tempTag;
-				}
+			$query->LoadEntityArray($this->_elements, "Tag", "TagID");
 
-				$returnValue = true;
+			$this->_isLoaded = true;
 
-				$this->_isLoaded = true;
-
-			}
-			else
-			{
-				$returnValue = false;
-			}
-
+			$returnValue = true;
 		}
 		else
 		{
@@ -69,12 +54,12 @@ class Tags extends CollectiveBase
 
 		return $returnValue;
 	}
-	
+
 	protected function ProcessNewElement($NewElement)
 	{
 
 		//Now add the new Tag
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
@@ -82,24 +67,24 @@ class Tags extends CollectiveBase
 		$addDate = new Date();
 		$userID = Application::CurrentUser()->UserID;
 
-		$query = "	INSERT INTO core_EntityTag
-					(
-						AssociatedEntityType,
-						AssociatedEntityID,
-						TagID,
-						UserID,
-						AddTimestamp
-					)
-					VALUES
-					(
-						{$conn->SetTextField($associatedEntityType)},
-						{$associatedEntityID},
-						{$NewElement->TagID},
-						{$userID},
-						{$conn->SetDateField($addDate)}
-					)";
+		$query->SQL = "	INSERT INTO core_EntityTag
+						(
+							AssociatedEntityType,
+							AssociatedEntityID,
+							TagID,
+							UserID,
+							AddTimestamp
+						)
+						VALUES
+						(
+							{$query->SetTextField($associatedEntityType)},
+							{$associatedEntityID},
+							{$NewElement->TagID},
+							{$userID},
+							{$query->SetDateField($addDate)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$returnValue = true;
 
@@ -109,18 +94,18 @@ class Tags extends CollectiveBase
 	protected function ProcessOldElement($OldElement)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityTag
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		TagID = {$OldElement->TagID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityTag
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		TagID = {$OldElement->TagID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -128,17 +113,17 @@ class Tags extends CollectiveBase
 
 	protected function ProcessClearElements()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityTag
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityTag
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}

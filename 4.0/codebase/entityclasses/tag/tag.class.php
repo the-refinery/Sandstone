@@ -6,8 +6,6 @@ Tag Class File
 @subpackage Tag
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Tag extends EntityBase
 {
 
@@ -52,40 +50,35 @@ class Tag extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_TagMaster
-							(
-								AccountID,
-								TagText
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$conn->SetTextField($this->_text)}
-							)";
+		$query->SQL = "	INSERT INTO core_TagMaster
+						(
+							AccountID,
+							TagText
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$query->SetTextField($this->_text)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_TagMaster SET
-								TagText = {$conn->SetTextField($this->_text)}
+		$query->SQL = "	UPDATE core_TagMaster SET
+								TagText = {$query->SetTextField($this->_text)}
 							WHERE TagID = {$this->_tagID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -95,19 +88,17 @@ class Tag extends EntityBase
 
 		if (strlen($this->_text) > 0)
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
-			$query = "	SELECT	TagID
-						FROM 	core_TagMaster
-						WHERE	TagText = {$conn->SetTextField($this->_text)}";
+			$query->SQL = "	SELECT	TagID
+							FROM 	core_TagMaster
+							WHERE	TagText = {$query->SetTextField($this->_text)}";
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds && $ds->RecordCount() > 0)
+			if ($query->SelectedRows > 0)
 			{
-				$dr = $ds->FetchRow();
-
-				$this->_tagID = $dr['TagID'];
+				$this->_tagID = $query->SingleRowResult['TagID'];
 				$this->_isLoaded = true;
 			}
 			else
@@ -170,16 +161,16 @@ class Tag extends EntityBase
 
 	static protected function PerformSearch($WhereClause)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "Tag", "TagID");
+		$returnValue = new ObjectSet($query, "Tag", "TagID");
 
 		return $returnValue;
 	}
