@@ -32,44 +32,39 @@ class County extends CodeTableEntityBase
 
     protected function SaveNewRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    INSERT INTO location_CountyMaster
-                            (
-                                CountyName,
-                                CountyFIPS,
-                                ProvinceID
-                            )
-                            VALUES
-                            (
-                                {$conn->SetTextField($this->_countyName)},
-                                {$conn->SetNullTextField($this->_countyFIPS)},
-                                {$this->_province}
-                            )";
+        $query->SQL = "	INSERT INTO location_CountyMaster
+                        (
+                            CountyName,
+                            CountyFIPS,
+                            ProvinceID
+                        )
+                        VALUES
+                        (
+                            {$query->SetTextField($this->_countyName)},
+                            {$query->SetNullTextField($this->_countyFIPS)},
+                            {$this->_province}
+                        )";
 
-        $conn->Execute($query);
+        $query->Execute();
 
-        //Get the new ID
-        $query = "SELECT LAST_INSERT_ID() newID ";
-
-        $dr = $conn->GetRow($query);
-
-        $this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
         return true;
     }
 
     protected function SaveUpdateRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    UPDATE location_CountyMaster SET
-                                CountyName = {$conn->SetTextField($this->_countyName)},
-                                CountyFIPS = {$conn->SetNullTextField($this->_countyFIPS)},
-                                ProvinceID = {$this->_province}
-                            WHERE CountyID = {$this->_countyID}";
+        $query->SQL = "	UPDATE location_CountyMaster SET
+	                        CountyName = {$query->SetTextField($this->_countyName)},
+	                        CountyFIPS = {$query->SetNullTextField($this->_countyFIPS)},
+	                        ProvinceID = {$this->_province}
+                        WHERE CountyID = {$this->_countyID}";
 
-        $conn->Execute($query);
+        $query->Execute();
 
         return true;
     }

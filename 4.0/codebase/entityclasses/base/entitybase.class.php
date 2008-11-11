@@ -1050,14 +1050,16 @@ class EntityBase extends Module
 	protected function Lookup_All($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = $this->GenerateLookupSelectClause($LookupType, $PageSize, $PageNumber);
 		$fromClause = $this->GenerateBaseFromClause();
 		$whereClause = $this->GenerateBaseWhereClause();
 		$limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
-		$query = $selectClause . $fromClause . $whereClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $limitClause;
+
+		$query->Execute();
 
 		$returnValue = $conn->Execute($query);
 

@@ -6,15 +6,8 @@ Session Handler Class File
 @subpackage Session
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class DISession
 {
-	protected $_sessionDBconfig = Array(	"DBhost" => "localhost",
-											"DBuser" => "bacdata_session",
-											"DBpass" => "jaw1206",
-											"DBname" => "bacdata_session");
-
 	protected $_conn;
 	protected $_timeout;
 
@@ -34,19 +27,17 @@ class DISession
 
 	public function Open($savePath, $sessionName)
 	{
+
+		$returnValue = false;
+
 	    //connect to the database
-	    $conn = GetConnection($this->_sessionDBconfig);
+		$this->_conn = new mysqli("localhost", "bacdata_session", "jaw1206", "bacdata_session");
 
-		// Default to true
-		$returnValue = true;
-
-	    if(! $conn)
+		if (is_set($this->_conn))
 		{
-	        $returnValue = false;
-	    }
+			$returnValue = true;
+		}
 
-	    $this->_conn = $conn;
-		
 	    return $returnValue;
 	}
 
@@ -58,26 +49,37 @@ class DISession
 	public function Read($sessionID)
 	{
 		//fetch the session record
-	    $query = "SELECT data FROM sessionMaster
-	              WHERE sessionid = '" . mysql_real_escape_string($sessionID) . "'";
+	    $query = "	SELECT	data
+	    			FROM 	sessionMaster
+	              	WHERE 	sessionid = '" . $this->_conn->real_escape_string($sessionID) . "'";
 
-		$ds = $this->_conn->Execute($query);
+		$result = $this->_conn->query($query);
 
-	    if($dr = $ds->FetchRow())
+		if ($this->_conn->errno == 0)
 		{
-	        return $dr['data'];
+			if ($result->num_rows > 0)
+			{
+				$dr = $result->fetch_array(MYSQLI_ASSOC);
+			}
+
+			$returnValue = $dr['data'];
+
+	    }
+	    else
+	    {
+	    	// you MUST send an empty string if no session data, not NULL
+	    	$returnValue = "";
 	    }
 
-	    // you MUST send an empty string if no session data, not NULL
-	    return "";
+	    return $returnValue;
 	}
 
 	public function Write($sessionID, $data)
 	{
 		$this->Destroy($sessionID);
 
-		$tempSessionID = mysql_real_escape_string($sessionID);
-		$tempSessionData = mysql_real_escape_string($data);
+		$tempSessionID = $this->_conn->real_escape_string($sessionID);
+		$tempSessionData = $this->_conn->real_escape_string($data);
 		$tempSessionTime = time();
 
 	    $query = "INSERT INTO sessionMaster
@@ -93,17 +95,19 @@ class DISession
 						'{$tempSessionData}'
 					)";
 
-		$ds = $this->_conn->Execute($query);
+		$this->_conn->query($query);
 
 	    return true;
 	}
 
-	public function Destroy($sessionID) {
+	public function Destroy($sessionID)
+	{
 		//remove session record from the database and return result
-	    $query = "DELETE FROM sessionMaster
-	                WHERE sessionid = '".mysql_real_escape_string($sessionID)."'";
+	    $query = "	DELETE
+	    			FROM 	sessionMaster
+	                WHERE 	sessionid = '" . $this->_conn->real_escape_string($sessionID) . "'";
 
-		$ds = $this->_conn->Execute($query);
+		$this->_conn->query($query);
 
 	    return true;
 	}
@@ -117,12 +121,13 @@ class DISession
 
 	    $timeout = time() - $maxLifeTime;
 
-	    $query = "DELETE FROM sessionMaster
-	                    WHERE lastaccess < {$timeout}";
+	    $query = "	DELETE
+	    			FROM 	sessionMaster
+	    			WHERE 	lastaccess < {$timeout}";
 
-		$ds = $this->_conn->Execute($query);
+		$this->_conn->query($query);
 
-	    return  $this->_conn->Affected_Rows();
+	    return  $this->_conn->affected_rows;
 	}
 }
 ?>
