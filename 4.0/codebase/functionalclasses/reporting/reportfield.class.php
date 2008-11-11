@@ -384,8 +384,8 @@ class ReportField extends EntityBase
             case "datetime":
                 if ($Value instanceof Date)
                 {
-                    $conn = GetConnection();
-                    $returnValue = $conn->SetDateField($Value);
+                    $query = new Query();
+                    $returnValue = $query->SetDateField($Value);
                 }
                 else
                 {
@@ -406,71 +406,66 @@ class ReportField extends EntityBase
 
     protected function SaveNewRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    INSERT INTO core_ReportFieldMaster
-                            (
-                                ReportID,
-                                Name,
-                                Description,
-                                FieldAlias,
-                                DataType,
-                                IsSortable,
-                                IsTotalable,
-                                IsGroupable,
-                                IsFilterable,
-                                FilterClause,
-                                IsHavingFilter,
-                                IsReturned
-                            )
-                            VALUES
-                            (
-                                {$this->_report},
-                                {$conn->SetTextField($this->_name)},
-                                {$conn->SetNullTextField($this->_description)},
-                                {$conn->SetNullTextField($this->_fieldAlias)},
-                                {$conn->SetTextField($this->_dataType)},
-                                {$conn->SetBooleanField($this->_isSortable)},
-                                {$conn->SetBooleanField($this->_isTotalable)},
-                                {$conn->SetBooleanField($this->_isGroupable)},
-                                {$conn->SetBooleanField($this->_isFilterable)},
-                                {$conn->SetNullTextField($this->_filterClause)},
-                                {$conn->SetBooleanField($this->_isHavingFilter)},
-                                {$conn->SetBooleanField($this->_isReturned)}
-                            )";
+        $query->SQL = "	INSERT INTO core_ReportFieldMaster
+                        (
+                            ReportID,
+                            Name,
+                            Description,
+                            FieldAlias,
+                            DataType,
+                            IsSortable,
+                            IsTotalable,
+                            IsGroupable,
+                            IsFilterable,
+                            FilterClause,
+                            IsHavingFilter,
+                            IsReturned
+                        )
+                        VALUES
+                        (
+                            {$this->_report},
+                            {$query->SetTextField($this->_name)},
+                            {$query->SetNullTextField($this->_description)},
+                            {$query->SetNullTextField($this->_fieldAlias)},
+                            {$query->SetTextField($this->_dataType)},
+                            {$query->SetBooleanField($this->_isSortable)},
+                            {$query->SetBooleanField($this->_isTotalable)},
+                            {$query->SetBooleanField($this->_isGroupable)},
+                            {$query->SetBooleanField($this->_isFilterable)},
+                            {$query->SetNullTextField($this->_filterClause)},
+                            {$query->SetBooleanField($this->_isHavingFilter)},
+                            {$query->SetBooleanField($this->_isReturned)}
+                        )";
 
-        $conn->Execute($query);
+        $query->Execute();
 
-        //Get the new ID
-        $query = "SELECT LAST_INSERT_ID() newID ";
-
-        $dr = $conn->GetRow($query);
-
-        $this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
         return true;
     }
 
     protected function SaveUpdateRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    UPDATE core_ReportFieldMaster SET
+        $query->SQL = "    UPDATE core_ReportFieldMaster SET
                                 ReportID = {$this->_report},
-                                Name = {$conn->SetTextField($this->_name)},
-                                Description = {$conn->SetNullTextField($this->_description)},
-                                FieldAlias = {$conn->SetNullTextField($this->_fieldAlias)},
-                                DataType = {$conn->SetTextField($this->_dataType)},
-                                IsSortable = {$conn->SetBooleanField($this->_isSortable)},
-                                IsTotalable = {$conn->SetBooleanField($this->_isTotalable)},
-                                IsGroupable = {$conn->SetBooleanField($this->_isGroupable)},
-                                IsFilterable = {$conn->SetBooleanField($this->_isFilterable)},
-                                FilterClause = {$conn->SetNullTextField($this->_filterClause)},
-                                IsHavingFilter = {$conn->SetBooleanField($this->_isHavingFilter)}
-                                IsReturned = {$conn->SetBooleanField($this->_isReturned)}
+                                Name = {$query->SetTextField($this->_name)},
+                                Description = {$query->SetNullTextField($this->_description)},
+                                FieldAlias = {$query->SetNullTextField($this->_fieldAlias)},
+                                DataType = {$query->SetTextField($this->_dataType)},
+                                IsSortable = {$query->SetBooleanField($this->_isSortable)},
+                                IsTotalable = {$query->SetBooleanField($this->_isTotalable)},
+                                IsGroupable = {$query->SetBooleanField($this->_isGroupable)},
+                                IsFilterable = {$query->SetBooleanField($this->_isFilterable)},
+                                FilterClause = {$query->SetNullTextField($this->_filterClause)},
+                                IsHavingFilter = {$query->SetBooleanField($this->_isHavingFilter)}
+                                IsReturned = {$query->SetBooleanField($this->_isReturned)}
                             WHERE FieldID = {$this->_fieldID}";
 
-        $conn->Execute($query);
+        $query->Execute();
 
         return true;
     }

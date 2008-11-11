@@ -1061,9 +1061,7 @@ class EntityBase extends Module
 
 		$query->Execute();
 
-		$returnValue = $conn->Execute($query);
-
-		return $returnValue;
+		return $query->Results;
 
 	}
 

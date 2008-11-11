@@ -41,41 +41,36 @@ class CreditCardType extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_CreditCardTypeMaster
-							(
-								Name,
-								IsAccepted
-							)
-							VALUES
-							(
-								{$conn->SetTextField($this->_name)},
-								{$conn->SetBooleanField($this->_isAccepted)}
-							)";
+		$query->SQL = "	INSERT INTO core_CreditCardTypeMaster
+						(
+							Name,
+							IsAccepted
+						)
+						VALUES
+						(
+							{$query->SetTextField($this->_name)},
+							{$query->SetBooleanField($this->_isAccepted)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_CreditCardTypeMaster SET
-								Name = {$conn->SetTextField($this->_name)},
-								IsAccepted = {$conn->SetBooleanField($this->_isAccepted)}
-							WHERE CardTypeID = {$this->_cardTypeID}";
+		$query->SQL = "	UPDATE core_CreditCardTypeMaster SET
+							Name = {$query->SetTextField($this->_name)},
+							IsAccepted = {$query->SetBooleanField($this->_isAccepted)}
+						WHERE CardTypeID = {$this->_cardTypeID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -301,7 +296,7 @@ class CreditCardType extends EntityBase
 	static public function LookupAll()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
@@ -309,11 +304,11 @@ class CreditCardType extends EntityBase
 
 		$orderByClause = "ORDER BY a.Name ";
 
-		$query = $selectClause . $fromClause . $whereClause . $orderByClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "CreditCardType", "CardTypeID");
+		$returnValue = new ObjectSet($query, "CreditCardType", "CardTypeID");
 
 		return $returnValue;
 	}

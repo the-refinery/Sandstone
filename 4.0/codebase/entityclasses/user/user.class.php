@@ -8,7 +8,6 @@ User Class File
 
 NameSpace::Using("Sandstone.Action");
 NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Date");
 NameSpace::Using("Sandstone.Email");
 NameSpace::Using("Sandstone.Phone");
@@ -180,7 +179,7 @@ class User extends EntityBase
 
 	public function LoadByID($ID)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = User::GenerateBaseSelectClause();
 		$fromClause = User::GenerateBaseFromClause();
@@ -196,19 +195,11 @@ class User extends EntityBase
 			$whereClause .= "AND UserID = {$ID} ";
 		}
 
-        $query = $selectClause . $fromClause . $whereClause;
+        $query->SQL = $selectClause . $fromClause . $whereClause;
 
-        $ds = $conn->Execute($query);
+        $query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
-        {
-            $dr = $ds->FetchRow();
-            $returnValue = $this->Load($dr);
-        }
-        else
-        {
-            $returnValue = false;
-        }
+		$returnValue = $query->LoadEntity($this);
 
         return $returnValue;
 
@@ -216,7 +207,7 @@ class User extends EntityBase
 
 	public function LoadByToken($Token)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
@@ -225,64 +216,38 @@ class User extends EntityBase
 		$whereClause = self::GenerateBaseWhereClause();
 		$whereClause = "AND b.Token = '{$Token}' ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-			$returnValue = $this->Load($dr);
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
-
 	}
 
 	public function LoadToken()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT 	Token
-					FROM 	core_UserToken
-					WHERE 	UserID = {$this->_userID}";
+		$query->SQL = "	SELECT 	Token
+						FROM 	core_UserToken
+						WHERE 	UserID = {$this->_userID}";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds)
+		if ($query->SelectedRows > 0)
 		{
-			if ($ds->RecordCount() > 0)
-			{
-				$dr = $ds->FetchRow();
-				$this->_token = $dr["Token"];
-
-				$returnValue = true;
-			}
-			else
-			{
-				//Return True if there weren't any records,
-				//since it's ok for a user to not have a token.
-				$returnValue = true;
-			}
-		}
-		else
-		{
-			$returnValue = false;
+			$this->_token = $query->SingleRowResult["Token"];
 		}
 
-		return $returnValue;
-
+		return true;
 	}
 
 	public function LoadRoles()
 	{
 		$this->_roles->Clear();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = Role::GenerateBaseSelectClause();
 
@@ -291,26 +256,13 @@ class User extends EntityBase
 
 		$whereClause = "WHERE b.UserID = {$this->_userID} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			while ($dr = $ds->FetchRow())
-			{
-				$tempRole = new Role($dr);
+		$query->LoadEntityArray($this->_roles, "Role", "RoleID");
 
-				$this->_roles[$tempRole->RoleID] = $tempRole;
-			}
-		}
-		else
-		{
-			//It's ok if we don't find any roles
-			$returnValue = true;
-		}
-
-		return $returnValue;
+		return true;
 	}
 
 	public function LoadAddresses()
@@ -331,41 +283,36 @@ class User extends EntityBase
 	protected function SaveNewRecord($AccountID = null)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_UserMaster
-							(
-								AccountID,
-								FirstName,
-								LastName,
-								Gender,
-								UserName,
-								Password,
-								PasswordSalt,
-								IsBulkMailAllowed,
-								IsDisabled
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$conn->SetTextField($this->_firstName)},
-								{$conn->SetTextField($this->_lastName)},
-								{$conn->SetNullTextField($this->_gender)},
-								{$conn->SetNullTextField($this->_userName)},
-								{$conn->SetNullTextField($this->_password)},
-								{$conn->SetTextField($this->_passwordSalt)},
-								{$conn->SetBooleanField($this->_isBulkMailAllowed)},
-								{$conn->SetBooleanField($this->_isDisabled)}
-							)";
+		$query->SQL = "	INSERT INTO core_UserMaster
+						(
+							AccountID,
+							FirstName,
+							LastName,
+							Gender,
+							UserName,
+							Password,
+							PasswordSalt,
+							IsBulkMailAllowed,
+							IsDisabled
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$query->SetTextField($this->_firstName)},
+							{$query->SetTextField($this->_lastName)},
+							{$query->SetNullTextField($this->_gender)},
+							{$query->SetNullTextField($this->_userName)},
+							{$query->SetNullTextField($this->_password)},
+							{$query->SetTextField($this->_passwordSalt)},
+							{$query->SetBooleanField($this->_isBulkMailAllowed)},
+							{$query->SetBooleanField($this->_isDisabled)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
         Action::Log("UserCreated", "User {$this->_firstName} {$this->_lastName} (ID: {$this->_userID}) was created.", $this->_userID);
 
@@ -374,19 +321,19 @@ class User extends EntityBase
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_UserMaster SET
-								FirstName = {$conn->SetTextField($this->_firstName)},
-								LastName = {$conn->SetTextField($this->_lastName)},
-								Gender = {$conn->SetNullTextField($this->_gender)},
-								UserName = {$conn->SetNullTextField($this->_userName)},
-								Password = {$conn->SetNullTextField($this->_password)},
-								IsBulkMailAllowed = {$conn->SetBooleanField($this->_isBulkMailAllowed)},
-								IsDisabled = {$conn->SetBooleanField($this->_isDisabled)}
-							WHERE UserID = {$this->_userID}";
+		$query->SQL = "	UPDATE core_UserMaster SET
+							FirstName = {$query->SetTextField($this->_firstName)},
+							LastName = {$query->SetTextField($this->_lastName)},
+							Gender = {$query->SetNullTextField($this->_gender)},
+							UserName = {$query->SetNullTextField($this->_userName)},
+							Password = {$query->SetNullTextField($this->_password)},
+							IsBulkMailAllowed = {$query->SetBooleanField($this->_isBulkMailAllowed)},
+							IsDisabled = {$query->SetBooleanField($this->_isDisabled)}
+						WHERE UserID = {$this->_userID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -438,7 +385,7 @@ class User extends EntityBase
 
 	protected function AttemptLocalLogin($UserName, $Password)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
@@ -447,21 +394,21 @@ class User extends EntityBase
 		$whereClause .= "	AND		Username LIKE '{$UserName}'
 							AND		IsDisabled = 0 ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			$dr = $ds->FetchRow();
+			$dr = $query->SingleRowResult;
 
-			$this->_passwordSalt = $dr['PasswordSalt'];
+			$this->_passwordSalt = $query->SingleRowResult['PasswordSalt'];
 
 			//We found a user, does the password match?
-			if ($dr['Password'] == $this->EncryptPassword($Password))
+			if ($query->SingleRowResult['Password'] == $this->EncryptPassword($Password))
 			{
 				//Valid User!
-				$returnValue = $this->Load($dr);
+				$returnValue = $query->LoadEntity($this);
 
 				//We have a valid user, create a new token for them
 				$this->_token = md5($_SERVER['HTTP_USER_AGENT'] . date('dmys'));
@@ -485,7 +432,7 @@ class User extends EntityBase
 
 	protected function AttemptAdminLogin($UserName, $Password)
 	{
-		$conn = GetConnection("DIteamDB");
+		$query = new Query("DIteamDB");
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
@@ -493,18 +440,16 @@ class User extends EntityBase
 		$whereClause .= "	WHERE 	Username LIKE '{$UserName}'
 							AND		IsDisabled = 0 ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			$dr = $ds->FetchRow();
-
-			$this->_passwordSalt = $dr['PasswordSalt'];
+			$this->_passwordSalt = $query->SingleRowResult['PasswordSalt'];
 
 			//We found a user, does the password match?
-			if ($dr['Password'] == $this->EncryptPassword($Password))
+			if ($query->SingleRowResult['Password'] == $this->EncryptPassword($Password))
 			{
 				//Valid User!
 				//Load the object as ID #1 (the Barracuda Suite Admin login)
@@ -562,40 +507,40 @@ class User extends EntityBase
 		//First, clear all database entries
 		$this->ClearToken();
 
-        $conn = GetConnection();
+        $query = new Query();
 
-		$query = "	INSERT INTO core_UserToken
-					(
-						UserID,
-						Token,
-						AccountID
-					)
-					VALUES
-					(
-						{$this->_userID},
-						{$conn->SetTextField($this->_token)},
-						{$this->AccountID}
-					)";
+		$query->SQL = "	INSERT INTO core_UserToken
+						(
+							UserID,
+							Token,
+							AccountID
+						)
+						VALUES
+						(
+							{$this->_userID},
+							{$query->SetTextField($this->_token)},
+							{$this->AccountID}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 	}
 
 	protected function ClearToken()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	DELETE
-					FROM 	core_UserToken
-					WHERE 	UserID = {$this->_userID}";
+		$query->SQL = "	DELETE
+						FROM 	core_UserToken
+						WHERE 	UserID = {$this->_userID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 	}
 
 	public function ValidateUniqueUsername($NewUserName)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = "	SELECT 	COUNT(UserID) NumberUsers ";
 		$fromClause = self::GenerateBaseFromClause();
@@ -603,12 +548,11 @@ class User extends EntityBase
 		$whereClause = self::GenerateBaseWhereClause();
 		$whereClause .= "AND Username LIKE '{$NewUserName}' ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
-		$dr = $ds->FetchRow();
+		$query->Execute();
 
-		if ($dr['NumberUsers'] == 0)
+		if ($query->SingleRowResult['NumberUsers'] == 0)
 		{
 			$returnValue = true;
 		}
@@ -626,20 +570,20 @@ class User extends EntityBase
 		{
 			if ($this->IsInRole($NewRole) == false)
 			{
-				$conn = GetConnection();
+				$query = new Query();
 
-				$query = "	INSERT INTO core_UserRole
-							(
-								UserID,
-								RoleID
-							)
-							VALUES
-							(
-								{$this->_userID},
-								{$NewRole->RoleID}
-							)";
+				$query->SQL = "	INSERT INTO core_UserRole
+								(
+									UserID,
+									RoleID
+								)
+								VALUES
+								(
+									{$this->_userID},
+									{$NewRole->RoleID}
+								)";
 
-				$conn->Execute($query);
+				$query->Execute();
 
 				$this->LoadRoles();
 
@@ -663,14 +607,14 @@ class User extends EntityBase
 
 			if ($this->IsInRole($OldRole))
 			{
-				$conn = GetConnection();
+				$query = new Query();
 
-				$query = "	DELETE
-							FROM	core_UserRole
-							WHERE	UserID = {$this->_userID}
-							AND		RoleID = {$OldRole->RoleID} ";
+				$query->SQL = "	DELETE
+								FROM	core_UserRole
+								WHERE	UserID = {$this->_userID}
+								AND		RoleID = {$OldRole->RoleID} ";
 
-				$conn->Execute($query);
+				$query->Execute();
 
 				$this->LoadRoles();
 
@@ -717,7 +661,7 @@ class User extends EntityBase
 	protected function Lookup_All($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = $this->GenerateLookupSelectClause($LookupType, $PageSize, $PageNumber);
 		$fromClause = $this->GenerateBaseFromClause();
@@ -729,19 +673,18 @@ class User extends EntityBase
 
         $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
-		$query = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
-		$returnValue = $conn->Execute($query);
+		$query->Execute();
 
-		return $returnValue;
+		return $query->Results;
 
 	}
 
 	protected function Lookup_ByRole($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 
-		$conn = GetConnection();
-
+		$query = new Query();
 
 		$selectClause = $this->GenerateLookupSelectClause($LookupType, $PageSize, $PageNumber);
 		$fromClause = $this->GenerateBaseFromClause();
@@ -766,11 +709,11 @@ class User extends EntityBase
 
         $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
-		$query = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
-		$returnValue = $conn->Execute($query);
+		$query->Execute();
 
-		return $returnValue;
+		return $query->Results;
 
 	}
 
@@ -837,17 +780,17 @@ class User extends EntityBase
 
 	static protected function PerformSearch($WhereClause, $MaxResults)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 		$limitClause = " LIMIT {$MaxResults} ";
 
-		$query = $selectClause . $fromClause . $WhereClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $WhereClause . $limitClause;
 
-		$ds = $conn->Execute($query);
+		$query = new Query();
 
-		$returnValue = new ObjectSet($ds, "User", "UserID");
+		$returnValue = new ObjectSet($query, "User", "UserID");
 
 		return $returnValue;
 	}
@@ -855,7 +798,7 @@ class User extends EntityBase
 	static public function AutoComplete($SearchString, $Parameters = Array())
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
@@ -875,11 +818,11 @@ class User extends EntityBase
 		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username ";
 		$limitClause = "LIMIT 10";
 
-		$query = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "User", "UserID");
+		$returnValue = new ObjectSet($query, "User", "UserID");
 
 		return $returnValue;
 	}

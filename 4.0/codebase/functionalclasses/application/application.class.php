@@ -6,6 +6,7 @@ Application Class File
 @subpackage Application
 */
 
+Namespace::Using("Sandstone.Database");
 Namespace::Using("Sandstone.Routing");
 NameSpace::Using("Sandstone.SEO");
 NameSpace::Using("Sandstone.User");
@@ -519,19 +520,17 @@ class Application extends Module
 	protected function LoadAccountIDfromToken($Token)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT	AccountID
-					FROM	core_UserToken
-					WHERE	Token = {$conn->SetTextField($Token)}";
+		$query->SQL = "	SELECT	AccountID
+						FROM	core_UserToken
+						WHERE	Token = {$query->SetTextField($Token)}";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $dr['AccountID'];
+			$returnValue = $query->SingleRowResult['AccountID'];
 		}
 
 		return $returnValue;

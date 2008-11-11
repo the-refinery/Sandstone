@@ -6,6 +6,8 @@ Action View Control Class File
 @subpackage Application
 */
 
+Namespace::Using("Sandstone.Database");
+
 class ActionViewControl extends BaseControl
 {
 
@@ -142,28 +144,17 @@ class ActionViewControl extends BaseControl
 
 	protected function LoadHistory()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = $this->BuildHistorySQL($conn);
+		$query->SQL = $this->BuildHistorySQL($query);
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
-		{
-
-			$returnValue = new DIarray();
-
-			while ($dr = $ds->FetchRow())
-			{
-				$returnValue[] = $dr;
-			}
-		}
-
-		return $returnValue;
+		return $query->Results;
 
 	}
 
-	protected function BuildHistorySQL($conn)
+	protected function BuildHistorySQL($Query)
 	{
 
 		$now = new Date();
@@ -178,12 +169,12 @@ class ActionViewControl extends BaseControl
 							IF(a.RoutingAction IS NULL, b.RoutingAction, a.RoutingAction) RoutingAction
 					FROM	core_ActionHistory a
 							INNER JOIN core_ActionMaster b ON b.ActionID = a.ActionID
-					WHERE	a.Timestamp >= {$conn->SetDateField($startDate)} ";
+					WHERE	a.Timestamp >= {$Query->SetDateField($startDate)} ";
 
 		if (is_set($this->_associatedEntityType))
 		{
 			$entityType = strtolower($this->_associatedEntityType);
-			$returnValue .= "AND	IF(a.AssociatedEntityType IS NULL, LOWER(b.AssociatedEntityType), LOWER(a.AssociatedEntityType)) = {$conn->SetTextField($entityType)} ";
+			$returnValue .= "AND	IF(a.AssociatedEntityType IS NULL, LOWER(b.AssociatedEntityType), LOWER(a.AssociatedEntityType)) = {$Query->SetTextField($entityType)} ";
 
 			if (is_set($this->_associatedEntityID))
 			{

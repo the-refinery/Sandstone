@@ -50,7 +50,7 @@ class Reports extends Module
 		$this->_reports->Clear();
 		$this->_reportsByType->Clear();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = Report::GenerateBaseSelectClause();
 
@@ -58,13 +58,13 @@ class Reports extends Module
 		$fromClause = Report::GenerateBaseFromClause();
 		$whereClause = Report::GenerateBaseWhereClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			while ($dr = $ds->FetchRow())
+			foreach ($query->Results as $dr)
 			{
 				$tempReport = new Report($dr);
 

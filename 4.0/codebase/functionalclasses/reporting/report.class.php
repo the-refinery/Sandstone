@@ -6,8 +6,6 @@ Report Class File
 @subpackage Reporting
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Report extends EntityBase
 {
 
@@ -99,7 +97,7 @@ class Report extends EntityBase
 
 		$Name = strtolower($Name);
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = Report::GenerateBaseSelectClause();
 		$fromClause = Report::GenerateBaseFromClause();
@@ -107,73 +105,59 @@ class Report extends EntityBase
 		$whereClause = Report::GenerateBaseWhereClause();
 		$whereClause .= "AND LOWER(a.TemplateName) = {$conn->SetTextField($Name)} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 	}
 
     protected function SaveNewRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    INSERT INTO core_ReportMaster
-                            (
-                                AccountID,
-                                Name,
-                                Description,
-                                AssociatedEntityType,
-                                TemplateName,
-                                IsActive
-                            )
-                            VALUES
-                            (
-                                {$conn->SetNullNumericField($this->_accountID)},
-                                {$conn->SetTextField($this->_name)},
-                                {$conn->SetNullTextField($this->_description)},
-                                {$conn->SetNullTextField($this->_associatedEntityType)},
-                                {$conn->SetTextField($this->_templateName)},
-                                {$conn->SetBooleanField($this->_isActive)}
-                            )";
+        $query->SQL = "	INSERT INTO core_ReportMaster
+	                    (
+	                        AccountID,
+	                        Name,
+	                        Description,
+	                        AssociatedEntityType,
+	                        TemplateName,
+	                        IsActive
+	                    )
+	                    VALUES
+	                    (
+	                        {$query->SetNullNumericField($this->_accountID)},
+	                        {$query->SetTextField($this->_name)},
+	                        {$query->SetNullTextField($this->_description)},
+	                        {$query->SetNullTextField($this->_associatedEntityType)},
+	                        {$query->SetTextField($this->_templateName)},
+	                        {$query->SetBooleanField($this->_isActive)}
+	                    )";
 
-        $conn->Execute($query);
+        $query->Execute();
 
-        //Get the new ID
-        $query = "SELECT LAST_INSERT_ID() newID ";
-
-        $dr = $conn->GetRow($query);
-
-        $this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
         return true;
     }
 
     protected function SaveUpdateRecord()
     {
-        $conn = GetConnection();
+        $query = new Query();
 
-        $query = "    UPDATE core_ReportMaster SET
-                                AccountID = {$conn->SetNullNumericField($this->_accountID)},
-                                Name = {$conn->SetTextField($this->_name)},
-                                Description = {$conn->SetNullTextField($this->_description)},
-                                AssociatedEntityType = {$conn->SetNullTextField($this->_associatedEntityType)},
-                                TemplateName = {$conn->SetTextField($this->_templateName)},
-                                IsActive = {$conn->SetBooleanField($this->_isActive)}
-                            WHERE ReportID = {$this->_reportID}";
+        $query->SQL = "	UPDATE core_ReportMaster SET
+	                        AccountID = {$query->SetNullNumericField($this->_accountID)},
+	                        Name = {$query->SetTextField($this->_name)},
+	                        Description = {$query->SetNullTextField($this->_description)},
+	                        AssociatedEntityType = {$query->SetNullTextField($this->_associatedEntityType)},
+	                        TemplateName = {$query->SetTextField($this->_templateName)},
+	                        IsActive = {$query->SetBooleanField($this->_isActive)}
+                        WHERE ReportID = {$this->_reportID}";
 
-        $conn->Execute($query);
+        $query->Execute();
 
         return true;
     }
@@ -197,41 +181,36 @@ class Report extends EntityBase
 
         if ($this->IsLoaded)
         {
-            $conn = GetConnection();
+            $query = new Query();
 
             $selectClause = ReportField::GenerateBaseSelectClause();
             $fromClause = ReportField::GenerateBaseFromClause();
             $whereClause = "WHERE a.ReportID = {$this->_reportID} ";
 
-            $query = $selectClause . $fromClause . $whereClause;
+            $query->SQL = $selectClause . $fromClause . $whereClause;
 
-            $ds = $conn->Execute($query);
+			$query->Execute();
 
-            if ($ds && $ds->RecordCount() > 0)
-            {
-                while ($dr = $ds->FetchRow())
-                {
-                    $tempField = new ReportField($dr);
-                    $tempField->Report = $this;
-
-                    $this->_fields[$tempField->FieldID] = $tempField;
-                    $this->_fieldsByAlias[strtolower($tempField->FieldAlias)] = $tempField;
-
-                    if ($tempField->IsReturned)
-                    {
-                    	$this->_returnedFields[$tempField->FieldID] = $tempField;
-                    }
-                }
+			if ($query->SelectedRows > 0)
+			{
+            	$query->LoadEntityArray($this->_fields, "ReportField", "FieldID", $this, "LoadFieldsCallback");
 
                 $returnValue = true;
             }
-
-
         }
 
         return $returnValue;
 
     }
+
+	public function LoadFieldsCallback($Field)
+	{
+		$Field->Report = $this;
+
+		$this->_fieldsByAlias[strtolower($Field->FieldAlias)] = $Field;
+
+		return $Field;
+	}
 
     public function Generate()
     {
@@ -260,13 +239,15 @@ class Report extends EntityBase
 
         if (strlen($this->_query) > 0)
         {
-            $conn = GetConnection();
+            $query = new Query();
 
-            $ds = $conn->Execute($this->_query);
+            $query->SQL = $this->_query;
 
-            if ($ds && $ds->RecordCount() > 0)
+            $query->Execute();
+
+            if ($query->SelectedRows > 0)
             {
-                while ($dr = $ds->FetchRow())
+                foreach ($query->Results as $dr)
                 {
                     $returnValue->AddData($dr);
                 }

@@ -91,40 +91,30 @@ class CreditCardTransaction extends EntityBase
 	public function LoadTransactionMessages()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$this->_transactionMessages->Clear();
 
-		$query = "	SELECT 	MessageText
-					FROM	core_CreditCardTransactionMessage
-					WHERE	TransactionID = {$this->_transactionID}
-					ORDER BY MessageID";
+		$query->SQL = "	SELECT 	MessageText
+						FROM	core_CreditCardTransactionMessage
+						WHERE	TransactionID = {$this->_transactionID}
+						ORDER BY MessageID";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds)
+		foreach ($query->Results as $dr)
 		{
-			if ($ds->RecordCount() > 0)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$this->_transactionMessages[] = $dr['MessageText'];
-				}
-			}
+			$this->_transactionMessages[] = $dr['MessageText'];
+		}
 
-			$returnValue = true;
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = true;
 
 		return $returnValue;
 	}
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		if (is_set($this->_relatedTransaction))
 		{
@@ -132,41 +122,41 @@ class CreditCardTransaction extends EntityBase
 		}
 
 
-		$query = "	INSERT INTO core_CreditCardTransactionMaster
-							(
-								MerchantAccountID,
-								CreditCardID,
-								CreditCardTransactionTypeID,
-								Timestamp,
-								Amount,
-								MerchantTransactionID,
-								IsSuccessful,
-								TransactionFee,
-								DiscountPercent,
-								RelatedTransactionID
-							)
-							VALUES
-							(
-								{$this->_merchantAccount->MerchantAccountID},
-								{$this->_creditCard->CreditCardID},
-								{$this->_creditCardTransactionTypeID},
-								{$conn->SetDateField($this->_timestamp)},
-								{$this->_amount},
-								{$conn->SetNullTextField($this->_merchantTransactionID)},
-								{$conn->SetBooleanField($this->_isSuccessful)},
-								{$conn->SetNullNumericField($this->_transactionFee)},
-								{$conn->SetNullNumericField($this->_discountPercent)},
-								{$conn->SetNullNumericField($relatedTransactionID)}
-							)";
+		$query->SQL = "	INSERT INTO core_CreditCardTransactionMaster
+						(
+							MerchantAccountID,
+							CreditCardID,
+							CreditCardTransactionTypeID,
+							Timestamp,
+							Amount,
+							MerchantTransactionID,
+							IsSuccessful,
+							TransactionFee,
+							DiscountPercent,
+							RelatedTransactionID
+						)
+						VALUES
+						(
+							{$this->_merchantAccount->MerchantAccountID},
+							{$this->_creditCard->CreditCardID},
+							{$this->_creditCardTransactionTypeID},
+							{$query->SetDateField($this->_timestamp)},
+							{$this->_amount},
+							{$query->SetNullTextField($this->_merchantTransactionID)},
+							{$query->SetBooleanField($this->_isSuccessful)},
+							{$query->SetNullNumericField($this->_transactionFee)},
+							{$query->SetNullNumericField($this->_discountPercent)},
+							{$query->SetNullNumericField($relatedTransactionID)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
+		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
 
-		$dr = $conn->GetRow($query);
+		$query->Execute();
 
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->_primaryIDproperty->Value = $query->SingleRowResult['newID'];
 
 		//Now save our messages (if any)
 		$this->SaveMessages();
@@ -183,23 +173,23 @@ class CreditCardTransaction extends EntityBase
 	protected function SaveMessages()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		foreach ($this->_transactionMessages as $tempMessage)
 		{
 
-			$query = "	INSERT INTO core_CreditCardTransactionMessage
-						(
-							TransactionID,
-							MessageText
-						)
-						VALUES
-						(
-							{$this->_transactionID},
-							'{$tempMessage}'
-						)";
+			$query->SQL = "	INSERT INTO core_CreditCardTransactionMessage
+							(
+								TransactionID,
+								MessageText
+							)
+							VALUES
+							(
+								{$this->_transactionID},
+								'{$tempMessage}'
+							)";
 
-			$conn->Execute($query);
+			$query->Execute();
 		}
 
 	}

@@ -318,9 +318,6 @@ class CreditCard extends Module
 
 	public function Load($dr)
 	{
-
-		$conn = GetConnection();
-
 		$this->_creditCardID = $dr['CreditCardID'];
 
 		$this->_partA = $dr['PartA'];
