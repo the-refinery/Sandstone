@@ -6,6 +6,8 @@ Search Class File
 @subpackage Search
 */
 
+Namespace::Using("Sandstone.Database");
+
 class Search extends Module
 {
 
@@ -104,33 +106,25 @@ class Search extends Module
 
 	public function LoadAvailableTypes()
 	{
+		$returnValue = false;
+
 		$this->_availableTypes = new DIarray();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = SearchEntity::GenerateBaseSelectClause();
 		$fromClause = SearchEntity::GenerateBaseFromClause();
 
 		$whereClause = "WHERE	IsActive = 1 ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			while ($dr = $ds->FetchRow())
-			{
-				$tempEntity = new SearchEntity($dr);
-
-				$this->_availableTypes[strtolower($tempEntity->ClassName)] = $tempEntity;
-			}
-
+			$query->LoadEntityArray($this->_availableTypes, "SearchEntity", "ClassName");
 			$returnValue = true;
-		}
-		else
-		{
-			$returnValue = false;
 		}
 
 		return $returnValue;
@@ -333,40 +327,35 @@ class Search extends Module
 	protected function LoadMatchingTags($SearchTerm, $TypeNamesCSV)
 	{
 
-		$conn = GetConnection();
+		$returnValue = false;
+
+		$query = new Query();
 
 		$tagText  = Tag::FormatTextForTag($SearchTerm);
+
+		$tagText = mysql_real_escape_string($tagText);
 
 		$likeClause = "LIKE '%{$tagText}%' ";
 
 		$accountID = Application::License()->AccountID;
 
-		$query = "	SELECT	a.TagID,
-							a.TagText
-					FROM	core_TagMaster a
-							INNER JOIN core_EntityTag b ON
-								b.TagID = a.TagID
-								AND  b.AssociatedEntityType IN ({$TypeNamesCSV})
-					WHERE	a.TagText {$likeClause}
-					AND		a.AccountID = {$accountID}
-					ORDER BY TagText ";
+		$query->SQL = "	SELECT	a.TagID,
+								a.TagText
+						FROM	core_TagMaster a
+								INNER JOIN core_EntityTag b ON
+									b.TagID = a.TagID
+									AND  b.AssociatedEntityType IN ({$TypeNamesCSV})
+						WHERE	a.TagText {$likeClause}
+						AND		a.AccountID = {$accountID}
+						ORDER BY TagText ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			while ($dr = $ds->FetchRow())
-			{
-				$tempTag = new Tag($dr);
-
-				$this->_tags[$tempTag->TagID] = $tempTag;
-			}
+			$query->LoadEntityArray($this->_tags, "Tag", "TagID");
 
 			$returnValue = true;
-		}
-		else
-		{
-			$returnValue = false;
 		}
 
 		return $returnValue;
@@ -374,30 +363,30 @@ class Search extends Module
 
 	protected function LoadTagResults($GroupedResults, $TypeNamesCSV)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$tagIDs = implode(",", $this->_tags->Keys());
 
-		$query = "	SELECT	DISTINCT AssociatedEntityID,
-							AssociatedEntityType
-					FROM	core_EntityTag
-					WHERE	TagID IN ({$tagIDs})
-					AND		AssociatedEntityType IN ({$TypeNamesCSV})
-					ORDER BY AddTimestamp DESC ";
+		$query->SQL = "	SELECT	DISTINCT AssociatedEntityID,
+								AssociatedEntityType
+						FROM	core_EntityTag
+						WHERE	TagID IN ({$tagIDs})
+						AND		AssociatedEntityType IN ({$TypeNamesCSV})
+						ORDER BY AddTimestamp DESC ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $ds);
+		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $query);
 
 		return $returnValue;
 	}
 
-	protected function LoadResultsFromTypeIDdataset($GroupedResults, $ds)
+	protected function LoadResultsFromTypeIDdataset($GroupedResults, $Query)
 	{
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($Query->SelectedRows > 0)
 		{
-			while ($dr = $ds->FetchRow())
+			foreach ($Query->Results as $dr)
 			{
 				//Build the matching object
 				$tempEntityType = $dr['AssociatedEntityType'];
@@ -431,22 +420,23 @@ class Search extends Module
 	{
 
 
-		$conn = GetConnection();
+		$query = new Query();
+
+		$SearchTerm = mysql_real_escape_string($SearchTerm);
 
 		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
 
-		$query = "  SELECT	DISTINCT a.AssociatedEntityType,
-							a.AssociatedEntityID
-					FROM	core_MessageMaster a
-							LEFT JOIN core_MessageCommentMaster b ON b.MessageID = a.MessageID
-					WHERE	LOWER(a.Subject) {$likeClause}
-					OR		LOWER(a.Content) {$likeClause}
-					OR		LOWER(b.Content) {$likeClause} ";
+		$query->SQL = "	SELECT	DISTINCT a.AssociatedEntityType,
+								a.AssociatedEntityID
+						FROM	core_MessageMaster a
+								LEFT JOIN core_MessageCommentMaster b ON b.MessageID = a.MessageID
+						WHERE	LOWER(a.Subject) {$likeClause}
+						OR		LOWER(a.Content) {$likeClause}
+						OR		LOWER(b.Content) {$likeClause} ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-
-		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $ds);
+		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $query);
 
 		return $returnValue;
 

@@ -6,8 +6,6 @@ SearchEntity Class File
 @subpackage Search
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class SearchEntity extends EntityBase
 {
 
@@ -46,34 +44,28 @@ class SearchEntity extends EntityBase
 
 	public function LoadSearchableProperties()
 	{
+
+		$returnValue = false;
+
 		$this->_searchableProperties->Clear();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = SearchProperty::GenerateBaseSelectClause();
 		$fromClause = SearchProperty::GenerateBaseFromClause();
 
-		$whereClause = "WHERE	TopLevelNamespace = {$conn->SetTextField($this->_topLevelNamespace)}
-						AND		ClassName = {$conn->SetTextField($this->_className)} ";
+		$whereClause = "WHERE	TopLevelNamespace = {$query->SetTextField($this->_topLevelNamespace)}
+						AND		ClassName = {$query->SetTextField($this->_className)} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRow > 0)
 		{
-			while ($dr = $ds->FetchRow())
-			{
-				$tempSearchProperty = new SearchProperty($dr);
-
-				$this->_searchableProperties[strtolower($tempSearchProperty->PropertyName)] = $tempSearchProperty;
-			}
+			$query->LoadEntityArray($this->_searchableProperties, "SearchProperty", "PropertyName");
 
 			$returnValue = true;
-		}
-		else
-		{
-			$returnValue = false;
 		}
 
 		return $returnValue;
