@@ -83,9 +83,11 @@ class Messages extends Module
 	public function Load()
 	{
 
+		$returnValue = false;
+
 		$this->_messages = Array();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = Message::GenerateBaseSelectClause();
         $fromClause = Message::GenerateBaseFromClause();
@@ -93,47 +95,29 @@ class Messages extends Module
         					AND		a.AssociatedEntityID = {$this->_associatedEntityID} ";
 		$orderByClause = "	ORDER BY a.Timestamp DESC ";
 
-        $query = $selectClause . $fromClause . $whereClause . $orderByClause;
+        $query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
+		if ($query->SelectedRows > 0)
 		{
-			//Set the return value to failure, then set it to true as soon as we are able to
-			//successfully load one.
-			$returnValue = false;
-
-			while ($dr = $ds->FetchRow())
-			{
-
-				$tempMessage = new Message($dr);
-
-				if ($tempMessage->IsLoaded)
-				{
-					$this->_messages[$tempMessage->MessageID] = $tempMessage;
-
-					//The first message we get is the latest message
-					if (is_set($this->_latestMessage) == false)
-					{
-						$this->_latestMessage = $tempMessage;
-					}
-
-					$returnValue = true;
-
-				}
-
-			}
-
-		}
-		else
-		{
-			$returnValue = false;
+			$query->LoadEntityArray($this->_messages, "Message", "MessageID", $this, "LoadCallback");
+			$returnValue = true;
 		}
 
 		$this->_isLoaded = $returnValue;
 
 		return $returnValue;
 
+	}
+
+	public function LoadCallback($Message)
+	{
+		//The first message we get is the latest message
+		if (is_set($this->_latestMessage) == false)
+		{
+			$this->_latestMessage = $Message;
+		}
 	}
 
 	public function AddMessage($User, $Subject, $Content)

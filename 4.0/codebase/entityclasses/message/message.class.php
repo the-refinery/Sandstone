@@ -184,20 +184,19 @@ class Message extends Module
 
     public function LoadByID($ID)
     {
-        $conn = GetConnection();
+        $query = new Query();
 
         $selectClause = self::GenerateBaseSelectClause();
         $fromClause = self::GenerateBaseFromClause();
         $whereClause = "WHERE     MessageID = {$ID} ";
 
-        $query = $selectClause . $fromClause . $whereClause;
+        $query->SQL = $selectClause . $fromClause . $whereClause;
 
-        $ds = $conn->Execute($query);
+        $query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
+        if ($query->SelectedRows > 0)
         {
-            $dr = $ds->FetchRow();
-            $returnValue = $this->Load($dr);
+            $returnValue = $this->Load($query->SingleRowResult);
         }
         else
         {
@@ -213,59 +212,26 @@ class Message extends Module
 
         $this->_comments = Array();
 
-        $conn = GetConnection();
+        $query = new Query();
 
         $selectClause = MessageComment::GenerateBaseSelectClause();
         $fromClause = MessageComment::GenerateBaseFromClause();
         $whereClause = "WHERE     MessageID = {$this->_messageID} ";
         $orderByClause = "ORDER BY a.Timestamp ASC ";
 
-        $query = $selectClause . $fromClause . $whereClause . $orderByClause;
+        $query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
 
-        $ds = $conn->Execute($query);
+        $query->Execute();
 
-        if ($ds)
-        {
-            if ($ds->RecordCount() > 0)
-            {
+		$query->LoadEntityArray($this->_comments, "MessageComment", "CommentID", $this, "LoadCommentsCallback");
 
-                //Set the return value to failure, then set it to true as soon as we are able to
-                //successfully load one.
-                $returnValue = false;
-
-                while ($dr = $ds->FetchRow())
-                {
-
-                    $tempComment = new MessageComment($dr);
-
-                    if ($tempComment->IsLoaded)
-                    {
-                        $this->_comments[$tempComment->CommentID] = $tempComment;
-
-                        $returnValue = true;
-                    }
-
-                }
-
-                //Save the last one as our Latest Comment
-                $this->_latestComment = $tempComment;
-
-            }
-            else
-            {
-                //Return True if there weren't any records,
-                //since it's ok for a message to not have any comments
-                $returnValue = true;
-            }
-
-        }
-        else
-        {
-            $returnValue = false;
-        }
-
-        return $returnValue;
+        return true;
     }
+
+	public function LoadCommentsCallback($Comment)
+	{
+		$this->_latestComment = $Comment;
+	}
 
 	public function Save()
 	{
@@ -299,40 +265,40 @@ class Message extends Module
 	protected function SaveNewRecord()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$accountID = Application::License()->AccountID;
 
-		$query = "	INSERT INTO core_MessageMaster
-					(
-						AccountID,
-						AssociatedEntityType,
-						AssociatedEntityID,
-						UserID,
-						Timestamp,
-						Subject,
-						Content
-					)
-					VALUES
-					(
-						{$accountID},
-						{$conn->SetTextField($this->_associatedEntityType)},
-						{$this->_associatedEntityID},
-						{$this->_user->UserID},
-						NOW(),
-						{$conn->SetTextField($this->_subject)},
-						{$conn->SetTextField($this->_content)}
-					)";
+		$query->SQL = "	INSERT INTO core_MessageMaster
+						(
+							AccountID,
+							AssociatedEntityType,
+							AssociatedEntityID,
+							UserID,
+							Timestamp,
+							Subject,
+							Content
+						)
+						VALUES
+						(
+							{$accountID},
+							{$query->SetTextField($this->_associatedEntityType)},
+							{$this->_associatedEntityID},
+							{$this->_user->UserID},
+							NOW(),
+							{$query->SetTextField($this->_subject)},
+							{$query->SetTextField($this->_content)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 
 		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
+		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
 
-		$dr = $conn->GetRow($query);
+		$query->Execute();
 
-		$this->_messageID = $dr['newID'];
+		$this->_messageID = $query->SingleRowResult['newID'];
 
 		$returnValue = $this->RefreshTimestamp();
 
@@ -343,15 +309,15 @@ class Message extends Module
 	protected function SaveUpdateRecord()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_MessageMaster SET
+		$query->SQL = "	UPDATE core_MessageMaster SET
 						UserID = {$this->_user->UserID},
-						Subject = {$conn->SetTextField($this->_subject)},
-						Content = {$conn->SetTextField($this->_content)}
+						Subject = {$query->SetTextField($this->_subject)},
+						Content = {$query->SetTextField($this->_content)}
 					WHERE MessageID = {$this->_messageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -393,18 +359,17 @@ class Message extends Module
 
 	protected function RefreshTimestamp()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT	Timestamp
-					FROM    core_MessageMaster
-					WHERE	MessageID = {$this->_messageID} ";
+		$query->SQL = "	SELECT	Timestamp
+						FROM    core_MessageMaster
+						WHERE	MessageID = {$this->_messageID} ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
+        if ($query->SelectedRows > 0)
         {
-            $dr = $ds->FetchRow();
-            $this->_timestamp = new Date($dr['Timestamp']);
+            $this->_timestamp = new Date($query->SingleRowResult['Timestamp']);
 
             $returnValue = true;
         }
@@ -432,13 +397,13 @@ class Message extends Module
 		}
 
 		//Now delete this record.
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	DELETE
-				    FROM    core_MessageMaster
-				    WHERE MessageID = {$this->_messageID} ";
+		$query->SQL = "	DELETE
+					    FROM    core_MessageMaster
+					    WHERE MessageID = {$this->_messageID} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$this->_messageID = null;
 

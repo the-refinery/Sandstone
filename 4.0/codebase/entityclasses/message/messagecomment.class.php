@@ -129,25 +129,17 @@ class MessageComment extends Module
 
     public function LoadByID($ID)
     {
-        $conn = GetConnection();
+        $query = new Query();
 
         $selectClause = self::GenerateBaseSelectClause();
         $fromClause = self::GenerateBaseFromClause();
         $whereClause = "WHERE     CommentID = {$ID} ";
 
-        $query = $selectClause . $fromClause . $whereClause;
+        $query->SQL = $selectClause . $fromClause . $whereClause;
 
-        $ds = $conn->Execute($query);
+        $query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
-        {
-            $dr = $ds->FetchRow();
-            $returnValue = $this->Load($dr);
-        }
-        else
-        {
-            $returnValue = false;
-        }
+        $returnValue = $query->LoadEntity($this);
 
         return $returnValue;
 
@@ -184,36 +176,36 @@ class MessageComment extends Module
 	protected function SaveNewRecord()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$accountID = Application::License()->AccountID;
 
-		$query = "	INSERT INTO core_MessageCommentMaster
-					(
-						AccountID,
-						MessageID,
-						UserID,
-						Timestamp,
-						Content
-					)
-					VALUES
-					(
-						{$accountID},
-						{$this->_messageID},
-						{$this->_user->UserID},
-						NOW(),
-						{$conn->SetTextField($this->_content)}
-					)";
+		$query->SQL = "	INSERT INTO core_MessageCommentMaster
+						(
+							AccountID,
+							MessageID,
+							UserID,
+							Timestamp,
+							Content
+						)
+						VALUES
+						(
+							{$accountID},
+							{$this->_messageID},
+							{$this->_user->UserID},
+							NOW(),
+							{$query->SetTextField($this->_content)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 
 		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
+		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
 
-		$dr = $conn->GetRow($query);
+		$query->Execute();
 
-		$this->_commentID = $dr['newID'];
+		$this->_commentID = $query->SingleRowResult['newID'];
 
 		$returnValue = $this->RefreshTimestamp();
 
@@ -224,14 +216,14 @@ class MessageComment extends Module
 	protected function SaveUpdateRecord()
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_MessageCommentMaster SET
-						UserID = {$this->_user->UserID},
-						Content = {$conn->SetTextField($this->_content)}
-					WHERE CommentID = {$this->_commentID}";
+		$query->SQL = "	UPDATE core_MessageCommentMaster SET
+							UserID = {$this->_user->UserID},
+							Content = {$query->SetTextField($this->_content)}
+						WHERE CommentID = {$this->_commentID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -262,18 +254,17 @@ class MessageComment extends Module
 
 	protected function RefreshTimestamp()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT	Timestamp
-					FROM    core_MessageCommentMaster
-					WHERE	CommentID = {$this->_commentID} ";
+		$query->SQL = "	SELECT	Timestamp
+						FROM    core_MessageCommentMaster
+						WHERE	CommentID = {$this->_commentID} ";
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-        if ($ds && $ds->RecordCount() > 0)
+        if ($query->SelectedRows > 0)
         {
-            $dr = $ds->FetchRow();
-            $this->_timestamp = new Date($dr['Timestamp']);
+            $this->_timestamp = new Date($query->SingleRowResult['Timestamp']);
             $returnValue = true;
         }
         else
@@ -287,13 +278,13 @@ class MessageComment extends Module
 
 	public function Delete()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	DELETE
-				    FROM    core_MessageCommentMaster
-				    WHERE CommentID = {$this->_commentID} ";
+		$query->SQL = "	DELETE
+					    FROM    core_MessageCommentMaster
+					    WHERE CommentID = {$this->_commentID} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$this->_commentID = null;
 
