@@ -6,7 +6,6 @@ Phone Class File
 @subpackage Phone
  */
 
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Utilities.String");
 
 class Phone extends EntityBase
@@ -70,46 +69,41 @@ class Phone extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_PhoneMaster
-							(
-								AccountID,
-								CountryCode,
-								AreaCode,
-								LocalNumber
-							)
-							VALUES
-							(
-								{$this->AccountID},
-								{$conn->SetNullTextField($this->_countryCode)},
-								{$conn->SetNullTextField($this->_areaCode)},
-								{$conn->SetTextField($this->_localNumber)}
-							)";
+		$query->SQL = "	INSERT INTO core_PhoneMaster
+						(
+							AccountID,
+							CountryCode,
+							AreaCode,
+							LocalNumber
+						)
+						VALUES
+						(
+							{$this->AccountID},
+							{$query->SetNullTextField($this->_countryCode)},
+							{$query->SetNullTextField($this->_areaCode)},
+							{$query->SetTextField($this->_localNumber)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_PhoneMaster SET
-								CountryCode = {$conn->SetNullTextField($this->_countryCode)},
-								AreaCode = {$conn->SetNullTextField($this->_areaCode)},
-								LocalNumber = {$conn->SetNullTextField($this->_localNumber)}
-							WHERE PhoneID = {$this->_phoneID}";
+		$query->SQL = "	UPDATE core_PhoneMaster SET
+							CountryCode = {$query->SetNullTextField($this->_countryCode)},
+							AreaCode = {$query->SetNullTextField($this->_areaCode)},
+							LocalNumber = {$query->SetNullTextField($this->_localNumber)}
+						WHERE PhoneID = {$this->_phoneID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -165,16 +159,16 @@ class Phone extends EntityBase
 
 	static protected function PerformSearch($WhereClause)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		$returnValue = new ObjectSet($ds, "Phone", "PhoneID");
+		$returnValue = new ObjectSet($query, "Phone", "PhoneID");
 
 		return $returnValue;
 	}

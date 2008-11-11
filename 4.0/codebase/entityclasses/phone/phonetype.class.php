@@ -6,8 +6,6 @@ PhoneType Class File
 @subpackage Phone
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class PhoneType extends EntityBase
 {
 	protected function SetupProperties()
@@ -32,36 +30,31 @@ class PhoneType extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_PhoneTypeMaster
-							(
-								Description
-							)
-							VALUES
-							(
-								{$conn->SetTextField($this->_description)}
-							)";
+		$query->SQL = "	INSERT INTO core_PhoneTypeMaster
+						(
+							Description
+						)
+						VALUES
+						(
+							{$query->SetTextField($this->_description)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_PhoneTypeMaster SET
-								Description = {$conn->SetTextField($this->_description)}
-							WHERE PhoneTypeID = {$this->_phoneTypeID}";
+		$query->SQL = "	UPDATE core_PhoneTypeMaster SET
+							Description = {$query->SetTextField($this->_description)}
+						WHERE PhoneTypeID = {$this->_phoneTypeID}";
 
 		$conn->Execute($query);
 

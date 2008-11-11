@@ -7,7 +7,6 @@ MerchantAccount Class File
  */
 
 NameSpace::Using("Sandstone.Action");
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.CreditCard");
 
 class MerchantAccount extends EntityBase

@@ -6,8 +6,6 @@ KnowledgebaseArticle Class File
 @subpackage Knowledgebase
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class KnowledgebaseArticle extends EntityBase
 {
 	protected function SetupProperties()

@@ -6,8 +6,6 @@ Phones Collective Class
 @subpackage Phones
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Phones extends CollectiveBase
 {
 
@@ -42,7 +40,7 @@ class Phones extends CollectiveBase
 			$this->_elements->Clear();
 			$this->_phonesByType->Clear();
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
@@ -56,29 +54,15 @@ class Phones extends CollectiveBase
 			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds)
-			{
-				while ($dr = $ds->FetchRow())
-				{
-					$tempPhone = new Phone($dr);
-					$this->_elements[$tempPhone->PhoneID] = $tempPhone;
+			$query->LoadEntityArray($this->_elements, "Phone", "PhoneID", $this, "LoadCallback");
 
-					$this->_phonesByType[$tempPhone->PhoneType->PhoneTypeID] = $tempPhone;
-				}
+			$returnValue = true;
 
-				$returnValue = true;
-
-				$this->_isLoaded = true;
-
-			}
-			else
-			{
-				$returnValue = false;
-			}
+			$this->_isLoaded = true;
 
 		}
 		else
@@ -87,6 +71,11 @@ class Phones extends CollectiveBase
 		}
 
 		return $returnValue;
+	}
+
+	public function LoadCallback($Phone)
+	{
+		$this->_phonesByType[$Phone->PhoneType->PhoneTypeID] = $Phone;
 	}
 
 	protected function ProcessNewElement($NewElement)
@@ -103,27 +92,27 @@ class Phones extends CollectiveBase
 			}
 
 			//Now add the new Phone
-			$conn = GetConnection();
+			$query = new Query();
 
 			$associatedEntityType = get_class($this->_parentEntity);
 			$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-			$query = "	INSERT INTO core_EntityPhone
-						(
-							AssociatedEntityType,
-							AssociatedEntityID,
-							PhoneID,
-							PhoneTypeID
-						)
-						VALUES
-						(
-							{$conn->SetTextField($associatedEntityType)},
-							{$associatedEntityID},
-							{$NewElement->PhoneID},
-							{$NewElement->PhoneType->PhoneTypeID}
-						)";
+			$query->SQL = "	INSERT INTO core_EntityPhone
+							(
+								AssociatedEntityType,
+								AssociatedEntityID,
+								PhoneID,
+								PhoneTypeID
+							)
+							VALUES
+							(
+								{$query->SetTextField($associatedEntityType)},
+								{$associatedEntityID},
+								{$NewElement->PhoneID},
+								{$NewElement->PhoneType->PhoneTypeID}
+							)";
 
-			$conn->Execute($query);
+			$query->Execute();
 
 			$returnValue = true;
 
@@ -139,18 +128,18 @@ class Phones extends CollectiveBase
 	protected function ProcessOldElement($OldElement)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityPhone
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		PhoneID = {$OldElement->PhoneID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityPhone
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		PhoneID = {$OldElement->PhoneID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
@@ -158,17 +147,17 @@ class Phones extends CollectiveBase
 
 	protected function ProcessClearElements()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	DELETE
-					FROM	core_EntityPhone
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}";
+		$query->SQL = "	DELETE
+						FROM	core_EntityPhone
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		$this->_phonesByType->Clear();
 
@@ -177,18 +166,18 @@ class Phones extends CollectiveBase
 
 	protected function ProcessSaveElement($CurrentElement)
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
 		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
-		$query = "	UPDATE core_EntityPhone SET
-						PhoneTypeID = {$CurrentElement->PhoneType->PhoneTypeID}
-					WHERE	AssociatedEntityType = {$conn->SetTextField($associatedEntityType)}
-					AND		AssociatedEntityID = {$associatedEntityID}
-					AND		PhoneID = {$CurrentElement->PhoneID} ";
+		$query->SQL = "	UPDATE core_EntityPhone SET
+							PhoneTypeID = {$CurrentElement->PhoneType->PhoneTypeID}
+						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						AND		AssociatedEntityID = {$associatedEntityID}
+						AND		PhoneID = {$CurrentElement->PhoneID} ";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 
