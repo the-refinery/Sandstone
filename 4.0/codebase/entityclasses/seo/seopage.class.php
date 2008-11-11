@@ -6,8 +6,6 @@ SEOpage Class File
 @subpackage SEO
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class SEOpage extends EntityBase
 {
 
@@ -95,30 +93,20 @@ class SEOpage extends EntityBase
 	public function LoadByName($Name)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$Name = strtolower($Name);
-
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 		$whereClause = "WHERE 	AccountID = {$this->AccountID}
-						AND		LOWER(Name) = {$conn->SetTextField($Name)} ";
+						AND		LOWER(Name) = {$query->SetTextField($Name)} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
-		else
-		{
-			$returnValue = false;
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 	}
@@ -130,26 +118,21 @@ class SEOpage extends EntityBase
 
 		if (is_set($AssociatedEntityType) && is_set($AssociatedEntityID))
 		{
-			$conn = GetConnection();
+			$query = new Query();
 
 			$Name = strtolower($Name);
 
 			$selectClause = self::GenerateBaseSelectClause();
 			$fromClause = self::GenerateBaseFromClause();
 			$whereClause = "WHERE	AccountID = {$this->AccountID}
-							AND		LOWER(AssociatedEntityType) = {$conn->SetTextField($AssociatedEntityType)}
+							AND		LOWER(AssociatedEntityType) = {$query->SetTextField($AssociatedEntityType)}
 							AND		AssociatedEntityID = {$AssociatedEntityID} ";
 
-			$query = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-			$ds = $conn->Execute($query);
+			$query->Execute();
 
-			if ($ds && $ds->RecordCount() > 0)
-			{
-				$dr = $ds->FetchRow();
-
-				$returnValue = $this->Load($dr);
-			}
+			$returnValue = $query->LoadEntity($this);
 		}
 
 		return $returnValue;
@@ -157,49 +140,44 @@ class SEOpage extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_SEOpageMaster
-							(
-								Name,
-								AccountID,
-								AssociatedEntityType,
-								AssociatedEntityID,
-								RoutingRuleName
-							)
-							VALUES
-							(
-								{$conn->SetTextField($this->_name)},
-								{$this->AccountID},
-								{$conn->SetTextField($this->_associatedEntityType)},
-								{$this->_associatedEntityID},
-								{$conn->SetTextField($this->_routingRuleName)}
-							)";
+		$query->SQL = "	INSERT INTO core_SEOpageMaster
+						(
+							Name,
+							AccountID,
+							AssociatedEntityType,
+							AssociatedEntityID,
+							RoutingRuleName
+						)
+						VALUES
+						(
+							{$query->SetTextField($this->_name)},
+							{$this->AccountID},
+							{$query->SetTextField($this->_associatedEntityType)},
+							{$this->_associatedEntityID},
+							{$query->SetTextField($this->_routingRuleName)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_SEOpageMaster SET
-								Name = {$conn->SetTextField($this->_name)},
-								AssociatedEntityType = {$conn->SetTextField($this->_associatedEntityType)},
-								AssociatedEntityID = {$this->_associatedEntityID},
-								RoutingRuleName = {$conn->SetTextField($this->_routingRuleName)}
-							WHERE SEOpageID = {$this->_sEOpageID}";
+		$query->SQL = "	UPDATE core_SEOpageMaster SET
+							Name = {$query->SetTextField($this->_name)},
+							AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)},
+							AssociatedEntityID = {$this->_associatedEntityID},
+							RoutingRuleName = {$query->SetTextField($this->_routingRuleName)}
+						WHERE SEOpageID = {$this->_sEOpageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -207,21 +185,21 @@ class SEOpage extends EntityBase
 	public function VerifyUniqueSEOname($TestSEOname)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	SELECT 	SEOpageID,
-							Name
-					FROM 	core_SEOpageMaster
-					WHERE 	Name LIKE '{$TestSEOname}'";
+		$query->SQL = "	SELECT 	SEOpageID,
+								Name
+						FROM 	core_SEOpageMaster
+						WHERE 	Name LIKE {$query->SetTextField($TestSEOname)}";
 
 		if (is_set($this->_seoPageID))
 		{
-			$query .= "	AND	SEOpageID <> {$this->_seoPageID}";
+			$query->SQL .= "	AND	SEOpageID <> {$this->_seoPageID}";
 		}
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() == 0)
+		if ($query->SelectedRows == 0)
 		{
 			$returnValue = true;
 		}
