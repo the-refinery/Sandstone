@@ -91,7 +91,7 @@ class Messages extends Module
 
 		$selectClause = Message::GenerateBaseSelectClause();
         $fromClause = Message::GenerateBaseFromClause();
-        $whereClause = "	WHERE	a.AssociatedEntityType = {$conn->SetTextField($this->_associatedEntityType)}
+        $whereClause = "	WHERE	a.AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
         					AND		a.AssociatedEntityID = {$this->_associatedEntityID} ";
 		$orderByClause = "	ORDER BY a.Timestamp DESC ";
 

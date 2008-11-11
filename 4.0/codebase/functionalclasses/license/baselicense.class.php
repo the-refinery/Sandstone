@@ -6,7 +6,6 @@ BaseLicense Class File
 @subpackage License
  */
 
-NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Merchant");
 Namespace::Using("Sandstone.Utilities.String");
 
@@ -71,61 +70,51 @@ class BaseLicense extends EntityBase
 
 		$returnValue = false;
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$searchString = strtolower($AccountName);
 
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$whereClause = "WHERE	LOWER(a.Name) = {$conn->SetTextField($searchString)} ";
+		$whereClause = "WHERE	LOWER(a.Name) = {$query->SetTextField($searchString)} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 	}
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_AccountMaster
-							(
-								Name
-							)
-							VALUES
-							(
-								{$conn->SetTextField($this->_name)}
-							)";
+		$query->SQL = "	INSERT INTO core_AccountMaster
+						(
+							Name
+						)
+						VALUES
+						(
+							{$query->SetTextField($this->_name)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_AccountMaster SET
-								Name = {$conn->SetTextField($this->_name)}
-							WHERE AccountID = {$this->_accountID}";
+		$query->SQL = "	UPDATE core_AccountMaster SET
+							Name = {$query->SetTextField($this->_name)}
+						WHERE AccountID = {$this->_accountID}";
 
 		$conn->Execute($query);
 
@@ -150,19 +139,18 @@ class BaseLicense extends EntityBase
 	static public function ValidateUniqueAccountName($NewAccountName)
 	{
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = "	SELECT 	COUNT(AccountID) NumberAccounts ";
 		$fromClause = self::GenerateBaseFromClause();
 
-		$whereClause .= "WHERE Name LIKE '{$NewAccountName}' ";
+		$whereClause .= "WHERE Name LIKE {$query->SetTextField($NewAccountName)} ";
 
-		$query = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$ds = $conn->Execute($query);
-		$dr = $ds->FetchRow();
+		$query->Execute();
 
-		if ($dr['NumberAccounts'] == 0)
+		if ($query->SingleRowResult['NumberAccounts'] == 0)
 		{
 			$returnValue = true;
 		}
