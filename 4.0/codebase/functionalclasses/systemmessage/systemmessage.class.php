@@ -6,8 +6,6 @@ SystemMessage Class File
 @subpackage SystemMessgae
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class SystemMessage extends EntityBase
 {
 
@@ -53,7 +51,7 @@ class SystemMessage extends EntityBase
 		$license = Application::License();
 		$user = Application::CurrentUser();
 
-		$conn = GetConnection();
+		$query = new Query();
 
 		$selectClause = SystemMessage::GenerateBaseSelectClause();
 		$fromClause = SystemMessage::GenerateBaseFromClause();
@@ -77,16 +75,11 @@ class SystemMessage extends EntityBase
 		$orderByClause = "ORDER BY a.MessageID DESC ";
 		$limitClause = "LIMIT 1";
 
-		$query = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
-		$ds = $conn->Execute($query);
+		$query->Execute();
 
-		if ($ds && $ds->RecordCount() > 0)
-		{
-			$dr = $ds->FetchRow();
-
-			$returnValue = $this->Load($dr);
-		}
+		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
 
@@ -94,50 +87,45 @@ class SystemMessage extends EntityBase
 
 	protected function SaveNewRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	INSERT INTO core_SystemMessageMaster
-							(
-								Title,
-								Content,
-								StartDate,
-								EndDate,
-								IsAdminOnly
-							)
-							VALUES
-							(
-								{$conn->SetNullTextField($this->_title)},
-								{$conn->SetTextField($this->_content)},
-								{$conn->SetNullDateField($this->_startDate)},
-								{$conn->SetNullDateField($this->_endDate)},
-								{$conn->SetBooleanField($this->_isAdminOnly)}
-							)";
+		$query->SQL = "	INSERT INTO core_SystemMessageMaster
+						(
+							Title,
+							Content,
+							StartDate,
+							EndDate,
+							IsAdminOnly
+						)
+						VALUES
+						(
+							{$query->SetNullTextField($this->_title)},
+							{$query->SetTextField($this->_content)},
+							{$query->SetNullDateField($this->_startDate)},
+							{$query->SetNullDateField($this->_endDate)},
+							{$query->SetBooleanField($this->_isAdminOnly)}
+						)";
 
-		$conn->Execute($query);
+		$query->Execute();
 
-		//Get the new ID
-		$query = "SELECT LAST_INSERT_ID() newID ";
-
-		$dr = $conn->GetRow($query);
-
-		$this->_primaryIDproperty->Value = $dr['newID'];
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-		$conn = GetConnection();
+		$query = new Query();
 
-		$query = "	UPDATE core_SystemMessageMaster SET
-								Title = {$conn->SetNullTextField($this->_title)},
-								Content = {$conn->SetTextField($this->_content)},
-								StartDate = {$conn->SetNullDateField($this->_startDate)},
-								EndDate = {$conn->SetNullDateField($this->_endDate)},
-								IsAdminOnly = {$conn->SetBooleanField($this->_isAdminOnly)}
+		$query->SQL = "	UPDATE core_SystemMessageMaster SET
+								Title = {$query->SetNullTextField($this->_title)},
+								Content = {$query->SetTextField($this->_content)},
+								StartDate = {$query->SetNullDateField($this->_startDate)},
+								EndDate = {$query->SetNullDateField($this->_endDate)},
+								IsAdminOnly = {$query->SetBooleanField($this->_isAdminOnly)}
 							WHERE MessageID = {$this->_messageID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}
@@ -148,28 +136,29 @@ class SystemMessage extends EntityBase
 		{
 			$user = Application::CurrentUser();
 
-			$conn = GetConnection();
+			$query = new Query();
 
 			//Delete first, just to make sure we don't get an error
-			$query = "	DELETE
-						FROM 	core_SystemMessageReadLog
-						WHERE	MessageID = {$this->_messageID}
-						AND		UserID = {$user->UserID} ";
+			$query->SQL = "	DELETE
+							FROM 	core_SystemMessageReadLog
+							WHERE	MessageID = {$this->_messageID}
+							AND		UserID = {$user->UserID} ";
 
-			$conn->Execute($query);
+			$query->Execute();
 
-			$query = "	INSERT INTO core_SystemMessageReadLog
-						(
-							MessageID,
-							UserID
-						)
-						VALUES
-						(
-							{$this->_messageID},
-							{$user->UserID}
-						)";
+			$query->SQL = "	INSERT INTO core_SystemMessageReadLog
+							(
+								MessageID,
+								UserID
+							)
+							VALUES
+							(
+								{$this->_messageID},
+								{$user->UserID}
+							)";
 
-			$conn->Execute($query);
+			$query->Execute();
+
 		}
 	}
 
