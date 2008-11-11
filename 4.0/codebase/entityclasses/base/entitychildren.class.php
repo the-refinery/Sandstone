@@ -122,7 +122,7 @@ class EntityChildren extends Module implements ArrayAccess, Iterator
 		return count($this->_elements);
 	}
 
-	public function Load($TargetClass, $ds, $ParentObject = null, $ParentProperty = null, $KeyField = null)
+	public function Load($TargetClass, $QueryResults, $ParentObject = null, $ParentProperty = null, $KeyField = null)
 	{
 
 		$this->Clear();
@@ -140,7 +140,7 @@ class EntityChildren extends Module implements ArrayAccess, Iterator
 		}
 
 		//Load our elements from the dataset
-        while ($dr = $ds->FetchRow())
+        foreach ($QueryResults as $ds)
         {
 			$key = $dr[$KeyField];
 			$this->offsetSet($key, $dr);
