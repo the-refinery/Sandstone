@@ -182,7 +182,7 @@ class SEOkeyword extends Module
 
 	}
 
-	protected function SaveUpdateRecord($conn)
+	protected function SaveUpdateRecord()
 	{
 
 		$query = new Query();

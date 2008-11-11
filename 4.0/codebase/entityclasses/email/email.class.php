@@ -87,7 +87,7 @@ class Email extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	UPDATE core_EmailMaster SET
-							Address = {$conn->SetTextField($this->_address)}
+							Address = {$query->SetTextField($this->_address)}
 						WHERE EmailID = {$this->_emailID}";
 
 		$query->Execute();

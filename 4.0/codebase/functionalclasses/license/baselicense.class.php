@@ -117,7 +117,7 @@ class BaseLicense extends EntityBase
 							Name = {$query->SetTextField($this->_name)}
 						WHERE AccountID = {$this->_accountID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}

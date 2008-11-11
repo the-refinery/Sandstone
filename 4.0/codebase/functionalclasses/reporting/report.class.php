@@ -103,7 +103,7 @@ class Report extends EntityBase
 		$fromClause = Report::GenerateBaseFromClause();
 
 		$whereClause = Report::GenerateBaseWhereClause();
-		$whereClause .= "AND LOWER(a.TemplateName) = {$conn->SetTextField($Name)} ";
+		$whereClause .= "AND LOWER(a.TemplateName) = {$query->SetTextField($Name)} ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
 

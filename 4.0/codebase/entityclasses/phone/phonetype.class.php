@@ -56,7 +56,7 @@ class PhoneType extends EntityBase
 							Description = {$query->SetTextField($this->_description)}
 						WHERE PhoneTypeID = {$this->_phoneTypeID}";
 
-		$conn->Execute($query);
+		$query->Execute();
 
 		return true;
 	}

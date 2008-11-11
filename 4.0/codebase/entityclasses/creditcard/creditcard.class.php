@@ -332,7 +332,7 @@ class CreditCard extends Module
 
 		if (is_set($dr['AddressID']))
 		{
-			$this->_billingAddress = new Address($dr['AddressID'], $conn);
+			$this->_billingAddress = new Address($dr['AddressID']);
 		}
 
 		$this->_expirationDate = new date($dr['ExpirationDate']);

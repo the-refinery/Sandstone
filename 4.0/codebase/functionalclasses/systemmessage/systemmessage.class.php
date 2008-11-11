@@ -60,7 +60,7 @@ class SystemMessage extends EntityBase
 
 		if ($license->hasProperty("SignupDate"))
 		{
-			$whereClause .= "AND a.StartDate >= {$conn->SetDateField($license->SignupDate)} ";
+			$whereClause .= "AND a.StartDate >= {$query->SetDateField($license->SignupDate)} ";
 		}
 
 		if ($user->IsInRole(new Role(1)) == false)

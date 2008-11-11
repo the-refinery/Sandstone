@@ -77,8 +77,6 @@ class MerchantAccount extends EntityBase
 
 		$query->Execute();
 
-		$ds = $conn->Execute($query);
-
 		$returnValue = $query->LoadEntity($this);
 
 		return $returnValue;
