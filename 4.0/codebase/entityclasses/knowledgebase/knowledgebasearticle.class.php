@@ -200,7 +200,7 @@ class KnowledgebaseArticle extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "KnowledgebaseArticle", "ArticleID");
+		$returnValue = new ObjectSet($query->Results, "KnowledgebaseArticle", "ArticleID");
 
 		return $returnValue;
 	}

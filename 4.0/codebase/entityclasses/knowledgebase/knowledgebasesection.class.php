@@ -177,7 +177,7 @@ class KnowledgebaseSection extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "KnowledgebaseSection", "SectionID");
+		$returnValue = new ObjectSet($query->Results, "KnowledgebaseSection", "SectionID");
 
 		return $returnValue;
 	}

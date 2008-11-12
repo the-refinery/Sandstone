@@ -308,7 +308,7 @@ class CreditCardType extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "CreditCardType", "CardTypeID");
+		$returnValue = new ObjectSet($query->Results, "CreditCardType", "CardTypeID");
 
 		return $returnValue;
 	}

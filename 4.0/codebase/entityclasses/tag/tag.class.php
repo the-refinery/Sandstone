@@ -170,7 +170,7 @@ class Tag extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "Tag", "TagID");
+		$returnValue = new ObjectSet($query->Results, "Tag", "TagID");
 
 		return $returnValue;
 	}

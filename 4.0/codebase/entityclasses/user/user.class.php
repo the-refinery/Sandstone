@@ -790,7 +790,7 @@ class User extends EntityBase
 
 		$query = new Query();
 
-		$returnValue = new ObjectSet($query, "User", "UserID");
+		$returnValue = new ObjectSet($query->Results, "User", "UserID");
 
 		return $returnValue;
 	}
@@ -822,7 +822,7 @@ class User extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "User", "UserID");
+		$returnValue = new ObjectSet($query->Results, "User", "UserID");
 
 		return $returnValue;
 	}

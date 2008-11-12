@@ -180,8 +180,7 @@ class Query extends Module
 	*/
 	public function SetTextField($Value)
 	{
-		$returnValue = "'" . mysql_real_escape_string($Value) . "'";
-
+		$returnValue = "'" . $this->_conn->real_escape_string($Value) . "'";
 		return $returnValue;
 	}
 

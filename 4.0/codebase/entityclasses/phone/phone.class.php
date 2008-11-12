@@ -168,7 +168,7 @@ class Phone extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "Phone", "PhoneID");
+		$returnValue = new ObjectSet($query->Results, "Phone", "PhoneID");
 
 		return $returnValue;
 	}

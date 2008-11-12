@@ -202,7 +202,7 @@ class Email extends EntityBase
 
 		$query->Execute();
 
-		$returnValue = new ObjectSet($query, "Email", "EmailID");
+		$returnValue = new ObjectSet($query->Results, "Email", "EmailID");
 
 		return $returnValue;
 	}
