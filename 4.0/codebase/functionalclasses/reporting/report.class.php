@@ -209,6 +209,12 @@ class Report extends EntityBase
 
 		$this->_fieldsByAlias[strtolower($Field->FieldAlias)] = $Field;
 
+        if ($Field->IsReturned)
+        {
+            $this->_returnedFields[$Field->FieldID] = $Field;
+        }
+
+
 		return $Field;
 	}
 

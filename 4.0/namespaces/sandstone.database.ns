@@ -1,5 +1,5 @@
-codebase/functionalclasses/database/new/diconnection.class.php
-codebase/functionalclasses/database/new/query.class.php
-codebase/functionalclasses/database/new/querylog.class.php
-codebase/functionalclasses/database/new/databaseconnectionexception.class.php
-codebase/functionalclasses/database/new/sqlexception.class.php
+codebase/functionalclasses/database/diconnection.class.php
+codebase/functionalclasses/database/query.class.php
+codebase/functionalclasses/database/querylog.class.php
+codebase/functionalclasses/database/databaseconnectionexception.class.php
+codebase/functionalclasses/database/sqlexception.class.php
