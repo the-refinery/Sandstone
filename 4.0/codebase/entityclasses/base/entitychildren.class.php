@@ -140,7 +140,7 @@ class EntityChildren extends Module implements ArrayAccess, Iterator
 		}
 
 		//Load our elements from the dataset
-        foreach ($QueryResults as $ds)
+        foreach ($QueryResults as $dr)
         {
 			$key = $dr[$KeyField];
 			$this->offsetSet($key, $dr);

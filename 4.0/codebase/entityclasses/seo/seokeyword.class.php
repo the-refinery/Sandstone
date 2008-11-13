@@ -187,7 +187,7 @@ class SEOkeyword extends Module
 
 		$query = new Query();
 
-		$query->$query = "	UPDATE core_SEOkeywordMaster SET
+		$query->SQL = "	UPDATE core_SEOkeywordMaster SET
 								SEOpageID = {$query->SetNullNumericField($this->_seoPageID)},
 								Keyword = {$query->SetTextField($this->_keyword)},
 								SortOrder = {$this->_sortOrder}

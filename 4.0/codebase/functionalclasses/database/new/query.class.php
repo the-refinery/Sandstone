@@ -261,7 +261,7 @@ class Query extends Module
 	{
 		if (is_set($Value) && strlen($Value) > 0)
 		{
-			$returnValue = mysql_real_escape_string("{$Value}");
+			$returnValue = $this->_conn->real_escape_string("{$Value}");
 		}
 		else
 		{
