@@ -21,7 +21,7 @@ class ObjectSet extends Module
 
 	public function __construct($Results = null, $ClassName = null, $KeyProperty = null)
 	{
-		$this->_objects = array();
+		$this->_objects = Array();
 		$this->_keys = Array();
 		$this->_currentIndex = 0;
 
@@ -167,7 +167,7 @@ class ObjectSet extends Module
 		return $returnValue;
 	}
 
-	public function Load($Restuls, $ClassName, $KeyProperty)
+	public function Load($Results, $ClassName, $KeyProperty)
 	{
 
 		if (count($Results) > 0)

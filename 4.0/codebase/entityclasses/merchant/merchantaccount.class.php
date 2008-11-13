@@ -163,10 +163,10 @@ class MerchantAccount extends EntityBase
 
 			//Update the Transaction Fee & Discount Percent
 			$query->SQL = "	UPDATE 	core_ActiveMerchantAccount SET
-							TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
-							DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)}
-						WHERE 	MerchantAccountID = {$this->_merchantAccountID}
-						AND		AccountID = {$this->AccountID}";
+								TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
+								DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)}
+							WHERE 	MerchantAccountID = {$this->_merchantAccountID}
+							AND		AccountID = {$this->AccountID}";
 
 			$query->Execute();
 

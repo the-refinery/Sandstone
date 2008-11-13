@@ -22,7 +22,7 @@ class Tags extends CollectiveBase
 
 			$this->_elements->Clear();
 
-			$query - new Query();
+			$query = new Query();
 
 			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;

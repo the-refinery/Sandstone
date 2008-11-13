@@ -1028,9 +1028,9 @@ class EntityBase extends Module
 		{
 			$ds = $this->$targetFunctionName ($Parameters, self::LOOKUP_TYPE_COUNT);
 
-			if ($ds && $ds->RecordCount() > 0)
+			if (count($ds) > 0)
 			{
-				$dr = $ds->FetchRow();
+				$dr = $ds[0];
 
 				$returnValue = $dr['LookupCount'];
 			}

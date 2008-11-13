@@ -22,6 +22,33 @@ class SQLexception extends DIexception
 		$this->_sql = $SQL;
 	}
 
+	public function __toString()
+	{
+
+		//We'll make it report where the query was executed rather than the
+		//actual execute line in the query class.
+		$originalTraceArray = $this->getTrace();
+
+		$line = $originalTraceArray[0]['line'];
+		$file = $originalTraceArray[0]['file'];
+
+		$returnValue .=
+		"
+					<h2><b>Error: </b>{$this->getMessage()}</h2>
+					<h3><b>Line: </b>{$line}</h3>
+					<h3><b>File: </b>{$file}</h3>
+					<h4><b>SQL</b></h4>
+					<pre>
+					{$this->_sql}
+					</pre>
+		";
+
+		$returnValue .= $this->DItraceAsString();
+
+		return $returnValue;
+	}
+
+
 	/*
 	ErrorNumber property
 
