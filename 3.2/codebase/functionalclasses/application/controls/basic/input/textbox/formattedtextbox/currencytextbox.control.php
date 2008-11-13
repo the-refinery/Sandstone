@@ -28,11 +28,8 @@ class CurrencyTextBoxControl extends FormattedTextBoxControl
 	{
 		if (strlen($Value) > 0)
 		{
-			// Remove $
-			$returnValue = str_replace("\$", "", $Value);
-
-			// Format Number
-			$returnValue = number_format($returnValue, 2, '.', '');
+			// Remove $ and thousand separators
+			$returnValue = str_replace(Array("\$", ","), "", $Value);
 		}
 
 		return $returnValue;
