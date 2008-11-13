@@ -6,8 +6,6 @@ Reports Class File
 @subpackage Reporting
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Reports extends Module
 {
 

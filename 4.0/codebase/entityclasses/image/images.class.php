@@ -6,8 +6,6 @@ Images Collective Class
 @subpackage Image
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class Images extends CollectiveBase
 {
 

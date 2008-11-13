@@ -6,7 +6,6 @@ BaseLicense Class File
 @subpackage License
  */
 
-//NameSpace::Using("Sandstone.ADOdb");
 NameSpace::Using("Sandstone.Merchant");
 Namespace::Using("Sandstone.Utilities.String");
 

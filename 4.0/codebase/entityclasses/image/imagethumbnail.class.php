@@ -6,8 +6,6 @@ ImageThumbnail Class File
 @subpackage Image
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-
 class ImageThumbnail extends EntityBase
 {
 	protected function SetupProperties()
