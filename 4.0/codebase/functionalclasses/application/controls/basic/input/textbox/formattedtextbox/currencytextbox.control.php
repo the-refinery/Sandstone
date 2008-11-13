@@ -1,8 +1,7 @@
 <?php
 
-/*
-Currency Text Box Control
-*/
+Namespace::Using("Sandstone.Utilities.String");
+
 class CurrencyTextBoxControl extends FormattedTextBoxControl
 {
 	public function __construct()
@@ -16,10 +15,7 @@ class CurrencyTextBoxControl extends FormattedTextBoxControl
 
 	protected function FormatDisplayValue($Value)
 	{
-		if (strlen($Value) > 0)
-		{
-			$returnValue = "\$" . number_format($Value, 2);
-		}
+		$returnValue = StringFunc::FormatCurrency($Value);
 
 		return $returnValue;
 	}
