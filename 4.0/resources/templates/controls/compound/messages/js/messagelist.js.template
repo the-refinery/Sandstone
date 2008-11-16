@@ -16,10 +16,8 @@ function {$ControlName}_BottomAddMessage_OnClick()
 
 function {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick(e)
 {
-	var clickedLink;
+	var clickedLink = e.element();
 	var parameters;
-
-	clickedLink = GetEventTarget(e);
 
 	parameters = "&messageid=" + clickedLink.rel;
 

@@ -22,11 +22,9 @@ function {$ControlName}_DeleteMessage_OnClick()
 
 function {$ControlName}_Comments_Item_DeleteComment_OnClick(e)
 {
-	var clickedImage;
+	var clickedImage = e.element();
 	var altParts;
 	var parameters;
-
-	clickedImage = GetEventTarget(e);
 
 	altParts = clickedImage.alt.split(':');
 

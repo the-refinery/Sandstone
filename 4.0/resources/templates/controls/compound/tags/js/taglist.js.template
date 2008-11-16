@@ -1,11 +1,9 @@
 function {$ControlName}_Item_DeleteTag_OnClick(e)
 {
-	var clickedImage;
+	var clickedImage = e.element();
 	var altParts;
 	var tagID;
 	var parameters;
-
-	clickedImage = GetEventTarget(e);
 
 	altParts = clickedImage.alt.split(':');
 
