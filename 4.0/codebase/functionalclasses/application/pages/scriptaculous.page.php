@@ -15,8 +15,20 @@ class ScriptaculousPage extends BasePage
 		$libraryFileSpec = "javascript/protoaculous.js";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		//Now add application js
-		$libraryFileSpec = "javascript/application.js";
+		//Now add ajax functions
+		$libraryFileSpec = "javascript/ajax.js";
+		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+
+		//Now add control functions
+		$libraryFileSpec = "javascript/controls.js";
+		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+
+		//Now add table functions
+		$libraryFileSpec = "javascript/table.js";
+		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+
+		//Now add string functions
+		$libraryFileSpec = "javascript/string.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
 		echo $libraryContents;

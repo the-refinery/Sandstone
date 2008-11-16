@@ -7,3 +7,4 @@ function RaiseAJAXevent(Target, Method, PostParameters)
 			onFailure:function(t) { alert('An AJAX error has happened!'); }
 		});
 }
+

@@ -1,6 +1,3 @@
-{!ajaxfunctions.js.template}
-{!controlfunctions.js.template}
-{!tablefunctions.js.template}
-{!utilityfunctions.js.template}
+{!constants.js.template}
 
 {Content}

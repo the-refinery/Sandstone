@@ -1,0 +1,17 @@
+function Trim(str, chars) 
+{
+    return Ltrim(Rtrim(str, chars), chars);
+}
+
+function Ltrim(str, chars) 
+{
+    chars = chars || "\\s";
+    return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+}
+
+function Rtrim(str, chars) 
+{
+    chars = chars || "\\s";
+    return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+}
+
