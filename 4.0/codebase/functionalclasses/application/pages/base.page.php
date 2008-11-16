@@ -116,7 +116,7 @@ class BasePage extends ControlContainer
 	Forms property
 
 	@return Array
-	 */
+	*/
 	public function getForms()
 	{
 		return $this->_forms;
@@ -136,7 +136,7 @@ class BasePage extends ControlContainer
     TemplateSearchPath property
 
     @return string
-     */
+    */
     final public function getTemplateSearchPath()
     {
         if (is_set($this->_templateSearchPath) == false)
@@ -337,7 +337,6 @@ class BasePage extends ControlContainer
 
 	final protected function GET_Handler($EventParameters)
 	{
-
 		$returnValue = new EventResults();
 
 		$session = Application::Session();
@@ -551,6 +550,8 @@ class BasePage extends ControlContainer
 		$processor->Template->FileName = strtolower("{$targetName}_{$EventParameters['method']}");;
 
 		//Call the method and echo the results
+		header('Content-Type: text/javascript');
+		
         $results = $processor->Render();
 		echo $this->CompressJavascript($results, false);
 
