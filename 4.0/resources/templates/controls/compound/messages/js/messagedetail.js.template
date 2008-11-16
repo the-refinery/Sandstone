@@ -16,7 +16,7 @@ function {$ControlName}_DeleteMessage_OnClick()
 	
 	if (confirmation)
 	{
-		FullFormAJAX("{$ControlName}", "DeleteMessage", '{$ControlName}_NewCommentForm');
+		RaiseAJAXevent("{$ControlName}", "DeleteMessage", $('{$ControlName}_NewCommentForm').serialize());
 	}
 }
 
@@ -34,13 +34,13 @@ function {$ControlName}_Comments_Item_DeleteComment_OnClick(e)
 	
 	if (confirmation)
 	{
-		FullFormAJAX("{$ControlName}", "DeleteComment", '{$ControlName}_NewCommentForm');
+		RaiseAJAXevent("{$ControlName}", "DeleteComment", $('{$ControlName}_NewCommentForm').serialize());
 	}
 }
 
 function {$ControlName}_NewCommentSubmit_OnClick()
 {
-	FullFormAJAX("{$ControlName}", "AddComment", '{$ControlName}_NewCommentForm');
+	RaiseAJAXevent("{$ControlName}", "AddComment", $('{$ControlName}_NewCommentForm').serialize());
 }
 
 function {$ControlName}_RemoveCommentDIV(CommentID)

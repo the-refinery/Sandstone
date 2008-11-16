@@ -10,7 +10,7 @@ function {$ControlName}_CancelAddMessage_OnClick()
 
 function {$ControlName}_NewMessageSubmit_OnClick()
 {
-	FullFormAJAX("{$ControlName}", "AddMessage", '{$ControlName}_AddMessageForm');
+	RaiseAJAXevent("{$ControlName}", "AddMessage", $('{$ControlName}_AddMessageForm').serialize());
 }
 
 function {$ControlName}_ClearNewMessageFields()
