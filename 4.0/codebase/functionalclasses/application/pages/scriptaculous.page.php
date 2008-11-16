@@ -11,12 +11,12 @@ class ScriptaculousPage extends BasePage
 	protected function JS_Processor($EventParameters)
 	{
 
-		//Load Prototype
-		$libraryFileSpec = "javascript/prototype.js";
+		//Load Prototype & Scriptaculous compressed
+		$libraryFileSpec = "javascript/protoaculous.js";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		//Now add effect
-		$libraryFileSpec = "javascript/effects.js";
+		//Now add application js
+		$libraryFileSpec = "javascript/application.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
 		echo $libraryContents;
