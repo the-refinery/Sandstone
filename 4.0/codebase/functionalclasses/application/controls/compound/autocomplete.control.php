@@ -154,8 +154,7 @@ class AutoCompleteControl extends BaseControl
 
 		$ajaxURL = Routing::GetFileTypeURL("ajax");
 
-		$returnValue .= "\tif (\$('{$this->Name}'))\n";
-		$returnValue .= "\t{\n";
+		$returnValue .= "\tif (\$('{$this->Name}')) ";
 
 		$parameters[] = "callback: {$this->Name}_AutoComplete_Callback";
 		$parameters[] = "afterUpdateElement: {$this->Name}_AutoComplete_afterUpdateElement";
@@ -164,9 +163,7 @@ class AutoCompleteControl extends BaseControl
 
 		$parameterString = implode(", ", $parameters);
 
-		$returnValue .= "\t\tnew Ajax.Autocompleter(\"{$this->Name}_AutoComplete_Text\", \"{$this->Name}_AutoComplete_Matches\", \"{$ajaxURL}\", {{$parameterString}});\n";
-
-		$returnValue .= "\t}\n\n";
+		$returnValue .= "new Ajax.Autocompleter(\"{$this->Name}_AutoComplete_Text\", \"{$this->Name}_AutoComplete_Matches\", \"{$ajaxURL}\", {{$parameterString}});\n";
 
 		return $returnValue;
 	}

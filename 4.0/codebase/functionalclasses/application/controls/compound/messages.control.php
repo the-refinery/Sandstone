@@ -323,7 +323,7 @@ class MessagesControl extends BaseControl
 				//IF we are in admin mode, add the observer for the delete image
 				if ($this->_isAdminUser)
 				{
-					$Processor->Template->CommentDeleteObservers = "Event.observe('Messages_Comments_Item_{$tempMessage->LatestComment->CommentID}_DeleteComment', 'click', Messages_Comments_Item_DeleteComment_OnClick);";
+					$Processor->Template->CommentDeleteObservers = "\$('Messages_Comments_Item_{$tempMessage->LatestComment->CommentID}_DeleteComment').observe('click', Messages_Comments_Item_DeleteComment_OnClick);";
 				}
 			}
 		}

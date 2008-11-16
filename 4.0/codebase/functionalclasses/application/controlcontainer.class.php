@@ -453,7 +453,26 @@ class ControlContainer extends Renderable
 		preg_match_all($pattern, $Javascript, $functions, PREG_SET_ORDER);
 
 		//Did we find any?
-		if (count($functions) > 0)
+		if (count($functions) == 1)
+		{
+			$function = $functions[0];
+			
+			$returnValue = "\tif (\$('{$this->Name}')) ";
+						
+			$eventName = strtolower($function[1]);
+			$endOfFunctionName = strpos($function[0], "(");
+			$functionName = substr(substr($function[0], 0, $endOfFunctionName), 9);
+
+			if ($eventName == "load")
+			{
+				$returnValue .= "{$functionName}();\n";
+			}
+			else
+			{
+				$returnValue .= "\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
+			}
+		}
+		elseif (count($functions) > 1)
 		{
 			//We have some, so register the observers
 			//(check in JS on the client side to make sure the DOM elements exist)
@@ -472,11 +491,11 @@ class ControlContainer extends Renderable
 				}
 				else
 				{
-					$returnValue .= "\t\tEvent.observe('{$this->Name}', '{$eventName}', {$functionName});\n";
+					$returnValue .= "\t\t\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
 				}
 			}
 
-			$returnValue .= "\t}\n\n";
+			$returnValue .= "\t}\n";
 		}
 
 		//Now look for any "sub elements" of this control which aren't part of our controls array
@@ -498,13 +517,8 @@ class ControlContainer extends Renderable
 				if (array_key_exists(strtolower($elementName), $this->Controls) == false)
 				{
 					//(check in JS on the client side to make sure the DOM elements exist)
-					$returnValue .= "\tif (\$('{$this->Name}_{$elementName}'))\n";
-					$returnValue .= "\t{\n";
-
-					$returnValue .= "\t\tEvent.observe('{$this->Name}_{$elementName}', '{$eventName}', {$functionName});\n";
-
-					$returnValue .= "\t}\n\n";
-
+					$returnValue .= "\tif (\$('{$this->Name}_{$elementName}')) ";
+					$returnValue .= "\$('{$this->Name}_{$elementName}').observe('{$eventName}', {$functionName});\n";
 				}
 
 			}

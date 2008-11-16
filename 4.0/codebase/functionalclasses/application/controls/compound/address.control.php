@@ -300,12 +300,12 @@ class AddressControl extends BaseControl
 
 		if ($IsMineIncluded)
 		{
-			$returnValue = "Event.observe('{$this->PickList->Name}_KeepMine', 'click', {$this->Name}_ClosePickList);\n";
+			$returnValue = "\$('{$this->PickList->Name}_KeepMine').observe('click', {$this->Name}_ClosePickList);\n";
 		}
 
 		for($i = 1; $i <= count($PostalCode->Cities); $i++)
 		{
-			$returnValue .= "Event.observe('{$this->PickList->Name}_Item_{$i}', 'click', {$this->PickList->Name}_ChooseCity);\n";
+			$returnValue .= "\$('{$this->PickList->Name}_Item_{$i}').observe('click', {$this->PickList->Name}_ChooseCity);\n";
 		}
 
 		return $returnValue;

@@ -195,11 +195,11 @@ class GroupBaseControl extends ElementDrivenBaseControl
 				//Loop through each of the elements and set an observer for each input tag
 				foreach($this->_elements as $key=>$tempElement)
 				{
-					$returnValue .= "\t\tEvent.observe('{$tempElement->InputItemID}', '{$eventName}', {$functionName});\n";
+					$returnValue .= "\t\t\$('{$tempElement->InputItemID}').observe('{$eventName}', {$functionName});\n";
 				}
 			}
 
-			$returnValue .= "\t}\n\n";
+			$returnValue .= "\t}\n";
 		}
 
 		//Now Loop any controls and append thier Observers

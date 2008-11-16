@@ -439,16 +439,16 @@ class BasePage extends ControlContainer
             $finalOutput .= "function RegisterObservers()\n";
             $finalOutput .= "{\n";
             $finalOutput .= $observers;
-
-            if (strpos($pageJavascript, "Page_OnLoad"))
-            {
-                $finalOutput .= "\tPage_OnLoad();\n";
-            }
-
             $finalOutput .= "}\n\n";
 
             //Now echo the command to execute that function once the page is loaded.
-            $finalOutput .= "Event.observe(window, 'load', RegisterObservers);";
+            $finalOutput .= "document.observe('dom:loaded', RegisterObservers);\n";
+            
+			if (strpos($pageJavascript, "Page_OnLoad"))
+            {
+				$finalOutput .= "document.observe('dom:loaded', Page_OnLoad);\n";
+            }
+
         }
 
         //Echo our final output
@@ -692,16 +692,10 @@ class BasePage extends ControlContainer
 				$functionName = substr(substr($tempFunction[0], 0, $endOfFunctionName), 9);
 
 				//Is this element a control?
-				if (array_key_exists(strtolower($elementName), $this->Controls) == false && array_key_exists(strtolower($elementName), $this->Forms) == false)
+				if (array_key_exists(strtolower($elementName), $this->Controls) == false && array_key_exists(strtolower($elementName), $this->Forms) == false && strtolower($elementName) != 'page')
 				{
 					//(check in JS on the client side to make sure the DOM elements exist)
-					$returnValue .= "\tif (\$('{$elementName}'))\n";
-					$returnValue .= "\t{\n";
-
-					$returnValue .= "\t\tEvent.observe('{$elementName}', '{$eventName}', {$functionName});\n";
-
-					$returnValue .= "\t}\n\n";
-
+					$returnValue .= "\tif (\$('{$elementName}')) \$('{$elementName}').observe('{$eventName}', {$functionName});\n";
 				}
 
 			}

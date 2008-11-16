@@ -6,9 +6,9 @@ new Element.hide('{$ControlName}_MessagesSummary_Item_{$NewMessageID}');
 new Element.hide('{$ControlName}_BottomAddMessage');
 
 //Register the Handlers
-Event.observe('{$ControlName}_TopAddMessage', 'click', {$ControlName}_TopAddMessage_OnClick);
-Event.observe('{$ControlName}_BottomAddMessage', 'click', {$ControlName}_BottomAddMessage_OnClick);
-Event.observe('{$ControlName}_MessagesSummary_Item_{$NewMessageID}_ViewDetail', 'click', {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick);
+$('{$ControlName}_TopAddMessage').observe('click', {$ControlName}_TopAddMessage_OnClick);
+$('{$ControlName}_BottomAddMessage').observe('click', {$ControlName}_BottomAddMessage_OnClick);
+$('{$ControlName}_MessagesSummary_Item_{$NewMessageID}_ViewDetail').observe('click', {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick);
 
 //Close the Add Message DIV
 {$ControlName}_CancelAddMessage_OnClick();

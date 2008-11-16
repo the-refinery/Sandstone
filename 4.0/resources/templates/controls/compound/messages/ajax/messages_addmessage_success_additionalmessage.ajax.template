@@ -5,7 +5,7 @@ new Insertion.After('{$ControlName}_TopAddMessage', '{$NewSummaryDIV}');
 new Element.hide('{$ControlName}_MessagesSummary_Item_{$NewMessageID}');
 
 //Register the Handlers
-Event.observe('{$ControlName}_MessagesSummary_Item_{$NewMessageID}_ViewDetail', 'click', {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick);
+$('{$ControlName}_MessagesSummary_Item_{$NewMessageID}_ViewDetail').observe('click', {$ControlName}_MessagesSummary_Item_ViewDetail_OnClick);
 
 //Close the Add Message DIV
 {$ControlName}_CancelAddMessage_OnClick();

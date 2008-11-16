@@ -12,10 +12,7 @@ else
 	Insertion.Bottom('{$ControlName}', '{$NewTagItem}');
 
 	//Render an observer for the delete image, if any
-	if ($('{$ControlName}_Item_{$NewTagID}_DeleteTag'))
-	{
-		Event.observe('{$ControlName}_Item_{$NewTagID}_DeleteTag', 'click', {$ControlName}_Item_DeleteTag_OnClick);
-	}
+	if ($('{$ControlName}_Item_{$NewTagID}_DeleteTag')) $('{$ControlName}_Item_{$NewTagID}_DeleteTag').observe('click', {$ControlName}_Item_DeleteTag_OnClick);
 }
 
 new Effect.Highlight('{$ControlName}_Item_{$NewTagID}', {queue:'end'});
