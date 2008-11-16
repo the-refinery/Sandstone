@@ -1,10 +1,6 @@
-//Standard Sandstone JS Functions
-
 {!ajaxfunctions.js.template}
 {!controlfunctions.js.template}
 {!tablefunctions.js.template}
 {!utilityfunctions.js.template}
-
-//End of Standard Sandstone JS Functions
 
 {Content}

@@ -21,7 +21,7 @@ function {$ControlName}_OnBlur()
 
 	if (isEntered)
 	{
-		SingleElementAJAX('{$ParentControlName}', 'autocomplete', '{$ControlName}');
+		RaiseAJAXevent('{$ParentControlName}', 'autocomplete', '{$ControlName}='+$F('{$ControlName}'));
 	}
 }
 
