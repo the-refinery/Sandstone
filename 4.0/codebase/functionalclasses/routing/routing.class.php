@@ -240,42 +240,44 @@ class Routing extends Module
 		if (is_set($matchingRule))
 		{
 			$ruleParameters = $this->BuildParametersFromRoutingRule($matchingRule, $returnValue['routingstring']);
-        }
+		}
 		else
 		{
 			//No routing rule match, as long as we have just a file name, see if it
 			//matches an SEO page or simple page name.
 			if (strpos($returnValue['routingstring'], "/") === false)
 			{
-
 				$allowedRootSEOpageClasses = $this->GetAllowedSEOrootClassesArray();
 
 				if (is_set($allowedRootSEOpageClasses) && count($allowedRootSEOpageClasses) > 0)
 				{
 					//Check for an SEO page
 
-					$seoPage = new SEOpage();
-					$isSEOpageFound = $seoPage->LoadByName($returnValue['routingstring']);
-
-					if ($isSEOpageFound)
+					if (Application::IsLicenseCheckComplete())
 					{
-						//Make sure the SEO Page's associted entity type is allowed
-						//as a root SEO page
-						if (array_search($seoPage->AssociatedEntityType, $allowedRootSEOpageClasses) === false)
-						{
-							//Not allowed as root
-							$isSEOpageFound = false;
-						}
-						else
-						{
-							//Get the rule parameters for the Routing Rule associated
-							//with this SEO page
-							$ruleParameters = $this->BuildParametersFromRoutingRule(strtolower($seoPage->RoutingRuleName), $returnValue['routingstring']);
+						$seoPage = new SEOpage();
+						$isSEOpageFound = $seoPage->LoadByName($returnValue['routingstring']);
 
-							//Now add some info from the SEO page itself
-							$ruleParameters['seopagename'] = $returnValue['routingstring'];
-							$ruleParameters['associatedentitytype'] = $seoPage->AssociatedEntityType;
-							$ruleParameters['associatedentityid'] = $seoPage->AssociatedEntityID;
+						if ($isSEOpageFound)
+						{
+							//Make sure the SEO Page's associted entity type is allowed
+							//as a root SEO page
+							if (array_search($seoPage->AssociatedEntityType, $allowedRootSEOpageClasses) === false)
+							{
+								//Not allowed as root
+								$isSEOpageFound = false;
+							}
+							else
+							{
+								//Get the rule parameters for the Routing Rule associated
+								//with this SEO page
+								$ruleParameters = $this->BuildParametersFromRoutingRule(strtolower($seoPage->RoutingRuleName), $returnValue['routingstring']);
+
+								//Now add some info from the SEO page itself
+								$ruleParameters['seopagename'] = $returnValue['routingstring'];
+								$ruleParameters['associatedentitytype'] = $seoPage->AssociatedEntityType;
+								$ruleParameters['associatedentityid'] = $seoPage->AssociatedEntityID;
+							}
 						}
 					}
 				}

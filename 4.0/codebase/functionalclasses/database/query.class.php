@@ -17,7 +17,7 @@ class Query extends Module
 
 	public function __construct($DBconfig = null)
 	{
-		$this->_conn = Application::NewDatabaseConnection($DBconfig);
+		$this->_conn = Application::DatabaseConnection($DBconfig);
 
 		$this->_results = new DIarray();
 

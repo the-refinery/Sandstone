@@ -148,18 +148,11 @@ class Application extends Module
 		return $App->Registry;
 	}
 
-	static public function DatabaseConnection($ConfigArray)
+	static public function DatabaseConnection($ConfigArray = null)
 	{
 		$App = Application::Instance();
 
 		return $App->ProcessDatabaseConnection($ConfigArray);
-	}
-
-	static public function NewDatabaseConnection($ConfigArray = null)
-	{
-		$App = Application::Instance();
-
-		return $App->NewProcessDatabaseConnection($ConfigArray);
 	}
 
 	static public function BaseURL()
@@ -378,9 +371,14 @@ class Application extends Module
 			$EventParameters = Routing::ParseRequest();
 
 			//Do we have a valid license?
-            $this->LicenseCheck();
+            $eventResults = $this->LicenseCheck($EventParameters);
 
-			$eventResults = $this->ProcessRaiseEvent($EventParameters);
+            //Make sure the License check didn't fire a 403 page
+            if (is_set($eventResults) == false)
+            {
+            	$eventResults = $this->ProcessRaiseEvent($EventParameters);
+            }
+
 			$eventResults->Flush();
 		}
 		catch (Exception $e)
@@ -448,7 +446,7 @@ class Application extends Module
 
 	}
 
-	protected function LicenseCheck()
+	protected function LicenseCheck($EventParameters = Array())
 	{
 		//Single or multi account?
 		if ($this->Registry->IsMultiAccount == 1)
@@ -458,10 +456,8 @@ class Application extends Module
 			//Only do an account check if we are not headed for a login page
 			if (Routing::GetIsUtilityFileRule() == false)
 			{
-
 				if (is_set($_SESSION['AccountID']) == false)
 				{
-
 					if (is_set($this->Cookie['DItoken']))
 					{
 						$currentAccountID = $this->LoadAccountIDfromToken($this->Cookie['DItoken']);
@@ -472,7 +468,6 @@ class Application extends Module
 						}
 					}
 				}
-
 
 				if (is_set($_SESSION['AccountID']))
 				{
@@ -486,9 +481,7 @@ class Application extends Module
 				else
 				{
 					//No account ID set, redirect to the login page.
-					$loginURL = Routing::BuildURLbyRule("login");
-
-					Application::Redirect($loginURL);
+					$returnValue = $this->HandleLoginOr403($EventParameters);
 				}
 			}
 		}
@@ -515,6 +508,62 @@ class Application extends Module
 
 		$this->_isLicenseCheckComplete = true;
 
+		return $returnValue;
+
+	}
+
+	protected function HandleLoginOr403($EventParameters)
+	{
+
+		switch ($EventParameters['filetype'])
+		{
+			case "htm":
+				$this->LoginRedirect($EventParameters);
+				break;
+
+			case "rss":
+			case "xml":
+			case "csv":
+			case "txt":
+
+				if (is_set($this->_license))
+				{
+					$EventParameters['filetype'] = "AUTH301";
+					$this->LoginRedirect($EventParameters);
+				}
+				else
+				{
+					$returnValue = $this->Fire403response();
+				}
+				break;
+
+			default:
+				$returnValue = $this->Fire403response();
+		}
+
+		return $returnValue;
+
+	}
+
+	protected function LoginRedirect($EventParameters)
+	{
+		Application::SetSessionVariable("TargetRoutingString", $EventParameters['routing']);
+
+		Application::Redirect(Routing::BuildURLbyRule("login", Array(), $EventParameters['filetype']));
+	}
+
+	protected function Fire403response()
+	{
+		$eventParameters['page'] = "Error403";
+		$eventParameters['pageclass'] = "Error403Page";
+		$eventParameters['filetype'] = "htm403";
+		$eventParameters['event'] = "GET";
+
+		$targetPage = new $eventParameters['pageclass'] ();
+
+		$returnValue = $targetPage->RaiseEvent($eventParameters);
+
+		return $returnValue;
 	}
 
 	protected function LoadAccountIDfromToken($Token)
@@ -536,60 +585,6 @@ class Application extends Module
 		return $returnValue;
 	}
 
-	protected function AuthenticateUser($TargetPage)
-	{
-		//First, does this page require a logged in user?
-		if ($TargetPage->IsLoginRequired)
-		{
-			//Do we have a logged in user?
-			if (is_set($this->_currentUser))
-			{
-				//Are there required roles?
-				if (count($TargetPage->AllowedRoleIDs) > 0)
-				{
-					//If the current user is in the admin role,
-					//we automatically pass.
-					if ($this->_currentUser->IsInRole(new Role(2)))
-					{
-						$returnValue = true;
-					}
-					else
-					{
-						//See if this user has any of the required roles
-						$returnValue = false;
-
-						foreach($TargetPage->AllowedRoleIDs as $tempID)
-						{
-							if ($this->_currentUser->IsInRole(new Role($tempID)))
-							{
-								$returnValue = true;
-							}
-						}
-					}
-				}
-				else
-				{
-					//There are no specified roles, so every logged
-					//in user has access
-					$returnValue = true;
-				}
-			}
-			else
-			{
-				//No logged in user which is required.
-				$returnValue = false;
-			}
-		}
-		else
-		{
-			//Since this page doesn't require a logged in user,
-			//it passes authentication.
-			$returnValue = true;
-		}
-
-		return $returnValue;
-	}
-
 	public function ProcessRaiseEvent($EventParameters)
 	{
 
@@ -600,23 +595,11 @@ class Application extends Module
 		$targetPage = new $EventParameters['pageclass'] ();
 
 		//Check authorization.
-		$isAuthenticated = $this->AuthenticateUser($targetPage);
+		$returnValue = $this->AuthenticateUser($targetPage, $EventParameters);
 
-		if ($isAuthenticated)
+		if (is_set($returnValue) == false)
 		{
 			//Everything is fine, process the event
-			$returnValue = $targetPage->RaiseEvent($EventParameters);
-		}
-		else
-		{
-			//Current User Credentials are not authorized for this action
-			$EventParameters['page'] = "Error403";
-			$EventParameters['pageclass'] = "Error403Page";
-			$EventParameters['filetype'] = "htm403";
-			$EventParameters['event'] = "GET";
-
-			$targetPage = new $EventParameters['pageclass'] ();
-
 			$returnValue = $targetPage->RaiseEvent($EventParameters);
 		}
 
@@ -651,6 +634,48 @@ class Application extends Module
 		{
 			$this->_currentUser = null;
 		}
+	}
+
+	protected function AuthenticateUser($TargetPage, $EventParameters)
+	{
+		//First, does this page require a logged in user?
+		if ($TargetPage->IsLoginRequired)
+		{
+			//Do we have a logged in user?
+			if (is_set($this->_currentUser))
+			{
+				//Are there required roles?
+				if (count($TargetPage->AllowedRoleIDs) > 0)
+				{
+					//If the current user is in the admin role,
+					//we automatically pass.
+					if ($this->_currentUser->IsInRole(new Role(2)) == false)
+					{
+						$roleFound == false;
+
+						foreach($TargetPage->AllowedRoleIDs as $tempID)
+						{
+							if ($this->_currentUser->IsInRole(new Role($tempID)))
+							{
+								$roleFound = true;
+							}
+						}
+
+						if ($roleFound == false)
+						{
+							$returnValue = $this->Fire403response();
+						}
+					}
+				}
+			}
+			else
+			{
+				//No logged in user which is required - force to the login page.
+				$returnValue = $this->HandleLoginOr403($EventParameters);
+			}
+		}
+
+		return $returnValue;
 	}
 
 	public function ProcessSelectAccount($AccountName)
@@ -737,30 +762,7 @@ class Application extends Module
 		}
 	}
 
-	public function ProcessDatabaseConnection($ConfigArray)
-	{
-		//Build the key for this connection
-		$key = $ConfigArray['DBhost'] . "|" . $ConfigArray['DBname'] . "|" . $ConfigArray['DBuser'] . "|OLD";
-
-		//Do we have an active connection for this Config?
-		if (array_key_exists($key, $this->_dbConnections) && $this->_dbConnections[$key] instanceof ADOConnection)
-		{
-			$returnValue = $this->_dbConnections[$key];
-		}
-		else
-		{
-			$conn = NewADOConnection('mysql');
-			$conn->Connect($ConfigArray['DBhost'], $ConfigArray['DBuser'], $ConfigArray['DBpass'], $ConfigArray['DBname']);
-
-			$this->_dbConnections[$key] = $conn;
-			$returnValue = $conn;
-		}
-
-		return $returnValue;
-
-	}
-
-	public function NewProcessDatabaseConnection($ConfigArray = null)
+	public function ProcessDatabaseConnection($ConfigArray = null)
 	{
 
 		if (is_array($ConfigArray) || $ConfigArray instanceof DIarray)
@@ -819,8 +821,6 @@ class Application extends Module
 
 	}
 
-
-
 	protected function SetupErrorHandling()
 	{
 		// Setup Error Reporting Level, Multiple Choices
@@ -831,6 +831,4 @@ class Application extends Module
 	}
 
 }
-
-
 ?>

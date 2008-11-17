@@ -1,0 +1,3 @@
+<p class="Notification">{$NotificationMessage}</p>
+
+{+LoginForm}
