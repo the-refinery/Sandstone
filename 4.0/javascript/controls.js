@@ -41,43 +41,44 @@ function SelectDropdownItem(DomID, Value)
 
 // === Title Textbox ===
 
-document.observe("controls:titletextbox:focus", function(event)
+document.observe('dom:loaded',function()
 {
-	var target = event.element();
-	
-	if ($F(target) == event.memo.labelText)
+	// Find all titletextboxes by looking for class name
+	$$(".titletextbox_body").each(function(element) 
 	{
-		target.removeClassName('titletextbox_blank');
-		target.value = '';
-	}
+		if ($F(element) == '')
+		{
+			element.value = $(element.id + '_Label').innerHTML;
+			element.addClassName('titletextbox_blank');
+		}
+		$(element.id + '_Label').hide();
+		
+		element.observe("focus",function(event)
+		{
+			var target = event.element();
+
+			if ($F(target) == $(target.id + '_Label').innerHTML)
+			{
+				target.removeClassName('titletextbox_blank');
+				target.value = '';
+			}
+
+			target.fire("controls:titletextbox:focus:callback");
+	  	});
 	
-	target.fire("controls:titletextbox:focus:callback");
+		element.observe("blur", function(event)
+		{
+			var target = event.element();
+
+			if ($F(target) == '')
+			{
+				target.addClassName('titletextbox_blank');
+				target.value = $(target.id + '_Label').innerHTML;
+			}
+
+			target.fire("controls:titletextbox:blur:callback");
+		});
+	});
 });
 
-document.observe("controls:titletextbox:blur", function(event)
-{
-	var target = event.element();
-	
-	if ($F(target) == '')
-	{
-		target.addClassName('titletextbox_blank');
-		target.value = event.memo.labelText;
-	}
-	
-	target.fire("controls:titletextbox:blur:callback");
-});
 
-document.observe("controls:titletextbox:load", function(event)
-{
-	var target = event.element();
-	
-	if ($F(target) == '')
-	{
-		target.value = event.memo.labelText;
-		target.addClassName('titletextbox_blank');
-	}
-
-	$(target.id + '_Label').hide();
-	
-	target.fire("controls:titletextbox:load:callback");
-});

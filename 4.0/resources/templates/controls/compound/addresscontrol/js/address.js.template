@@ -8,5 +8,4 @@ function {$ControlName}_ClosePickList()
 	{
 		$('{$ControlName}_PickList').remove();
 	}
-
 }

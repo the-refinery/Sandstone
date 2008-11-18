@@ -1,11 +1,5 @@
-function {$ControlName}_OnFocus()
-{
-	$('{$ControlName}').fire("controls:titletextbox:focus", { labelText: '{$LabelText}' });
-}
-
 function {$ControlName}_OnBlur()
 {
-
 	var isEntered;
 
 	if ($('{$ControlName}').value == '')
@@ -17,15 +11,8 @@ function {$ControlName}_OnBlur()
 		isEntered = true;
 	}
 
-	$('{$ControlName}').fire("controls:titletextbox:blur", { labelText: '{$LabelText}' });
-
 	if (isEntered)
 	{
 		RaiseAJAXevent('{$ParentControlName}', 'autocomplete', '{$ControlName}='+$F('{$ControlName}'));
 	}
-}
-
-function {$ControlName}_OnLoad()
-{
-	$('{$ControlName}').fire("controls:titletextbox:load", { labelText: '{$LabelText}' });
 }

@@ -6,5 +6,4 @@ function {$ControlName}_ChooseCity(e)
 	$('{$ParentControlName}_CountryCode').value = target.title;
 
     {$ParentControlName}_ClosePickList();
-
 }
