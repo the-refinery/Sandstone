@@ -24,6 +24,8 @@ class Messages extends Module
 		$this->_associatedEntityType = strtolower($AssociatedEntityType);
 		$this->_associatedEntityID = $AssociatedEntityID;
 
+		$this->_messages = new DIarray();
+
 		if (is_set($this->_associatedEntityID) && $this->_associatedEntityID > 0)
 		{
 			$this->Load();
@@ -85,8 +87,6 @@ class Messages extends Module
 
 		$returnValue = false;
 
-		$this->_messages = Array();
-
 		$query = new Query();
 
 		$selectClause = Message::GenerateBaseSelectClause();
@@ -131,6 +131,8 @@ class Messages extends Module
 			$newMessage->Content = $Content;
 
 			$returnValue = $newMessage->Save();
+
+			$newArray = new DIarray();
 
             if ($returnValue == true)
             {
