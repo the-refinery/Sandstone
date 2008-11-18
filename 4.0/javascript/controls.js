@@ -45,7 +45,7 @@ document.observe("controls:titletextbox:focus", function(event)
 {
 	var target = event.element();
 	
-	if (target.value == event.memo.labelText)
+	if ($F(target) == event.memo.labelText)
 	{
 		target.removeClassName('titletextbox_blank');
 		target.value = '';
@@ -58,7 +58,7 @@ document.observe("controls:titletextbox:blur", function(event)
 {
 	var target = event.element();
 	
-	if (target.value == '')
+	if ($F(target) == '')
 	{
 		target.addClassName('titletextbox_blank');
 		target.value = event.memo.labelText;

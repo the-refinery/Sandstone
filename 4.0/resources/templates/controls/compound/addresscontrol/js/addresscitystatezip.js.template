@@ -1,6 +1,6 @@
 function {$ControlName}_OnFocus()
 {
-	{!titletextbox_onfocus.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:focus", { labelText: '{$LabelText}' });
 }
 
 function {$ControlName}_OnBlur()
@@ -17,7 +17,7 @@ function {$ControlName}_OnBlur()
 		isEntered = true;
 	}
 
-	{!titletextbox_onblur.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:blur", { labelText: '{$LabelText}' });
 
 	if (isEntered)
 	{
@@ -27,5 +27,5 @@ function {$ControlName}_OnBlur()
 
 function {$ControlName}_OnLoad()
 {
-	{!titletextbox_onload.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:load", { labelText: '{$LabelText}' });
 }
