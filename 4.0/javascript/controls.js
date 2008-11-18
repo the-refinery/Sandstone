@@ -1,11 +1,10 @@
 function SetControlMessage(ControlName, MessageText)
 {
-	var messageDOM = $(ControlName + '_Message');
-	var existingMessageLength = messageDOM.innerHTML.length;
+	var	messageDOM = $(ControlName + '_Message'),
+		existingMessageLength = messageDOM.innerHTML.length;
 
 	if (MessageText.length == 0 && existingMessageLength > 0)
 	{
-		// We had a message, but not it has been cleared
 		new Effect.BlindUp(messageDOM,
 			{
 				afterFinish:function() { messageDOM.innerHTML = MessageText; }
@@ -40,3 +39,45 @@ function SelectDropdownItem(DomID, Value)
     }
 }
 
+// === Title Textbox ===
+
+document.observe("controls:titletextbox:focus", function(event)
+{
+	var target = event.element();
+	
+	if (target.value == event.memo.labelText)
+	{
+		target.removeClassName('titletextbox_blank');
+		target.value = '';
+	}
+	
+	target.fire("controls:titletextbox:focus:callback");
+});
+
+document.observe("controls:titletextbox:blur", function(event)
+{
+	var target = event.element();
+	
+	if (target.value == '')
+	{
+		target.addClassName('titletextbox_blank');
+		target.value = event.memo.labelText;
+	}
+	
+	target.fire("controls:titletextbox:blur:callback");
+});
+
+document.observe("controls:titletextbox:load", function(event)
+{
+	var target = event.element();
+	
+	if ($F(target) == '')
+	{
+		target.value = event.memo.labelText;
+		target.addClassName('titletextbox_blank');
+	}
+
+	$(target.id + '_Label').hide();
+	
+	target.fire("controls:titletextbox:load:callback");
+});

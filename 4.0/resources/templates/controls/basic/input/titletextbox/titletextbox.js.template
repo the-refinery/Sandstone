@@ -1,14 +1,14 @@
 function {$ControlName}_OnFocus()
 {
-	{!titletextbox_onfocus.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:focus", { labelText: '{$LabelText}' });
 }
 
 function {$ControlName}_OnBlur()
 {
-	{!titletextbox_onblur.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:blur", { labelText: '{$LabelText}' });
 }
 
 function {$ControlName}_OnLoad()
 {
-	{!titletextbox_onload.js.template}
+	$('{$ControlName}').fire("controls:titletextbox:load", { labelText: '{$LabelText}' });
 }
