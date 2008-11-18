@@ -14,6 +14,12 @@ class PageForm extends ControlContainer
 
 	protected $_redirectTarget;
 
+	protected $_entityObject;
+	protected $_isEntitySaveDisabled;
+	protected $_entitySaveSuccessNotification;
+	protected $_entitySaveFailureNotification;
+	protected $_entitySaveSuccessRoutingAction;
+
 	public function __construct($EventParameters)
 	{
 		parent::__construct();
@@ -28,6 +34,8 @@ class PageForm extends ControlContainer
         //Prep our template to use the form layout
         $this->_template->IsMasterLayoutUsed = true;
         $this->_template->MasterLayoutFileName = "form";
+
+        $this->_isEntitySaveDisabled = false;
 
 	}
 
@@ -61,6 +69,86 @@ class PageForm extends ControlContainer
 	public function setRedirectTarget($Value)
 	{
 		$this->_redirectTarget = $Value;
+	}
+
+	/*
+	EntityObject property
+
+	@return Entity
+	@param Entity $Value
+	 */
+	public function getEntityObject()
+	{
+		return $this->_entityObject;
+	}
+
+	public function setEntityObject($Value)
+	{
+		$this->_entityObject = $Value;
+	}
+
+	/*
+	IsEntitySaveDisabled property
+
+	@return boolean
+	@param boolean $Value
+	 */
+	public function getIsEntitySaveDisabled()
+	{
+		return $this->_isEntitySaveDisabled;
+	}
+
+	public function setIsEntitySaveDisabled($Value)
+	{
+		$this->_isEntitySaveDisabled = $Value;
+	}
+
+	/*
+	EntitySaveSuccessNotification property
+
+	@return string
+	@param string $Value
+	 */
+	public function getEntitySaveSuccessNotification()
+	{
+		return $this->_entitySaveSuccessNotification;
+	}
+
+	public function setEntitySaveSuccessNotification($Value)
+	{
+		$this->_entitySaveSuccessNotification = $Value;
+	}
+
+	/*
+	EntitySaveFailureNotification property
+
+	@return string
+	@param string $Value
+	 */
+	public function getEntitySaveFailureNotification()
+	{
+		return $this->_entitySaveFailureNotification;
+	}
+
+	public function setEntitySaveFailureNotification($Value)
+	{
+		$this->_entitySaveFailureNotification = $Value;
+	}
+
+	/*
+	EntitySaveSuccessRoutingAction property
+
+	@return string
+	@param string $Value
+	 */
+	public function getEntitySaveSuccessRoutingAction()
+	{
+		return $this->_entitySaveSuccessRoutingAction;
+	}
+
+	public function setEntitySaveSuccessRoutingAction($Value)
+	{
+		$this->_entitySaveSuccessRoutingAction = $Value;
 	}
 
     public function Render()

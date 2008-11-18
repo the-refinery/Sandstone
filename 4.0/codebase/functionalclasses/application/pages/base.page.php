@@ -443,7 +443,7 @@ class BasePage extends ControlContainer
 
             //Now echo the command to execute that function once the page is loaded.
             $finalOutput .= "document.observe('dom:loaded', RegisterObservers);\n";
-            
+
 			if (strpos($pageJavascript, "Page_OnLoad"))
             {
 				$finalOutput .= "document.observe('dom:loaded', Page_OnLoad);\n";
@@ -463,33 +463,64 @@ class BasePage extends ControlContainer
         echo $this->CompressCSS($css);
     }
 
+
 	final protected function POST_Handler($EventParameters)
 	{
 		$returnValue = new EventResults();
 
 		//First thing we should do is validate the posted form
-		$isFormValid = $this->ValidatePostedForm();
+		$success = $this->ValidatePostedForm();
 
-		if ($isFormValid)
+		if ($success)
 		{
 			//By standard, we will set the form's redirect target
 			//back to the current URL
 			$this->_postedForm->RedirectTarget = $EventParameters['routing'];
 
 			//We passed validation, call the form processor
+			$preProcessorMethodName = $this->_postedForm->Name . "_PreProcessor";
 			$processorMethodName = $this->_postedForm->Name . "_Processor";
+			$postProcessorMethodName = $this->_postedForm->Name . "_PostProcessor";
 
-			if (method_exists($this, $processorMethodName))
+			//Fire the pre-processor
+			if (method_exists($this, $preProcessorMethodName))
 			{
-				$isFormValid = $this->$processorMethodName($EventParameters);
+				$success = $this->$preProcessorMethodName($EventParameters);
 			}
-			else
+
+			//Fire the form processor or do the Entity Save routine if needed
+			if ($success)
 			{
-				$isFormValid = false;
+				if (method_exists($this, $processorMethodName))
+				{
+					$success = $this->$processorMethodName($EventParameters);
+				}
+				else
+				{
+					if (is_set($this->_postedForm->EntityObject))
+					{
+						$success = $this->FormEntitySave_Processor($EventParameters);
+					}
+					else
+					{
+						$success = false;
+					}
+				}
+
+			}
+
+			//Fire the post-processor
+			if ($success)
+			{
+				if (method_exists($this, $postProcessorMethodName))
+				{
+					$success = $this->$postProcessorMethodName($EventParameters);
+				}
 			}
 		}
 
-		if ($isFormValid)
+		//All processing complete - based on our success value, what do we do?
+		if ($success)
 		{
 			//We have successfully processed the valid form.  Redirect to
 			//the form's specified target
@@ -514,6 +545,22 @@ class BasePage extends ControlContainer
 
 		return $returnValue;
 
+	}
+
+	final protected function FormEntitySave_Processor($EventParameters)
+	{
+
+		foreach ($this->_postedForm->Controls as $key=>$value)
+		{
+			if ($this->_postedForm->EntityObject->hasProperty($key))
+			{
+				$this->_postedForm->EntityObject->$key = $this->_postedForm->$key->Value;
+			}
+		}
+
+		$returnValue = $this->_postedForm->EntityObject->Save();
+
+		return $returnValue;
 	}
 
 	final protected function AJAX_Handler($EventParameters)
@@ -551,7 +598,7 @@ class BasePage extends ControlContainer
 
 		//Call the method and echo the results
 		header('Content-Type: text/javascript');
-		
+
         $results = $processor->Render();
 		echo $this->CompressJavascript($results, false);
 
