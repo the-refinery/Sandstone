@@ -1,11 +1,5 @@
-function {$ControlName}_OnFocus()
-{
-	{!titletextbox_onfocus.js.template}
-}
-
 function {$ControlName}_OnBlur()
 {
-
 	var isEntered;
 
 	if ($('{$ControlName}').value == '')
@@ -17,15 +11,8 @@ function {$ControlName}_OnBlur()
 		isEntered = true;
 	}
 
-	{!titletextbox_onblur.js.template}
-
 	if (isEntered)
 	{
 		RaiseAJAXevent('{$ParentControlName}', 'autocomplete', '{$ControlName}='+$F('{$ControlName}'));
 	}
-}
-
-function {$ControlName}_OnLoad()
-{
-	{!titletextbox_onload.js.template}
 }

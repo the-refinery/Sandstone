@@ -17,9 +17,6 @@ function {$ControlName}_NewTagSubmit_OnClick()
 
 function {$ControlName}_CancelAddTag_OnClick()
 {
-	$('{$ControlName}_NewTagText').value = '';
-	{$ControlName}_NewTagText_OnBlur();
-
 	new Effect.BlindUp('{$ControlName}_NewTag', {queue:'end'});
 	new Effect.BlindDown('{$ControlName}_AddTag_Paragraph', {queue:'end'});
 }

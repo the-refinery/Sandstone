@@ -1,7 +1,0 @@
-	if ($F('{$ControlName}') == '')
-	{
-		$('{$ControlName}').value = '{$LabelText}';
-		$('{$ControlName}').addClassName('titletextbox_blank');
-	}
-
-	$('{$ControlName}_Label').hide();
