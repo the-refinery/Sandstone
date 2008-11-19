@@ -74,6 +74,7 @@ class SEOpage extends EntityBase
 		$returnValue = str_replace("@","-", $returnValue);
 		$returnValue = str_replace("&","And", $returnValue);
 		$returnValue = str_replace("?","", $returnValue);
+		$returnValue = str_replace("/","", $returnValue);
 
 		$returnValue = urlencode($returnValue);
 
