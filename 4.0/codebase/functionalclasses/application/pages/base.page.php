@@ -550,15 +550,39 @@ class BasePage extends ControlContainer
 	final protected function FormEntitySave_Processor($EventParameters)
 	{
 
-		foreach ($this->_postedForm->Controls as $key=>$value)
+		foreach ($this->_postedForm->Controls as $propertyName=>$control)
 		{
-			if ($this->_postedForm->EntityObject->hasProperty($key))
+			if ($this->_postedForm->EntityObject->hasProperty($propertyName))
 			{
-				$this->_postedForm->EntityObject->$key = $this->_postedForm->$key->Value;
+				$this->_postedForm->EntityObject->$propertyName = $control->Value;
 			}
 		}
 
 		$returnValue = $this->_postedForm->EntityObject->Save();
+
+		if ($returnValue == true)
+		{
+			//Set the notification (if any)
+			if (is_set($this->_postedForm->EntitySaveSuccessNotification))
+			{
+				Application::SetSessionVariable('notificationmessage', $this->_postedForm->EntitySaveSuccessNotification);
+			}
+
+			//Set the Redirect Target (if an action is specified)
+			if (is_set($this->_postedForm->EntitySaveSuccessRoutingAction))
+			{
+				$this->_postedForm->RedirectTarget = Routing::BuildURLbyEntity($this->_postedForm->EntityObject, $this->_postedForm->EntitySaveSuccessRoutingAction);
+			}
+		}
+		else
+		{
+			//Set the notification (if any)
+			if (is_set($this->_postedForm->EntitySaveFailureNotification))
+			{
+				Application::SetSessionVariable('notificationmessage', $this->_postedForm->EntitySaveFailureNotification);
+			}
+
+		}
 
 		return $returnValue;
 	}
