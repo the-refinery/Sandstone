@@ -80,6 +80,11 @@ class SEOpage extends EntityBase
 
 		$returnValue = str_replace("+","-", $returnValue);
 
+		// The last step is to replace any multiple consecutive "-"'s into a single dash.
+		// Multiple dashes can occur when removing all characters between spaces, such as 
+		// "Upgrade / Downgrade" would be transformed into "upgrade--downgrade"
+		$returnValue = preg_replace("/-+/",'-', $returnValue);
+		
 		return $returnValue;
 	}
 
