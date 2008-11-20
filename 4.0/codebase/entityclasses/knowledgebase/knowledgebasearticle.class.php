@@ -160,6 +160,12 @@ class KnowledgebaseArticle extends EntityBase
 		return $returnValue;
 	}
 
+    static public function GenerateBaseWhereClause()
+    {
+        return null;
+    }
+
+
 	/*
 	Search Query Functions
 	 */
