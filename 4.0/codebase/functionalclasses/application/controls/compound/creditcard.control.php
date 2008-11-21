@@ -103,27 +103,27 @@ class CreditCardControl extends BaseControl
 
 		$this->CardType = new DropDownControl();
 		$this->CardType->ControlStyle->AddClass("creditcard_cardtypeitem");
-		$this->CardType->LabelText = "Card Type";
+		$this->CardType->LabelText = "Card Type:";
 
 		$this->CardNumber = new TextBoxControl();
 		$this->CardNumber->ControlStyle->AddClass("creditcard_cardnumberitem");
-		$this->CardNumber->LabelText = "Card Number";
+		$this->CardNumber->LabelText = "Card Number:";
 
 		$this->NameOnCard= new TextBoxControl();
 		$this->NameOnCard->ControlStyle->AddClass("creditcard_nameoncarditem");
-		$this->NameOnCard->LabelText = "Name on Card";
+		$this->NameOnCard->LabelText = "Name on Card:";
 
 		$this->Month = new DropDownControl();
 		$this->Month->ControlStyle->AddClass("creditcard_monthitem");
-		$this->Month->LabelText = "Month";
+		$this->Month->LabelText = "Expiration Date:";
 
    		$this->Year = new DropDownControl();
 		$this->Year->ControlStyle->AddClass("creditcard_yearitem");
-		$this->Year->LabelText = "Year";
+		$this->Year->LabelText = "Year:";
 
 		$this->CVV= new TextBoxControl();
 		$this->CardNumber->ControlStyle->AddClass("creditcard_cvvitem");
-		$this->CVV->LabelText = "CVV";
+		$this->CVV->LabelText = "CVV:";
 
 	}
 

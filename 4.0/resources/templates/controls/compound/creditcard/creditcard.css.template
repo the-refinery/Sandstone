@@ -1,5 +1,6 @@
 @media screen
 {
-	div.creditcard_monthitem, div.creditcard_yearitem {float:left;}
-	div.datepicker_cvv { clear:both;}
+	div.creditcard_monthitem, div.creditcard_yearitem {float:left; margin-right:5px;}
+	div.datepicker_cvv { float:left; width:50px;}
+	div.creditcard_yearitem label { text-indent:-9999px;}
 }
