@@ -717,6 +717,7 @@ class Routing extends Module
 
 			case 'login':
 			case 'accountlogin':
+			case 'signup':
 				$returnValue = true;
 				break;
 		}
