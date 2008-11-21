@@ -44,7 +44,7 @@ class GenericValidator extends Module
 		}
 		else
 		{
-			$name = $Control->Name;
+			$name = $Control->LocalName;
 		}
 
 
