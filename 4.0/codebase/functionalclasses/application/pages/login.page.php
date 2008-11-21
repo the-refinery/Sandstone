@@ -51,8 +51,6 @@ class LoginPage extends BasePage
 
 	public function HTM_Processor($EventParameters)
 	{
-		parent::HTM_Processor($EventParameters);
-
 		if (Application::CurrentUser() &&
 			(Application::CurrentUser()->IsInRole(new Role(2)) || Application::CurrentUser()->IsInRole(new Role(3))) &&
 			Application::License()->IsValid
