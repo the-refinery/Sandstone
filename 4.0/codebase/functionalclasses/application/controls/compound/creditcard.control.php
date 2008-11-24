@@ -14,6 +14,8 @@ class CreditCardControl extends BaseControl
 	protected $_startYear;
 	protected $_endYear;
 
+	protected $_isAdminMode;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -36,17 +38,42 @@ class CreditCardControl extends BaseControl
 
 	}
 
+	/*
+	IsAdminMode property
+
+	@return boolean
+	@param boolean $Value
+	 */
+	public function getIsAdminMode()
+	{
+		return $this->_isAdminMode;
+	}
+
+	public function setIsAdminMode($Value)
+	{
+		$this->_isAdminMode = $Value;
+
+		$this->LoadCardTypeDropDown();
+	}
+
 	protected function LoadCardTypeDropDown()
 	{
 		$this->CardType->ClearElements();
 
-		$currentLicense =  Application::License();
+		if ($this->_isAdminMode)
+		{
+			$targetLicense =  new License(1);
+		}
+		else
+		{
+			$targetLicense =  Application::License();
+		}
 
 		//Does the current license support active card types?
-		if ($currentLicense->hasProperty("ActiveCreditCardTypes"))
+		if ($targetLicense->hasProperty("ActiveCreditCardTypes"))
 		{
 			//Show just the active ones
-			foreach ($currentLicense->ActiveCreditCardTypes as $tempType)
+			foreach ($targetLicense->ActiveCreditCardTypes as $tempType)
 			{
 				$this->CardType->AddElement($tempType->CardTypeID, $tempType->Name);
 			}
