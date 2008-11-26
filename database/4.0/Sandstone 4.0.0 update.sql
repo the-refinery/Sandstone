@@ -1,0 +1,1 @@
+INSERT INTO `core_DBversion` VALUES ('4', '0', '0', '2008-11-07 14:19:11');
