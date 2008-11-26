@@ -20,11 +20,6 @@
 		padding:8px 4px 4px 4px;
 	}
 
-	.address_citystatezipitem .titletextbox_body
-	{
-		font-size:1em;
-	}
-
     ul.address_picklist
     {
         list-style:none;

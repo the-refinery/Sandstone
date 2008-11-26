@@ -3,7 +3,6 @@
 	fieldset.group_body ul li
 	{
 		line-height:1.5em;
-		font-size:0.9em;
 	}
 
 	fieldset.group_body ul li input

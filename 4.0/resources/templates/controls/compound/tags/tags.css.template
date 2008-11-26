@@ -34,7 +34,6 @@
 	
 	div.tags_general input.titletextbox_body
 	{
-		font-size:14px;
 		display:inline;
 		width:80px;
 	}
