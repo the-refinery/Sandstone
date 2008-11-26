@@ -2,7 +2,6 @@
 {
 	select.select_body option
 	{
-		font-size:0.9em;
 		padding:2px;
 		background:#fff;
 	}	

@@ -4,7 +4,6 @@ input.autocomplete_textbox
 	background:#fff;
 	border:1px solid;
 	border-color:#848484 #dbdbdb #dbdbdb #848484;
-	font-size:1em;
 }
 
 input.autocomplete_textbox:focus, input.autocomplete_textbox:hover

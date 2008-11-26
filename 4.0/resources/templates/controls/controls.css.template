@@ -1,11 +1,3 @@
-@media screen
-{
-	div.control_general
-	{
-		margin-bottom:10px;
-	}
-}
-
 {!label.css.template}
 
 {!group.css.template}
