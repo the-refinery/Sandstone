@@ -121,6 +121,8 @@ class CreditCardTransaction extends EntityBase
 			$relatedTransactionID = $this->_relatedTransaction->TransactionID;
 		}
 
+		//Record the currently active account ID
+		$accountID = Application::License()->AccountID;
 
 		$query->SQL = "	INSERT INTO core_CreditCardTransactionMaster
 						(
@@ -133,7 +135,8 @@ class CreditCardTransaction extends EntityBase
 							IsSuccessful,
 							TransactionFee,
 							DiscountPercent,
-							RelatedTransactionID
+							RelatedTransactionID,
+							AccountID
 						)
 						VALUES
 						(
@@ -146,7 +149,8 @@ class CreditCardTransaction extends EntityBase
 							{$query->SetBooleanField($this->_isSuccessful)},
 							{$query->SetNullNumericField($this->_transactionFee)},
 							{$query->SetNullNumericField($this->_discountPercent)},
-							{$query->SetNullNumericField($relatedTransactionID)}
+							{$query->SetNullNumericField($relatedTransactionID)},
+							{$accountID}
 						)";
 
 		$query->Execute();
