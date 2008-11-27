@@ -711,7 +711,7 @@ class Routing extends Module
 		switch ($this->_parsedEventParameters['matchedrule'])
 		{
 			case 'javascript':
-			case 'scriptaculous':
+			case 'resource':
 				$returnValue = true;
 				break;
 

@@ -25,10 +25,10 @@
 		<page>javascript</page>
 	</javascript>
 
-	<scriptaculous>
-		<url>scriptaculous</url>
-		<page>scriptaculous</page>
-	</scriptaculous>
+	<resource>
+		<url>resource</url>
+		<page>resource</page>
+	</resource>
 
 	<KnowledgebaseArticle>
 		<url>knowledgebase/{seopagename}</url>

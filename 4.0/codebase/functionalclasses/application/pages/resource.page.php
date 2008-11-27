@@ -2,7 +2,7 @@
 
 NameSpace::Using("Sandstone.Application");
 
-class ScriptaculousPage extends BasePage
+class ResourcePage extends BasePage
 {
 
 	protected $_isLoginRequired = false;
