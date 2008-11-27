@@ -199,6 +199,10 @@ class Application extends Module
 
 		die();
 	}
+	
+	static public function CacheOutput($Seconds)
+	{
+	}
 
 	static public function SelectAccount($AccountName)
 	{
