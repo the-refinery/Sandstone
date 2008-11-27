@@ -31,7 +31,6 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "javascript/string.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		Application::CacheOutput(86400);
 		echo $this->CompressJavascript($libraryContents);
 
 	}
@@ -50,8 +49,6 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "css/error.css";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		Application::CacheOutput(86400);
-		
 		echo $this->CompressCSS($libraryContents);
 	}
 }
