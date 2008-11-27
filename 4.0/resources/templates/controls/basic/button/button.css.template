@@ -1,7 +1,0 @@
-@media screen
-{
-	input.button_body
-	{
-		padding:3px;
-	}
-}

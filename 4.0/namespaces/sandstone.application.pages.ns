@@ -13,6 +13,7 @@ codebase/functionalclasses/application/pages/rss.page.php
 codebase/functionalclasses/application/pages/txt.page.php
 codebase/functionalclasses/application/pages/system.page.php
 codebase/functionalclasses/application/pages/searchresults.page.php
+codebase/functionalclasses/application/pages/baseresource.page.php
 codebase/functionalclasses/application/pages/resource.page.php
 codebase/functionalclasses/application/pages/knowledgebaseview.page.php
 codebase/functionalclasses/application/pages/barcode.page.php

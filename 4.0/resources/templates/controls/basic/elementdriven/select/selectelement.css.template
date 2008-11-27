@@ -1,8 +1,0 @@
-@media screen
-{
-	select.select_body option
-	{
-		padding:2px;
-		background:#fff;
-	}	
-}
