@@ -254,8 +254,6 @@ class NameSpace extends Module
 		//Determine the file location of the root namespace.
 		$rootLocation = $this->DetermineRootLocation($NameSpace);
 
-		echo "$rootLocation<br />";
-
 		//Build the actual filespec
 		$nameSpaceFileSpec = $rootLocation .  strtolower($NameSpace) . ".ns";
 
