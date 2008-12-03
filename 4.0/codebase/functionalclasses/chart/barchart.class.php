@@ -3,12 +3,20 @@
 class BarChart extends GoogleChart
 {
 	protected $_colors = array();
-
+	
 	protected function BuildParameters()
 	{
 		$returnValue = array(
-								'cht' => 'bhs',
+								'cht' => 'bvs',
+								'chco' => $this->Colors
 							);
+
+		return $returnValue;
+	}
+
+	protected function getDataValues()
+	{
+		$returnValue = $this->SimpleEncode($this->_data,0,16);
 
 		return $returnValue;
 	}
@@ -16,13 +24,24 @@ class BarChart extends GoogleChart
 	public function AddData($data, $legend = "")
 	{
 		$this->_data[] = $data;
-
-		if (is_null($color))
+	}
+		
+	public function getColors()
+	{
+		if (is_array($this->_colors))
 		{
-			$color = ColorFunc::GenerateRandomColor(50,180);
+			$returnValue = implode(",", $this->_colors);
 		}
-
-		$this->_colors[] = $this->FormatColor($color);
+		else
+		{
+			$returnValue = $this->_colors;
+		}
+		return $returnValue;
+	}
+	
+	public function setColors($Colors)
+	{
+		$this->_colors = $Colors;
 	}
 }
 

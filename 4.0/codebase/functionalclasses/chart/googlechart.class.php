@@ -14,7 +14,10 @@ class GoogleChart extends Module
 	protected $_width;
 	protected $_height;
 	protected $_labelsXY = false;
-
+	
+	protected $_scaleMinimum = 0;
+	protected $_scaleMaximum = null;
+		
 	protected function getTitle()
 	{
 		return $this->_title;
@@ -32,7 +35,6 @@ class GoogleChart extends Module
 
 	protected function getDataValues()
 	{
-
 		$returnValue = $this->SimpleEncode($this->_data);
 
 		return $returnValue;
@@ -117,45 +119,61 @@ class GoogleChart extends Module
 		$this->_data[] = $data;
 	}
 
-	protected function SimpleEncode($Data)
+	protected function SimpleEncode($Data, $ForcedMinimum = 0, $ForcedMaximum = null)
 	{
 	        $table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-			// Calculate min and max
-			foreach ($Data as $series)
+			
+			if (is_set($ForcedMinimum) && is_set($ForcedMaximum))
 			{
-				if (is_array($series))
+				$min = $ForcedMinimum;
+				$max = $ForcedMaximum;
+			}
+			else
+			{
+				// Calculate min and max
+				foreach ($Data as $series)
 				{
-					foreach ($series as $value)
+					if (is_array($series))
 					{
-						if (is_set($min) == false || $value < ($min + 1))
+						foreach ($series as $value)
 						{
-							$min = $value - 1;
+							if (is_set($min) == false || $value < $min)
+							{
+								$min = $value;
+							}
+
+							if (is_set($max) == false || $value > $max)
+							{
+								$max = $value;
+							}
+						}
+					}
+					else
+					{
+						if (is_set($min) == false || $series < $min)
+						{
+							$min = $series;
 						}
 
-						if (is_set($max) == false || $value > ($max - 1))
+						if (is_set($max) == false || $series > $max)
 						{
-							$max = $value + 1;
+							$max = $series;
 						}
 					}
 				}
-				else
+			
+				if (is_set($ForcedMinimum))
 				{
-					if (is_set($min) == false || $series < ($min + 1))
-					{
-						$min = $series - 1;
-					}
+					$min = $ForcedMinimum;
+				}
 
-					if (is_set($max) == false || $series > ($max - 1))
-					{
-						$max = $series + 1;
-					}
+				if (is_set($ForcedMaximum))
+				{
+					$max = $ForcedMaximum;
 				}
 			}
-
+						
 	        $delta = $max - $min;
-
-	        $size = strlen($table) - 1;
 
 	        foreach ($Data as $series)
 			{
@@ -168,16 +186,14 @@ class GoogleChart extends Module
 
 					foreach ($series as $value)
 					{
-						$translationLocation = $size * ($value - $min) / $delta;
-						$translationLocation = round($translationLocation);
+						$translationLocation = floor(($value - $min) * (61 / $delta));
 
 						$returnValue .= $table[$translationLocation];
 					}
 				}
 				else
 				{
-					$translationLocation = $size * ($series - $min) / $delta;
-					$translationLocation = round($translationLocation);
+					$translationLocation = floor(($series - $min) * (61 / $delta));
 
 					$returnValue .= $table[$translationLocation];
 				}
