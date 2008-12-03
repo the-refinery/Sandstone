@@ -10,7 +10,6 @@ class BaseResourcePage extends BasePage
 
 	protected function JS_Processor($EventParameters)
 	{
-		
 		//Load Prototype & Scriptaculous compressed
 		$libraryFileSpec = "javascript/protoaculous.js";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
@@ -31,10 +30,7 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "javascript/string.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		Application::CacheOutput(86400);
-		
 		echo $this->CompressJavascript($libraryContents);
-
 	}
 
 	protected function CSS_Processor($EventParameters)
@@ -45,14 +41,12 @@ class BaseResourcePage extends BasePage
 
 		//Load controls
 		$libraryFileSpec = "css/controls.css";
-		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
 		//Load error
 		$libraryFileSpec = "css/error.css";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		Application::CacheOutput(86400);
-		
 		echo $this->CompressCSS($libraryContents);
 	}
 }
