@@ -7,7 +7,6 @@
 {+CardNumber}
 
 <div id="{$ControlName}_ExpirationDate" class="datepicker_expirationdate">
-	{+Month}
-	{+Year}
+	{+Month}{+Year}
 	{+CVV}
 </div>

@@ -43,7 +43,7 @@ class CreditCardControl extends BaseControl
 
 	@return boolean
 	@param boolean $Value
-	 */
+	*/
 	public function getIsAdminMode()
 	{
 		return $this->_isAdminMode;
@@ -142,11 +142,9 @@ class CreditCardControl extends BaseControl
 
 		$this->Month = new DropDownControl();
 		$this->Month->ControlStyle->AddClass("creditcard_monthitem");
-		$this->Month->LabelText = "Expiration Date:";
 
    		$this->Year = new DropDownControl();
 		$this->Year->ControlStyle->AddClass("creditcard_yearitem");
-		$this->Year->LabelText = "Year:";
 
 		$this->CVV= new TextBoxControl();
 		$this->CardNumber->ControlStyle->AddClass("creditcard_cvvitem");

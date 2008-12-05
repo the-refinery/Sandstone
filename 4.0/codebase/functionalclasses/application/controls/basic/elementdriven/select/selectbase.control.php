@@ -266,6 +266,16 @@ class SelectBaseControl extends ElementDrivenBaseControl
 				$options .= $tempElement->Render() . "\n";
 			}
 		}
+		
+		//Which template should we use?
+		if (is_set($this->_labelText))
+		{
+		    $this->_template->FileName = "selectandlabel";
+		}
+		else
+		{
+		    $this->_template->FileName = "select";
+		}
 
 		$this->_template->Elements = $options;
 
