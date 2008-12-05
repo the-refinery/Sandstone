@@ -82,7 +82,7 @@
 		margin-right:5px;
 	}
 
-	div.boolean_general label
+	label.boolean
 	{
 		display:inline;
 		font-weight:normal;
