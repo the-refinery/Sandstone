@@ -1,9 +1,10 @@
-codebase/functionalclasses/chart/googlechart.class.php
-codebase/functionalclasses/chart/piechart.class.php
-codebase/functionalclasses/chart/linechart.class.php
-codebase/functionalclasses/chart/barchart.class.php
 codebase/functionalclasses/chart/chartbase.class.php
 codebase/functionalclasses/chart/chartdataseries.class.php
-codebase/functionalclasses/chart/chartaxis.class.php
+codebase/functionalclasses/chart/piechart.class.php
 codebase/functionalclasses/chart/axischartbase.class.php
+codebase/functionalclasses/chart/chartaxis.class.php
+codebase/functionalclasses/chart/linechart.class.php
+codebase/functionalclasses/chart/barchart.class.php
 codebase/functionalclasses/chart/sparklinechart.class.php
+codebase/functionalclasses/chart/ganttchart.class.php
+codebase/functionalclasses/chart/gantttask.class.php

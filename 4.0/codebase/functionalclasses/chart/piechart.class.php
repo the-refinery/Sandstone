@@ -39,6 +39,20 @@ class PieChart extends ChartBase
 		}
 	}
 
+	public function AddDataSeries($Data, $Labels=null, $Legend=null, $Color=null)
+	{
+		$returnValue = false;
+
+		//Only 1 data series allowed
+		if (count($this->_dataSeries) == 0)
+		{
+			$returnValue = parent::AddDataSeries($Data, $Labels, $Legend, $Color);
+		}
+
+		return $returnValue;
+	}
+
+
 	protected function SetupURLqueryParameters()
 	{
 
