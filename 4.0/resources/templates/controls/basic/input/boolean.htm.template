@@ -1,1 +1,1 @@
-<input id="{$ControlName}" type="checkbox" {$InputValue} name="{$ControlName}" {$BodyStyle->Classes} {$BodyStyle->Style} /> <label for="{$ControlName}">{$LabelText}</label>
+<input id="{$ControlName}" type="checkbox" {$InputValue} name="{$ControlName}" {$BodyStyle->Classes} {$BodyStyle->Style} /> <label for="{$ControlName}" class="boolean">{$LabelText}</label>

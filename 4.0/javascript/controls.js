@@ -1,18 +1,24 @@
 function SetControlMessage(ControlName, MessageText)
 {
-	var	messageDOM = $(ControlName + '_Message'),
-		existingMessageLength = messageDOM.innerHTML.length;
+	var	messageDOM = ControlName + '_Message';
+	
+	if (! $(messageDOM))
+	{
+		new Insertion.Before(ControlName,'<div id="'+ControlName+'_Message" class="control_message"></div>');
+	}
+	
+	var existingMessageLength = $(messageDOM).innerHTML.length;
 
 	if (MessageText.length == 0 && existingMessageLength > 0)
 	{
 		new Effect.BlindUp(messageDOM,
 			{
-				afterFinish:function() { messageDOM.innerHTML = MessageText; }
+				afterFinish:function() { $(messageDOM).remove(); }
 			});
 	}
 	else if (MessageText.length > 0)
 	{
-		messageDOM.update(MessageText);
+		$(messageDOM).update(MessageText);
 
 		if (existingMessageLength == 0)
 		{

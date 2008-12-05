@@ -1,13 +1,10 @@
 {!label.htm.template}
 
 {+CardType}
-
 {+NameOnCard}
-
 {+CardNumber}
 
-<div id="{$ControlName}_ExpirationDate" class="datepicker_expirationdate">
-	{+Month}
-	{+Year}
-	{+CVV}
-</div>
+<label>Expiration Date:</label>
+{+Month}{+Year}
+
+{+CVV}
