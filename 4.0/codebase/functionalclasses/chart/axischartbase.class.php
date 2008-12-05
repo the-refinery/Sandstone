@@ -16,6 +16,9 @@ class AxisChartBase extends ChartBase
 	{
 		parent::__construct();
 
+		$this->_xAxis = Array();
+		$this->_yAxis = Array();
+
 		$this->_seriesLabels = Array();
 		$this->_seriesColors = Array();
 

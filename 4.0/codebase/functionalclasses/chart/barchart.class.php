@@ -1,48 +1,150 @@
 <?php
 
-class BarChart extends GoogleChart
+class BarChart extends AxisChartBase
 {
-	protected $_colors = array();
-	
-	protected function BuildParameters()
-	{
-		$returnValue = array(
-								'cht' => 'bvs',
-								'chco' => $this->Colors
-							);
+	const STACKED_TYPE = 0;
+	const GROUPED_TYPE = 1;
 
-		return $returnValue;
+	const VERTICAL_BAR = 0;
+	const HORIZONTAL_BAR = 1;
+
+	protected $_type;
+	protected $_direction;
+
+	protected $_dataAxis;
+	protected $_scaleAxis;
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->_dataAxis = Array();
+		$this->_scaleAxis = Array();
+
+		$this->_type = BarChart::STACKED_TYPE;
+		$this->_direction = BarChart::VERTICAL_BAR;
 	}
 
-	protected function getDataValues()
-	{
-		$returnValue = $this->SimpleEncode($this->_data,0,16);
+	/*
+	Type property
 
-		return $returnValue;
+	@return integer
+	@param integer $Value
+	 */
+	public function getType()
+	{
+		return $this->_type;
 	}
 
-	public function AddData($data, $legend = "")
+	public function setType($Value)
 	{
-		$this->_data[] = $data;
+		$this->_type = $Value;
 	}
-		
-	public function getColors()
+
+	/*
+	Direction property
+
+	@return integer
+	@param integer $Value
+	 */
+	public function getDirection()
 	{
-		if (is_array($this->_colors))
+		return $this->_direction;
+	}
+
+	public function setDirection($Value)
+	{
+		$this->_direction = $Value;
+	}
+
+	public function AddDataAxis($Labels, $Color=null, $FontSize=null, $Alignment=ChartAxis::CENTER_LABEL_ALIGN)
+	{
+		$returnValue = false;
+
+		if (is_array($Labels) || $Labels instanceof DIarray)
 		{
-			$returnValue = implode(",", $this->_colors);
+			$newAxis = new ChartAxis($Labels, $Color, $FontSize, $Alignment);
+
+			$this->_dataAxis[] = $newAxis;
+
+			$returnValue = true;
+		}
+
+		return $returnValue;
+	}
+
+	public function AddScaleAxis($Labels, $Color=null, $FontSize=null, $Alignment=ChartAxis::CENTER_LABEL_ALIGN)
+	{
+		$returnValue = false;
+
+		if (is_array($Labels) || $Labels instanceof DIarray)
+		{
+			$newAxis = new ChartAxis($Labels, $Color, $FontSize, $Alignment);
+
+			$this->_scaleAxis[] = $newAxis;
+
+			$returnValue = true;
+		}
+
+		return $returnValue;
+	}
+
+   	protected function SetupURLqueryParameters()
+	{
+
+		//Orient the data & scale axis based on the bar direction.
+		$this->OrientAxis();
+
+		parent::SetupURLqueryParameters();
+
+
+		$this->_urlQueryParameters[] = "cht=" . $this->BuildChartType();
+	}
+
+	protected function OrientAxis()
+	{
+		if ($this->_direction == BarChart::VERTICAL_BAR)
+		{
+			//Data is X
+			$this->_xAxis = $this->_dataAxis;
+
+			//Scale is Y
+			$this->_yAxis = $this->_scaleAxis;
 		}
 		else
 		{
-			$returnValue = $this->_colors;
+			//Data is Y
+			$this->_yAxis = $this->_dataAxis;
+
+			//Scale is X
+			$this->_xAxis = $this->_scaleAxis;
 		}
+	}
+
+	protected function BuildChartType()
+	{
+		$returnValue = "b";
+
+		if ($this->_direction == BarChart::VERTICAL_BAR)
+		{
+			$returnValue .= "v";
+		}
+		else
+		{
+			$returnValue .= "h";
+		}
+
+		if ($this->_type == BarChart::STACKED_TYPE)
+		{
+			$returnValue .= "s";
+		}
+		else
+		{
+			$returnValue .= "g";
+		}
+
 		return $returnValue;
 	}
-	
-	public function setColors($Colors)
-	{
-		$this->_colors = $Colors;
-	}
-}
 
+}
 ?>
