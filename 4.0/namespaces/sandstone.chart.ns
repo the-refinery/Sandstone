@@ -4,3 +4,5 @@ codebase/functionalclasses/chart/linechart.class.php
 codebase/functionalclasses/chart/barchart.class.php
 codebase/functionalclasses/chart/chartbase.class.php
 codebase/functionalclasses/chart/chartdataseries.class.php
+codebase/functionalclasses/chart/chartaxis.class.php
+codebase/functionalclasses/chart/axischartbase.class.php
