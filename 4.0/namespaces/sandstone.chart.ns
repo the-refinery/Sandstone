@@ -6,3 +6,4 @@ codebase/functionalclasses/chart/chartbase.class.php
 codebase/functionalclasses/chart/chartdataseries.class.php
 codebase/functionalclasses/chart/chartaxis.class.php
 codebase/functionalclasses/chart/axischartbase.class.php
+codebase/functionalclasses/chart/sparklinechart.class.php

@@ -9,18 +9,12 @@ class AxisChartBase extends ChartBase
 	protected $_xAxis;
 	protected $_yAxis;
 
-	protected $_seriesLabels;
-	protected $_seriesColors;
-
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->_xAxis = Array();
 		$this->_yAxis = Array();
-
-		$this->_seriesLabels = Array();
-		$this->_seriesColors = Array();
 
 	}
 
@@ -88,44 +82,44 @@ class AxisChartBase extends ChartBase
 		return $returnValue;
 	}
 
-	public function AddDataSeries($Series, $Label=null, $Color=null)
-	{
-
-		$returnValue = parent::AddDataSeries($Series);
-
-		if ($returnValue == true)
-		{
-			if (is_set($Label))
-			{
-				$this->_seriesLabels[] = urlencode($Label);
-			}
-
-			if (is_set($Color))
-			{
-				$this->_seriesColors[] = $Color;
-			}
-		}
-
-		return $returnValue;
-
-	}
-
     protected function SetupURLqueryParameters()
 	{
 		parent::SetupURLqueryParameters();
 
-		//Series Labels & Colors
-		if (count($this->_seriesLabels) > 0)
+		$this->SetupSeriesLegendURLqueryParameter();
+		$this->SetupSeriesColorURLqueryParameter();
+		$this->SetupAxisURLqueryParameters();
+		$this->SetupGridURLqueryParameter();
+
+	}
+
+	protected function SetupSeriesColorURLqueryParameter()
+	{
+
+		foreach ($this->_dataSeries as $tempDataSeries)
 		{
-			$this->_urlQueryParameters[] = "chdl=" . implode("|", $this->_seriesLabels);
+			$colors[] = $tempDataSeries->Color;
 		}
 
-		if (count($this->_seriesColors) > 0)
+		$this->_urlQueryParameters[] = "chco=" . implode(",", $colors);
+
+	}
+
+	protected function SetupSeriesLegendURLqueryParameter()
+	{
+
+		foreach ($this->_dataSeries as $tempDataSeries)
 		{
-			$this->_urlQueryParameters[] = "chco=" . implode(",", $this->_seriesColors);
+			$legends[] = urlencode($tempDataSeries->Legend);
 		}
 
-		//Build the Axis DAta
+		$this->_urlQueryParameters[] = "chdl=" . implode("|", $legends);
+
+	}
+
+	protected function SetupAxisURLqueryParameters()
+	{
+		//Build the Axis Data
 		foreach($this->_xAxis as $tempAxis)
 		{
 			$enabledAxis[] = "x";
@@ -175,12 +169,9 @@ class AxisChartBase extends ChartBase
 			$this->_urlQueryParameters[] = "chxs=" . implode("|", $styleContent);
 		}
 
-		//Grid
-		$this->_urlQueryParameters[] = $this->ComputeVerticleGridParameter();
-
 	}
 
-	protected function ComputeVerticleGridParameter()
+	protected function SetupGridURLqueryParameter()
 	{
 		if ($this->_isVerticleGridDrawn)
 		{
@@ -224,9 +215,8 @@ class AxisChartBase extends ChartBase
 		}
 
 
-		$returnValue = "chg={$xGridStep},{$yGridStep}";
+		$this->_urlQueryParameters[] = "chg={$xGridStep},{$yGridStep}";
 
-		return $returnValue;
 	}
 
 }

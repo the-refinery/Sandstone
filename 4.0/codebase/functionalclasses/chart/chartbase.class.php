@@ -169,25 +169,30 @@ class ChartBase extends Module
 		}
 	}
 
-	public function AddDataSeries($Series)
+	public function AddDataSeries($Data, $Labels=null, $Legend=null, $Color=null)
 	{
 		$returnValue = false;
 
-		if ($Series instanceof ChartDataSeries)
+		if (is_array($Data) || $Data instanceof DIarray)
 		{
-			$Series->Chart = $this;
-			$this->_dataSeries[] = $Series;
+			$newSeries = new ChartDataSeries();
+			$newSeries->AddData($Data, $Labels);
+			$newSeries->Legend = $Legend;
+			$newSeries->Color = $Color;
 
-			$this->_dataCount += $Series->DataCount;
+			$newSeries->Chart = $this;
+			$this->_dataSeries[] = $newSeries;
 
-			if (is_set($this->_minimumDataValue) == false || $Series->MinimumDataValue < $this->_minimumDataValue)
+			$this->_dataCount += $newSeries->DataCount;
+
+			if (is_set($this->_minimumDataValue) == false || $newSeries->MinimumDataValue < $this->_minimumDataValue)
 			{
-				$this->_minimumDataValue = $Series->MinimumDataValue;
+				$this->_minimumDataValue = $newSeries->MinimumDataValue;
 			}
 
-			if (is_set($this->_maximumDataValue) == false || $Series->MaximumDataValue > $this->_maximumDataValue)
+			if (is_set($this->_maximumDataValue) == false || $newSeries->MaximumDataValue > $this->_maximumDataValue)
 			{
-				$this->_maximumDataValue = $Series->MaximumDataValue;
+				$this->_maximumDataValue = $newSeries->MaximumDataValue;
 			}
 
 			$returnValue = true;
