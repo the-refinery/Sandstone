@@ -305,14 +305,32 @@ class GanttChart extends AxisChartBase
 		$this->AddDataSeries($futureData, null, "Future", $this->_futureColor);
 		$this->AddDataSeries($otherData, null, $this->_otherDescription, $this->_otherColor);
 
-		$this->ScaleMaximumValue = $this->_totalUnits;
+		if (is_set($this->_targetUnits) && $this->_targetUnits > $this->_totalUnits)
+		{
+			$this->ScaleMaximumValue = $this->_targetUnits;
+		}
+		else
+		{
+			$this->ScaleMaximumValue = $this->_totalUnits;
+		}
+
 	}
 
 	protected function BuildXaxis()
 	{
 		$i = 0;
 
-		while ($i <= $this->_totalUnits)
+        if (is_set($this->_targetUnits) && $this->_targetUnits > $this->_totalUnits)
+		{
+			$totalLabels = $this->_targetUnits;
+		}
+		else
+		{
+			$totalLabels = $this->_totalUnits;
+		}
+
+
+		while ($i <= $totalLabels)
 		{
 			//If we have a start date, units are considered days
 			//and we print the date rather than the increment.
@@ -362,7 +380,17 @@ class GanttChart extends AxisChartBase
 	{
 		if (is_set($this->_startDate))
 		{
-			$singleDayIncrement = round(1 / $this->_totalUnits, 2);
+
+	        if (is_set($this->_targetUnits) && $this->_targetUnits > $this->_totalUnits)
+			{
+				$totalIncrements = $this->_targetUnits;
+			}
+			else
+			{
+				$totalIncrements = $this->_totalUnits;
+			}
+
+			$singleDayIncrement = round(1 / $totalIncrements, 2);
 
 			$diff = $this->_startDate->DateDiff();
 			$daysSinceStart = $diff['d'];
