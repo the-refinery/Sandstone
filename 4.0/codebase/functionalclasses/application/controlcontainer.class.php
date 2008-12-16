@@ -476,9 +476,6 @@ class ControlContainer extends Renderable
 		{
 			//We have some, so register the observers
 			//(check in JS on the client side to make sure the DOM elements exist)
-			$returnValue = "\tif (\$('{$this->Name}'))\n";
-			$returnValue .= "\t{\n";
-
 			foreach ($functions as $tempFunction)
 			{
 				$eventName = strtolower($tempFunction[1]);
@@ -487,15 +484,15 @@ class ControlContainer extends Renderable
 
 				if ($eventName == "load")
 				{
-					$returnValue .= "\t\t{$functionName}();\n";
+					$returnValue .= "\t\tif (\$('{$this->Name}')) ";
+					$returnValue .= "{$functionName}();\n";
 				}
 				else
 				{
-					$returnValue .= "\t\t\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\t\tif (\$('{$this->Name}')) ";
+					$returnValue .= "\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
 				}
 			}
-
-			$returnValue .= "\t}\n";
 		}
 
 		//Now look for any "sub elements" of this control which aren't part of our controls array

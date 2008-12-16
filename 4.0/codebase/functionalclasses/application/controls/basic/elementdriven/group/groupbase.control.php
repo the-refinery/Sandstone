@@ -183,9 +183,7 @@ class GroupBaseControl extends ElementDrivenBaseControl
 		{
 			//We have some, so register the observers
 			//(check in JS on the client side to make sure the DOM elements exist)
-			$returnValue = "\tif (\$('{$this->MasterControlDOMid}'))\n";
-			$returnValue .= "\t{\n";
-
+			
 			foreach ($functions as $tempFunction)
 			{
 				$eventName = strtolower($tempFunction[1]);
@@ -195,11 +193,10 @@ class GroupBaseControl extends ElementDrivenBaseControl
 				//Loop through each of the elements and set an observer for each input tag
 				foreach($this->_elements as $key=>$tempElement)
 				{
-					$returnValue .= "\t\t\$('{$tempElement->InputItemID}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\tif (\$('{$tempElement->InputItemID}')) ";
+					$returnValue .= "\$('{$tempElement->InputItemID}').observe('{$eventName}', {$functionName});\n";
 				}
 			}
-
-			$returnValue .= "\t}\n";
 		}
 
 		//Now Loop any controls and append thier Observers
