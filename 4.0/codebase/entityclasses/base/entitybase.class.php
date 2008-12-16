@@ -1005,6 +1005,40 @@ class EntityBase extends Module
 		return $returnValue;
 	}
 
+	public function SortChildren($Children, $OrderArray, $LoadFunction)
+	{
+		$returnValue = false;
+		if ($Children instanceof DIarray && ($OrderArray instanceof DIarray || is_array($OrderArray)))
+		{
+			//Make sure all the children are Sortable
+			$allOK = true;
+
+			foreach ($Children as $tempChild)
+			{
+				if (($tempChild instanceof SortableEntityBase) == false)
+				{
+					$allOK = false;
+				}
+			}
+
+			if ($allOK)
+			{
+				//Sort them.
+				foreach($OrderArray as $index=>$childID)
+				{
+					$targetChild = $Children[$childID];
+					$targetChild->SortOrder = $index;
+					$targetChild->Save();
+				}
+
+				$returnValue = $this->$LoadFunction ();
+			}
+
+		}
+
+		return $returnValue;
+	}
+
 	public function Lookup($Class, $Method, $Parameters, $PageSize, $PageNumber)
 	{
 

@@ -3,3 +3,4 @@ codebase/entityclasses/base/property.class.php
 codebase/entityclasses/base/collectivebase.class.php
 codebase/entityclasses/base/codetableentitybase.class.php
 codebase/entityclasses/base/entitychildren.class.php
+codebase/entityclasses/base/sortableentitybase.class.php
