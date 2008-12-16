@@ -15,7 +15,10 @@ class CurrencyTextBoxControl extends FormattedTextBoxControl
 
 	protected function FormatDisplayValue($Value)
 	{
-		$returnValue = StringFunc::FormatCurrency($Value);
+		if (strlen($Value) > 0)
+		{
+			$returnValue = StringFunc::FormatCurrency($Value);
+		}
 
 		return $returnValue;
 	}
@@ -30,6 +33,7 @@ class CurrencyTextBoxControl extends FormattedTextBoxControl
 
 		return $returnValue;
 	}
+	
 }
 
 ?>

@@ -58,8 +58,7 @@ class InputBaseControl extends BaseControl
 	}
 
 	protected function RenderDisplayValue()
-	{
-
+	{		
 		//Do we have a value?
 		if (is_set($this->_value) && $this->_isValueReturned)
 		{
@@ -77,15 +76,13 @@ class InputBaseControl extends BaseControl
 				$returnValue = "";
 			}
 		}
-
-
+		
 		return $returnValue;
 
 	}
 
 	public function Render()
 	{
-
 		//Set some template variables
         $this->_template->Type = $this->_inputType;
 		$this->_template->InputValue = "value=\"{$this->RenderDisplayValue()}\"";

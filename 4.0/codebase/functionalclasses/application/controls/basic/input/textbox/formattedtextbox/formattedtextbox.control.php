@@ -13,7 +13,7 @@ class FormattedTextBoxControl extends TextBoxControl
 	}
 
 	protected function ParseEventParameters()
-	{
+	{		
 		$tempValue = DIunescape($this->_eventParameters[strtolower($this->Name)]);
 
 		if (is_set($tempValue))
