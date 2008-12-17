@@ -37,6 +37,7 @@ class BaseLicense extends EntityBase
 
 		$this->AddProperty("AccountID","integer","AccountID",true,false,true,false,false,null);
 		$this->AddProperty("Name","string","Name",false,true,false,false,false,null);
+		$this->AddProperty("IsCancelled","boolean","IsCancelled",false,false,false,false,false,null);
 
 		parent::SetupProperties();
 	}
