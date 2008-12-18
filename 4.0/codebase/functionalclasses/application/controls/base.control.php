@@ -30,6 +30,7 @@ class BaseControl extends ControlContainer
 
 	protected $_isParentTemplateUsed;
 
+	protected $_associatedEntityPropertyName;
 
 	public function __construct()
 	{
@@ -382,6 +383,23 @@ class BaseControl extends ControlContainer
 	{
 		return $this->_isParentTemplateUsed;
 	}
+
+	/*
+	AssociatedEntityPropertyName property
+
+	@return string
+	@param string $Value
+	 */
+	public function getAssociatedEntityPropertyName()
+	{
+		return $this->_associatedEntityPropertyName;
+	}
+
+	public function setAssociatedEntityPropertyName($Value)
+	{
+		$this->_associatedEntityPropertyName = $Value;
+	}
+
 
 	final public function RaiseEvent($EventName, $EventParameters)
 	{

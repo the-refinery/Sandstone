@@ -550,8 +550,18 @@ class BasePage extends ControlContainer
 	final protected function FormEntitySave_Processor($EventParameters)
 	{
 
-		foreach ($this->_postedForm->Controls as $propertyName=>$control)
+		foreach ($this->_postedForm->Controls as $controlName=>$control)
 		{
+
+			if (is_set($control->AssociatedEntityPropertyName))
+			{
+				$propertyName = $control->AssociatedEntityPropertyName;
+			}
+			else
+			{
+				$propertyName = $controlName;
+			}
+
 			if ($this->_postedForm->EntityObject->hasProperty($propertyName))
 			{
 				$this->_postedForm->EntityObject->$propertyName = $control->Value;
