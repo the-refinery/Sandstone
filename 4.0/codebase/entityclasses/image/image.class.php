@@ -24,6 +24,11 @@ class Image extends EntityBase
 		parent::SetupProperties();
 	}
 
+	public function getFileName()
+	{
+		return $this->_file->FileName;
+	}
+
 	public function LoadByFileID($FileID)
 	{
 
