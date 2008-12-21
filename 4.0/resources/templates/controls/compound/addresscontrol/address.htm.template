@@ -1,3 +1,7 @@
-{+Street}
-{+CityStateZip}
-{+CountryCode}
+<div id="{$ControlName}">
+	{+Street}
+
+	<div id="{$ControlName}_Locale">
+		{+CityStateZip}{+CountryCode}
+	</div>
+</div>

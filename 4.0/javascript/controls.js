@@ -1,13 +1,16 @@
 function SetControlMessage(ControlName, MessageText)
 {
 	var	messageDOM = ControlName + '_Message';
-	
-	if (! $(messageDOM))
+	var existingMessageLength;
+		
+	if ($(messageDOM))
 	{
-		new Insertion.Before(ControlName,'<div id="'+ControlName+'_Message" class="control_message"></div>');
+		existingMessageLength = $(messageDOM).innerHTML.length;
 	}
-	
-	var existingMessageLength = $(messageDOM).innerHTML.length;
+	else
+	{
+		existingMessageLength = 0;
+	}
 
 	if (MessageText.length == 0 && existingMessageLength > 0)
 	{
@@ -18,6 +21,8 @@ function SetControlMessage(ControlName, MessageText)
 	}
 	else if (MessageText.length > 0)
 	{
+		if (! $(messageDOM)) new Insertion.Before(ControlName,'<div id="'+ControlName+'_Message" class="control_message" style="display:none;"></div>');
+  	
 		$(messageDOM).update(MessageText);
 
 		if (existingMessageLength == 0)

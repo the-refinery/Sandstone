@@ -7,7 +7,7 @@ if ($('{$ControlName}_PickList'))
 }
 
 SetControlMessage('{$ControlName}', "");
-new Insertion.Bottom($('{$ControlName}_Control'),'{$PickListHTML}');
+new Insertion.Bottom($('{$ControlName}'),'{$PickListHTML}');
 
 {$PickListObservers}
 
