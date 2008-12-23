@@ -61,7 +61,7 @@ class SearchEntity extends EntityBase
 
 		$query->Execute();
 
-		if ($query->SelectedRow > 0)
+		if ($query->SelectedRows > 0)
 		{
 			$query->LoadEntityArray($this->_searchableProperties, "SearchProperty", "PropertyName");
 
