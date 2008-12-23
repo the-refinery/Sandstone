@@ -26,10 +26,6 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "javascript/table.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		//Now add string functions
-		$libraryFileSpec = "javascript/string.js";
-		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
-
 		echo $this->CompressJavascript($libraryContents);
 	}
 
