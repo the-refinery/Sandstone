@@ -1,14 +1,14 @@
-function AlternateTableRowStyles(tableElement, oddClass, evenClass)
-{
+function AlternateTableRowStyles(Selector, oddClass, evenClass)
+{	
 	if (!oddClass) oddClass = "odd";
 	if (!evenClass) evenClass = "even";
 	
-	$$('table#'+tableElement+' tbody > tr:nth-child(odd)').each(function(s) 
+	$$('table.'+Selector+' tbody > tr:nth-child(odd)').each(function(s) 
 	{
 		s.addClassName(oddClass);
 	});
 	
-    $$('table#'+tableElement+' tbody > tr:nth-child(even)').each(function(s) 
+    $$('table#'+Selector+' tbody > tr:nth-child(even)').each(function(s) 
 	{
         s.addClassName(evenClass);
     });
