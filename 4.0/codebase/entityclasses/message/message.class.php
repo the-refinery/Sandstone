@@ -253,6 +253,30 @@ class Message extends EntityBase
 		return true;
 	}
 
+	public function CheckReadStatus($User)
+	{
+		$returnValue = false;
+
+		if ($User instanceof User && $User->IsLoaded)
+		{
+			$query = new Query();
+
+			$query->SQL = "	SELECT	MessageID
+                            FROM	core_UserReadMessages
+							WHERE	MessageID = {$this->_messageID}
+							AND		UserID = {$User->UserID} ";
+
+			$query->Execute();
+
+			if ($query->SelectedRows > 0)
+			{
+				$returnValue = true;
+			}
+		}
+
+		return $returnValue;
+	}
+
 	public function CountSearchTermOccurrances($SearchTerm)
 	{
 
