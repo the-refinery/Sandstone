@@ -87,6 +87,8 @@ class Messages extends Module
 
 		$returnValue = false;
 
+		$this->_latestMessage = null;
+
 		$query = new Query();
 
 		$selectClause = Message::GenerateBaseSelectClause();
@@ -120,39 +122,31 @@ class Messages extends Module
 		}
 	}
 
-	public function AddMessage($User, $Subject, $Content)
+	public function AddMessage($User, $Subject, $Content, $IsEmailOnComment = false)
 	{
+
+		$returnValue = false;
 
 		if ($User instanceof User && $User->IsLoaded && strlen($Subject) > 0 && strlen($Content) > 0)
 		{
-			$newMessage = new Message(null, $this->_associatedEntityType, $this->_associatedEntityID);
+			$newMessage = new Message();
+			$newMessage->AssociatedEntityType = $this->_associatedEntityType;
+			$newMessage->AssociatedEntityID = $this->_associatedEntityID;
 			$newMessage->User = $User;
 			$newMessage->Subject = $Subject;
 			$newMessage->Content = $Content;
+			$newMessage->IsEmailOnComment = $IsEmailOnComment;
 
 			$returnValue = $newMessage->Save();
 
-			$newArray = new DIarray();
+			$success = new DIarray();
 
-            if ($returnValue == true)
+            if ($success == true)
             {
-            	//Add it to a new array, then copy all existing messages into it. to
-            	//ensure they are in descending date order.
-				$newArray[$newMessage->MessageID] = $newMessage;
-
-				foreach($this->_messages as $tempMessage)
-				{
-					$newArray[$tempMessage->MessageID] = $tempMessage;
-				}
-
-                $this->_messages = $newArray;
+            	$returnValue = $this->Load();
             }
 
 		}
-        else
-        {
-            $returnValue = false;
-        }
 
         return $returnValue;
 
@@ -160,6 +154,8 @@ class Messages extends Module
 
 	public function RemoveMessage($Message)
 	{
+		$returnValue = false;
+
 		if ($Message instanceof Message && $Message->IsLoaded)
 		{
 			if (array_key_exists($Message->MessageID, $this->_messages))
@@ -167,18 +163,9 @@ class Messages extends Module
 				$messageID = $Message->MessageID;
 
 				$this->_messages[$messageID ]->Delete();
-				unset($this->_messages[$messageID]);
 
-				$returnValue = true;
+				$returnValue = $this->Load();
 			}
-			else
-			{
-				$returnValue = false;
-			}
-		}
-		else
-		{
-			$returnValue = false;
 		}
 
 		return $returnValue;

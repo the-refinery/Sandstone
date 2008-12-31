@@ -1,279 +1,89 @@
 <?php
 /*
-Message Comment Class
+MessageComment Class File
 
 @package Sandstone
 @subpackage Message
 */
 
-NameSpace::Using("Sandstone.Database");
-
-class MessageComment extends Module
+class MessageComment extends EntityBase
 {
 
-	protected $_commentID;
-	protected $_messageID;
-	protected $_user;
-	protected $_timestamp;
-	protected $_content;
-
-    public function __construct($ID = null, $Message = null)
-    {
-        if (is_set($ID))
-        {
-            if (is_array($ID))
-            {
-                $this->Load($ID);
-            }
-            else
-            {
-                $this->LoadByID($ID);
-            }
-        }
-        else
-        {
-            //This is a new Comment
-            if ($Message instanceof Message && $Message->IsLoaded)
-            {
-            	$this->_messageID = $Message->MessageID;
-            }
-
-        }
-
-    }
-
-	/*
-	CommentID property
-
-	@return int
-	*/
-	public function getCommentID()
+	public function __construct($ID = null)
 	{
-		return $this->_commentID;
-	}
 
-	/*
-	MessageID property
+		$this->_isTagsDisabled = true;
+		$this->_isMessagesDisabled = true;
 
-	@return int
-	*/
-	public function getMessageID()
-	{
-		return $this->_messageID;
-	}
-
-	/*
-	User property
-
-	@return User
-	@param User $Value
-	*/
-	public function getUser()
-	{
-		return $this->_user;
-	}
-
-	public function setUser($Value)
-	{
-		if ($Value instanceof User && $Value->IsLoaded)
-		{
-			$this->_user = $Value;
-		}
-		else
-		{
-			$this->_user = null;
-		}
+		parent::__construct($ID);
 
 	}
 
-	/*
-	Timestamp property
-
-	@return Date
-	*/
-	public function getTimestamp()
-	{
-		return $this->_timestamp;
-	}
-
-	/*
-	Content property
-
-	@return string
-	@param string $Value
-	*/
-	public function getContent()
-	{
-		return $this->_content;
-	}
-
-	public function setContent($Value)
-	{
-		$this->_content = $Value;
-	}
-
-    public function Load($dr)
-    {
-
-    	$this->_commentID = $dr['CommentID'];
-		$this->_messageID = $dr['MessageID'];
-
-		$this->_user = new User($dr['UserID']);
-		$this->_timestamp = new Date($dr['Timestamp']);
-		$this->_content = $dr['Content'];
-
-        $this->_isLoaded = true;
-
-        return true;
-    }
-
-    public function LoadByID($ID)
-    {
-        $query = new Query();
-
-        $selectClause = self::GenerateBaseSelectClause();
-        $fromClause = self::GenerateBaseFromClause();
-        $whereClause = "WHERE     CommentID = {$ID} ";
-
-        $query->SQL = $selectClause . $fromClause . $whereClause;
-
-        $query->Execute();
-
-        $returnValue = $query->LoadEntity($this);
-
-        return $returnValue;
-
-    }
-
-	public function Save()
+	protected function SetupProperties()
 	{
 
-		$isOkToSave = $this->ValidateRequiredProperties();
+		//AddProperty Parameters:
+		// 1) Name
+		// 2) DataType
+		// 3) DBfieldName
+		// 4) IsReadOnly
+		// 5) IsRequired
+		// 6) IsPrimaryID
+		// 7) IsLoadedRequired
+		// 8) IsLoadOnDemand
+		// 9) LoadOnDemandFunctionName
 
-		if ($isOkToSave == true)
-		{
+		$this->AddProperty("CommentID","integer","CommentID",true,false,true,false,false,null);
+		$this->AddProperty("Message","Message","MessageID",false,true,false,true,false,null);
+		$this->AddProperty("User","User","UserID",false,true,false,true,false,null);
+		$this->AddProperty("Timestamp","date","Timestamp",true,false,false,false,false,null);
+		$this->AddProperty("Content","string","Content",false,true,false,false,false,null);
 
-			if (is_set($this->_commentID) OR $this->_commentID > 0)
-			{
-				$returnValue = $this->SaveUpdateRecord();
-			}
-			else
-			{
-				$returnValue = $this->SaveNewRecord();
-			}
-		}
-		else
-		{
-			$returnValue = false;
-		}
-
-		$this->_isLoaded = $returnValue;
-
-		return $returnValue;
-
+		parent::SetupProperties();
 	}
 
 	protected function SaveNewRecord()
 	{
-
 		$query = new Query();
 
-		$accountID = Application::License()->AccountID;
+		$this->_timestamp = new Date();
 
 		$query->SQL = "	INSERT INTO core_MessageCommentMaster
-						(
-							AccountID,
-							MessageID,
-							UserID,
-							Timestamp,
-							Content
-						)
-						VALUES
-						(
-							{$accountID},
-							{$this->_messageID},
-							{$this->_user->UserID},
-							NOW(),
-							{$query->SetTextField($this->_content)}
-						)";
+							(
+								AccountID,
+								MessageID,
+								UserID,
+								Timestamp,
+								Content
+							)
+							VALUES
+							(
+								{$this->AccountID},
+								{$this->_message->MessageID},
+								{$this->_user->UserID},
+								{$query->SetNullDateField($this->_timestamp)},
+								{$query->SetTextField($this->_content)}
+							)";
 
 		$query->Execute();
 
-
-		//Get the new ID
-		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
-
-		$query->Execute();
-
-		$this->_commentID = $query->SingleRowResult['newID'];
-
-		$returnValue = $this->RefreshTimestamp();
-
-		return $returnValue;
-
-	}
-
-	protected function SaveUpdateRecord()
-	{
-
-		$query = new Query();
-
-		$query->SQL = "	UPDATE core_MessageCommentMaster SET
-							UserID = {$this->_user->UserID},
-							Content = {$query->SetTextField($this->_content)}
-						WHERE CommentID = {$this->_commentID}";
-
-		$query->Execute();
+		$this->GetNewPrimaryID();
 
 		return true;
 	}
 
-	protected function ValidateRequiredProperties()
-	{
-
-		//Start as true, and set it to false if something is missing
-		$returnValue = true;
-
-		if (is_set($this->_messageID) == false)
-		{
-			$returnValue = false;
-		}
-
-		if (is_set($this->_user) == false)
-		{
-			$returnValue = false;
-		}
-
-		if (strlen($this->_content) == 0)
-		{
-			$returnValue = false;
-		}
-
-		return $returnValue;
-	}
-
-	protected function RefreshTimestamp()
+	protected function SaveUpdateRecord()
 	{
 		$query = new Query();
 
-		$query->SQL = "	SELECT	Timestamp
-						FROM    core_MessageCommentMaster
-						WHERE	CommentID = {$this->_commentID} ";
+		$query->SQL = "	UPDATE core_MessageCommentMaster SET
+								UserID = {$this->_user->UserID},
+								Content = {$query->SetTextField($this->_content)}
+							WHERE CommentID = {$this->_commentID}";
 
 		$query->Execute();
 
-        if ($query->SelectedRows > 0)
-        {
-            $this->_timestamp = new Date($query->SingleRowResult['Timestamp']);
-            $returnValue = true;
-        }
-        else
-        {
-            $returnValue = false;
-        }
-
-        return $returnValue;
-
+		return true;
 	}
 
 	public function Delete()
@@ -291,27 +101,74 @@ class MessageComment extends Module
 		return true;
 	}
 
-    /*
-    Static Query Functions
-    */
-    static public function GenerateBaseSelectClause()
-    {
-        $returnValue = "    SELECT  a.CommentID,
-                                    a.MessageID,
-                                    a.UserID,
-                                    a.Timestamp,
-                                    a.Content ";
+	/*
+	Static Query Functions
+	 */
+	static public function GenerateBaseSelectClause()
+	{
+		$returnValue = "	SELECT	a.CommentID,
+										a.MessageID,
+										a.UserID,
+										a.Timestamp,
+										a.Content ";
 
-        return $returnValue;
+		return $returnValue;
+	}
 
-    }
+	static public function GenerateBaseFromClause()
+	{
+		$returnValue = "	FROM	core_MessageCommentMaster a ";
 
-    static public function GenerateBaseFromClause()
-    {
-        $returnValue = "    FROM    core_MessageCommentMaster a ";
+		return $returnValue;
+	}
 
-        return $returnValue;
-    }
+	/*
+	Search Query Functions
+	 */
+	static public function SearchMultipleEntity($SearchTerm, $MaxResults)
+	{
+		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
+
+		$searchClause .= "LOWER(Content) {$likeClause} ";
+
+		$whereClause = self::GenerateBaseWhereClause();
+		$whereClause .= "AND ({$searchClause}) ";
+
+		$returnValue = self::PerformSearch($whereClause, $MaxResults);
+
+		return $returnValue;
+	}
+
+	static public function SearchSingleEntity($SearchTerm, $MaxResults)
+	{
+		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
+
+		$searchClause .= "LOWER(Content) {$likeClause} ";
+
+		$whereClause = self::GenerateBaseWhereClause();
+		$whereClause .= "AND ({$searchClause}) ";
+
+		$returnValue = self::PerformSearch($whereClause, $MaxResults);
+
+		return $returnValue;
+	}
+
+	static protected function PerformSearch($WhereClause, $MaxResults)
+	{
+		$query = new Query();
+
+		$selectClause = self::GenerateBaseSelectClause();
+		$fromClause = self::GenerateBaseFromClause();
+		$limitClause = " LIMIT {$MaxResults} ";
+
+		$query->SQL = $selectClause . $fromClause . $WhereClause . $limitClause;
+
+		$query->Execute();
+
+		$returnValue = new ObjectSet($query->Results, "MessageComment", "CommentID");
+
+		return $returnValue;
+	}
 
 }
 ?>

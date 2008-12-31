@@ -1,399 +1,193 @@
 <?php
 /*
-Message Class
+Message Class File
 
 @package Sandstone
 @subpackage Message
 */
 
-NameSpace::Using("Sandstone.Database");
 NameSpace::Using("Sandstone.User");
 
-class Message extends Module
+class Message extends EntityBase
 {
-
-	protected $_messageID;
-	protected $_associatedEntityType;
-	protected $_associatedEntityID;
-
-	protected $_user;
-	protected $_timestamp;
-	protected $_subject;
-	protected $_content;
-
-	protected $_comments;
-    protected $_latestComment;
-
-    public function __construct($ID = null, $AssociatedEntityType = null, $AssociatedEntityID = null)
-    {
-        if (is_set($ID))
-        {
-            if (is_array($ID))
-            {
-                $this->Load($ID);
-            }
-            else
-            {
-                $this->LoadByID($ID);
-            }
-        }
-        else
-        {
-            //This is a new Message
-            $this->_associatedEntityType = strtolower($AssociatedEntityType);
-            $this->_associatedEntityID = $AssociatedEntityID;
-
-            $this->_comments = Array();
-        }
-    }
-
-	/*
-	MessageID property
-
-	@return int
-	*/
-	public function getMessageID()
+	public function __construct($ID = null)
 	{
-		return $this->_messageID;
-	}
 
-	/*
-	AssociatedEntityType property
+		$this->_isTagsDisabled = true;
+		$this->_isMessagesDisabled = true;
 
-	@return string
-	*/
-	public function getAssociatedEntityType()
-	{
-		return $this->_associatedEntityType;
-	}
-
-	/*
-	AssociatedEntityID property
-
-	@return int
-	*/
-	public function getAssociatedEntityID()
-	{
-		return $this->_associatedEntityID;
-	}
-
-	/*
-	User property
-
-	@return User
-	@param User $Value
-	*/
-	public function getUser()
-	{
-		return $this->_user;
-	}
-
-	public function setUser($Value)
-	{
-		if ($Value instanceof User && $Value->IsLoaded)
-		{
-			$this->_user = $Value;
-		}
-		else
-		{
-			$this->_user = null;
-		}
+		parent::__construct($ID);
 
 	}
 
-	/*
-	Timestamp property
-
-	@return Date
-	*/
-	public function getTimestamp()
-	{
-		return $this->_timestamp;
-	}
-
-	/*
-	Subject property
-
-	@return string
-	@param string $Value
-	*/
-	public function getSubject()
-	{
-		return $this->_subject;
-	}
-
-	public function setSubject($Value)
-	{
-		$this->_subject = $Value;
-	}
-
-	/*
-	Content property
-
-	@return string
-	@param string $Value
-	*/
-	public function getContent()
-	{
-		return $this->_content;
-	}
-
-	public function setContent($Value)
-	{
-		$this->_content = $Value;
-	}
-
-	/*
-	Comments property
-
-	@return Array
-	*/
-	public function getComments()
-	{
-		return $this->_comments;
-	}
-
-    /*
-    LatestComment property
-
-    @return Comment
-    */
-    public function getLatestComment()
-    {
-        return $this->_latestComment;
-    }
-
-    public function Load($dr)
-    {
-
-		$this->_messageID = $dr['MessageID'];
-		$this->_associatedEntityType = $dr['AssociatedEntityType'];
-		$this->_associatedEntityID = $dr['AssociatedEntityID'];
-
-		$this->_user = new User($dr['UserID']);
-		$this->_timestamp = new Date($dr['Timestamp']);
-		$this->_subject = $dr['Subject'];
-		$this->_content = $dr['Content'];
-
-        $returnValue = $this->LoadComments();
-
-        $this->_isLoaded = $returnValue;
-
-        return $returnValue;
-    }
-
-    public function LoadByID($ID)
-    {
-        $query = new Query();
-
-        $selectClause = self::GenerateBaseSelectClause();
-        $fromClause = self::GenerateBaseFromClause();
-        $whereClause = "WHERE     MessageID = {$ID} ";
-
-        $query->SQL = $selectClause . $fromClause . $whereClause;
-
-        $query->Execute();
-
-        if ($query->SelectedRows > 0)
-        {
-            $returnValue = $this->Load($query->SingleRowResult);
-        }
-        else
-        {
-            $returnValue = false;
-        }
-
-        return $returnValue;
-
-    }
-
-    protected function LoadComments()
-    {
-
-        $this->_comments = Array();
-
-        $query = new Query();
-
-        $selectClause = MessageComment::GenerateBaseSelectClause();
-        $fromClause = MessageComment::GenerateBaseFromClause();
-        $whereClause = "WHERE     MessageID = {$this->_messageID} ";
-        $orderByClause = "ORDER BY a.Timestamp ASC ";
-
-        $query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
-
-        $query->Execute();
-
-		$query->LoadEntityArray($this->_comments, "MessageComment", "CommentID", $this, "LoadCommentsCallback");
-
-        return true;
-    }
-
-	public function LoadCommentsCallback($Comment)
-	{
-		$this->_latestComment = $Comment;
-	}
-
-	public function Save()
+	protected function SetupProperties()
 	{
 
-		$isOkToSave = $this->ValidateRequiredProperties();
+		//AddProperty Parameters:
+		// 1) Name
+		// 2) DataType
+		// 3) DBfieldName
+		// 4) IsReadOnly
+		// 5) IsRequired
+		// 6) IsPrimaryID
+		// 7) IsLoadedRequired
+		// 8) IsLoadOnDemand
+		// 9) LoadOnDemandFunctionName
 
-		if ($isOkToSave == true)
-		{
+		$this->AddProperty("MessageID","integer","MessageID",true,false,true,false,false,null);
+		$this->AddProperty("AssociatedEntityType","string","AssociatedEntityType",false,true,false,false,false,null);
+		$this->AddProperty("AssociatedEntityID","integer","AssociatedEntityID",false,true,false,false,false,null);
+		$this->AddProperty("User","User","UserID",false,true,false,true,false,null);
+		$this->AddProperty("Timestamp","date","Timestamp",true,false,false,false,false,null);
+		$this->AddProperty("Subject","string","Subject",false,true,false,false,false,null);
+		$this->AddProperty("Content","string","Content",false,true,false,false,false,null);
+		$this->AddProperty("IsEmailOnComment","boolean","IsEmailOnComment",false,false,false,false,false,null);
+		$this->AddProperty("Comments","array",null,true,false,false,false,true,"LoadComments");
+		$this->AddProperty("LatestComment","MessageComment",null,true,false,false,false,true,"LoadComments");
 
-			if (is_set($this->_messageID) OR $this->_messageID > 0)
-			{
-				$returnValue = $this->SaveUpdateRecord();
-			}
-			else
-			{
-				$returnValue = $this->SaveNewRecord();
-			}
-
-		}
-		else
-		{
-			$returnValue = false;
-		}
-
-		$this->_isLoaded = $returnValue;
-
-		return $returnValue;
-
+		parent::SetupProperties();
 	}
 
 	protected function SaveNewRecord()
 	{
-
 		$query = new Query();
 
-		$accountID = Application::License()->AccountID;
+		$this->_timestamp = new Date();
 
 		$query->SQL = "	INSERT INTO core_MessageMaster
-						(
-							AccountID,
-							AssociatedEntityType,
-							AssociatedEntityID,
-							UserID,
-							Timestamp,
-							Subject,
-							Content
-						)
-						VALUES
-						(
-							{$accountID},
-							{$query->SetTextField($this->_associatedEntityType)},
-							{$this->_associatedEntityID},
-							{$this->_user->UserID},
-							NOW(),
-							{$query->SetTextField($this->_subject)},
-							{$query->SetTextField($this->_content)}
-						)";
+							(
+								AccountID,
+								AssociatedEntityType,
+								AssociatedEntityID,
+								UserID,
+								Timestamp,
+								Subject,
+								Content,
+								IsEmailOnComment
+							)
+							VALUES
+							(
+								{$this->AccountID},
+								{$query->SetTextField($this->_associatedEntityType)},
+								{$this->_associatedEntityID},
+								{$this->_user->UserID},
+								{$query->SetNullDateField($this->_timestamp)},
+								{$query->SetTextField($this->_subject)},
+								{$query->SetTextField($this->_content)},
+								{$query->SetBooleanField($this->_isEmailOnComment)}
+							)";
 
 		$query->Execute();
 
+		$this->GetNewPrimaryID();
 
-		//Get the new ID
-		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
-
-		$query->Execute();
-
-		$this->_messageID = $query->SingleRowResult['newID'];
-
-		$returnValue = $this->RefreshTimestamp();
-
-		return $returnValue;
-
+		return true;
 	}
 
 	protected function SaveUpdateRecord()
 	{
-
 		$query = new Query();
 
 		$query->SQL = "	UPDATE core_MessageMaster SET
-						UserID = {$this->_user->UserID},
-						Subject = {$query->SetTextField($this->_subject)},
-						Content = {$query->SetTextField($this->_content)}
-					WHERE MessageID = {$this->_messageID}";
+								UserID = {$this->_user},
+								Subject = {$query->SetTextField($this->_subject)},
+								Content = {$query->SetTextField($this->_content)},
+								IsEmailOnComment = {$query->SetBooleanField($this->_isEmailOnComment)}
+							WHERE MessageID = {$this->_messageID}";
 
 		$query->Execute();
+
+		return true;
+	}
+
+	public function LoadComments()
+	{
+
+		$this->_Comments->Clear();
+
+		$query = new Query();
+
+		$selectClause = MessageComment::GenerateBaseSelectClause();
+		$fromClause = MessageComment::GenerateBaseFromClause();
+		$whereClause = "WHERE a.MessageID = {$this->_MessageID} ";
+		$orderByClause = "ORDER BY a.Timestamp ";
+
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
+
+		$query->Execute();
+
+		$query->LoadEntityArray($this->_Comments, "MessageComment", "CommentID", $this, "LoadCommentsCallback");
 
 		return true;
 
 	}
 
-	protected function ValidateRequiredProperties()
+	public function LoadCommentsCallback($MessageComment)
 	{
 
-		//Start as true, and set it to false if something is missing
-		$returnValue = true;
+		$MessageComment->Message = $this;
 
-		if (strlen($this->_associatedEntityType) == 0)
-		{
-			$returnValue = false;
-		}
+		$this->_latestComment = $MessageComment;
 
-		if (is_set($this->_associatedEntityID) == false)
-		{
-			$returnValue = false;
-		}
+		return $MessageComment;
 
-		if (is_set($this->_user) == false)
-		{
-			$returnValue = false;
-		}
-
-		if (strlen($this->_subject) == 0)
-		{
-			$returnValue = false;
-		}
-
-		if (strlen($this->_content) == 0)
-		{
-			$returnValue = false;
-		}
-
-		return $returnValue;
 	}
 
-	protected function RefreshTimestamp()
-	{
-		$query = new Query();
+    public function AddComment($User, $Content)
+    {
+		$returnValue = false;
 
-		$query->SQL = "	SELECT	Timestamp
-						FROM    core_MessageMaster
-						WHERE	MessageID = {$this->_messageID} ";
-
-		$query->Execute();
-
-        if ($query->SelectedRows > 0)
+        if ($User instanceof User && $User->IsLoaded && strlen($Content) > 0)
         {
-            $this->_timestamp = new Date($query->SingleRowResult['Timestamp']);
+            $newComment = new MessageComment();
+            $newComment->Message = $this;
+            $newComment->User = $User;
+            $newComment->Content = $Content;
 
-            $returnValue = true;
-        }
-        else
-        {
-            $returnValue = false;
+            $success = $newComment->Save();
+
+            if ($success == true)
+            {
+				$returnValue = $this->LoadComments();
+
+				//A new comment flags as unread for everybody.
+				$this->MarkUnread();
+			}
         }
 
         return $returnValue;
+    }
 
+	public function RemoveComment($Comment)
+	{
+
+		$returnValue = false;
+
+		if ($Comment instanceof MessageComment && $Comment->IsLoaded)
+		{
+			if (array_key_exists($Comment->CommentID, $this->Comments))
+			{
+				$commentID = $Comment->CommentID;
+
+				$this->_comments[$commentID]->Delete();
+
+				$returnValue = $this->LoadComments();
+			}
+		}
+
+		return $returnValue;
 	}
 
 	public function Delete()
 	{
 
 		//First delete any comments
-		if (count($this->_comments) > 0)
+		if (count($this->Comments) > 0)
 		{
 			foreach($this->_comments as $tempComment);
 			{
 				$tempComment->Delete();
 			}
-
-			$this->_comments = Array();
 		}
 
 		//Now delete this record.
@@ -405,59 +199,58 @@ class Message extends Module
 
 		$query->Execute();
 
-		$this->_messageID = null;
-
 		return true;
 	}
 
-    public function AddComment($User, $Content)
-    {
-        if ($User instanceof User && $User->IsLoaded && strlen($Content) > 0)
-        {
-            $newComment = new MessageComment(null, $this);
-            $newComment->User = $User;
-            $newComment->Content = $Content;
-
-            $returnValue = $newComment->Save();
-
-            if ($returnValue == true)
-            {
-                $this->_comments[$newComment->CommentID] = $newComment;
-                $this->_latestComment = $newComment;
-            }
-        }
-        else
-        {
-            $returnValue = false;
-        }
-
-        return $returnValue;
-    }
-
-	public function RemoveComment($Comment)
+	public function MarkRead($User)
 	{
-		if ($Comment instanceof MessageComment && $Comment->IsLoaded)
-		{
-			if (array_key_exists($Comment->CommentID, $this->_comments))
-			{
-				$commentID = $Comment->CommentID;
 
-				$this->_comments[$commentID]->Delete();
-				unset($this->_comments[$commentID]);
+		$returnValue = false;
 
-				$returnValue = true;
-			}
-			else
-			{
-				$returnValue = false;
-			}
-		}
-		else
+		if ($User instanceof User && $User->IsLoaded)
 		{
-			$returnValue = false;
+
+			//Make sure it's not currently marked as read
+			$this->MarkUnread($User);
+
+			$query = new Query();
+
+			$query->SQL = "	INSERT INTO core_UserReadMessages
+							(
+								UserID,
+								MessageID
+							)
+							VALUES
+							(
+								{$User->UserID},
+								{$this->_messageID}
+							)";
+
+			$query->Execute();
+
+			$returnValue = true;
 		}
 
 		return $returnValue;
+	}
+
+	public function MarkUnread($User=null)
+	{
+		$query = new Query();
+
+		$query->SQL = "	DELETE
+						FROM	core_UserReadMessages
+						WHERE	MessageID = {$this->_messageID} ";
+
+		if ($User instanceof User && $User->IsLoaded)
+		{
+			$query->SQL .= " AND UserID = {$User->UserID} ";
+		}
+
+
+		$query->Execute();
+
+		return true;
 	}
 
 	public function CountSearchTermOccurrances($SearchTerm)
@@ -470,7 +263,7 @@ class Message extends Module
 		$returnValue += substr_count($this->_content, $SearchTerm);
 
 		//Now the content of any comments
-		if (count($this->_comments) > 0)
+		if (count($this->Comments) > 0)
 		{
 			foreach ($this->_comments as $tempComment)
 			{
@@ -481,31 +274,29 @@ class Message extends Module
 		return $returnValue;
 	}
 
+	/*
+	Static Query Functions
+	 */
+	static public function GenerateBaseSelectClause()
+	{
+		$returnValue = "	SELECT	a.MessageID,
+										a.AssociatedEntityType,
+										a.AssociatedEntityID,
+										a.UserID,
+										a.Timestamp,
+										a.Subject,
+										a.Content,
+										a.IsEmailOnComment ";
 
-    /*
-    Static Query Functions
-    */
-    static public function GenerateBaseSelectClause()
-    {
-        $returnValue = "    SELECT	a.MessageID,
-                                    a.AssociatedEntityType,
-                                    a.AssociatedEntityID,
-                                    a.UserID,
-                                    a.Timestamp,
-                                    a.Subject,
-                                    a.Content ";
+		return $returnValue;
+	}
 
-        return $returnValue;
+	static public function GenerateBaseFromClause()
+	{
+		$returnValue = "	FROM	core_MessageMaster a ";
 
-    }
-
-    static public function GenerateBaseFromClause()
-    {
-        $returnValue = "    FROM    core_MessageMaster a ";
-
-        return $returnValue;
-    }
-
+		return $returnValue;
+	}
 
 }
 ?>
