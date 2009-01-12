@@ -171,6 +171,18 @@ class Messages extends Module
 		return $returnValue;
 	}
 
+	public function Clear()
+	{
+		foreach ($this->_messages as $tempMessage)
+		{
+			$tempMessage->Delete();
+		}
+		
+		$this->_messages->Clear();
+		
+		return true;
+	}
+
 	public function CountSearchTermOccurrances($SearchTerm)
 	{
 

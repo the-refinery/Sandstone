@@ -190,6 +190,9 @@ class Message extends EntityBase
 			}
 		}
 
+		//Remove any read flags
+		$this->MarkUnread();
+
 		//Now delete this record.
 		$query = new Query();
 
