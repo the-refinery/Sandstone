@@ -6,11 +6,12 @@ function {$ControlName}_AutoComplete_Callback(element, entry)
 
 	//Clear any existing selection
 	$('{$ControlName}').value = '';
-
+	
 	return returnValue;
 }
 
 function {$ControlName}_AutoComplete_afterUpdateElement(text, li)
 {
+	$('{$ControlName}').fire("controls:autocomplete:selected:callback", {selectedID: li.id});
 	$('{$ControlName}').value = li.id;
 }
