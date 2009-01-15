@@ -490,12 +490,20 @@ class Date extends Module
 		
 		if (substr($uom, -1, 1) != "s")
 		{
-			$uom .= "s";			
+			$uom .= "s";
+			$value  = 1;
+		}
+		else
+		{
+			if (count($Parameters) == 1)
+			{
+				$value = $Parameters[0];
+			}
 		}
 		
-		if (count($Parameters) == 1)
+		if (is_set($value))
 		{
-			$returnValue = $this->DateMath("+", $Parameters[0], $uom);	
+			$returnValue = $this->DateMath("+", $value, $uom);	
 		}
 		
 		return $returnValue;
@@ -507,12 +515,20 @@ class Date extends Module
 		
 		if (substr($uom, -1, 1) != "s")
 		{
-			$uom .= "s";			
+			$uom .= "s";
+			$value  = 1;
+		}
+		else
+		{
+			if (count($Parameters) == 1)
+			{
+				$value = $Parameters[0];
+			}
 		}
 		
-		if (count($Parameters) == 1)
+		if (is_set($value))
 		{
-			$returnValue = $this->DateMath("-", $Parameters[0], $uom);	
+			$returnValue = $this->DateMath("-", $value, $uom);	
 		}
 		
 		return $returnValue;
