@@ -68,7 +68,6 @@ class NameSpace extends Module
 
 	static public function AutoLoad($ClassName)
 	{
-
 		$ns = NameSpace::Instance();
 
 		$returnValue = $ns->RequireClassFile($ClassName);
