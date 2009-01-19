@@ -472,6 +472,10 @@ class Application extends Module
 							$this->SetSessionVariable("AccountID", $currentAccountID);
 						}
 					}
+					elseif (is_set($EventParameters['subdomain']))
+					{
+						Application::SelectAccount($EventParameters['subdomain']);
+					}
 				}
 
 				if (is_set($_SESSION['AccountID']))
