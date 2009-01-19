@@ -29,6 +29,27 @@ class Date extends Module
 		return $returnValue;
 	}
 
+	public function __call($Name, $Parameters)
+	{
+		
+		$testName = strtolower($Name);
+		
+		if (substr($testName, 0, 3) == "add")
+		{
+			$returnValue = $this->AddTime($Name, $Parameters);
+		}
+		elseif(substr($testName, 0, 8) == "subtract")
+		{
+			$returnValue = $this->SubtractTime($Name, $Parameters);
+		}
+		else
+		{
+			parent::__call($Name, $Parameters);
+		}
+		
+		return $returnValue;
+	}
+
 	/*
 	Date property
 
@@ -462,23 +483,66 @@ class Date extends Module
 
 	}
 
-	public function AddDays($NumberOfDays)
-	{
 
-		$newDateStamp = strtotime("+{$NumberOfDays} days", $this->_dateStamp);
-
-		$returnValue = new Date($newDateStamp);
-
+	protected function Addtime($Name, $Parameters)
+	{	
+		$uom = strtolower(substr($Name, 3));
+		
+		if (substr($uom, -1, 1) != "s")
+		{
+			$uom .= "s";
+			$value  = 1;
+		}
+		else
+		{
+			if (count($Parameters) == 1)
+			{
+				$value = $Parameters[0];
+			}
+		}
+		
+		if (is_set($value))
+		{
+			$returnValue = $this->DateMath("+", $value, $uom);	
+		}
+		
 		return $returnValue;
 	}
 
-	public function SubtractDays($NumberOfDays)
+	protected function SubtractTime($Name, $Parameters)
 	{
-		$newDateStamp = strtotime("-{$NumberOfDays} days", $this->_dateStamp);
+		$uom = strtolower(substr($Name, 8));
+		
+		if (substr($uom, -1, 1) != "s")
+		{
+			$uom .= "s";
+			$value  = 1;
+		}
+		else
+		{
+			if (count($Parameters) == 1)
+			{
+				$value = $Parameters[0];
+			}
+		}
+		
+		if (is_set($value))
+		{
+			$returnValue = $this->DateMath("-", $value, $uom);	
+		}
+		
+		return $returnValue;
+		
+	}
 
+	protected function DateMath($Modifier, $Value, $UOM)
+	{
+		
+		$newDateStamp = strtotime("{$Modifier}{$Value} {$UOM}", $this->_dateStamp);
+		
 		$returnValue = new Date($newDateStamp);
 
-		return $returnValue;
+		return $returnValue;		
 	}
 
 	static public function MonthName($MonthNumber)
