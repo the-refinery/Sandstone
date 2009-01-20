@@ -2,11 +2,14 @@ codebase/functionalclasses/application/pages/pageform.class.php
 codebase/functionalclasses/application/pages/base/base.page.php
 codebase/functionalclasses/application/pages/base/baseresource.page.php
 codebase/functionalclasses/application/pages/base/home.page.php
+codebase/functionalclasses/application/pages/base/messagebase.page.php
+codebase/functionalclasses/application/pages/base/entitymessagesbase.page.php
 codebase/functionalclasses/application/pages/base/javascript.page.php
 codebase/functionalclasses/application/pages/error/error.page.php
 codebase/functionalclasses/application/pages/error/error403.page.php
 codebase/functionalclasses/application/pages/error/error404.page.php
 codebase/functionalclasses/application/pages/entity/knowledgebaseview.page.php
+codebase/functionalclasses/application/pages/entity/message.page.php
 codebase/functionalclasses/application/pages/functional/barcode.page.php
 codebase/functionalclasses/application/pages/functional/file.page.php
 codebase/functionalclasses/application/pages/functional/image.page.php

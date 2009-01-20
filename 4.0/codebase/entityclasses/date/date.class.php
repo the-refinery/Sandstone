@@ -90,12 +90,8 @@ class Date extends Module
 	*/
 	public function getMySQLtimestamp()
 	{
-		$returnValue = $this->getYear();
-		$returnValue .= "-" . $this->getMonth();
-		$returnValue .= "-" . $this->getDay();
-		$returnValue .= " " . $this->gettime();
-		$returnValue .= ":" . $this->getMinutes();
-		$returnValue .= ":" . $this->getSeconds();
+		
+		$returnValue = $this->FormatDate("Y-m-d H:i:s");
 
 		return $returnValue;
 	}

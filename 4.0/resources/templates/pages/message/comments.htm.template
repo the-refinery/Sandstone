@@ -1,0 +1,4 @@
+<div id="{$ControlName}">
+	<h3>Comments</h3>
+	{Content}
+</div>
