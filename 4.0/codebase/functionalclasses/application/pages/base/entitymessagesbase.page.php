@@ -9,8 +9,7 @@ class EntityMessagesBasePage extends ApplicationPage
     
 	public function AddMessageForm_Processor($EventParameters)
 	{
-
-		$this->_entity->Messages->AddMessage(Application::CurrentUser(), $this->AddMessageForm->Subject->Value, $this->AddMessageForm->Content->Value);
+		$this->_entity->Messages->AddMessage(Application::CurrentUser(), $this->AddMessageForm->Subject->Value, $this->AddMessageForm->Content->Value, $this->AddMessageForm->SubscribeCheckBox->Value);
         
         $this->AddMessageForm->RedirectTarget = Routing::BuildURLbyEntity($this->_entity->Messages->LatestMessage, "view");
         
@@ -49,6 +48,9 @@ class EntityMessagesBasePage extends ApplicationPage
         $this->AddMessageForm->Content = new TextAreaControl();
         $this->AddMessageForm->Content->LabelText = "Message";
         $this->AddMessageForm->Content->AddValidator("GenericValidator", "IsRequired");
+        
+        $this->AddMessageForm->SubscribeCheckbox = new BooleanControl();
+        $this->AddMessageForm->SubscribeCheckbox->LabelText = "Subscribe to Message";
         
         $this->AddMessageForm->Submit = new SubmitButtonControl();
 		

@@ -1,4 +1,5 @@
 <h1>{$Message->Subject}</h1>
+{!?IsModerator,message_delete.htm.template}
 <h2>by {$Message->User->FirstName} {$Message->User->LastName} <em>{$Message->Timestamp->FriendlyDate}</em></h2>
 <div>
 {$Message->Content}

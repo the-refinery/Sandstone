@@ -6,6 +6,19 @@ class MessageBasePage extends ApplicationPage
 {
 
     protected $_message;
+    protected $_entity;
+
+    public function getIsModerator()
+    {
+        $returnValue = false;
+        
+        if (Application::CurrentUser()->IsInRole(new Role(2)))
+        {
+            $returnValue = true;
+        }
+        
+        return $returnValue;
+    }
 
 	protected function Generic_PreProcessor(&$EventParameters)
 	{
@@ -16,9 +29,11 @@ class MessageBasePage extends ApplicationPage
 			
             if ($this->_message->IsLoaded)
             {
-                $this->_template->Message = $this->_message;
+                $this->_entity = new $this->_message->AssociatedEntityType ($this->_message->AssociatedEntityID);
                 
-                $this->_template->Entity = new $this->_message->AssociatedEntityType ($this->_message->AssociatedEntityID);
+                $this->_template->Message = $this->_message;
+                $this->_template->Entity = $this->_entity;
+                $this->_template->IsModerator = $this->IsModerator;
             }
             else
             {
@@ -41,6 +56,11 @@ class MessageBasePage extends ApplicationPage
         $this->_message->MarkRead(Application::CurrentUser());
 
 	}
+        
+	public function AJAX_DeleteComment($Processor)
+	{
+		$Processor->Template->Message = "From the Processor";
+	}
     
 	public function AddCommentForm_Processor($EventParameters)
 	{
@@ -51,6 +71,19 @@ class MessageBasePage extends ApplicationPage
         
 		return true;
 	}
+
+	public function DeleteMessageForm_Processor($EventParameters)
+	{
+        
+        $this->_message->Delete();
+        
+        $this->DeleteMessageForm->RedirectTarget = Routing::BuildURLbyEntity($this->_entity, "viewmessages");
+        
+        $this->SetNotificationMessage("Message Deleted Successfully");
+        
+		return true;
+	}
+
         
 	protected function BuildControlArray($EventParameters)
 	{
@@ -66,6 +99,9 @@ class MessageBasePage extends ApplicationPage
         
         $this->AddCommentForm->Submit = new SubmitButtonControl();
 		
+        $this->DeleteMessageForm = new PageForm($EventParameters);
+        
+        
         parent::BuildControlArray($EventParameters);
     }
     
