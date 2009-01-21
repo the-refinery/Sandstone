@@ -4,6 +4,8 @@ codebase/functionalclasses/application/pages/base/baseresource.page.php
 codebase/functionalclasses/application/pages/base/home.page.php
 codebase/functionalclasses/application/pages/base/messagebase.page.php
 codebase/functionalclasses/application/pages/base/entitymessagesbase.page.php
+codebase/functionalclasses/application/pages/base/applicationbase.page.php
+codebase/functionalclasses/application/pages/base/entity.page.php
 codebase/functionalclasses/application/pages/base/javascript.page.php
 codebase/functionalclasses/application/pages/error/error.page.php
 codebase/functionalclasses/application/pages/error/error403.page.php
@@ -17,3 +19,4 @@ codebase/functionalclasses/application/pages/functional/login.page.php
 codebase/functionalclasses/application/pages/functional/resource.page.php
 codebase/functionalclasses/application/pages/functional/searchresults.page.php
 codebase/functionalclasses/application/pages/functional/system.page.php
+codebase/functionalclasses/application/pages/functional/application.page.php

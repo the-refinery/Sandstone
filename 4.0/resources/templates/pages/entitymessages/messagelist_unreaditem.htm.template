@@ -1,0 +1,3 @@
+<li id="{$ControlName}" class="messages_unread">
+    {!messagelist_itembase.htm.template}
+</li>

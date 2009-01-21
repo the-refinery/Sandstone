@@ -6,4 +6,6 @@
 
 {+Comments}
 
+<a href="[=>$Entity,viewmessages]">Back</a>
+
 {+AddCommentForm}

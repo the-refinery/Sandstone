@@ -1,6 +1,6 @@
-<div id="{$ControlName}">
+<li id="{$ControlName}">
     <h4>by {$Element->User->FirstName} {$Element->User->LastName} <em>{$Element->Timestamp->FriendlyDate}</em></h4>
     <div>
         {$Element->Content}
     </div>
-</div>
+</li>

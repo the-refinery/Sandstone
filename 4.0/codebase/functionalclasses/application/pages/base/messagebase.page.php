@@ -1,9 +1,8 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
 NameSpace::Using("Sandstone.Message");
 
-class MessageBasePage extends BasePage
+class MessageBasePage extends ApplicationPage
 {
 
     protected $_message;
@@ -18,6 +17,8 @@ class MessageBasePage extends BasePage
             if ($this->_message->IsLoaded)
             {
                 $this->_template->Message = $this->_message;
+                
+                $this->_template->Entity = new $this->_message->AssociatedEntityType ($this->_message->AssociatedEntityID);
             }
             else
             {
@@ -33,6 +34,14 @@ class MessageBasePage extends BasePage
 
 	}
 
+	protected function HTM_Processor($EventParameters)
+	{
+        parent::HTM_Processor($EventParameters);	
+
+        $this->_message->MarkRead(Application::CurrentUser());
+
+	}
+    
 	public function AddCommentForm_Processor($EventParameters)
 	{
 
