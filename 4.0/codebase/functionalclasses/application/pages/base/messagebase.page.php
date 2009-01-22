@@ -84,12 +84,18 @@ class MessageBasePage extends ApplicationPage
 		return true;
 	}
 
+
+	public function CommentsCallback($CurrentElement, $Template)
+	{
+		$Template->IsModerator = $this->IsModerator;
+	}
         
 	protected function BuildControlArray($EventParameters)
 	{
         
 		$this->Comments = new RepeaterControl();
 		$this->Comments->ItemIDsuffixFormat = "{CommentID}";
+        $this->Comments->SetCallback($this, "CommentsCallback");        
 
         $this->AddCommentForm = new PageForm($EventParameters);
         

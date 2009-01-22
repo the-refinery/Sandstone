@@ -1,5 +1,6 @@
 <li id="{$ControlName}">
     <h4>by {$Element->User->FirstName} {$Element->User->LastName} <em>{$Element->Timestamp->FriendlyDate}</em></h4>
+    {!?IsModerator,comment_delete.htm.template}
     <div>
         {$Element->Content}
     </div>
