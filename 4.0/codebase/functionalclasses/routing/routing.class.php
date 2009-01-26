@@ -823,7 +823,7 @@ class Routing extends Module
 
 		//Check to see if this is an allowed root SEO page
 		$allowedRootSEOpageClasses = $this->GetAllowedSEOrootClassesArray();
-
+		
 		if (array_search(strtolower($entityClass), $allowedRootSEOpageClasses) !== false)
 		{
 			//Root SEO pages only applicable for VIEW actions
@@ -832,7 +832,6 @@ class Routing extends Module
 				$isRootSEOpageAllowed = true;
 			}
 		}
-
 
 		$isRootSEOpageFound = false;
 

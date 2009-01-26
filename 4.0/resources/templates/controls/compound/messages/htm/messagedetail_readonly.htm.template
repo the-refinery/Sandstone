@@ -1,5 +1,0 @@
-{!messagedetail_message_base.htm.template}
-
-<div id="{$ControlName}_MessageDetail_Comments" class="messages_detailcontent_comments">
-	{+Comments}
-</div>

@@ -95,7 +95,7 @@ class MessageComment extends EntityBase
 					    WHERE CommentID = {$this->_commentID} ";
 
 		$query->Execute();
-
+		
 		$this->_commentID = null;
 
 		return true;

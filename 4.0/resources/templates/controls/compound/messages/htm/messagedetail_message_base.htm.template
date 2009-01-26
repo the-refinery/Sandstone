@@ -1,3 +1,0 @@
-<h2 class="messages_detailsubject"><a href="javascript:void(0);" id="{$ControlName}_CloseDetail">{$MessageSubject}</a></h2>
-<h3 class="messages_summaryauthor">by {$Author} <em>{$MessageDate}</em></h3>
-<div class="messages_detailcontent">{$MessageContent}</div>

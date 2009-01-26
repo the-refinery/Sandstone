@@ -1,3 +1,0 @@
-<div id="{$ControlName}" class="messages_detailcomment" style="{$DIVstyle}">
-	{!messagedetail_comment_base.htm.template}
-</div>
