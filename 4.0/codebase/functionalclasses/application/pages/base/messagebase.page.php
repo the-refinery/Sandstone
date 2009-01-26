@@ -59,7 +59,7 @@ class MessageBasePage extends ApplicationPage
         
 	public function AJAX_DeleteComment($Processor)
 	{
-		$Processor->Template->Message = "From the Processor";
+		$this->_message->Comments[$Processor->EventParameters['commentid']]->Delete();
 	}
     
 	public function AddCommentForm_Processor($EventParameters)

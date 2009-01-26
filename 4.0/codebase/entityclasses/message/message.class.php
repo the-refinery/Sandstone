@@ -152,11 +152,24 @@ class Message extends EntityBase
 
 				//A new comment flags as unread for everybody.
 				$this->MarkUnread();
+				
+				//Do we need to send a notification?
+				if ($this->_isEmailOnComment)
+				{
+					$this->SendNotificationEmail();
+				}
 			}
         }
 
         return $returnValue;
     }
+
+	protected function SendNotificationEmail()
+	{
+		
+
+		
+	}
 
 	public function RemoveComment($Comment)
 	{

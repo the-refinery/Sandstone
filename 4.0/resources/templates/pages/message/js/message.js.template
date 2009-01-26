@@ -1,1 +1,3 @@
 {!?IsModerator,message_delete.js.template}
+
+{+Comments}
