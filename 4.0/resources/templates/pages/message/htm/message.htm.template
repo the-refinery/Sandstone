@@ -1,12 +1,16 @@
 <h1>{$Message->Subject}</h1>
+
 {!?IsModerator,message_delete.htm.template}
-<h2>by {$Message->User->FirstName} {$Message->User->LastName} <em>{$Message->Timestamp->FriendlyDate}</em></h2>
-<div>
-{$Message->Content}
+<p class="meta">by {$Message->User->FirstName} {$Message->User->LastName} <em>{$Message->Timestamp->FriendlyDate}</em></p>
+
+<div class="MessageContent">
+	{$Message->Content}
 </div>
 
 {+Comments}
 
-<a href="[=>$Entity,viewmessages]">Back</a>
+<p>
+	<a href="[=>$Entity,viewmessages]">Back</a>
+</p>
 
 {+AddCommentForm}
