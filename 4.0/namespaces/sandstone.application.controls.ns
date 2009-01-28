@@ -36,7 +36,6 @@ codebase/functionalclasses/application/controls/compound/datepicker.control.php
 codebase/functionalclasses/application/controls/compound/fileupload.control.php
 codebase/functionalclasses/application/controls/compound/imageupload.control.php
 codebase/functionalclasses/application/controls/compound/importfileupload.control.php
-codebase/functionalclasses/application/controls/compound/messages.control.php
 codebase/functionalclasses/application/controls/compound/tags.control.php
 codebase/functionalclasses/application/controls/compound/tagsearch.control.php
 codebase/functionalclasses/application/controls/compound/search.control.php

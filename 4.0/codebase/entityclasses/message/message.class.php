@@ -152,11 +152,24 @@ class Message extends EntityBase
 
 				//A new comment flags as unread for everybody.
 				$this->MarkUnread();
+				
+				//Do we need to send a notification?
+				if ($this->_isEmailOnComment)
+				{
+					$this->SendNotificationEmail();
+				}
 			}
         }
 
         return $returnValue;
     }
+
+	protected function SendNotificationEmail()
+	{
+		
+
+		
+	}
 
 	public function RemoveComment($Comment)
 	{
@@ -182,20 +195,18 @@ class Message extends EntityBase
 	{
 
 		//First delete any comments
-		if (count($this->Comments) > 0)
-		{
-			foreach($this->_comments as $tempComment);
-			{
-				$tempComment->Delete();
-			}
-		}
+		$query = new Query();
+		
+		$query->SQL = "	DELETE
+						FROM	core_MessageCommentMaster
+						WHERE MessageID = {$this->_messageID} ";
+						
+		$query->Execute();						
 
 		//Remove any read flags
 		$this->MarkUnread();
 
 		//Now delete this record.
-		$query = new Query();
-
 		$query->SQL = "	DELETE
 					    FROM    core_MessageMaster
 					    WHERE MessageID = {$this->_messageID} ";

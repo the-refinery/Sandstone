@@ -1,0 +1,14 @@
+function {$ControlName}_Item_Delete_OnClick(e)
+{
+    var commentID;
+    
+    commentID = this.id;
+    
+    commentID = commentID.replace('{$ControlName}_Item_', '');
+    commentID = commentID.replace('_Delete', '');
+    
+    RaiseAJAXevent('Page', 'DeleteComment', 'commentid=' + commentID);
+
+    $('{$ControlName}_Item_' + commentID).remove();
+
+}
