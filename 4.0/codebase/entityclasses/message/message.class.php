@@ -267,9 +267,14 @@ class Message extends EntityBase
 		return true;
 	}
 
-	public function CheckReadStatus($User)
+	public function CheckReadStatus($User = null)
 	{
 		$returnValue = false;
+
+		if (is_set($User) == false)
+		{
+			$User = Application::CurrentUser();
+		}
 
 		if ($User instanceof User && $User->IsLoaded)
 		{
