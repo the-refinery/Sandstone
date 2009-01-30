@@ -183,6 +183,29 @@ class Messages extends Module
 		return true;
 	}
 
+	public function CountUnreadMessages($User = null)
+	{
+		$returnValue = 0;
+	
+		if (is_set($User) == false)
+		{
+			$User = Application::CurrentUser();
+		}
+	
+		if ($User instanceof User && $User->IsLoaded)
+		{
+			foreach ($this->_messages as $tempMessage)
+			{
+				if ($tempMessage->CheckReadStatus($User) == false)
+				{
+					$returnValue++;
+				}
+			}			
+		}
+			
+		return $returnValue;
+	}
+
 	public function CountSearchTermOccurrances($SearchTerm)
 	{
 
