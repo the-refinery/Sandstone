@@ -222,13 +222,7 @@
 		clear:both;
 	}
 
-	div.datepicker_monthitem, div.datepicker_dayitem, div.datepicker_yearitem
-	{
-		float:left;
-		padding-right:5px;
-	}
-
-	div.datepicker_general div label
+	div.datepicker_general label
 	{
 		display:none;
 	}
