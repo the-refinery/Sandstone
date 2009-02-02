@@ -218,7 +218,7 @@
 	/* Datepicker */
 	div.datepicker_general
 	{
-		height:50px;
+		margin-bottom:3px;
 		clear:both;
 	}
 
