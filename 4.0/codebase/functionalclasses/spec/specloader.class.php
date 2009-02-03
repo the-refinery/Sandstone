@@ -6,7 +6,7 @@ class SpecLoader extends Module
 	{
 		GLOBAL $APPLICATION_ROOT_LOCATION;
 		
-		$testsDirectory = $APPLICATION_ROOT_LOCATION . "tests/";
+		$testsDirectory = $APPLICATION_ROOT_LOCATION . "specs/";
 		
 		if ($SpecName)
 		{
