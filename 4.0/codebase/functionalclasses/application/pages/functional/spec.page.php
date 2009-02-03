@@ -4,7 +4,7 @@ Namespace::Using("Sandstone.Spec");
 
 class SpecPage extends BasePage
 {
-	protected $_testClasses;
+	protected $_specs;
 	
 	public function __construct()
 	{
@@ -25,16 +25,15 @@ class SpecPage extends BasePage
 			$this->SetResponseCode(404, $EventParameters);			
 		}
 		
-		$this->_testClasses = SpecLoader::FetchTestFiles();
-		
+		$this->_specs = SpecLoader::FetchTestFiles();
 	}
 	
 	public function TestCasesCallback($CurrentElement, $Template)
 	{
 		$Template->TestName = $CurrentElement->FriendlyTestName;
-		$Template->TestResult = $CurrentElement->TestResult;
+		$Template->Message = $CurrentElement->Message;
 
-		if ($CurrentElement->IsPassed)
+		if ($CurrentElement->TestResult == true)
 		{
 			$Template->Filename = "testcases_item_passed";
 		}
@@ -60,7 +59,7 @@ class SpecPage extends BasePage
 	protected function BuildControlArray($EventParameters)
 	{
 		$this->TestClasses = new RepeaterControl();
-		$this->TestClasses->Data = $this->_testClasses;
+		$this->TestClasses->Data = $this->_specs;
 		$this->TestClasses->SetCallback($this, "TestClassesCallback");
 
 		parent::BuildControlArray($EventParameters);

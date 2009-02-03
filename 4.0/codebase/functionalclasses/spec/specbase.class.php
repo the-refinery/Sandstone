@@ -47,12 +47,20 @@ class SpecBase extends Module
 		{
 			$this->BeforeEach();
 			
-			$this->_currentTest = $test;
+			$this->_currentTest = new SpecAssertion($test);
 			$this->$test();
+			$this->_testResults[] = $this->_currentTest;
 			
 			$this->AfterEach();
 		}
 		$this->After();		
+	}
+	
+	public function Should($ActualValue)
+	{
+		$this->_currentTest->ActualValue = $ActualValue;
+		
+		return $this->_currentTest;
 	}
 	
 	protected function DetermineTests($ReflectorMethods)
@@ -76,149 +84,7 @@ class SpecBase extends Module
 			}
 		}
 	}
-			
-	/*** ASSERTS ***/
-	
-	public function RecordTestResult($TestResult)
-	{
-		$testCase = new SpecCase();
-		$testCase->TestName = $this->_currentTest;
-		$testCase->TestResult = $TestResult;
-		
-		$this->_testResults[] = $testCase;
-	}
-	
-	public function AssertTrue($Boolean)
-	{
-		if ($Boolean)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Expected true, but was not.");
-		}
-	}
 
-	public function AssertFalse($Boolean)
-	{
-		if ($Boolean == false)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Expected false, but was not.");
-		}
-	}
-
-	public function AssertNull($Variable)
-	{
-		if (is_null($Variable))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Expected null, but was not.");
-		}
-	}
-
-	public function AssertNotNull($Variable)
-	{
-		if (is_null($Variable) == false)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Was null, but should not have been.");
-		}
-	}
-	
-	public function AssertEqual($ActualValue, $ExpectedValue)
-	{
-		if ($ActualValue == $ExpectedValue)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$ActualValue} was expected to be {$ExpectedValue}");
-		}
-	}
-
-	public function AssertNotEqual($ActualValue, $ExpectedValue)
-	{
-		if ($ActualValue != $ExpectedValue)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$ExpectedValue} and {$ActualValue} should not be equal");
-		}
-	}
-	
-	public function AssertContains($Needle, $Haystack)
-	{
-		if (in_array($Needle,$Haystack))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Needle} was not found in the array");
-		}
-	}
-
-	public function AssertDoesNotContain($Needle, $Haystack)
-	{
-		if (in_array($Needle,$Haystack) == false)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Needle} exists in the array, but should not.");
-		}
-	}
-	
-	public function AssertRegularExpression($Subject, $Pattern)
-	{
-		if (preg_match($Pattern, $Subject))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} did not regex match {$Pattern}.");
-		}
-	}
-
-	public function AssertType($Subject, $Type)
-	{
-		if (gettype($Subject) == strtolower($Type))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} was expected to be a {$Type}, but was a " . gettype($Subject) . ".");
-		}
-	}
-
-	public function AssertNotType($Subject, $Type)
-	{
-		if (gettype($Subject) != strtolower($Type))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} was a {$Type}, but should not have been.");
-		}
-	}
 }
 
 ?>
