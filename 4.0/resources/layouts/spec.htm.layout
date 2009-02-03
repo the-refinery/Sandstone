@@ -5,10 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Running Tests</title>
 	
-	<link rel="stylesheet" href="{$CSSfileURL}" type="text/css" />
-	
-	<script src='{$JavascriptFileURL}' type='text/javascript'></script>
-	
+	<link rel="stylesheet" href="/{$CSSfileURL}" type="text/css" />	
 </head>
 <body>
 

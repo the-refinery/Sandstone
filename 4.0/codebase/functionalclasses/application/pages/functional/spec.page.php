@@ -25,7 +25,7 @@ class SpecPage extends BasePage
 			$this->SetResponseCode(404, $EventParameters);			
 		}
 		
-		$this->_specs = SpecLoader::FetchTestFiles();
+		$this->_specs = SpecLoader::FetchTestFiles($EventParameters['specname']);
 	}
 	
 	public function TestCasesCallback($CurrentElement, $Template)
