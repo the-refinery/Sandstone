@@ -147,7 +147,7 @@ class Application extends Module
 
 		return $App->Registry;
 	}
-
+	
 	static public function DatabaseConnection($ConfigArray = null)
 	{
 		$App = Application::Instance();

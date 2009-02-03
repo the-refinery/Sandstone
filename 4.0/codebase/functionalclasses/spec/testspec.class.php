@@ -3,9 +3,12 @@
 // Tests are any PUBLIC functions which are only present in the inherited classes definition
 // Helpers methods are any PROTECTED functions not on the TestSpec class, and are ignored by this class
 
-class TestSpec extends Component
+class TestSpec extends Module
 {
 	protected $_tests = array();
+	protected $_testResults = array();
+	
+	protected $_currentTest;
 	
 	// Run before any tests
 	public function Before()
@@ -27,12 +30,29 @@ class TestSpec extends Component
 	{
 	}
 	
+	public function getTestResults()
+	{
+		return $this->_testResults;
+	}
+	
 	/*** INTERNALS ***/
 	
 	public function Run()
 	{
 		$reflector = new ReflectionClass(get_class($this));
 		$this->DetermineTests($reflector->getMethods());
+		
+		$this->Before();
+		foreach ($this->_tests as $test)
+		{
+			$this->BeforeEach();
+			
+			$this->_currentTest = $test;
+			$this->$test();
+			
+			$this->AfterEach();
+		}
+		$this->After();		
 	}
 	
 	protected function DetermineTests($ReflectorMethods)
@@ -55,15 +75,149 @@ class TestSpec extends Component
 				$this->_tests[] = $tempMethod->name;
 			}
 		}
-		
-		di_var_dump($this->_tests,true);
 	}
 			
 	/*** ASSERTS ***/
 	
-	public function AssertEqual($Variable, $Value)
+	public function RecordTestResult($TestResult)
 	{
-		return $Variable == $Value;
+		$testCase = new TestCase();
+		$testCase->TestName = $this->_currentTest;
+		$testCase->TestResult = $TestResult;
+		
+		$this->_testResults[] = $testCase;
+	}
+	
+	public function AssertTrue($Boolean)
+	{
+		if ($Boolean)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("Expected true, but was not.");
+		}
+	}
+
+	public function AssertFalse($Boolean)
+	{
+		if ($Boolean == false)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("Expected false, but was not.");
+		}
+	}
+
+	public function AssertNull($Variable)
+	{
+		if (is_null($Variable))
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("Expected null, but was not.");
+		}
+	}
+
+	public function AssertNotNull($Variable)
+	{
+		if (is_null($Variable) == false)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("Was null, but should not have been.");
+		}
+	}
+	
+	public function AssertEqual($ActualValue, $ExpectedValue)
+	{
+		if ($ActualValue == $ExpectedValue)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$ActualValue} was expected to be {$ExpectedValue}");
+		}
+	}
+
+	public function AssertNotEqual($ActualValue, $ExpectedValue)
+	{
+		if ($ActualValue != $ExpectedValue)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$ExpectedValue} and {$ActualValue} should not be equal");
+		}
+	}
+	
+	public function AssertContains($Needle, $Haystack)
+	{
+		if (in_array($Needle,$Haystack))
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$Needle} was not found in the array");
+		}
+	}
+
+	public function AssertDoesNotContain($Needle, $Haystack)
+	{
+		if (in_array($Needle,$Haystack) == false)
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$Needle} exists in the array, but should not.");
+		}
+	}
+	
+	public function AssertRegularExpression($Subject, $Pattern)
+	{
+		if (preg_match($Pattern, $Subject))
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$Subject} did not regex match {$Pattern}.");
+		}
+	}
+
+	public function AssertType($Subject, $Type)
+	{
+		if (gettype($Subject) == strtolower($Type))
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$Subject} was expected to be a {$Type}, but was a " . gettype($Subject) . ".");
+		}
+	}
+
+	public function AssertNotType($Subject, $Type)
+	{
+		if (gettype($Subject) != strtolower($Type))
+		{
+			$this->RecordTestResult(true);
+		}
+		else
+		{
+			$this->RecordTestResult("{$Subject} was a {$Type}, but should not have been.");
+		}
 	}
 }
 
