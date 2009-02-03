@@ -18,7 +18,7 @@ class SpecPage extends BasePage
 	{
 		parent::Generic_PreProcessor($EventParameters);
 		
-		$isDevMode = Application::Registry()->IsDevMode;
+		$isDevMode = Application::Registry()->RunSpecs;
 		
 		if ($isDevMode == false)
 		{
