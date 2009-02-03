@@ -1,2 +1,3 @@
-codebase/functionalclasses/spec/testspec.class.php
-codebase/functionalclasses/spec/testcase.class.php
+codebase/functionalclasses/spec/specbase.class.php
+codebase/functionalclasses/spec/speccase.class.php
+codebase/functionalclasses/spec/specloader.class.php

@@ -3,7 +3,7 @@
 // Tests are any PUBLIC functions which are only present in the inherited classes definition
 // Helpers methods are any PROTECTED functions not on the TestSpec class, and are ignored by this class
 
-class TestSpec extends Module
+class SpecBase extends Module
 {
 	protected $_tests = array();
 	protected $_testResults = array();
@@ -59,7 +59,7 @@ class TestSpec extends Module
 	{
 		// Get a list of methods on the TestSpec base, so we can determine
 		// which methods the user entered as tests.
-		$baseReflector = new ReflectionClass('TestSpec');
+		$baseReflector = new ReflectionClass('SpecBase');
 		$tempMethods = $baseReflector->getMethods();
 		
 		foreach ($tempMethods as $tempMethod)
@@ -81,7 +81,7 @@ class TestSpec extends Module
 	
 	public function RecordTestResult($TestResult)
 	{
-		$testCase = new TestCase();
+		$testCase = new SpecCase();
 		$testCase->TestName = $this->_currentTest;
 		$testCase->TestResult = $TestResult;
 		

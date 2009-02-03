@@ -1,6 +1,6 @@
 <?php
 
-class TestCase extends Module
+class SpecCase extends Module
 {
 	protected $_testName;
 	protected $_testResult;

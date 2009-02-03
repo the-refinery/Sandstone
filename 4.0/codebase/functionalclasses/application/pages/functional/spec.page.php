@@ -25,24 +25,7 @@ class SpecPage extends BasePage
 			$this->SetResponseCode(404, $EventParameters);			
 		}
 		
-		GLOBAL $APPLICATION_ROOT_LOCATION;
-		
-		$testsDirectory = $APPLICATION_ROOT_LOCATION . "tests/";
-		
-		$pattern = $testsDirectory . "*.test.php";
-		$tempTests = glob($pattern);
-		
-		foreach ($tempTests as $tempTest)
-		{
-			require($tempTest);
-			
-			$testNameStart = strrpos($tempTest, "/") + 1;
-			$testNameEnd = strlen($tempTest) - 9;
-			$testNameLength = $testNameEnd - $testNameStart;
-			$testClassName = strtolower(substr($tempTest, $testNameStart, $testNameLength)) . "test";
-						
-			$this->_testClasses[] = $testClassName;
-		}		
+		$this->_testClasses = SpecLoader::FetchTestFiles();
 		
 	}
 	
