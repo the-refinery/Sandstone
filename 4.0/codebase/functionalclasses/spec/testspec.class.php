@@ -3,9 +3,11 @@
 // Tests are any PUBLIC functions which are only present in the inherited classes definition
 // Helpers methods are any PROTECTED functions not on the TestSpec class, and are ignored by this class
 
-class TestSpec extends Component
+class TestSpec extends Module
 {
 	protected $_tests = array();
+	protected $_testResults = array();
+	
 	protected $_currentTest;
 	
 	// Run before any tests
@@ -28,6 +30,11 @@ class TestSpec extends Component
 	{
 	}
 	
+	public function getTestResults()
+	{
+		return $this->_testResults;
+	}
+	
 	/*** INTERNALS ***/
 	
 	public function Run()
@@ -36,7 +43,7 @@ class TestSpec extends Component
 		$this->DetermineTests($reflector->getMethods());
 		
 		$this->Before();
-		foreach ($this->_tests as $test => $value)
+		foreach ($this->_tests as $test)
 		{
 			$this->BeforeEach();
 			
@@ -65,7 +72,7 @@ class TestSpec extends Component
 		{
 			if ($tempMethod->isPublic() && in_array($tempMethod->name, $baseMethods) == false)
 			{
-				$this->_tests[$tempMethod->name] = null;
+				$this->_tests[] = $tempMethod->name;
 			}
 		}
 	}
@@ -74,7 +81,11 @@ class TestSpec extends Component
 	
 	public function RecordTestResult($TestResult)
 	{
-		$this->_tests[$this->_currentTest] = $TestResult;
+		$testCase = new TestCase();
+		$testCase->TestName = $this->_currentTest;
+		$testCase->TestResult = $TestResult;
+		
+		$this->_testResults[] = $testCase;
 	}
 	
 	public function AssertTrue($Boolean)

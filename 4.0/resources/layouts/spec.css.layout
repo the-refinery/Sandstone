@@ -1,0 +1,36 @@
+body
+{
+	font-family: Arial, "MS Trebuchet", sans-serif;
+}
+
+h1
+{
+	font-size:14px;
+	font-weight:bold;
+}
+
+div.Passed, div.Failed
+{
+	padding:5px 5px 5px 20px;
+	margin-bottom:3px;
+	font-size:12px;
+}
+
+div.Passed
+{
+	background:#9f9;
+	border:1px solid #696;
+}
+
+div.Failed
+{
+	background:#f99;
+	border:1px solid #966;
+}
+
+div.Failed strong, div.Passed strong
+{
+	display:block;
+	margin-left:-15px;
+	font-size:14px;
+}

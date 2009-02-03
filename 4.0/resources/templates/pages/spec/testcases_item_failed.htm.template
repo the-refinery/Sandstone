@@ -1,0 +1,4 @@
+<div class="Failed">
+	<strong>{$TestName}</strong> 
+	{$TestResult}
+</div>

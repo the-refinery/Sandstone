@@ -1,0 +1,3 @@
+<div class="Passed">
+	<strong>{$TestName}</strong> 
+</div>
