@@ -4,3 +4,4 @@ codebase/functionalclasses/exception/invaliduploadexception.class.php
 codebase/functionalclasses/exception/invalidsystemexception.class.php
 codebase/functionalclasses/exception/invalidactionexception.class.php
 codebase/functionalclasses/exception/missinglicenseexception.class.php
+codebase/functionalclasses/exception/unknownassertexception.class.php

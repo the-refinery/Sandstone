@@ -41,15 +41,15 @@ class SpecAssertion extends Module
 		$parameter = $Arguments[0];
 		
 		// Determine wether this is a ShouldBe or ShouldNotBe
-		if (stristr($Method,'shouldbe'))
+		if (stristr($Method,'shouldnot'))
 		{
-			$assertion = substr($Method, 8);
-			$this->_testResult = $this->$assertion($parameter);			
+			$assertion = substr($Method, 9);
+			$this->_testResult = ($this->Assert($assertion, $parameter) == false);
 		}
-		elseif (stristr($Method,'shouldnotbe'))
+		elseif (stristr($Method,'should'))
 		{
-			$assertion = substr($Method, 11);
-			$this->_testResult = ($this->$assertion($parameter) == false);
+			$assertion = substr($Method, 6);
+			$this->_testResult = $this->Assert($assertion, $parameter);
 		}
 		
 		// If failed, create a message
@@ -66,14 +66,28 @@ class SpecAssertion extends Module
 		$testSpec->AddTestResult($this);
 	}
 	
+	public function Assert($Method, $Parameter)
+	{
+		if (method_exists($this, $Method))
+		{
+			$returnValue = $this->$Method($Parameter);
+		}
+		else
+		{
+			Throw New UnknownAssertException("Unknown Assert: $Method");
+		}
+		
+		return $returnValue;
+	}
+	
 	/*** ASSERTS ***/
 	
-	public function True()
+	public function BeTrue()
 	{
 		return $this->_actualValue === true;
 	}
 	
-	public function EqualTo($ExpectedValue)
+	public function BeEqualTo($ExpectedValue)
 	{
 		return $this->_actualValue === $ExpectedValue;
 	}
