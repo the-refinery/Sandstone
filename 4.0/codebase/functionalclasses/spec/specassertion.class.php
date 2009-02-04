@@ -44,37 +44,26 @@ class SpecAssertion extends Module
 		if (stristr($Method,'shouldbe'))
 		{
 			$assertion = substr($Method, 8);
-			$this->_testResult = $this->Assert($assertion, $parameter);			
+			$this->_testResult = $this->$assertion($parameter);			
 		}
 		elseif (stristr($Method,'shouldnotbe'))
 		{
 			$assertion = substr($Method, 11);
-			$this->_testResult = ($this->Assert($assertion, $parameter) == false);
+			$this->_testResult = ($this->$assertion($parameter) == false);
 		}
 		
 		// If failed, create a message
 		if ($this->_testResult == false)
 		{
 			$methodDescription = StringFunc::CamelCaseToSentance($Method);
-			$this->_message = "{$this->_actualValue} {$methodDescription} {$parameter}";
+			
+			if (is_set($this->_message) == false)
+			{
+				$this->_message = "{$this->_actualValue} {$methodDescription} {$parameter}";
+			}
 		}
 		
 		$testSpec->AddTestResult($this);
-	}
-	
-	protected function Assert($Method, $Parameter)
-	{
-		if (method_exists($this,$Method))
-		{
-			$returnValue = $this->$Method($Parameter);			
-		}
-		else
-		{
-			$returnValue = false;
-			$this->_message = "Unknown Assertion!";
-		}
-		
-		return $returnValue;
 	}
 	
 	/*** ASSERTS ***/
