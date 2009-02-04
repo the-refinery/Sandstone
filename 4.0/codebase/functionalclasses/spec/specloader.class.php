@@ -4,30 +4,33 @@ class SpecLoader extends Module
 {
 	static public function FetchTestFiles($SpecName = false)
 	{
+		GLOBAL $SANDSTONE_ROOT_LOCATION;
 		GLOBAL $APPLICATION_ROOT_LOCATION;
-		
-		$testsDirectory = $APPLICATION_ROOT_LOCATION . "specs/";
-		
+				
 		if ($SpecName)
 		{
-			$pattern = $testsDirectory . "{$SpecName}.spec.php";
-			$tempTests = glob($pattern);
+			$SpecName = strtolower($SpecName);
+			
+			$paths = explode(PATH_SEPARATOR, get_include_path());
 
-			foreach ($tempTests as $tempTest)
+			// Check if the spec you asked for exists in the include path, including inside sandstone
+			foreach ($paths as $path) 
 			{
-				require($tempTest);
+				$fullPath = $path . DIRECTORY_SEPARATOR . "/specs/{$SpecName}.spec.php";
 
-				$testNameStart = strrpos($tempTest, "/") + 1;
-				$testNameEnd = strlen($tempTest) - 9;
-				$testNameLength = $testNameEnd - $testNameStart;
-				$testClassName = strtolower(substr($tempTest, $testNameStart, $testNameLength)) . "spec";
-
-				$returnValue[] = $testClassName;
+				if (file_exists($fullPath)) 
+				{
+					require($fullPath);
+					
+					$returnValue[] = "{$SpecName}spec";
+					break;
+				}
 			}
 		}
 		else
 		{
 			// Load all Specs
+			$testsDirectory = $APPLICATION_ROOT_LOCATION . "specs/";			
 			$pattern = $testsDirectory . "*.spec.php";
 			$tempTests = glob($pattern);
 
