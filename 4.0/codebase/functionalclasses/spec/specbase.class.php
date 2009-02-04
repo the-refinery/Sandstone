@@ -7,6 +7,7 @@ class SpecBase extends Module
 {
 	protected $_tests = array();
 	protected $_testResults = array();
+	protected $_hasFailed = false;
 	
 	protected $_currentTest;
 	
@@ -35,6 +36,21 @@ class SpecBase extends Module
 		return $this->_testResults;
 	}
 	
+	public function getHasFailed()
+	{
+		return $this->_hasFailed;
+	}
+	
+	public function AddTestResult($Value)
+	{
+		if ($Value->TestResult == false)
+		{
+			$this->_hasFailed = true;
+		}
+		
+		$this->_testResults[] = $Value;
+	}
+		
 	/*** INTERNALS ***/
 	
 	public function Run()
@@ -46,23 +62,12 @@ class SpecBase extends Module
 		foreach ($this->_tests as $test)
 		{
 			$this->BeforeEach();
-			
-			$this->_currentTest = new SpecAssertion($test);
 			$this->$test();
-			$this->_testResults[] = $this->_currentTest;
-			
 			$this->AfterEach();
 		}
 		$this->After();		
 	}
-	
-	public function Should($ActualValue)
-	{
-		$this->_currentTest->ActualValue = $ActualValue;
 		
-		return $this->_currentTest;
-	}
-	
 	protected function DetermineTests($ReflectorMethods)
 	{
 		// Get a list of methods on the TestSpec base, so we can determine
@@ -82,9 +87,16 @@ class SpecBase extends Module
 			{
 				$this->_tests[] = $tempMethod->name;
 			}
-		}
+		}		
 	}
 
+}
+
+function Check($ActualValue)
+{
+	$testResults = new SpecAssertion($ActualValue);
+	
+	return $testResults;
 }
 
 ?>

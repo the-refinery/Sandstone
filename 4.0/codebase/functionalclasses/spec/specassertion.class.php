@@ -1,5 +1,7 @@
 <?php
 
+Namespace::Using("Sandstone.Utilities.String");
+
 class SpecAssertion extends Module
 {
 	protected $_testName;
@@ -7,168 +9,86 @@ class SpecAssertion extends Module
 	protected $_testResult;
 	protected $_message;
 	
-	public function __construct($TestName)
+	public function __construct($ActualValue)
 	{
-		$this->_testName = $TestName;
-	}
-
-	public function getTestName()
-	{
-		return $this->_testName;
+		$this->_actualValue = $ActualValue;
 	}
 	
 	public function getFriendlyTestName()
 	{
-		preg_match_all('/[A-Z][^A-Z]*/', $this->_testName, $results);
-
-		return implode(' ', $results[0]);
+		return StringFunc::CamelCaseToSentance($this->_testName);
 	}
-
+	
 	public function getTestResult()
 	{
 		return $this->_testResult;
-	}
-	
-	public function getActualValue()
-	{
-		return $this->_actualValue;
-	}
-	
-	public function setActualValue($Value)
-	{
-		$this->_actualValue = $Value;
 	}
 	
 	public function getMessage()
 	{
 		return $this->_message;
 	}
+
+	public function __call($Method, $Arguments)
+	{
+		$callStack = debug_backtrace();
+		//The call context we are interested in will be index 2 in the array.
+		// 0 = this function
+		// 1 = internal function call to this test
+		// 2 = context in question
+		$this->_testName = $callStack[2]['function'];
+		$testSpec = $callStack[2]['object'];
+		$parameter = $Arguments[0];
+		
+		// Determine wether this is a ShouldBe or ShouldNotBe
+		if (stristr($Method,'shouldbe'))
+		{
+			$assertion = substr($Method, 8);
+			$this->_testResult = $this->Assert($assertion, $parameter);			
+		}
+		elseif (stristr($Method,'shouldnotbe'))
+		{
+			$assertion = substr($Method, 11);
+			$this->_testResult = ($this->Assert($assertion, $parameter) == false);
+		}
+		
+		// If failed, create a message
+		if ($this->_testResult == false)
+		{
+			$methodDescription = StringFunc::CamelCaseToSentance($Method);
+			$this->_message = "{$this->_actualValue} {$methodDescription} {$parameter}";
+		}
+		
+		$testSpec->AddTestResult($this);
+	}
+	
+	protected function Assert($Method, $Parameter)
+	{
+		if (method_exists($this,$Method))
+		{
+			$returnValue = $this->$Method($Parameter);			
+		}
+		else
+		{
+			$returnValue = false;
+			$this->_message = "Unknown Assertion!";
+		}
+		
+		return $returnValue;
+	}
+	
 	/*** ASSERTS ***/
 	
-	public function TestCondition($Result, $Message)
+	public function True()
 	{
-		if ($Result === true)
-		{
-			$this->_testResult = true;
-			$this->_message = '';
-		}
-		else
-		{
-			$this->_testResult = false;
-			$this->_message = $Message;
-		}
+		return $this->_actualValue === true;
 	}
 	
-	public function AssertTrue()
+	public function EqualTo($ExpectedValue)
 	{
-		$this->TestCondition($this->_actualValue, "Expected true, but was not.");
-	}
-
-	public function AssertFalse()
-	{
-		$this->TestCondition($this->_actualValue == false, "Expected false, but was not.");		
-	}
-
-	public function AssertNull($Variable)
-	{
-		if (is_null($Variable))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Expected null, but was not.");
-		}
-	}
-
-	public function AssertNotNull($Variable)
-	{
-		if (is_null($Variable) == false)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("Was null, but should not have been.");
-		}
+		return $this->_actualValue === $ExpectedValue;
 	}
 	
-	public function AssertEqual($ExpectedValue)
-	{
-		$this->TestCondition($this->_actualValue == $ExpectedValue, "{$this->_actualValue} was expected to be {$ExpectedValue}");		
-	}
-
-	public function AssertNotEqual($ActualValue, $ExpectedValue)
-	{
-		if ($ActualValue != $ExpectedValue)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$ExpectedValue} and {$ActualValue} should not be equal");
-		}
-	}
-	
-	public function AssertContains($Needle, $Haystack)
-	{
-		if (in_array($Needle,$Haystack))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Needle} was not found in the array");
-		}
-	}
-
-	public function AssertDoesNotContain($Needle, $Haystack)
-	{
-		if (in_array($Needle,$Haystack) == false)
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Needle} exists in the array, but should not.");
-		}
-	}
-	
-	public function AssertRegularExpression($Subject, $Pattern)
-	{
-		if (preg_match($Pattern, $Subject))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} did not regex match {$Pattern}.");
-		}
-	}
-
-	public function AssertType($Subject, $Type)
-	{
-		if (gettype($Subject) == strtolower($Type))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} was expected to be a {$Type}, but was a " . gettype($Subject) . ".");
-		}
-	}
-
-	public function AssertNotType($Subject, $Type)
-	{
-		if (gettype($Subject) != strtolower($Type))
-		{
-			$this->RecordTestResult(true);
-		}
-		else
-		{
-			$this->RecordTestResult("{$Subject} was a {$Type}, but should not have been.");
-		}
-	}
 }
 
 ?>

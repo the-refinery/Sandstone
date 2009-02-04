@@ -50,6 +50,15 @@ class SpecPage extends BasePage
 		
 		$testClass = new $TestClassName();
 		$testClass->Run();
+
+		if ($testClass->HasFailed)
+		{
+			$Template->Success = "<span style=\"color:red\">FAIL</span>";
+		}
+		else
+		{
+			$Template->Success = "<span style=\"color:green\">PASS</span>";
+		}
 				
 		$this->TestClasses->CurrentRepeaterItem->TestCases = new RepeaterControl();
 		$this->TestClasses->CurrentRepeaterItem->TestCases->Data = $testClass->TestResults;

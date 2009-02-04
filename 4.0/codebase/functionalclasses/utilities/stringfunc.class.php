@@ -19,6 +19,13 @@ class StringFunc
 
 		return $ReturnValue;
 	}
+	
+	static function CamelCaseToSentance($Subject)
+	{
+		preg_match_all('/[A-Z][^A-Z]*/', $Subject, $results);
+
+		return implode(' ', $results[0]);
+	}
 
 	static function RemovePunctuation($String)
 	{
