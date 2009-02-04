@@ -11,25 +11,10 @@ class SpecBase extends Module
 	
 	protected $_currentTest;
 	
-	// Run before any tests
-	public function Before()
-	{	
-	}
-	
-	// Run before each test
-	public function BeforeEach()
-	{
-	}
-	
-	// Run after all tests
-	public function After()
-	{
-	}
-	
-	// Run after each test
-	public function AfterEach()
-	{
-	}
+	public function Before() {}
+	public function BeforeEach() {}
+	public function After() {}
+	public function AfterEach() {}
 	
 	public function getTestResults()
 	{

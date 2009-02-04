@@ -1,3 +1,4 @@
 codebase/functionalclasses/spec/specbase.class.php
 codebase/functionalclasses/spec/specloader.class.php
+codebase/functionalclasses/spec/specassertionbase.class.php
 codebase/functionalclasses/spec/specassertion.class.php
