@@ -226,7 +226,7 @@ class File extends EntityBase
 
 		$query->SQL = "	SELECT	Count(*) FileCount
 						FROM	core_FileMaster
-						WHERE	FileName = '{$query->SetTextField($FileName)}' ";
+						WHERE	FileName = {$query->SetTextField($FileName)} ";
 
 		$query->Execute();
 
