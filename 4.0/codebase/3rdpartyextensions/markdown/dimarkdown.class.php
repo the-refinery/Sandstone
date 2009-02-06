@@ -40,6 +40,7 @@ class DImarkDown extends Module
 		$returnValue = $this->ParseEntityURLs($returnValue);
 
 		return $returnValue;
+
 	}
 
 	protected function ParseImageTags($Value)
@@ -55,7 +56,7 @@ class DImarkDown extends Module
         {
             $tempToken = $tempMatch[0];
             $imageID = strtolower($tempMatch[2]);
-
+			
 			$image = new Image($imageID);
 
 			if ($image->IsLoaded)
@@ -65,7 +66,7 @@ class DImarkDown extends Module
 			}
 			else
 			{
-				$imageTag;
+				$imageTag = null;
 			}
 
             $returnValue = str_replace($tempToken, $imageTag, $returnValue);
