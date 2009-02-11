@@ -12,6 +12,12 @@ NameSpace::Using("Sandstone.Message");
 NameSpace::Using("Sandstone.ObjectSet");
 NameSpace::Using("Sandstone.Tag");
 
+define("PROPERTY_READ_WRITE", 0);
+define("PROPERTY_READ_ONLY", 1);
+define("PROPERTY_REQUIRED", 2);
+define("PROPERTY_PRIMARY_ID", 4);
+define("PROPERTY_LOADED_REQUIRED", 8);
+
 class EntityBase extends Module
 {
 
@@ -925,6 +931,18 @@ class EntityBase extends Module
 
 	final protected function AddProperty($Name, $DataType, $DBfieldName = null, $IsReadOnly = false, $IsRequired = false, $IsPrimaryID = false, $IsLoadedRequired = false, $IsLoadOnDemand = false, $LoadOnDemandFunctionName = null)
 	{
+		
+		//Which call mode are we in?
+		if ($IsReadOnly === true || $IsReadOnly === false)
+		{
+			//Old style - list of boolean options
+		}
+		else
+		{
+			//New style, options parameter is 4th, LoadOnDemand function a name is 5th
+		}
+		
+		
 		$newProperty = new Property($this, $Name, $DataType, $DBfieldName, $IsReadOnly, $IsRequired, $IsPrimaryID, $IsLoadedRequired, $IsLoadOnDemand, $LoadOnDemandFunctionName);
 
 		$this->_properties[strtolower($Name)] = $newProperty;
