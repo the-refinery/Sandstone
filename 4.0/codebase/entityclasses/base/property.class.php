@@ -589,5 +589,10 @@ class Property extends Module
 		return $returnValue;
 	}
 
+	public function Display()
+	{
+		echo parent::__toString();
+	}
+
 }
 ?>

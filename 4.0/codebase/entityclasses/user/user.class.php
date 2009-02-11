@@ -59,16 +59,16 @@ class User extends EntityBase
 		// 8) IsLoadOnDemand
 		// 9) LoadOnDemandFunctionName
 
-		$this->AddProperty("UserID","integer","UserID",true,false,true,false,false,null);
-		$this->AddProperty("FirstName","string","FirstName",false,true,false,false,false,null);
-		$this->AddProperty("LastName","string","LastName",false,true,false,false,false,null);
-		$this->AddProperty("Gender","string","Gender",false,false,false,false,false,null);
-		$this->AddProperty("UserName","string","UserName",false,false,false,false,false,null);
-		$this->AddProperty("Password","string","Password",false,false,false,false,false,null);
-		$this->AddProperty("IsBulkMailAllowed","boolean","IsBulkMailAllowed",false,true,false,false,false,null);
-		$this->AddProperty("IsDisabled","boolean","IsDisabled",false,true,false,false,false,null);
-		$this->AddProperty("Token","string",null,false,false,false,false,true,"LoadToken");
-		$this->AddProperty("Roles","array",null,false,false,false,false,true,"LoadRoles");
+		$this->AddProperty("UserID","integer","UserID",PROPERTY_PRIMARY_ID);
+		$this->AddProperty("FirstName","string","FirstName",PROPERTY_REQUIRED);
+		$this->AddProperty("LastName","string","LastName",PROPERTY_REQUIRED);
+		$this->AddProperty("Gender","string","Gender",PROPERTY_READ_WRITE);
+		$this->AddProperty("UserName","string","UserName",PROPERTY_READ_WRITE);
+		$this->AddProperty("Password","string","Password",PROPERTY_READ_WRITE);
+		$this->AddProperty("IsBulkMailAllowed","boolean","IsBulkMailAllowed",PROPERTY_REQUIRED);
+		$this->AddProperty("IsDisabled","boolean","IsDisabled",PROPERTY_REQUIRED);
+		$this->AddProperty("Token","string",null,PROPERTY_READ_WRITE,"LoadToken");
+		$this->AddProperty("Roles","array",null,PROPERTY_READ_ONLY,"LoadRoles");
 
 		$this->AddCollective("Emails", "Emails");
 		$this->AddCollective("Phones", "Phones");

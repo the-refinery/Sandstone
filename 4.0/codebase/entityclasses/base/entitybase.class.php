@@ -933,17 +933,72 @@ class EntityBase extends Module
 	{
 		
 		//Which call mode are we in?
-		if ($IsReadOnly === true || $IsReadOnly === false)
-		{
-			//Old style - list of boolean options
-		}
-		else
+		if (($IsReadOnly === true || $IsReadOnly === false) == false)
 		{
 			//New style, options parameter is 4th, LoadOnDemand function a name is 5th
+			$options = $IsReadOnly;
+			
+			if (strlen($IsRequired) > 0)
+			{
+				$LoadOnDemandFunctionName = $IsRequired;
+			}
+			
+			if ($options & PROPERTY_PRIMARY_ID)
+			{
+				//Primary ID is a special case - always R/O, never required nor loaded required
+				$IsPrimaryID = true;
+				$IsReadOnly = true;
+				$IsRequired = false;
+				$IsLoadedRequired = false;
+				$IsLoadOnDemand = false;
+				$LoadOnDemandFunctionName = null;
+			}
+			else
+			{
+				$IsPrimaryID = false;
+				
+				if ($options & PROPERTY_READ_ONLY)
+				{
+					$IsReadOnly = true;
+				}
+				else
+				{
+					$IsReadOnly = false;
+				}
+				
+				if ($options & PROPERTY_REQUIRED)
+				{
+					$IsRequired = true;
+				}
+				else
+				{
+					$IsRequired = false;
+				}
+				
+				if ($options & PROPERTY_LOADED_REQUIRED)
+				{
+					$IsLoadedRequired = true;
+				}
+				else
+				{
+					$IsLoadedRequired = false;	
+				}
+				
+				if (is_set($LoadOnDemandFunctionName))
+				{
+					$IsLoadOnDemand = true;
+				}
+			}
+			
+			$newMode = true;
 		}
 		
+		$newProperty = new Property($this, $Name, $DataType, $DBfieldName, $IsReadOnly, $IsRequired, $IsPrimaryID, $IsLoadedRequired, $IsLoadOnDemand, $LoadOnDemandFunctionName);		
 		
-		$newProperty = new Property($this, $Name, $DataType, $DBfieldName, $IsReadOnly, $IsRequired, $IsPrimaryID, $IsLoadedRequired, $IsLoadOnDemand, $LoadOnDemandFunctionName);
+if ($newMode)
+{
+	$newProperty->Display();	
+}
 
 		$this->_properties[strtolower($Name)] = $newProperty;
 
