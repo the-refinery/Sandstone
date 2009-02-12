@@ -989,17 +989,11 @@ class EntityBase extends Module
 					$IsLoadOnDemand = true;
 				}
 			}
-			
-			$newMode = true;
+		
 		}
 		
 		$newProperty = new Property($this, $Name, $DataType, $DBfieldName, $IsReadOnly, $IsRequired, $IsPrimaryID, $IsLoadedRequired, $IsLoadOnDemand, $LoadOnDemandFunctionName);		
 		
-if ($newMode)
-{
-	$newProperty->Display();	
-}
-
 		$this->_properties[strtolower($Name)] = $newProperty;
 
 		if ($IsPrimaryID)
