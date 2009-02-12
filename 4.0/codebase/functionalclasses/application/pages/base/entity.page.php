@@ -5,7 +5,7 @@ class EntityPage extends ApplicationPage
 	protected $_loadedEntity;
 
 	protected $_entityType;
-	protected $_EntityIDEventParameter;
+	protected $_entityIDEventParameter;
 
   	protected function Generic_PreProcessor(&$EventParameters)
   	{
@@ -23,12 +23,12 @@ class EntityPage extends ApplicationPage
   		parent::Generic_PreProcessor($EventParameters);
   	}
 
-	// Override in the page if the _EntityIDEventParameter is not the primary key
+	// Override in the page if the _entityIDEventParameter is not the primary key
 	// and thus cannot be loaded in the default manner.
 	protected function LoadEntity($EventParameters)
 	{
 		$EntityType = $this->_entityType;
-  		$this->_loadedEntity = new $EntityType($EventParameters[$this->_EntityIDEventParameter]);
+  		$this->_loadedEntity = new $EntityType($EventParameters[$this->_entityIDEventParameter]);
 	}
 
 	protected function ValidateAJAXForm($Form)
