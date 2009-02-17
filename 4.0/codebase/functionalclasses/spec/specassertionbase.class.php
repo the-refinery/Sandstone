@@ -59,7 +59,7 @@ class SpecAssertionBase extends Module
 			
 			if (is_set($this->_message) == false)
 			{
-				$this->_message = "{$this->_actualValue} {$methodDescription} {$parameter}";
+				$this->_message = "(" . gettype($this->_actualValue) . ") {$this->_actualValue} {$methodDescription} (" . gettype($parameter) . ") {$parameter}";
 			}
 		}
 		

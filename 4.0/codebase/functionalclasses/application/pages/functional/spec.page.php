@@ -17,7 +17,7 @@ class SpecPage extends BasePage
 	public function Generic_PreProcessor($EventParameters)
 	{
 		parent::Generic_PreProcessor($EventParameters);
-		
+
 		$isDevMode = Application::Registry()->RunSpecs;
 		
 		if ($isDevMode == false)
