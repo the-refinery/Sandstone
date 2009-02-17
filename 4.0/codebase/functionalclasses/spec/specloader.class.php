@@ -6,7 +6,7 @@ class SpecLoader extends Module
 	{
 		GLOBAL $SANDSTONE_ROOT_LOCATION;
 		GLOBAL $APPLICATION_ROOT_LOCATION;
-				
+		
 		if ($SpecName)
 		{
 			$SpecName = strtolower($SpecName);
@@ -30,8 +30,8 @@ class SpecLoader extends Module
 		else
 		{
 			// Load all Specs
-			$testsDirectory = $APPLICATION_ROOT_LOCATION . "specs/";			
-			$pattern = $testsDirectory . "*.spec.php";
+			$pattern = $APPLICATION_ROOT_LOCATION . "specs/" . $testsDirectory . "*.spec.php";			
+
 			$tempTests = glob($pattern);
 
 			foreach ($tempTests as $tempTest)
