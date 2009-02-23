@@ -44,3 +44,4 @@ codebase/functionalclasses/application/controls/repeater/repeateritem.class.php
 codebase/functionalclasses/application/controls/basic/image.control.php
 codebase/functionalclasses/application/controls/compound/creditcard.control.php
 codebase/functionalclasses/application/controls/datanavigation/datanavigation.control.php
+codebase/functionalclasses/application/controls/widget/widget.control.php
