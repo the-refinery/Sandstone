@@ -46,7 +46,9 @@ class SpecPage extends BasePage
 	public function TestClassesCallback($CurrentElement, $Template)
 	{
 		$TestClassName = $CurrentElement;
-		$Template->TestClassName = $CurrentElement;
+		
+		// Show the name of the spec, without the trailing "spec"
+		$Template->TestClassName = substr($CurrentElement,0,strlen($CurrentElement) - 4);
 		
 		$testClass = new $TestClassName();
 		$testClass->Run();

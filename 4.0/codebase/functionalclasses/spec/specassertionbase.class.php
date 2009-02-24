@@ -143,10 +143,15 @@ class SpecAssertionBase extends Module
 	{
 		return $this->_actualValue instanceof $ObjectType;
 	}
-	
+
 	public function BeOfType($Type)
 	{
 		return gettype($this->_actualValue) === $Type;
+	}
+	
+	public function BeAnArray($Type)
+	{
+		return is_array($this->_actualValue);
 	}
 	
 	public function BeLoaded()

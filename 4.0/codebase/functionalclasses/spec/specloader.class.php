@@ -4,16 +4,15 @@ class SpecLoader extends Module
 {
 	static public function FetchTestFiles($SpecName = false)
 	{
-		GLOBAL $SANDSTONE_ROOT_LOCATION;
 		GLOBAL $APPLICATION_ROOT_LOCATION;
+
+		$SpecName = strtolower($SpecName);
 		
-		if ($SpecName)
-		{
-			$SpecName = strtolower($SpecName);
-			
+		if ($SpecName && $SpecName != 'sandstone')
+		{			
 			$paths = explode(PATH_SEPARATOR, get_include_path());
 
-			// Check if the spec you asked for exists in the include path, including inside sandstone
+			// Check if the spec you asked for exists in the include path, including inside a framework or sandstone
 			foreach ($paths as $path) 
 			{
 				$fullPath = $path . DIRECTORY_SEPARATOR . "/specs/{$SpecName}.spec.php";
@@ -29,8 +28,17 @@ class SpecLoader extends Module
 		}
 		else
 		{
-			// Load all Specs
-			$pattern = $APPLICATION_ROOT_LOCATION . "specs/" . $testsDirectory . "*.spec.php";			
+			if ($SpecName == 'sandstone')
+			{
+				$basePath = Namespace::NamespaceEnviromentBase('sandstone');
+			}
+			else
+			{
+				$basePath = $APPLICATION_ROOT_LOCATION;
+			}
+			
+			// Load all Specs in the current application
+			$pattern = $basePath . "specs/" . $testsDirectory . "*.spec.php";			
 
 			$tempTests = glob($pattern);
 

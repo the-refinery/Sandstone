@@ -1,3 +1,3 @@
-<h1>{$Success} {$TestClassName}</h1>
+<h1>{$Success} <a href="/spec/{$TestClassName}">{$TestClassName}</a></h1>
 
 {+TestCases}
