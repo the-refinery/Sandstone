@@ -87,11 +87,6 @@ class SpecAssertionBase extends Module
 		return $this->_actualValue === true;
 	}
 
-  public function BeFalse()
-  {
-    return $this->_actualValue === false;
-  }
-
 	public function BeNull()
 	{
 		return is_null($this->_actualValue);
