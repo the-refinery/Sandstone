@@ -86,7 +86,12 @@ class SpecAssertionBase extends Module
 	{
 		return $this->_actualValue === true;
 	}
-	
+
+  public function BeFalse()
+  {
+    return $this->_actualValue === false;
+  }
+
 	public function BeNull()
 	{
 		return is_null($this->_actualValue);
@@ -95,6 +100,11 @@ class SpecAssertionBase extends Module
 	public function BeEqualTo($ExpectedValue)
 	{
 		return $this->_actualValue === $ExpectedValue;
+	}
+	
+	public function BeSimilarTo($ExpectedValue)
+	{
+		return $this->_actualValue == $ExpectedValue;		
 	}
 	
 	public function BeGreaterThan($CompareValue)
