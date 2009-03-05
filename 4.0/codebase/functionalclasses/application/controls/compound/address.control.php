@@ -7,6 +7,7 @@ Address Control Class File
 */
 
 Namespace::Using("Sandstone.Utilities.String");
+Namespace::Using("Sandstone.Address");
 
 class AddressControl extends BaseControl
 {
@@ -300,12 +301,12 @@ class AddressControl extends BaseControl
 
 		if ($IsMineIncluded)
 		{
-			$returnValue = "\$('{$this->PickList->Name}_KeepMine').observe('click', {$this->Name}_ClosePickList);\n";
+			$returnValue = "\$('#{$this->PickList->Name}_KeepMine').bind('click', {$this->Name}_ClosePickList);\n";
 		}
 
 		for($i = 1; $i <= count($PostalCode->Cities); $i++)
 		{
-			$returnValue .= "\$('{$this->PickList->Name}_Item_{$i}').observe('click', {$this->PickList->Name}_ChooseCity);\n";
+			$returnValue .= "\$('#{$this->PickList->Name}_Item_{$i}').bind('click', {$this->PickList->Name}_ChooseCity);\n";
 		}
 
 		return $returnValue;

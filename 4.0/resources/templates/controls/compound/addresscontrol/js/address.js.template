@@ -4,8 +4,8 @@
 
 function {$ControlName}_ClosePickList()
 {
-	if ($('{$ControlName}_PickList'))
+	if ($('#{$ControlName}_PickList').length)
 	{
-		$('{$ControlName}_PickList').remove();
+		$('#{$ControlName}_PickList').remove();
 	}
 }

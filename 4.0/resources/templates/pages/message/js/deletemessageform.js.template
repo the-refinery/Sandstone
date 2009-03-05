@@ -1,4 +1,4 @@
 function MessageDelete_OnClick()
 {
-    $("DeleteMessageForm").submit();    
+    $("#DeleteMessageForm").submit();    
 }

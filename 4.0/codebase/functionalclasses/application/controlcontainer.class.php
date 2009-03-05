@@ -457,7 +457,7 @@ class ControlContainer extends Renderable
 		{
 			$function = $functions[0];
 			
-			$returnValue = "\tif (\$('{$this->Name}')) ";
+			$returnValue = "\tif (\$('#{$this->Name}').length) ";
 						
 			$eventName = strtolower($function[1]);
 			$endOfFunctionName = strpos($function[0], "(");
@@ -469,7 +469,7 @@ class ControlContainer extends Renderable
 			}
 			else
 			{
-				$returnValue .= "\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
+				$returnValue .= "\$('#{$this->Name}').bind('{$eventName}', {$functionName});\n";
 			}
 		}
 		elseif (count($functions) > 1)
@@ -484,13 +484,13 @@ class ControlContainer extends Renderable
 
 				if ($eventName == "load")
 				{
-					$returnValue .= "\t\tif (\$('{$this->Name}')) ";
+					$returnValue .= "\t\tif (\$(#'{$this->Name}')) ";
 					$returnValue .= "{$functionName}();\n";
 				}
 				else
 				{
 					$returnValue .= "\t\tif (\$('{$this->Name}')) ";
-					$returnValue .= "\$('{$this->Name}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\$('#{$this->Name}').bind('{$eventName}', {$functionName});\n";
 				}
 			}
 		}
@@ -514,8 +514,8 @@ class ControlContainer extends Renderable
 				if (array_key_exists(strtolower($elementName), $this->Controls) == false)
 				{
 					//(check in JS on the client side to make sure the DOM elements exist)
-					$returnValue .= "\tif (\$('{$this->Name}_{$elementName}')) ";
-					$returnValue .= "\$('{$this->Name}_{$elementName}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\tif (\$('#{$this->Name}_{$elementName}').length) ";
+					$returnValue .= "\$('#{$this->Name}_{$elementName}').bind('{$eventName}', {$functionName});\n";
 				}
 
 			}

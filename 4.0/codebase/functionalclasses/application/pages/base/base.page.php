@@ -436,19 +436,10 @@ class BasePage extends ControlContainer
         {
             //We have observers we need to register.  Build the function to register them
             $finalOutput .= "\n";
-            $finalOutput .= "function RegisterObservers()\n";
+            $finalOutput .= "$(document).ready(function()\n";
             $finalOutput .= "{\n";
             $finalOutput .= $observers;
-            $finalOutput .= "}\n\n";
-
-            //Now echo the command to execute that function once the page is loaded.
-            $finalOutput .= "document.observe('dom:loaded', RegisterObservers);\n";
-
-			if (strpos($pageJavascript, "Page_OnLoad"))
-            {
-				$finalOutput .= "document.observe('dom:loaded', Page_OnLoad);\n";
-            }
-
+            $finalOutput .= "})\n\n";
         }
 
         //Echo our final output
@@ -776,7 +767,7 @@ class BasePage extends ControlContainer
 				if (array_key_exists(strtolower($elementName), $this->Controls) == false && array_key_exists(strtolower($elementName), $this->Forms) == false && strtolower($elementName) != 'page')
 				{
 					//(check in JS on the client side to make sure the DOM elements exist)
-					$returnValue .= "\tif (\$('{$elementName}')) \$('{$elementName}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\tif (\$('#{$elementName}')) \$('#{$elementName}').bind('{$eventName}', {$functionName});\n";
 				}
 
 			}

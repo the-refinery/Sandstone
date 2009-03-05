@@ -154,7 +154,7 @@ class AutoCompleteControl extends BaseControl
 
 		$ajaxURL = Routing::GetFileTypeURL("ajax");
 
-		$returnValue .= "\tif (\$('{$this->Name}')) ";
+		$returnValue .= "\tif (\$('#{$this->Name}'),length) ";
 
 		$parameters[] = "callback: {$this->Name}_AutoComplete_Callback";
 		$parameters[] = "afterUpdateElement: {$this->Name}_AutoComplete_afterUpdateElement";
