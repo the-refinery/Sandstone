@@ -6,7 +6,7 @@ if ($('#{$ControlName}_NoData').length)
 }
 else
 {
-	$('#{$ControlName}').append('{!taglist_nodata_item.htm.template}');
+x	$('#{$ControlName}').append('{!taglist_nodata_item.htm.template}');
 }
 
-$('#{$ControlName}_NoData').effects('highlight',{},1500);
+$('#{$ControlName}_NoData').effects('highlight');

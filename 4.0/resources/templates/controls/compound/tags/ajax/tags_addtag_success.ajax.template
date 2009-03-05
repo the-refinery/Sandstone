@@ -5,7 +5,7 @@ if ($('#{$ControlName}_NoData'))
 
 if ($('{$ControlName}_Item_{$NewTagID}'))
 {
-	$('#{$ControlName}_Item_{$NewTagID}').show();
+	$('#{$ControlName}_Item_{$NewTagID}').show('blind');
 }
 else
 {
@@ -15,7 +15,7 @@ else
 	if ($('#{$ControlName}_Item_{$NewTagID}_DeleteTag')) $('#{$ControlName}_Item_{$NewTagID}_DeleteTag').bind('click', {$ControlName}_Item_DeleteTag_OnClick);
 }
 
-$('{$ControlName}_Item_{$NewTagID}').effects('highlight',{},1500);
+$('{$ControlName}_Item_{$NewTagID}').effects('highlight');
 
 $('#{$ParentContainerName}_NewTagText').val('');
 $('#{$ParentContainerName}_NewTagText').focus();

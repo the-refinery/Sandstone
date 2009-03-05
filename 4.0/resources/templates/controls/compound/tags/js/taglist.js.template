@@ -1,13 +1,11 @@
 function {$ControlName}_Item_DeleteTag_OnClick(e)
 {
-	var clickedImage = e.element();
-	var altParts;
 	var tagID;
-	var parameters;
 
-	altParts = clickedImage.alt.split(':');
-	tagID = altParts[1];
-
+	tagID = $(this).attr('id');
+	tagID = tagID.replace("{$ParentContainerName}_TagList_Item_",'');
+	tagID = tagID.replace("_DeleteTag",'');
+	
 	if (confirm("Are you sure you want to delete this tag?"))
 	{
 		RaiseAJAXevent("{$ParentContainerName}", "DeleteTag", {'TargetTagID':tagID});

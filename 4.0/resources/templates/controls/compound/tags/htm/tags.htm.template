@@ -6,9 +6,7 @@
 </p>
 
 <div id="{$ControlName}_NewTag" class="tags_addtag" style="display:none;">
-	<form id="{$ControlName}_AddTagForm">
 	{+NewTagText}
 	{+NewTagSubmit}
 	 or <a href="javascript:void(0);" id="{$ControlName}_CancelAddTag">close</a>
-	</form>
 </div>
