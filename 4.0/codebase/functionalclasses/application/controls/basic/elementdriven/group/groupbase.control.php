@@ -193,8 +193,8 @@ class GroupBaseControl extends ElementDrivenBaseControl
 				//Loop through each of the elements and set an observer for each input tag
 				foreach($this->_elements as $key=>$tempElement)
 				{
-					$returnValue .= "\tif (\$('{$tempElement->InputItemID}')) ";
-					$returnValue .= "\$('{$tempElement->InputItemID}').observe('{$eventName}', {$functionName});\n";
+					$returnValue .= "\tif (\$('#{$tempElement->InputItemID}').length) ";
+					$returnValue .= "\$('#{$tempElement->InputItemID}').bind('{$eventName}', {$functionName});\n";
 				}
 			}
 		}

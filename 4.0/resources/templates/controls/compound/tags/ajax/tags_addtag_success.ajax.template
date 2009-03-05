@@ -1,21 +1,21 @@
-if ($('{$ControlName}_NoData'))
+if ($('#{$ControlName}_NoData'))
 {
-	$('{$ControlName}_NoData').remove();
+	$('#{$ControlName}_NoData').remove();
 }
 
 if ($('{$ControlName}_Item_{$NewTagID}'))
 {
-	new Element.show('{$ControlName}_Item_{$NewTagID}', {queue:'end'});
+	$('#{$ControlName}_Item_{$NewTagID}').show();
 }
 else
 {
-	Insertion.Bottom('{$ControlName}', '{$NewTagItem}');
+	$('#{$ControlName}').append('{$NewTagItem}');
 
 	//Render an observer for the delete image, if any
-	if ($('{$ControlName}_Item_{$NewTagID}_DeleteTag')) $('{$ControlName}_Item_{$NewTagID}_DeleteTag').observe('click', {$ControlName}_Item_DeleteTag_OnClick);
+	if ($('#{$ControlName}_Item_{$NewTagID}_DeleteTag')) $('#{$ControlName}_Item_{$NewTagID}_DeleteTag').bind('click', {$ControlName}_Item_DeleteTag_OnClick);
 }
 
-new Effect.Highlight('{$ControlName}_Item_{$NewTagID}', {queue:'end'});
+$('{$ControlName}_Item_{$NewTagID}').effects('highlight',{},1500);
 
-$('{$ParentContainerName}_NewTagText').value = '';
-$('{$ParentContainerName}_NewTagText').focus();
+$('#{$ParentContainerName}_NewTagText').val('');
+$('#{$ParentContainerName}_NewTagText').focus();

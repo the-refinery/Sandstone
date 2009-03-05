@@ -2,7 +2,7 @@ function {$ControlName}_OnBlur()
 {
 	var isEntered;
 
-	if ($('{$ControlName}').value == '')
+	if ($('#{$ControlName}').val() == '')
 	{
 		isEntered = false;
 	}
@@ -13,6 +13,6 @@ function {$ControlName}_OnBlur()
 
 	if (isEntered)
 	{
-		RaiseAJAXevent('{$ParentControlName}', 'autocomplete', '{$ControlName}='+$F('{$ControlName}'));
+		RaiseAJAXevent('{$ParentControlName}', 'autocomplete', {'{$ControlName}': $('#{$ControlName}').val()});
 	}
 }

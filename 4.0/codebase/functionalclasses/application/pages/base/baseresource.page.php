@@ -11,7 +11,7 @@ class BaseResourcePage extends BasePage
 	protected function JS_Processor($EventParameters)
 	{
 		//Load Prototype & Scriptaculous compressed
-		$libraryFileSpec = "javascript/protoaculous.js";
+		$libraryFileSpec = "javascript/jquery.js";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
 		//Now add ajax functions
@@ -20,10 +20,6 @@ class BaseResourcePage extends BasePage
 
 		//Now add control functions
 		$libraryFileSpec = "javascript/controls.js";
-		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
-
-		//Now add table functions
-		$libraryFileSpec = "javascript/table.js";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
 		echo $this->CompressJavascript($libraryContents);
@@ -35,6 +31,10 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "css/meyerreset.css";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
+		//Load meyer reset
+		$libraryFileSpec = "css/jquery.css";
+		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+		
 		//Load controls
 		$libraryFileSpec = "css/controls.css";
 		$libraryContents .= file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);

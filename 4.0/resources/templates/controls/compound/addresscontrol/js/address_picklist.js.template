@@ -1,9 +1,7 @@
 function {$ControlName}_ChooseCity(e)
 {
-	var target = e.element();
-
-	$('{$ParentControlName}_CityStateZip').value = target.innerHTML;
-	$('{$ParentControlName}_CountryCode').value = target.title;
+	$('#{$ParentControlName}_CityStateZip').val($(this).html());
+	$('#{$ParentControlName}_CountryCode').val($(this).attr('title'));
 
     {$ParentControlName}_ClosePickList();
 }

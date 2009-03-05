@@ -12,7 +12,7 @@ function {$ControlName}_AddTag_OnClick()
 
 function {$ControlName}_NewTagSubmit_OnClick()
 {
-    RaiseAJAXevent("{$ControlName}", "AddTag", $('{$ControlName}_AddTagForm').serialize());
+    RaiseAJAXevent("{$ControlName}", "AddTag", $('#{$ControlName}_AddTagForm').serialize());
 }
 
 function {$ControlName}_CancelAddTag_OnClick()

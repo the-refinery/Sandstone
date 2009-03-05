@@ -1,5 +1,5 @@
 {$ControlName}_ClosePickList();
 SetControlMessage('{$ControlName}', "");
 
-$('{$ControlName}_CityStateZip').value = '{$CityStateZip}';
-$('{$ControlName}_CountryCode').value = '{$CountryCode}';
+$('#{$ControlName}_CityStateZip').val('{$CityStateZip}');
+$('#{$ControlName}_CountryCode').val('{$CountryCode}');
