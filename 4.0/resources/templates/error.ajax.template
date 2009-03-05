@@ -5,4 +5,4 @@ if ($('#AJAXerror').length == 0)
 
 $('#AJAXerror').html('<h1>AJAX Error</h1>{$ErrorMessage}');
 
-$('#AJAXerror').effect("highlight", {}, 1500);
+$('#AJAXerror').effect("highlight");
