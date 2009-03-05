@@ -1,39 +1,46 @@
 function SetControlMessage(ControlName, MessageText)
 {
-// 	var	messageDOM = ControlName + '_Message';
-// 	var existingMessageLength;
-// 		
-// 	if ($(messageDOM))
-// 	{
-// 		existingMessageLength = $(messageDOM).innerHTML.length;
-// 	}
-// 	else
-// 	{
-// 		existingMessageLength = 0;
-// 	}
-// 
-// 	if (MessageText.length == 0 && existingMessageLength > 0)
-// 	{
-// 		new Effect.BlindUp(messageDOM,
-// 			{
-// 				afterFinish:function() { $(messageDOM).remove(); }
-// 			});
-// 	}
-// 	else if (MessageText.length > 0)
-// 	{
-// 		if (! $(messageDOM)) new Insertion.Before(ControlName,'<div id="'+ControlName+'_Message" class="control_message" style="display:none;"></div>');
-//   	
-// 		$(messageDOM).update(MessageText);
-// 
-// 		if (existingMessageLength == 0)
-// 		{
-// 			new Effect.BlindDown(messageDOM);
-// 		}
-// 		else
-// 		{
-// 			new Effect.Shake(messageDOM);
-// 		}
-// 	}
+	var	messageDOMselector = '#' + ControlName + '_Message';
+	var existingMessageLength;
+	
+	if ($(messageDOMselector).length)
+	{
+		existingMessageLength = $(messageDOMselector).html().length;
+	}
+	else
+	{
+		existingMessageLength = 0;
+	}
+	
+	if (MessageText.length == 0 && existingMessageLength > 0)
+	{
+		$(messageDOMselector).hide('blind',
+			{	complete: function() 
+				{ 
+					$(messageDOMselector).remove(); 
+				}
+			});		
+	}
+	else if (MessageText.length > 0)
+	{
+		if ($(messageDOMselector).length == 0)
+		{
+			$('#' + ControlName).before('<div id="'+ControlName+'_Message" class="control_message"></div>');
+			$(messageDOMselector).hide();
+			$(messageDOMselector).show('blind');
+		} 
+  	
+		$(messageDOMselector).html(MessageText);
+
+		if (existingMessageLength == 0)
+		{
+			$(messageDOMselector);
+		}
+		else
+		{
+			$(messageDOMselector).effect('shake', { times: 3 });
+		}
+	}
 }
 // 
 // function SelectDropdownItem(DomID, Value)
