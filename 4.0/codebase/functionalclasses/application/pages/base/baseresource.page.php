@@ -31,8 +31,12 @@ class BaseResourcePage extends BasePage
 		$libraryFileSpec = "css/meyerreset.css";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 
-		//Load meyer reset
+		//Load jquery 
 		$libraryFileSpec = "css/jquery.css";
+		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
+
+		//Load jquery theme
+		$libraryFileSpec = "css/jquery-theme.css";
 		$libraryContents = file_get_contents($libraryFileSpec, FILE_USE_INCLUDE_PATH);
 		
 		//Load controls

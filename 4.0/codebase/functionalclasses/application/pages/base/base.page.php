@@ -637,9 +637,6 @@ class BasePage extends ControlContainer
 	{
 		$returnValue = new EventResults();
 
-
-
-
         $returnValue->Value = true;
 		$returnValue->Complete();
 
