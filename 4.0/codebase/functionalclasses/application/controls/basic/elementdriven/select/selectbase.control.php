@@ -191,7 +191,6 @@ class SelectBaseControl extends ElementDrivenBaseControl
 
 		if(is_set($this->_labelFormat) && is_set($this->_valueFormat) && is_set($this->_objectSet) && $this->_objectSet->IsLoaded)
 		{
-
 			$currentGroupValue = null;
 
 			while ($tempItem = $this->_objectSet->FetchItem())
@@ -211,7 +210,6 @@ class SelectBaseControl extends ElementDrivenBaseControl
 
 				$this->AddElement($value, $label, false, $group);
 			}
-
 		}
 		else
 		{
