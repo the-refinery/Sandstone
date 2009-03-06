@@ -93,7 +93,10 @@ $(document).ready(function()
 				$(this).val(data[0]);
 				$('#' + $(this).attr('id').replace('_query','')).val(data[1]);
 			}
+			
+			$('#' + $(this).attr('id').replace('_query','')).trigger('autocompleteCallback', data);
 		});
+		
 		
 	});
 });
