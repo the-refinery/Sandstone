@@ -658,6 +658,89 @@ class User extends EntityBase
 		return $returnValue;
 	}
 
+	public function GenerateNewPassword($Syllables = 2)
+	{
+		
+		//prefixes
+		$prefix = array('aero', 'anti', 'auto', 'bi', 'bio',
+						'cine', 'deca', 'demo', 'dyna', 'eco',
+						'ergo', 'geo', 'gyno', 'hypo', 'kilo',
+						'mega', 'tera', 'mini', 'nano', 'duo');
+	
+		//suffixes
+		$suffix = array('dom', 'ity', 'ment', 'sion', 'ness',
+						'ence', 'er', 'ist', 'tion', 'or'); 
+	
+		//vowel sounds 
+		$vowels = array('a', 'o', 'e', 'i', 'y', 'u', 'ou', 'oo'); 
+	
+		//consonants 
+		$consonants = array('w', 'r', 't', 'p', 's', 'd', 'f', 'g', 'h', 'j', 
+							'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'qu');
+		
+		$doubles = array('n', 'm', 't', 's');
+	
+		//Special characters
+		$specialCharacters = array("+", "-", "_", "*", "&", "%", "$", "#", "@", "!", "?");
+	
+		$password = $this->RandomElement($prefix);
+
+		$password_suffix = $this->RandomElement($suffix);
+	
+		for($i=0; $i<$Syllables; $i++)
+		{
+			// selecting random consonant
+			$selectedConsonant = $this->RandomElement($consonants);
+			
+			if (in_array($selectedConsonant, $doubles)&&($i!=0)) { // maybe double it
+				if (rand(0, 2) == 1) // 33% probability
+					$selectedConsonant .= $selectedConsonant;
+			}
+			$returnValue .= $selectedConsonant;
+
+			// selecting random vowel
+			$returnValue .= $this->RandomElement($vowels);
+	
+			if ($i == $syllables - 1) // if suffix begin with vovel
+				if (in_array($password_suffix[0], $vowels)) // add one more consonant 
+					$returnValue .= $this->RandomElement($consonants);
+	
+		}
+	
+		// selecting random suffix
+		$returnValue .= $password_suffix;
+	
+		//select a special character
+		$returnValue .= $this->RandomElement($specialCharacters);
+	
+		//Add a numeric value
+		$returnValue .=  rand(1, 999);
+	
+		return $returnValue;
+	}
+
+	protected function RandomElement($Array)
+	{
+		$index = rand(0, sizeof($Array)-1);
+		
+		return $Array[$index];
+	}
+	
+	public function ResetPassword()
+	{
+		if ($this->_isLoaded)
+		{
+		
+			$returnValue = $this->GenerateNewPassword();
+			
+			$this->Password = $returnValue;
+				
+			$returnValue = $this->Save();
+		}
+		
+		return $returnValue;
+	}
+
 	protected function Lookup_All($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 

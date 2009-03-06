@@ -16,6 +16,13 @@ class Mailer extends Renderable
 	
 	protected $_sendAsHTML = false;
 	
+	public function __construct()
+	{
+		parent::__construct();
+		
+		$this->_template->RequestFileType = "email";
+	}
+		
 	public function getToName()
 	{
 		return $this->_toName;
@@ -28,7 +35,7 @@ class Mailer extends Renderable
 	
 	public function getToEmail()
 	{
-		return $this->_toName;
+		return $this->_toEmail;
 	}
 	
 	public function setToEmail($Value)
@@ -80,16 +87,7 @@ class Mailer extends Renderable
 	public function Send()
 	{
 	}
-	
-	public function Render()
-	{		
-		$this->_template->RequestFileType = "email";
-		
-		$returnValue = parent::Render();
-		
-		return $returnValue;
-	}
-		
+			
 }
 
 ?>
