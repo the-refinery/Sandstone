@@ -117,11 +117,10 @@ class AutoCompleteControl extends BaseControl
 
 	public function AJAX_AutoComplete($Processor)
 	{
-		header('Content-Type: text/html');
 		$Processor->Template->IsMasterLayoutUsed = false;
 		$Processor->Template->FileName = "autocomplete";
 
-		$searchString = $Processor->EventParameters['autocomplete_parameter'];
+		$searchString = $Processor->EventParameters['q'];
 
 		if (strlen($searchString) > 0 && is_set($this->_associatedEntityType))
 		{
@@ -141,7 +140,7 @@ class AutoCompleteControl extends BaseControl
 					$matchID = $tempElement->PrimaryIDproperty->Value;
 					$matchContent = $this->_template->Render();
 
-					$matchItems .= "<li id=\"{$matchID}\">{$matchContent}</li>";
+					$matchItems .= "$matchContent|$matchID\n";
 				}
 			}
 

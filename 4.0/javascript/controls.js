@@ -78,6 +78,24 @@ $(document).ready(function()
 			}
 		});
 	});
+	
+	// === Autocomplete ===
+	$("input.autocomplete_textbox").each(function() 
+	{	
+		$('#' + $(this).attr('id')).autocomplete(AJAX_URL,{
+			minChars: 3,
+			extraParams:{target: $(this).attr('id').replace('_query',''), method: 'autocomplete'}
+		});
+		
+		$('#' + $(this).attr('id')).result(function(event, data, formatted) {
+			if (data)
+			{
+				$(this).val(data[0]);
+				$('#' + $(this).attr('id').replace('_query','')).val(data[1]);
+			}
+		});
+		
+	});
 });
 
 
