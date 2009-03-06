@@ -735,7 +735,7 @@ class User extends EntityBase
 			
 			$this->Password = $returnValue;
 				
-			$returnValue = $this->Save();
+			$this->Save();
 		}
 		
 		return $returnValue;
