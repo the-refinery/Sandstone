@@ -100,5 +100,3 @@ $(document).ready(function()
 		
 	});
 });
-
-

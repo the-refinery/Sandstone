@@ -10,5 +10,4 @@ function {$ControlName}_Item_DeleteTag_OnClick(e)
 	{
 		RaiseAJAXevent("{$ParentContainerName}", "DeleteTag", {'TargetTagID':tagID});
 	}
-
 }
