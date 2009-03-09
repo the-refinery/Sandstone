@@ -117,11 +117,10 @@ class AutoCompleteControl extends BaseControl
 
 	public function AJAX_AutoComplete($Processor)
 	{
-		header('Content-Type: text/html');
 		$Processor->Template->IsMasterLayoutUsed = false;
 		$Processor->Template->FileName = "autocomplete";
 
-		$searchString = $Processor->EventParameters['autocomplete_parameter'];
+		$searchString = $Processor->EventParameters['q'];
 
 		if (strlen($searchString) > 0 && is_set($this->_associatedEntityType))
 		{
@@ -141,31 +140,12 @@ class AutoCompleteControl extends BaseControl
 					$matchID = $tempElement->PrimaryIDproperty->Value;
 					$matchContent = $this->_template->Render();
 
-					$matchItems .= "<li id=\"{$matchID}\">{$matchContent}</li>";
+					$matchItems .= "$matchContent|$matchID\n";
 				}
 			}
 
 			$Processor->Template->MatchItems = $matchItems;
 		}
-	}
-
-    public function RenderObservers($Javascript)
-	{
-
-		$ajaxURL = Routing::GetFileTypeURL("ajax");
-
-		$returnValue .= "\tif (\$('{$this->Name}')) ";
-
-		$parameters[] = "callback: {$this->Name}_AutoComplete_Callback";
-		$parameters[] = "afterUpdateElement: {$this->Name}_AutoComplete_afterUpdateElement";
-		$parameters[] = "indicator: '{$this->Name}_AutoComplete_Waiting'";
-		$parameters[] = "minChars: 3";
-
-		$parameterString = implode(", ", $parameters);
-
-		$returnValue .= "new Ajax.Autocompleter(\"{$this->Name}_AutoComplete_Text\", \"{$this->Name}_AutoComplete_Matches\", \"{$ajaxURL}\", {{$parameterString}});\n";
-
-		return $returnValue;
 	}
 
 	public function Render()

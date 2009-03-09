@@ -2,21 +2,19 @@
 {+NewTagText}
 {+NewTagSubmit}
 
-
 function {$ControlName}_AddTag_OnClick()
 {
-	new Effect.BlindUp('{$ControlName}_AddTag_Paragraph', {queue:'end'});
-	new Effect.BlindDown('{$ControlName}_NewTag', {queue:'end'});
+	$('#{$ControlName}_AddTag_Paragraph').hide('blind');
+	$('#{$ControlName}_NewTag').show('blind');
 }
-
 
 function {$ControlName}_NewTagSubmit_OnClick()
 {
-    RaiseAJAXevent("{$ControlName}", "AddTag", $('{$ControlName}_AddTagForm').serialize());
+    RaiseAJAXevent("{$ControlName}", "AddTag", { '{$ControlName}_NewTagText': $('#{$ControlName}_NewTagText').val() });
 }
 
 function {$ControlName}_CancelAddTag_OnClick()
 {
-	new Effect.BlindUp('{$ControlName}_NewTag', {queue:'end'});
-	new Effect.BlindDown('{$ControlName}_AddTag_Paragraph', {queue:'end'});
+	$('#{$ControlName}_NewTag').hide('blind');
+	$('#{$ControlName}_AddTag_Paragraph').show('blind');
 }

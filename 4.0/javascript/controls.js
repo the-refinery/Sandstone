@@ -1,95 +1,100 @@
 function SetControlMessage(ControlName, MessageText)
 {
-	var	messageDOM = ControlName + '_Message';
+	var	messageDOMselector = '#' + ControlName + '_Message';
 	var existingMessageLength;
-		
-	if ($(messageDOM))
+	
+	if ($(messageDOMselector).length)
 	{
-		existingMessageLength = $(messageDOM).innerHTML.length;
+		existingMessageLength = $(messageDOMselector).html().length;
 	}
 	else
 	{
 		existingMessageLength = 0;
 	}
-
+	
 	if (MessageText.length == 0 && existingMessageLength > 0)
 	{
-		new Effect.BlindUp(messageDOM,
-			{
-				afterFinish:function() { $(messageDOM).remove(); }
-			});
+		$(messageDOMselector).hide('blind',
+			{	complete: function() 
+				{ 
+					$(messageDOMselector).remove(); 
+				}
+			});		
 	}
 	else if (MessageText.length > 0)
 	{
-		if (! $(messageDOM)) new Insertion.Before(ControlName,'<div id="'+ControlName+'_Message" class="control_message" style="display:none;"></div>');
+		if ($(messageDOMselector).length == 0)
+		{
+			$('#' + ControlName).before('<div id="'+ControlName+'_Message" class="control_message"></div>');
+			$(messageDOMselector).hide();
+			$(messageDOMselector).show('blind');
+		} 
   	
-		$(messageDOM).update(MessageText);
+		$(messageDOMselector).html(MessageText);
 
 		if (existingMessageLength == 0)
 		{
-			new Effect.BlindDown(messageDOM);
+			$(messageDOMselector);
 		}
 		else
 		{
-			new Effect.Shake(messageDOM);
+			$(messageDOMselector).effect('shake', { times: 3 });
 		}
 	}
 }
 
 function SelectDropdownItem(DomID, Value)
 {
-    $(DomID)[0].selected = true;
-
-	var i;
-    for (i = 0; i < $(DomID).length; i++)
-    {
-        if ( $(DomID)[i].value == Value )
-        {
-            $(DomID)[i].selected = true;
-        }
-    }
+    $("#"+ DomID + " option[value='" + Value + "']").attr('selected', 'selected');
 }
 
-// === Title Textbox ===
-
-document.observe('dom:loaded',function()
+$(document).ready(function()
 {
-	// Find all titletextboxes by looking for class name
-	$$(".titletextbox_body").each(function(element) 
+	// === Title Textbox ===
+	$("input.titletextbox_body").each(function() 
 	{
-		if ($F(element) == '')
+		if ($(this).val() == '')
 		{
-			element.value = $(element.id + '_Label').innerHTML;
-			element.addClassName('titletextbox_blank');
+			$(this).val($('#' + $(this).attr('id') + '_Label').html());
+			$(this).addClass('titletextbox_blank');
 		}
-		$(element.id + '_Label').hide();
+		$('#' + $(this).attr('id') + '_Label').hide();
 		
-		element.observe("focus",function(event)
+		$(this).bind("focus",function(event)
 		{
-			var target = event.element();
-
-			if ($F(target) == $(target.id + '_Label').innerHTML)
+			if ($(this).val() == $('#' + $(this).attr('id') + '_Label').html())
 			{
-				target.removeClassName('titletextbox_blank');
-				target.value = '';
+				$(this).removeClass('titletextbox_blank');
+				$(this).val('');
 			}
-
-			target.fire("controls:titletextbox:focus:callback");
 	  	});
 	
-		element.observe("blur", function(event)
+		$(this).bind("blur", function(event)
 		{
-			var target = event.element();
-
-			if ($F(target) == '')
+			if ($(this).val() == '')
 			{
-				target.addClassName('titletextbox_blank');
-				target.value = $(target.id + '_Label').innerHTML;
+				$(this).addClass('titletextbox_blank');
+				$(this).val($('#' + $(this).attr('id') + '_Label').html());
 			}
-
-			target.fire("controls:titletextbox:blur:callback");
+		});
+	});
+	
+	// === Autocomplete ===
+	$("input.autocomplete_textbox").each(function() 
+	{	
+		$('#' + $(this).attr('id')).autocomplete(AJAX_URL,{
+			minChars: 3,
+			extraParams:{target: $(this).attr('id').replace('_query',''), method: 'autocomplete'}
+		});
+		
+		$('#' + $(this).attr('id')).result(function(event, data, formatted) {
+			if (data)
+			{
+				$(this).val(data[0]);
+				$('#' + $(this).attr('id').replace('_query','')).val(data[1]);
+			}
+			
+			$('#' + $(this).attr('id').replace('_query','')).trigger('autocompleteCallback', data);
 		});
 	});
 });
-
-

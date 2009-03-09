@@ -228,13 +228,13 @@
 	}
 
 	/* Tags */
-	div.tags_general ul
+	ul.tags_general ul
 	{
 		display:inline;
 		line-height:30px;
 	}
 
-	div.tags_general ul li
+	ul.tags_general li
 	{
 		display:inline;
 		padding:5px;
@@ -244,28 +244,22 @@
 		margin-right:10px;
 	}
 
-	div.tags_general ul li img
+	ul.tags_general li img
 	{
 		margin-left:3px;
 		cursor:pointer;
 	}
 
-	div.tags_general p
+	p.tags_general
 	{
-		display:inline;
+		margin-top:1em;
 	}
-
-	div.tags_general div.titletextbox_general
+	
+	div.tags_addtag input
 	{
-		display:inline;
+		font-size:1em;
 	}
-
-	div.tags_general input.titletextbox_body
-	{
-		display:inline;
-		width:80px;
-	}
-
+	
 	/* Data Navigation */
 
 	ol.datanavigation_body

@@ -1,17 +1,17 @@
 var IsReplacement;
 
-if ($('{$ControlName}_PickList'))
+if ($('#{$ControlName}_PickList').length)
 {
 	{$ControlName}_ClosePickList();
 	IsReplacement = true;
 }
 
 SetControlMessage('{$ControlName}', "");
-new Insertion.Bottom($('{$ControlName}'),'{$PickListHTML}');
+$('#{$ControlName}').append('{$PickListHTML}');
 
 {$PickListObservers}
 
 if (IsReplacement)
 {
-	new Effect.Highlight($('{$ControlName}_PickList'));
+	$('#{$ControlName}_PickList').effect("highlight", {}, 1500);
 }

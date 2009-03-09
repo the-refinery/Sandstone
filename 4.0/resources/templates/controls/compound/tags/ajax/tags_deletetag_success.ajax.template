@@ -1,5 +1,1 @@
-new Effect.Fade('{$ControlName}_Item_{$TargetTagID}', {queue:'end'});
-
-
-
-
+$('#{$ControlName}_Item_{$TargetTagID}').hide('blind');

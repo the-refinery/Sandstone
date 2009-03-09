@@ -1,9 +1,8 @@
-if (!$('AJAXerror'))
+if ($('#AJAXerror').length == 0)
 {
-	Insertion.Top(document.body, '<div id="AJAXerror" style="border: 5px solid red; padding: 10px;"></div>');
+	$(document.body).prepend('<div id="AJAXerror" style="border: 5px solid red; padding: 10px;"></div>');
 }
 
-$('AJAXerror').innerHTML ='<h1>AJAX Error</h1>{$ErrorMessage}';
+$('#AJAXerror').html('<h1>AJAX Error</h1>{$ErrorMessage}');
 
-new Effect.Highlight('AJAXerror', {queue:'end', startcolor:'FF0000'});
-
+$('#AJAXerror').effect("highlight");

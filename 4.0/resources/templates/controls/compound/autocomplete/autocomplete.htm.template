@@ -1,10 +1,3 @@
 {!label.htm.template}
-<input type="text" id="{$ControlName}_AutoComplete_Text" class="autocomplete_textbox" name="autocomplete_parameter" value="{$TextBoxValue}"/>
-
-<div id="{$ControlName}_AutoComplete_Waiting" style="display: none;">
-	<img src="images/{$WaitingImageFileName}" alt="Searching..." />
-</div>
-
-<div id="{$ControlName}_AutoComplete_Matches" class="autocomplete_matches" style="display: none"></div>
-
-<input type="hidden" id="{$ControlName}" name="{$ControlName}" value="{$DefaultIDvalue}"/>
+<input type="text" id="{$ControlName}_query" class="autocomplete_textbox" name="{$ControlName}_query" value="{$TextBoxValue}" />
+<input type="hidden" id="{$ControlName}" name="{$ControlName}" />

@@ -304,8 +304,8 @@ class RepeaterControl extends BaseControl
 						$targetDOMelementID= $tempRepeaterItem->Name . "_" . $tempFunction[1];
 
 						//(check in JS on the client side to make sure the DOM element exists)
-						$returnValue .= "\tif (\$('{$targetDOMelementID}')) ";
-						$returnValue .= "\$('{$targetDOMelementID}').observe('{$eventName}', {$functionName});\n";
+						$returnValue .= "\tif (\$('#{$targetDOMelementID}')) ";
+						$returnValue .= "\$('#{$targetDOMelementID}').bind('{$eventName}', {$functionName});\n";
 					}
 
 				}

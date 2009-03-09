@@ -1,12 +1,12 @@
 {!tags_deletetag_success.ajax.template}
 
-if ($('{$ControlName}_NoData'))
+if ($('#{$ControlName}_NoData').length)
 {
-	new Element.show('{$ControlName}_NoData', {queue:'end'});
+	$('#{$ControlName}_NoData').show();
 }
 else
 {
-	Insertion.Bottom('{$ControlName}', '{!taglist_nodata_item.htm.template}');
+	$('#{$ControlName}').append('{!taglist_nodata_item.htm.template}');
 }
 
-new Effect.Highlight('{$ControlName}_NoData', {queue:'end'});
+$('#{$ControlName}_NoData').effect('highlight');
