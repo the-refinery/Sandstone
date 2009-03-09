@@ -142,7 +142,7 @@ class BarChart extends AxisChartBase
 		{
 			$returnValue .= "g";
 		}
-
+		
 		return $returnValue;
 	}
 

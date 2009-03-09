@@ -15,6 +15,7 @@ class WidgetBase extends Renderable
         
         $this->_template->Filename = strtolower(get_class($this));
         
-    }    
+    }
+
 }
 ?>
