@@ -148,25 +148,6 @@ class AutoCompleteControl extends BaseControl
 		}
 	}
 
-    public function RenderObservers($Javascript)
-	{
-
-		$ajaxURL = Routing::GetFileTypeURL("ajax");
-
-		$returnValue .= "\tif (\$('#{$this->Name}'),length) ";
-
-		$parameters[] = "callback: {$this->Name}_AutoComplete_Callback";
-		$parameters[] = "afterUpdateElement: {$this->Name}_AutoComplete_afterUpdateElement";
-		$parameters[] = "indicator: '{$this->Name}_AutoComplete_Waiting'";
-		$parameters[] = "minChars: 3";
-
-		$parameterString = implode(", ", $parameters);
-
-		$returnValue .= "new Ajax.Autocompleter(\"{$this->Name}_AutoComplete_Text\", \"{$this->Name}_AutoComplete_Matches\", \"{$ajaxURL}\", {{$parameterString}});\n";
-
-		return $returnValue;
-	}
-
 	public function Render()
 	{
 		$this->_template->WaitingImageFileName = $this->_waitingImageFileName;

@@ -96,7 +96,5 @@ $(document).ready(function()
 			
 			$('#' + $(this).attr('id').replace('_query','')).trigger('autocompleteCallback', data);
 		});
-		
-		
 	});
 });
