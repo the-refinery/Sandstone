@@ -1,19 +1,16 @@
-@media screen
+div.control_message
 {
-	div.control_message
-	{
-		background-color:#fcc;
-		padding:4px;
-		line-height:1em;
-		margin:0 0 5px 0;
-		font-size:0.9em;
-		font-weight:bold;
-		color:#900;
-		border-left:5px solid #900;
-	}
-
-	div.control_message:after
-	{
-		content: "!";
-	}	
+	background-color:#fcc;
+	padding:4px;
+	line-height:1em;
+	margin:0 0 5px 0;
+	font-size:0.9em;
+	font-weight:bold;
+	color:#900;
+	border-left:5px solid #900;
 }
+
+div.control_message:after
+{
+	content: "!";
+}	
