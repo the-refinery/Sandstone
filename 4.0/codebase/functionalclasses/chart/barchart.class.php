@@ -8,11 +8,19 @@ class BarChart extends AxisChartBase
 	const VERTICAL_BAR = 0;
 	const HORIZONTAL_BAR = 1;
 
+	const DEFAULT_BAR_WIDTH = 23;
+	const DEFAULT_BAR_SPACING = 4;
+	const DEFAULT_GROUP_SPACING = 8;
+
 	protected $_type;
 	protected $_direction;
 
 	protected $_dataAxis;
 	protected $_scaleAxis;
+
+	protected $_barWidth;
+	protected $_barSpacing;
+	protected $_groupSpacing;
 
 	public function __construct()
 	{
@@ -23,6 +31,11 @@ class BarChart extends AxisChartBase
 
 		$this->_type = BarChart::STACKED_TYPE;
 		$this->_direction = BarChart::VERTICAL_BAR;
+		
+		//these are the Google defaults
+		$this->_barWidth = self::DEFAULT_BAR_WIDTH;
+		$this->_barSpacing = self::DEFAULT_BAR_SPACING;
+		$this->_groupSpacing = self::DEFAULT_GROUP_SPACING;
 	}
 
 	/*
@@ -55,6 +68,57 @@ class BarChart extends AxisChartBase
 	public function setDirection($Value)
 	{
 		$this->_direction = $Value;
+	}
+
+	public function getBarWidth()
+	{
+		return $this->_barWidth;
+	}
+	
+	public function setBarWidth($Value)
+	{
+		if ($Value > 0)
+		{
+			$this->_barWidth = $Value;
+		}
+		else
+		{
+			$this->_barWidth = self::DEFAULT_BAR_WIDTH;
+		}
+	}
+
+	public function getBarSpacing()
+	{
+		return $this->_barSpacing;
+	}
+	
+	public function setBarSpacing($Value)
+	{
+		if ($Value > 0)
+		{
+			$this->_barSpacing = $Value;
+		}
+		else
+		{
+			$this->_barSpacing = self::DEFAULT_BAR_SPACING;
+		}
+	}
+
+	public function getGroupSpacing()
+	{
+		return $this->_groupSpacing;
+	}
+	
+	public function setGroupSpacing($Value)
+	{
+		if ($Value > 0)
+		{
+			$this->_groupSpacing = $Value;
+		}
+		else
+		{
+			$this->_groupSpacing = self::DEFAULT_GROUP_SPACING;
+		}
 	}
 
 	public function AddDataAxis($Labels, $Color=null, $FontSize=null, $Alignment=ChartAxis::CENTER_LABEL_ALIGN)
@@ -97,8 +161,8 @@ class BarChart extends AxisChartBase
 
 		parent::SetupURLqueryParameters();
 
-
 		$this->_urlQueryParameters[] = "cht=" . $this->BuildChartType();
+		$this->_urlQueryParameters[] = $this->BuildSizeAndSpacing();
 	}
 
 	protected function OrientAxis()
@@ -142,6 +206,14 @@ class BarChart extends AxisChartBase
 		{
 			$returnValue .= "g";
 		}
+		
+		return $returnValue;
+	}
+	
+	protected function BuildSizeAndSpacing()
+	{
+		
+		$returnValue = "chbh={$this->_barWidth},{$this->_barSpacing},{$this->_groupSpacing}";
 		
 		return $returnValue;
 	}

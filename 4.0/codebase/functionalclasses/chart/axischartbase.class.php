@@ -3,35 +3,39 @@
 class AxisChartBase extends ChartBase
 {
 
-	protected $_isVerticleGridDrawn;
+	protected $_isVerticalGridDrawn;
 	protected $_isHorizontalGridDrawn;
 
 	protected $_xAxis;
 	protected $_yAxis;
 
+	protected $_rangeMarkers;
+	
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->_xAxis = Array();
 		$this->_yAxis = Array();
+		
+		$this->_rangeMarkers = Array();
 
 	}
 
 	/*
-	IsVerticleGridDrawn property
+	IsVerticalGridDrawn property
 
 	@return boolean
 	@param boolean $Value
 	 */
-	public function getIsVerticleGridDrawn()
+	public function getIsVerticalGridDrawn()
 	{
-		return $this->_isVerticleGridDrawn;
+		return $this->_isVerticalGridDrawn;
 	}
 
-	public function setIsVerticleGridDrawn($Value)
+	public function setIsVerticalGridDrawn($Value)
 	{
-		$this->_isVerticleGridDrawn = $Value;
+		$this->_isVerticalGridDrawn = $Value;
 	}
 
 	/*
@@ -82,6 +86,23 @@ class AxisChartBase extends ChartBase
 		return $returnValue;
 	}
 
+	public function AddVerticalRangeMarker($Start, $End, $Color = "ff0000")
+	{
+		$this->AddRangeMarker(AxisRangeMarker::VERTICAL_DIRECTION, $Start, $End, $Color);
+	}
+	
+	public function AddHorizontalRangeMarker($Start, $End, $Color = "ff0000")
+	{
+		$this->AddRangeMarker(AxisRangeMarker::HORIZONTAL_DIRECTION, $Start, $End, $Color);
+	}
+
+	protected function AddRangeMarker($Direction, $Start, $End, $Color)
+	{
+		$newRangeMarker = new AxisRangeMarker($Start, $End, $Direction, $Color);
+		
+		$this->_rangeMarkers[] = $newRangeMarker;
+	}
+
     protected function SetupURLqueryParameters()
 	{
 		parent::SetupURLqueryParameters();
@@ -90,6 +111,7 @@ class AxisChartBase extends ChartBase
 		$this->SetupSeriesColorURLqueryParameter();
 		$this->SetupAxisURLqueryParameters();
 		$this->SetupGridURLqueryParameter();
+		$this->SetupRangeMarkerURLqueryParameter();
 
 	}
 
@@ -173,7 +195,7 @@ class AxisChartBase extends ChartBase
 
 	protected function SetupGridURLqueryParameter()
 	{
-		if ($this->_isVerticleGridDrawn)
+		if ($this->_isVerticalGridDrawn)
 		{
 			if (is_set($this->_xAxis[0]))
 			{
@@ -216,6 +238,18 @@ class AxisChartBase extends ChartBase
 
 
 		$this->_urlQueryParameters[] = "chg={$xGridStep},{$yGridStep}";
+
+	}
+
+	protected function SetupRangeMarkerURLqueryParameter()
+	{
+
+		foreach ($this->_rangeMarkers as $tempRangeMarker)
+		{
+			$markers[] = $tempRangeMarker->GenerateQueryParameterData();
+		}
+
+		$this->_urlQueryParameters[] = "chm=" . implode("|", $markers);
 
 	}
 

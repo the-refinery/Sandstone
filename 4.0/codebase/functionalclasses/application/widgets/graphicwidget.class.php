@@ -11,7 +11,7 @@ Namespace::Using("Sandstone.Chart");
 class GraphicWidget extends WidgetBase
 {
 
-    public function OutputPNG()
+    public function OutputPNG($EventParameters)
     {
         
     }

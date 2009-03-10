@@ -245,7 +245,7 @@ class GanttChart extends AxisChartBase
 		$this->BuildXaxis();
 		$this->BuildYaxis();
 
-		$this->IsVerticleGridDrawn = true;
+		$this->IsVerticalGridDrawn = true;
 
 		parent::SetupURLqueryParameters();
 
