@@ -1,283 +1,280 @@
-@media screen
+/* Label */
+label
 {
-	/* Label */
-	label
-	{
-		font-family:Arial, verdana, sans-serif;
-		font-size:0.8em;
-		font-weight:bold;
-		display:block;
-	}
+	font-family:Arial, verdana, sans-serif;
+	font-size:0.8em;
+	font-weight:bold;
+	display:block;
+}
 
-	/* Button */
-	input.button_body 
-	{ 
-		padding:3px; 
-	}
+/* Button */
+input.button_body 
+{ 
+	padding:3px; 
+}
 
-	/* Group */
-	fieldset.group_body
-	{
-		border:1px solid #777;
-		padding:10px;
-	}
+/* Group */
+fieldset.group_body
+{
+	border:1px solid #777;
+	padding:10px;
+}
 
-	fieldset.group_body legend
-	{
-		font-weight:bold;
-		padding:0 5px;
-	}
+fieldset.group_body legend
+{
+	font-weight:bold;
+	padding:0 5px;
+}
 
-	fieldset.group_body ul
-	{
-		list-style:none;
-	}
+fieldset.group_body ul
+{
+	list-style:none;
+}
 
-	fieldset.group_body ul li
-	{
-		line-height:1.5em;
-	}
+fieldset.group_body ul li
+{
+	line-height:1.5em;
+}
 
-	fieldset.group_body ul li input
-	{
-		margin-right:5px;
-	}
+fieldset.group_body ul li input
+{
+	margin-right:5px;
+}
 
-	/* Select */
-	select.select_body
-	{
-		border:1px solid;
-		border-color:#848484 #dbdbdb #dbdbdb #848484;
-		padding:1px;
-	}
+/* Select */
+select.select_body
+{
+	border:1px solid;
+	border-color:#848484 #dbdbdb #dbdbdb #848484;
+	padding:1px;
+}
 
-	select.select_body option
-	{
-		padding:2px;
-		background:#fff;
-	}
+select.select_body option
+{
+	padding:2px;
+	background:#fff;
+}
 
-	select.select_body optgroup
-	{
-		font-style:normal;
-		font-weight:bold;
-		text-transform:uppercase;
-	}
+select.select_body optgroup
+{
+	font-style:normal;
+	font-weight:bold;
+	text-transform:uppercase;
+}
 
-	select.select_body optgroup option
-	{
-		margin-left:10px;
-		text-transform:none;
-	}
+select.select_body optgroup option
+{
+	margin-left:10px;
+	text-transform:none;
+}
 
-	/* Boolean */
-	div.boolean_general
-	{
-		padding:5px;
-		margin-bottom:0;
-	}
+/* Boolean */
+div.boolean_general
+{
+	padding:5px;
+	margin-bottom:0;
+}
 
-	div.boolean_general input
-	{
-		margin-right:5px;
-	}
+div.boolean_general input
+{
+	margin-right:5px;
+}
 
-	label.boolean
-	{
-		display:inline;
-		font-weight:normal;
-	}
+label.boolean
+{
+	display:inline;
+	font-weight:normal;
+}
 
-	/* Input */
-	input.textbox_body
-	{
-		padding:3px;
-		background:#fff;
-		border:1px solid;
-		border-color:#848484 #dbdbdb #dbdbdb #848484;
-	}
+/* Input */
+input.textbox_body
+{
+	padding:3px;
+	background:#fff;
+	border:1px solid;
+	border-color:#848484 #dbdbdb #dbdbdb #848484;
+}
 
-	input.textbox_body:focus, input.textbox_body:hover
-	{
-		background-color:#ffc;
-	}
+input.textbox_body:focus, input.textbox_body:hover
+{
+	background-color:#ffc;
+}
 
-	/* TitleTextbox */
-	input.titletextbox_body
-	{
-		color:#000;
-	}
+/* TitleTextbox */
+input.titletextbox_body
+{
+	color:#000;
+}
 
-	input.titletextbox_blank
-	{
-		color:#aaa;
-	}
+input.titletextbox_blank
+{
+	color:#aaa;
+}
 
-	/* Textarea */
-	textarea.textarea_body
-	{
-		padding:3px;
-		background:#fff;
-		border:1px solid;
-		border-color:#848484 #dbdbdb #dbdbdb #848484;
-		line-height:1.5em;
-	}
+/* Textarea */
+textarea.textarea_body
+{
+	padding:3px;
+	background:#fff;
+	border:1px solid;
+	border-color:#848484 #dbdbdb #dbdbdb #848484;
+	line-height:1.5em;
+}
 
-	textarea.textarea_body:focus, textarea.textarea_body:hover
-	{
-		background-color:#ffc;
-	}
+textarea.textarea_body:focus, textarea.textarea_body:hover
+{
+	background-color:#ffc;
+}
 
-	/* Address */
-	.address_streetitem
-	{
-		margin-bottom:3px;
-	}
+/* Address */
+.address_streetitem
+{
+	margin-bottom:3px;
+}
 
-	.address_streetitem textarea
-	{
-		height:3em;
-	}
+.address_streetitem textarea
+{
+	height:3em;
+}
 
-	.address_citystateitem
-	{
-		float:left;
-	    margin-right: 1em;
-		font-size:0.9em;
-		color:#444;
-		width:125px;
-		padding:8px 4px 4px 4px;
-	}
+.address_citystateitem
+{
+	float:left;
+    margin-right: 1em;
+	font-size:0.9em;
+	color:#444;
+	width:125px;
+	padding:8px 4px 4px 4px;
+}
 
-	ul.address_picklist
-	{
-	    list-style:none;
-	    margin:0;
-	}
+ul.address_picklist
+{
+    list-style:none;
+    margin:0;
+}
 
-	ul.address_picklist li
-	{
-	    cursor:pointer;
-	    text-decoration:underline;
-	    color:blue;
-	    padding:3px 0;
-	}
+ul.address_picklist li
+{
+    cursor:pointer;
+    text-decoration:underline;
+    color:blue;
+    padding:3px 0;
+}
 
-	/* Autocomplete */
-	input.autocomplete_textbox
-	{
-		padding:3px;
-		background:#fff;
-		border:1px solid;
-		border-color:#848484 #dbdbdb #dbdbdb #848484;
-	}
+/* Autocomplete */
+input.autocomplete_textbox
+{
+	padding:3px;
+	background:#fff;
+	border:1px solid;
+	border-color:#848484 #dbdbdb #dbdbdb #848484;
+}
 
-	input.autocomplete_textbox:focus, input.autocomplete_textbox:hover
-	{
-		background-color:#ffc;
-	}
+input.autocomplete_textbox:focus, input.autocomplete_textbox:hover
+{
+	background-color:#ffc;
+}
 
-	div.autocomplete_matches
-	{
-	  position:absolute;
-	  width:250px;
-	  background-color:white;
-	  border:1px solid #888;
-	  margin:0px;
-	  padding:0px;
-	}
+div.autocomplete_matches
+{
+  position:absolute;
+  width:250px;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
 
-	div.autocomplete_matches ul
-	{
-	  list-style-type:none;
-	  margin:0px;
-	  padding:0px;
-	}
+div.autocomplete_matches ul
+{
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
 
-	div.autocomplete_matches ul li.selected
-	{
-		background-color: #ffb;
-	}
+div.autocomplete_matches ul li.selected
+{
+	background-color: #ffb;
+}
 
-	div.autocomplete_matches ul li
-	{
-	  list-style-type:none;
-	  display:block;
-	  margin:0;
-	  padding:2px;
-	  height:32px;
-	  cursor:pointer;
-	}
+div.autocomplete_matches ul li
+{
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  height:32px;
+  cursor:pointer;
+}
 
-	/* Credit Card */
-	div.creditcard_monthitem, div.creditcard_yearitem {float:left; margin-right:5px;}
-	div.datepicker_cvv { float:left; width:50px;}
-	div.creditcard_yearitem label { text-indent:-9999px;}
-	div.datepicker_expirationdate input.textbox_body { width:50px; }
+/* Credit Card */
+div.creditcard_monthitem, div.creditcard_yearitem {float:left; margin-right:5px;}
+div.datepicker_cvv { float:left; width:50px;}
+div.creditcard_yearitem label { text-indent:-9999px;}
+div.datepicker_expirationdate input.textbox_body { width:50px; }
 
-	/* Datepicker */
-	div.datepicker_general
-	{
-		margin-bottom:3px;
-		clear:both;
-	}
+/* Datepicker */
+div.datepicker_general
+{
+	margin-bottom:3px;
+	clear:both;
+}
 
-	div.datepicker_general label
-	{
-		display:none;
-	}
+div.datepicker_general label
+{
+	display:none;
+}
 
-	/* Tags */
-	ul.tags_general ul
-	{
-		display:inline;
-		line-height:30px;
-	}
+/* Tags */
+ul.tags_general ul
+{
+	display:inline;
+	line-height:30px;
+}
 
-	ul.tags_general li
-	{
-		display:inline;
-		padding:5px;
-		background:#ddd;
-		border-right:1px solid #bbb;
-		border-bottom:1px solid #bbb;
-		margin-right:10px;
-	}
+ul.tags_general li
+{
+	display:inline;
+	padding:5px;
+	background:#ddd;
+	border-right:1px solid #bbb;
+	border-bottom:1px solid #bbb;
+	margin-right:10px;
+}
 
-	ul.tags_general li img
-	{
-		margin-left:3px;
-		cursor:pointer;
-	}
+ul.tags_general li img
+{
+	margin-left:3px;
+	cursor:pointer;
+}
 
-	p.tags_general
-	{
-		margin-top:1em;
-	}
-	
-	div.tags_addtag input
-	{
-		font-size:1em;
-	}
-	
-	/* Data Navigation */
+p.tags_general
+{
+	margin-top:1em;
+}
 
-	ol.datanavigation_body
-	{
-	    text-align:center;
-	    margin:15px 0;
-	}
+div.tags_addtag input
+{
+	font-size:1em;
+}
 
-	ol.datanavigation_body li
-	{
-	    display:inline;
-	    margin-right:0.5em;
-	}
+/* Data Navigation */
 
-	li.datanavigation_currentpage
-	{
-	    font-weight:bold;
-	    font-size:1.4em;
-	    padding:2px;
-	}
+ol.datanavigation_body
+{
+    text-align:center;
+    margin:15px 0;
+}
+
+ol.datanavigation_body li
+{
+    display:inline;
+    margin-right:0.5em;
+}
+
+li.datanavigation_currentpage
+{
+    font-weight:bold;
+    font-size:1.4em;
+    padding:2px;
 }
