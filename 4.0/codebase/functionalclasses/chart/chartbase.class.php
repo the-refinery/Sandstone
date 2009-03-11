@@ -16,6 +16,11 @@ class ChartBase extends Module
 	protected $_scaleMinimumValue;
 	protected $_scaleMaximumValue;
 
+	protected $_topMargin;
+	protected $_bottomMargin;
+	protected $_leftMargin;
+	protected $_rightMargin;
+
 	protected $_dataCount;
 	protected $_minimumDataValue;
 	protected $_maximumDataValue;
@@ -31,7 +36,12 @@ class ChartBase extends Module
 
 		//Setup the defaults
 		$this->_scaleMinimumValue = 0;
-
+		
+		$this->_topMargin = 0;
+		$this->_bottomMargin = 0;
+		$this->_leftMargin = 0;
+		$this->_rightMargin = 0;
+	
 		$this->SetupCodeTables();
 	}
 
@@ -107,6 +117,74 @@ class ChartBase extends Module
 	public function setScaleMinimumValue($Value)
 	{
 		$this->_scaleMinimumValue = $Value;
+	}
+
+	public function getTopMargin()
+	{
+		return $this->_topMargin;
+	}
+	
+	public function setTopMargin($Value)
+	{
+		if (is_numeric($Value) && $Value > 0)
+		{
+			$this->_topMargin = $Value;
+		}
+		else
+		{
+			$this->_topMargin = null;
+		}
+	}
+
+	public function getBottomMargin()
+	{
+		return $this->_bottomMargin;
+	}
+	
+	public function setBottomMargin($Value)
+	{
+		if (is_numeric($Value) && $Value > 0)
+		{
+			$this->_bottomMargin = $Value;
+		}
+		else
+		{
+			$this->_bottomMargin = null;
+		}
+	}
+
+	public function getRightMargin()
+	{
+		return $this->_rightMargin;
+	}
+	
+	public function setRightMargin($Value)
+	{
+		if (is_numeric($Value) && $Value > 0)
+		{
+			$this->_rightMargin = $Value;
+		}
+		else
+		{
+			$this->_rightMargin = null;
+		}
+	}
+
+	public function getLeftMargin()
+	{
+		return $this->_leftMargin;
+	}
+	
+	public function setLeftMargin($Value)
+	{
+		if (is_numeric($Value) && $Value > 0)
+		{
+			$this->_leftMargin = $Value;
+		}
+		else
+		{
+			$this->_leftMargin = null;
+		}
 	}
 
 	/*
@@ -248,6 +326,7 @@ class ChartBase extends Module
 	{
 		$this->_urlQueryParameters[] = "chtt=" . urlencode($this->_title);
 		$this->_urlQueryParameters[] = "chs={$this->_width}x{$this->_height}";
+		$this->_urlQueryParameters[] = "chma={$this->_leftMargin},{$this->_rightMargin},{$this->_topMargin},{$this->_bottomMargin}";
 
 		$this->_urlQueryParameters[] = $this->EncodeData();
 	}

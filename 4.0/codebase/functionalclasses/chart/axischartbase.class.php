@@ -249,8 +249,10 @@ class AxisChartBase extends ChartBase
 			$markers[] = $tempRangeMarker->GenerateQueryParameterData();
 		}
 
-		$this->_urlQueryParameters[] = "chm=" . implode("|", $markers);
-
+		if (count($markers) > 0)
+		{
+			$this->_urlQueryParameters[] = "chm=" . implode("|", $markers);	
+		}
 	}
 
 }
