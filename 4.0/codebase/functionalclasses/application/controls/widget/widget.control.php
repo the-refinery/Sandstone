@@ -31,6 +31,7 @@ class WidgetControl extends BaseControl
     
     public function Render()
     {
+        
         if (is_set($this->_widget))
         {
             $this->_widget->Template->RequestFileType = $this->_template->RequestFileType;

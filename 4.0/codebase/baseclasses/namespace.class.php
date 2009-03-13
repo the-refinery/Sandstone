@@ -698,6 +698,11 @@ class NameSpace extends Module
 							break;
 
 						default:
+							if (strlen($namespaceTemplates) > 0)
+							{
+								$namespaceTemplates .= PATH_SEPARATOR;
+							}
+							
 							$namespaceTemplates .= implode(PATH_SEPARATOR, $templateDirs);
 							break;
 					}

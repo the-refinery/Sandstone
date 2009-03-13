@@ -32,7 +32,7 @@ class WidgetsPage extends ApplicationPage
 
     protected function PNG_Processor($EventParameters)
 	{
-        $this->_widget->OutputPNG();
+        $this->_widget->OutputPNG($EventParameters);
     }
 
 }
