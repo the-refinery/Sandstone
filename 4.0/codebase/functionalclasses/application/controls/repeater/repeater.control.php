@@ -13,6 +13,8 @@ class RepeaterControl extends BaseControl
 	protected $_itemIDsuffixFormat;
 	protected $_repeaterItems;
 
+	protected $_group;
+
 	protected $_callbackObject;
 	protected $_callbackMethodName;
 
@@ -29,8 +31,7 @@ class RepeaterControl extends BaseControl
 		$this->_controlStyle->AddClass('repeater_general');
 		$this->_bodyStyle->AddClass('repeater_body');
 
-		$this->_template->IsMasterLayoutUsed = false;
-
+		$this->_template->IsMasterLayoutUsed = false;		
 	}
 
 	/*
@@ -119,6 +120,28 @@ class RepeaterControl extends BaseControl
 	{
 		$this->_callbackObject = null;
 		$this->_callbackMethodName = null;
+	}
+
+	public function AddGroup($Name, $Property, $CallbackObject = null, $CallbackMethodName = null)
+	{
+		
+		$returnValue = false;
+		
+		if (strlen($Property) > 0)
+		{			
+			if (is_set($this->_group))
+			{
+				$this->_group->AddGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName);
+			}
+			else
+			{
+				$this->_group = new RepeaterGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName);	
+			}
+						
+			$returnValue = true;
+		}
+		
+		return $returnValue;
 	}
 
 	protected function SetupRepeaterItems()
@@ -243,8 +266,27 @@ class RepeaterControl extends BaseControl
 				//Perform any callback
 				eval($callbackCommand);
 
-				//Render it
-				$itemContent .= $tempRepeaterItem->Render();
+				if (is_set($this->_group))
+				{
+					$isSameGroup = $this->_group->AddItem($tempRepeaterItem);
+					
+					if ($isSameGroup == false)
+					{
+						$itemContent .= $this->_group->Render();
+					}
+				}
+				else
+				{
+					//No grouping, just Render it
+					$itemContent .= $tempRepeaterItem->Render();
+				}
+				
+			}
+
+			//Once all the items have been processed, if there's grouping, render the final group
+			if (is_set($this->_group))
+			{
+				$itemContent .= $this->_group->Render();
 			}
 
 			$returnValue = str_replace("{Content}", $itemContent, $returnValue);

@@ -41,6 +41,7 @@ codebase/functionalclasses/application/controls/compound/tagsearch.control.php
 codebase/functionalclasses/application/controls/compound/search.control.php
 codebase/functionalclasses/application/controls/repeater/repeater.control.php
 codebase/functionalclasses/application/controls/repeater/repeateritem.class.php
+codebase/functionalclasses/application/controls/repeater/repeatergroup.class.php
 codebase/functionalclasses/application/controls/basic/image.control.php
 codebase/functionalclasses/application/controls/compound/creditcard.control.php
 codebase/functionalclasses/application/controls/datanavigation/datanavigation.control.php
