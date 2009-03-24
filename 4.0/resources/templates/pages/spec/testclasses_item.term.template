@@ -11,3 +11,9 @@ fi
 if [ "{$NumberFailing}" -gt "0" ]; then 
 	failedTestNotify {$NumberFailing}
 fi 
+
+{+FailedTests}
+
+echo ""
+echo "${BOLD}${FOREWHITE}{$TotalSpecs} Specifications, ${FOREGREEN}{$NumberPassing} Passed, ${FORERED}{$NumberFailing} Failed${DEFAULTCOLOR}"
+echo ""

@@ -13,10 +13,17 @@ class SpecBase extends Module
 	protected $_passedTests = array();
 	protected $_failedTests = array();
 	
+	protected $_timeToRun;
+	
 	public function Before() {}
 	public function BeforeEach() {}
 	public function After() {}
 	public function AfterEach() {}
+	
+	public function getTests()
+	{
+		return $this->_tests;
+	}
 	
 	public function getTestResults()
 	{
@@ -27,10 +34,15 @@ class SpecBase extends Module
 	{
 		return $this->_passedTests;
 	}
-	
+		
 	public function getFailedTests()
 	{
 		return $this->_failedTests;
+	}
+	
+	public function getTimeToRun()
+	{
+		return $this->_timeToRun;
 	}
 	
 	public function AddTestResult($Value)
@@ -54,6 +66,8 @@ class SpecBase extends Module
 		$reflector = new ReflectionClass(get_class($this));
 		$this->DetermineTests($reflector->getMethods());
 		
+		di_timer();
+		
 		$this->Before();
 		foreach ($this->_tests as $test)
 		{
@@ -61,7 +75,11 @@ class SpecBase extends Module
 			$this->$test();
 			$this->AfterEach();
 		}
-		$this->After();		
+		$this->After();	
+		
+		$elapsedTime = di_timer();
+		
+		$this->_timeToRun = StringFunc::FormatNumber($elapsedTime, 5);
 	}
 		
 	protected function DetermineTests($ReflectorMethods)

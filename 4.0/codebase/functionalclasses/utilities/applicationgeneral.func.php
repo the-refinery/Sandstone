@@ -138,7 +138,7 @@ function di_timer()
 
 		$et = $endTime - $startTime;
 
-		echo "ET: $et";
+		$returnValue = $et;
 
 		$startTime = null;
 	}
@@ -147,14 +147,15 @@ function di_timer()
 		//We are starting a timer
 		$startTime = microtime(true);
 	}
+	
+	return $returnValue;
+}
 
 
 function diecho($Value)
 {
     echo $Value;
     die();
-}
-
 }
 
 function di_echo($Value)

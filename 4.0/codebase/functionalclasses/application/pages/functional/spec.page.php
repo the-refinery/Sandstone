@@ -28,6 +28,12 @@ class SpecPage extends BasePage
 		}		
 	}
 	
+	public function FailedTestsCallback($CurrentElement, $Template)
+	{
+		$Template->TestName = $CurrentElement->FriendlyTestName;
+		$Template->Message = $CurrentElement->Message;
+	}
+	
 	public function TestClassesCallback($CurrentElement, $Template)
 	{
 		$TestClassName = $CurrentElement;
@@ -40,10 +46,17 @@ class SpecPage extends BasePage
 		
 		$Template->NumberPassing = count($testClass->PassedTests);
 		$Template->NumberFailing = count($testClass->FailedTests);
+		$Template->TotalSpecs = count($testClass->Tests);
+		
+		$Template->ElapsedTime = $testClass->TimeToRun . " seconds";
 		
 		$this->TestClasses->CurrentRepeaterItem->TestCases = new RepeaterControl();
 		$this->TestClasses->CurrentRepeaterItem->TestCases->Data = $testClass->TestResults;
 		$this->TestClasses->CurrentRepeaterItem->TestCases->SetCallback($this,"TestCasesCallback");
+
+		$this->TestClasses->CurrentRepeaterItem->FailedTests = new RepeaterControl();
+		$this->TestClasses->CurrentRepeaterItem->FailedTests->Data = $testClass->FailedTests;
+		$this->TestClasses->CurrentRepeaterItem->FailedTests->SetCallback($this,"FailedTestsCallback");
 	}
 	
 	protected function BuildControlArray($EventParameters)

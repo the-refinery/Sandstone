@@ -2,7 +2,7 @@
 
 Namespace::Using("Sandstone.Utilities.String");
 
-class StringFormattingSpec extends SpecBase
+class UtilitiesSpec extends SpecBase
 {
 	public function ItShouldStripNonNumericCharactersFromString()
 	{
@@ -26,7 +26,7 @@ class StringFormattingSpec extends SpecBase
 		$testCase = "ab)*c(d)e^f%g1)(2)3";
 		$testCase = StringFunc::RemovePunctuation($testCase);
 		
-		Check($testCase)->ShouldBeEqualTo('abcdefg123');		
+		Check($testCase)->ShouldNotBeEqualTo('abcdefg123');		
 	}
 
 	public function ItShouldFormatAsAValidFilename()
