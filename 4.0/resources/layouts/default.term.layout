@@ -1,0 +1,28 @@
+BOLD=$(tput bold)
+FORERED=$(tput setaf 1)
+FOREGREEN=$(tput setaf 2)
+FOREYELLOW=$(tput setaf 3)
+FOREBLUE=$(tput setaf 4)
+FOREPURPLE=$(tput setaf 5)
+FORECYAN=$(tput setaf 6)
+FOREWHITE=$(tput setaf 7)
+
+BACKRED=$(tput setab 1)
+BACKGREEN=$(tput setab 2)
+BACKYELLOW=$(tput setab 3)
+BACKBLUE=$(tput setab 4)
+BACKPURPLE=$(tput setab 5)
+BACKCYAN=$(tput setab 6)
+BACKWHITE=$(tput setab 7)
+
+DEFAULTCOLOR=$(tput sgr0)
+
+notify() {
+	if which growlnotify; then 
+		echo "GOT HERE"
+	fi
+}
+
+notify
+
+{Content}

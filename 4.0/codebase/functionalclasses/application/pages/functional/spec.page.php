@@ -5,26 +5,11 @@ Namespace::Using("Sandstone.Spec");
 class SpecPage extends BasePage
 {
 	protected $_specs;
-	
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->_template->MasterLayoutFileName = "spec";
-		$this->_template->FileName = "spec";
-	}
-	
+		
 	public function Generic_PreProcessor($EventParameters)
 	{
 		parent::Generic_PreProcessor($EventParameters);
 
-		$isDevMode = Application::Registry()->RunSpecs;
-		
-		if ($isDevMode == false)
-		{
-			$this->SetResponseCode(404, $EventParameters);			
-		}
-		
 		$this->_specs = SpecLoader::FetchTestFiles($EventParameters['specname']);
 	}
 	
@@ -55,11 +40,11 @@ class SpecPage extends BasePage
 
 		if ($testClass->HasFailed)
 		{
-			$Template->Success = "<span style=\"color:red\">FAIL</span>";
+			$Template->Success = "FAIL";
 		}
 		else
 		{
-			$Template->Success = "<span style=\"color:green\">PASS</span>";
+			$Template->Success = "PASS";
 		}
 				
 		$this->TestClasses->CurrentRepeaterItem->TestCases = new RepeaterControl();

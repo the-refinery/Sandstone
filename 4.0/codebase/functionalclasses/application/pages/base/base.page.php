@@ -350,6 +350,7 @@ class BasePage extends ControlContainer
 
 			case "txt":
 			case "csv":
+			case "term":
 				header('Content-Type: text/plain');
 				break;
 
@@ -375,7 +376,7 @@ class BasePage extends ControlContainer
 			case "txt404":
 				header('HTTP/1.1 404 Not Found');
 				break;
-
+				
 			case "cron":
 				//For cron processes - make sure they come in via the
 				//cron.php entry point.  Otherwise just die
@@ -454,6 +455,12 @@ class BasePage extends ControlContainer
         echo $this->CompressCSS($css);
     }
 
+	protected function TERM_Processor($EventParameters)
+	{
+        $term = $this->Render();
+		
+		echo $this->Terminalize($term);
+	}
 
 	final protected function POST_Handler($EventParameters)
 	{

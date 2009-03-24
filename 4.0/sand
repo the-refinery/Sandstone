@@ -1,0 +1,10 @@
+#!/bin/bash 
+
+echo "Enter Sandstone URL: ";
+# read SandstoneURL;
+SandstoneURL="http://www.sudoku.local/spec/block.term";
+
+PageOutput=`curl $SandstoneURL`;
+echo -e $PageOutput > .sandsource;
+
+source .sandsource

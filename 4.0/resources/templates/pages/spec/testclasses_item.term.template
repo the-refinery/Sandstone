@@ -1,0 +1,3 @@
+echo "{$Success} {$TestClassName}"
+
+{+TestCases}

@@ -1,0 +1,1 @@
+echo -e "${GREEN}PASSED: {$TestName}${DEFAULTCOLOR}"

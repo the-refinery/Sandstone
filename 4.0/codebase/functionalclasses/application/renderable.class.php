@@ -240,6 +240,15 @@ class Renderable extends Module
         return $returnValue;
     }
 
+	protected function Terminalize($TerminalOutput)
+	{
+		// Our bash runner reads the output of this template and sources it with bash.  
+		// It needs to pass an unescaped newline character in addition to the escaped one, 
+		// which is interpreted by the bash source command
+		
+		$TerminalOutput = str_replace("\n","\\n\n", $TerminalOutput);
+		return $TerminalOutput;
+	}
 
 }
 

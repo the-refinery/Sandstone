@@ -1,4 +1,0 @@
-<div class="Failed">
-	<strong>{$TestName}</strong> 
-	{$Message}
-</div>
