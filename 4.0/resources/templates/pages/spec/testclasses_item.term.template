@@ -1,3 +1,13 @@
-echo "{$Success} {$TestClassName}"
+echo ""
+echo "${BOLD}${FOREWHITE}{$TestClassName}${DEFAULTCOLOR}"
 
 {+TestCases}
+echo "" 
+
+if [ "{$NumberPassing}" -gt "0" ]; then 
+	passedTestNotify {$NumberPassing}
+fi
+
+if [ "{$NumberFailing}" -gt "0" ]; then 
+	failedTestNotify {$NumberFailing}
+fi 

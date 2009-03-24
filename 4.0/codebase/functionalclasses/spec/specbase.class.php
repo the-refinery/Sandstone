@@ -7,9 +7,11 @@ class SpecBase extends Module
 {
 	protected $_tests = array();
 	protected $_testResults = array();
-	protected $_hasFailed = false;
 	
 	protected $_currentTest;
+	
+	protected $_passedTests = array();
+	protected $_failedTests = array();
 	
 	public function Before() {}
 	public function BeforeEach() {}
@@ -21,16 +23,25 @@ class SpecBase extends Module
 		return $this->_testResults;
 	}
 	
-	public function getHasFailed()
+	public function getPassedTests()
 	{
-		return $this->_hasFailed;
+		return $this->_passedTests;
+	}
+	
+	public function getFailedTests()
+	{
+		return $this->_failedTests;
 	}
 	
 	public function AddTestResult($Value)
 	{
-		if ($Value->TestResult == false)
+		if ($Value->TestResult == true)
 		{
-			$this->_hasFailed = true;
+			$this->_passedTests[] = $Value;
+		}
+		else
+		{
+			$this->_failedTests[] = $Value;
 		}
 		
 		$this->_testResults[] = $Value;

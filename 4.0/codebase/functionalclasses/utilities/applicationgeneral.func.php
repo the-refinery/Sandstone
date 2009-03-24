@@ -148,6 +148,7 @@ function di_timer()
 		$startTime = microtime(true);
 	}
 
+
 function diecho($Value)
 {
     echo $Value;

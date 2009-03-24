@@ -1,1 +1,13 @@
+failedTestNotify() {
+	if which -s growlnotify; then 
+		growlnotify -p 2 -t "Spec Results" -m "$1 Failing"
+	fi
+}
+
+passedTestNotify() {
+	if which -s growlnotify; then 
+		growlnotify -p -2 -t "Spec Results" -m "$1 Passing"
+	fi
+}
+
 {+TestClasses}

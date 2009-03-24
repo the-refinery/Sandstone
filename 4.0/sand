@@ -1,10 +1,27 @@
 #!/bin/bash 
 
+# To run this from anywhere on your machine, make a link from this script in your /usr/bin
+# sudo ln sand /usr/bin/sand
+
 echo "Enter Sandstone URL: ";
-# read SandstoneURL;
-SandstoneURL="http://www.sudoku.local/spec/block.term";
+read SandstoneURL;
 
-PageOutput=`curl $SandstoneURL`;
-echo -e $PageOutput > .sandsource;
+execute(){
+	PageOutput=`curl $SandstoneURL`;
+	echo -e $PageOutput > .sandsource;
 
-source .sandsource
+	source .sandsource
+
+	select nextaction in "run again" "exit"
+	do
+		case "$nextaction" in
+			'run again')
+				execute;
+			;;
+		esac
+
+		break
+	done
+}
+
+execute

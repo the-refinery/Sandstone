@@ -1,1 +1,1 @@
-echo "FAILED: {$TestName}: {$Message}"
+echo "${FORERED}- {$TestName}"

@@ -14,7 +14,7 @@ class SpecPage extends BasePage
 	}
 	
 	public function TestCasesCallback($CurrentElement, $Template)
-	{
+	{		
 		$Template->TestName = $CurrentElement->FriendlyTestName;
 		$Template->Message = $CurrentElement->Message;
 
@@ -25,7 +25,7 @@ class SpecPage extends BasePage
 		else
 		{
 			$Template->Filename = "testcases_item_failed";			
-		}
+		}		
 	}
 	
 	public function TestClassesCallback($CurrentElement, $Template)
@@ -37,16 +37,10 @@ class SpecPage extends BasePage
 		
 		$testClass = new $TestClassName();
 		$testClass->Run();
-
-		if ($testClass->HasFailed)
-		{
-			$Template->Success = "FAIL";
-		}
-		else
-		{
-			$Template->Success = "PASS";
-		}
-				
+		
+		$Template->NumberPassing = count($testClass->PassedTests);
+		$Template->NumberFailing = count($testClass->FailedTests);
+		
 		$this->TestClasses->CurrentRepeaterItem->TestCases = new RepeaterControl();
 		$this->TestClasses->CurrentRepeaterItem->TestCases->Data = $testClass->TestResults;
 		$this->TestClasses->CurrentRepeaterItem->TestCases->SetCallback($this,"TestCasesCallback");

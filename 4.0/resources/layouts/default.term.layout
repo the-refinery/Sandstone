@@ -17,12 +17,4 @@ BACKWHITE=$(tput setab 7)
 
 DEFAULTCOLOR=$(tput sgr0)
 
-notify() {
-	if which growlnotify; then 
-		echo "GOT HERE"
-	fi
-}
-
-notify
-
 {Content}
