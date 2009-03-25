@@ -545,6 +545,11 @@ class Application extends Module
 					$returnValue = $this->Fire403response();
 				}
 				break;
+				
+			case "term":
+				// Don't fire 403, instead just select account 1
+				$this->_license = new License(1);
+				break;
 
 			default:
 				$returnValue = $this->Fire403response();

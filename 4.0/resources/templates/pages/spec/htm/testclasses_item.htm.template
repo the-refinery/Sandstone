@@ -1,0 +1,12 @@
+<li>
+	<p>
+		<span class="summary">{$TotalSpecs} Specifications, <span class="passed">{$NumberPassing} Passed</span>, <span class="failed">{$NumberFailing} Failed</span></span>
+		<strong>{$TestClassName}</strong> 
+	</p>
+
+	{+TestCases}
+
+	{+FailedTests}
+
+	<p class="summary">Completed in {$ElapsedTime}</p>
+</li>

@@ -16,4 +16,5 @@ fi
 
 echo ""
 echo "${BOLD}${FOREWHITE}{$TotalSpecs} Specifications, ${FOREGREEN}{$NumberPassing} Passed, ${FORERED}{$NumberFailing} Failed${DEFAULTCOLOR}"
+echo "${FOREWHITE}Completed in {$ElapsedTime}${DEFAULTCOLOR}"
 echo ""

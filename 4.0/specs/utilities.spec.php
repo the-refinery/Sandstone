@@ -26,7 +26,7 @@ class UtilitiesSpec extends SpecBase
 		$testCase = "ab)*c(d)e^f%g1)(2)3";
 		$testCase = StringFunc::RemovePunctuation($testCase);
 		
-		Check($testCase)->ShouldNotBeEqualTo('abcdefg123');		
+		Check($testCase)->ShouldBeEqualTo('abcdefg123');		
 	}
 
 	public function ItShouldFormatAsAValidFilename()

@@ -5,12 +5,25 @@ Namespace::Using("Sandstone.Spec");
 class SpecPage extends BasePage
 {
 	protected $_specs;
-		
+	
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->_isLoginRequired = false;
+		$this->_allowedRoleIDs = Array();
+	}
+			
 	public function Generic_PreProcessor($EventParameters)
 	{
 		parent::Generic_PreProcessor($EventParameters);
 
 		$this->_specs = SpecLoader::FetchTestFiles($EventParameters['specname']);
+	}
+	
+	protected function HTM_Processor($EventParameters)
+	{
+		$this->_template->MasterLayoutFileName = "spec";
 	}
 	
 	public function TestCasesCallback($CurrentElement, $Template)
