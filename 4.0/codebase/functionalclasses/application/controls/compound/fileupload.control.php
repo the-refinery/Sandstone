@@ -584,8 +584,7 @@ class FileUploadControl extends BaseControl
 
 	public function ValidFileType($Control)
 	{
-
-		if ($Control->IsFileTypeValid == false)
+		if (($Control->IsFileTypeValid == false) && (is_null($Control->Value) == false))
 		{
 			$returnValue = $Control->InvalidFileTypeMessage;
 		}
