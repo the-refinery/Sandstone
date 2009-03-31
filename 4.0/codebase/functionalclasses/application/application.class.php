@@ -724,8 +724,10 @@ class Application extends Module
 				//Default to 30 days
 				$expires = time()+60*60*24*30;
 			}
-
-			setcookie($Name, $Value, $expires, "/");
+			
+			$domain = str_replace("http://", "", Application::BaseURL());
+		
+			setcookie($Name, $Value, $expires, "/", $domain);
 			$this->_cookie[$Name] = $Value;
 		}
 
