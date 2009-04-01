@@ -122,14 +122,6 @@ class AJAXprocessor extends Renderable
 		//Render the template
 		$returnValue = parent::Render();
 
-		if (is_set($returnValue) == false)
-		{
-			//If we don't wind up with anything, fire the error
-			$this->_template->FileName = "error";
-			$this->_template->ErrorMessage = "No Response";
-			$returnValue = parent::Render();
-		}
-
 		return $returnValue;
 	}
 
