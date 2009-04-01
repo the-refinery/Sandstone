@@ -1156,9 +1156,10 @@ class EntityBase extends Module
 		$selectClause = $this->GenerateLookupSelectClause($LookupType, $PageSize, $PageNumber);
 		$fromClause = $this->GenerateBaseFromClause();
 		$whereClause = $this->GenerateBaseWhereClause();
+		$orderByClause = $this->GenerateBaseOrderByClause();
 		$limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
-		$query->SQL = $selectClause . $fromClause . $whereClause . $limitClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
 		$query->Execute();
 
@@ -1227,6 +1228,11 @@ class EntityBase extends Module
 		return $returnValue;
 	}
 
+	static public function GenerateBaseOrderByClause()
+	{
+		return null;
+	}
+	
 	/*
 	Search Query Functions
 	*/
