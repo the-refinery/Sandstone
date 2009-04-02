@@ -161,7 +161,6 @@ class Query extends Module
 
 	public function LoadEntity($Entity)
 	{
-
 		$returnValue = false;
 
 		if ($this->SelectedRows == 1)

@@ -69,21 +69,28 @@ class LoginPage extends BasePage
 
 	protected function LoginForm_Processor($EventParameters)
 	{
-		// Account Test
-		if ($this->LoginForm->AccountName->Value)
+		if (Application::Registry()->IsMultiAccount)
 		{
-			$accountName = $this->LoginForm->AccountName->Value;
+			// Multi-Account Test
+			if ($this->LoginForm->AccountName->Value)
+			{
+				$accountName = $this->LoginForm->AccountName->Value;
+			}
+			else
+			{
+				$accountName = $EventParameters['subdomain'];
+			}
+
+			$accountCheck = Application::SelectAccount($accountName);
 		}
 		else
 		{
-			$accountName = $EventParameters['subdomain'];
+			// Not Multi-Account
+			$accountCheck = true;
 		}
 
-		$accountCheck = Application::SelectAccount($accountName);
-
-
 		$license = Application::License();
-
+		
 		if ($license->IsCancelled)
 		{
 			Application::Redirect(Routing::BuildURLbyRule('cancelled'));
@@ -148,6 +155,10 @@ class LoginPage extends BasePage
 		if ($EventParameters['subdomain'])
 		{
 			$this->LoginForm->AccountName->DefaultValue = $EventParameters['subdomain'];
+			$this->LoginForm->AccountName->IsRendered = false;
+		}
+		elseif (Application::Registry()->IsMultiAccount == false)
+		{
 			$this->LoginForm->AccountName->IsRendered = false;
 		}
 	}
