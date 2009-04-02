@@ -28,6 +28,8 @@ class Template extends Module
 
 	protected $_isRendered;
 
+	protected $_additionalTemplatePath;
+
 	public function __construct($ParentObject)
 	{
 		if ($ParentObject instanceof Renderable)
@@ -218,6 +220,22 @@ class Template extends Module
 	public function getTemplateVariables()
 	{
 		return $this->_templateVariables;
+	}
+
+	/*
+	AdditionalTemplatePath property
+	
+	@return string
+	@param string $Value
+	*/
+	public function getAdditionalTemplatePath()
+	{
+		return $this->_additionalTemplatePath;
+	}
+
+	public function setAdditionalTemplatePath($Value)
+	{
+		$this->_additionalTemplatePath = $Value;
 	}
 
     public function Display()
@@ -599,6 +617,12 @@ class Template extends Module
 
         //Now add the path for the application, sandstone and any used top level namespaces
         $templateIncludePath .= Namespace::TemplateSearchPath();
+
+		//If we have some additional path, add it to the end
+		if (is_set($this->_additionalTemplatePath))
+		{
+			$templateIncludePath .= PATH_SEPARATOR . $this->_additionalTemplatePath;
+		}
 
         //Set the actual PHP include path
         set_include_path($templateIncludePath);
