@@ -772,7 +772,6 @@ class EntityBase extends Module
 
 	public function Load($dr)
 	{
-
 		if (count($this->_properties) > 0)
 		{
 			foreach ($this->_properties as $tempProperty)

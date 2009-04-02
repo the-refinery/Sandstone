@@ -14,7 +14,6 @@ class BaseLicense extends EntityBase
 
     public function __construct($ID = null)
     {
-
         $this->_isTagsDisabled = true;
         $this->_isMessagesDisabled = true;
 
@@ -68,7 +67,6 @@ class BaseLicense extends EntityBase
 
 	public function LookupByName($AccountName)
 	{
-
 		$returnValue = false;
 
 		$query = new Query();
