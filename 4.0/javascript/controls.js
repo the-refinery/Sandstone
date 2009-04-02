@@ -97,4 +97,10 @@ $(document).ready(function()
 			$('#' + $(this).attr('id').replace('_query','')).trigger('autocompleteCallback', data);
 		});
 	});
+	
+	// === Datepicker ===
+	$("input.datepicker_body").each(function()
+	{
+		$(this).datepicker();
+	});
 });

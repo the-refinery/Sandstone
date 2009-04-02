@@ -1,4 +1,1 @@
-{!label.htm.template}
-<div class="datepicker_general">
-	{+Month}{+Day}{+Year}
-</div>
+{!inputandlabel.htm.template}

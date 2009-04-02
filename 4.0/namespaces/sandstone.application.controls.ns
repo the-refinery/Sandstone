@@ -32,7 +32,7 @@ codebase/functionalclasses/application/controls/basic/input/textbox/formattedtex
 codebase/functionalclasses/application/controls/compound/actionview.control.php
 codebase/functionalclasses/application/controls/compound/address.control.php
 codebase/functionalclasses/application/controls/compound/autocomplete.control.php
-codebase/functionalclasses/application/controls/compound/datepicker.control.php
+codebase/functionalclasses/application/controls/basic/input/textbox/datepicker/datepicker.control.php
 codebase/functionalclasses/application/controls/compound/fileupload.control.php
 codebase/functionalclasses/application/controls/compound/imageupload.control.php
 codebase/functionalclasses/application/controls/compound/importfileupload.control.php
