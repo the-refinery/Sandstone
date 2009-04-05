@@ -17,13 +17,18 @@ class SpecPage extends BasePage
 	public function Generic_PreProcessor($EventParameters)
 	{
 		parent::Generic_PreProcessor($EventParameters);
-
+		
 		$this->_specs = SpecLoader::FetchTestFiles($EventParameters['specname']);
 	}
 	
 	protected function HTM_Processor($EventParameters)
 	{
 		$this->_template->MasterLayoutFileName = "spec";
+		
+		if (Application::Registry()->RunSpecs == false)
+		{
+			$this->SetResponseCode(404, $EventParameters);
+		}
 	}
 	
 	public function TestCasesCallback($CurrentElement, $Template)
