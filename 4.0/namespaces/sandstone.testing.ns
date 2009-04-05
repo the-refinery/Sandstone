@@ -2,3 +2,4 @@ codebase/functionalclasses/testing/spec/specbase.class.php
 codebase/functionalclasses/testing/spec/specloader.class.php
 codebase/functionalclasses/testing/spec/specassertionbase.class.php
 codebase/functionalclasses/testing/spec/specassertion.class.php
+codebase/functionalclasses/testing/dingus/dingus.class.php
