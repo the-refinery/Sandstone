@@ -11,7 +11,7 @@ class LookupSpec extends SpecBase
 
 	public function ItShouldGiveMeNullForNoData()
 	{
-		$users = LookupObjectSet('User','ByRole',array('roleid'=>1));
+		$users = LookupObjectSet('User','ByRole',array('roleid'=>5));
 		
 		Check($users->ItemsByKey)->ShouldBeNull();
 	}
