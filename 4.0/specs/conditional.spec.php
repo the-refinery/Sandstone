@@ -11,7 +11,7 @@ class ConditionalSpec extends SpecBase
 
 	public function ItShouldCheckAValueIsNotBetweenTwoValues()
 	{
-		Check(IsInRange(15,3,10))->ShouldBeFalse();
+		Check(IsInRange(15,3,10))->ShouldNotBeTrue();
 	}
 
 }

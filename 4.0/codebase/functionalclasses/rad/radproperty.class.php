@@ -94,6 +94,10 @@ class RADproperty extends Module
             case "tinyint":
                 $Value = "boolean";
                 break;
+            
+            case "datetime":
+                $Value = "date";
+                break;
         }
         
 		$this->_dataType = $Value;
