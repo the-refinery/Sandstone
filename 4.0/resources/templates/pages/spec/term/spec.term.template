@@ -14,7 +14,7 @@ passedTestNotify() {
 	fi
 	  
 	if which -s mumbles-send; then
-  	 mumbles-send "Spec Results" "$1 Failing"
+  	 mumbles-send "Spec Results" "$1 Passing"
 	fi
 }
 
