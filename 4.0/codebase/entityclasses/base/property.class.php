@@ -25,6 +25,11 @@ class Property extends Module
 
 	protected $_value;
 
+	protected $_isMultiEntity;
+	protected $_searchMatchWeight;
+	protected $_searchWildcardWeight;
+	protected $_searchDBfield;
+
 	public function __construct($ParentClass, $Name, $DataType, $DBfieldName = null, $IsReadOnly = false, $IsRequired = false, $IsPrimaryID = false, $IsLoadedRequired = false, $IsLoadOnDemand = false, $LoadOnDemandFunctionName = null)
 	{
 		if ($ParentClass instanceof EntityBase)
@@ -355,6 +360,71 @@ class Property extends Module
 	public function setPropertyValue($Value)
 	{
 		$this->_value = $this->InboundValidation($Value);
+	}
+
+
+	/*
+	IsMultiEntity property
+	
+	@return boolean
+	@param boolean $Value
+	*/
+	public function getIsMultiEntity()
+	{
+		return $this->_isMultiEntity;
+	}
+
+	public function setIsMultiEntity($Value)
+	{
+		$this->_isMultiEntity = $Value;
+	}
+
+	/*
+	SearchMatchWeight property
+	
+	@return integer
+	@param integer $Value
+	*/
+	public function getSearchMatchWeight()
+	{
+		return $this->_searchMatchWeight;
+	}
+
+	public function setSearchMatchWeight($Value)
+	{
+		$this->_searchMatchWeight = $Value;
+	}
+
+	/*
+	SearchWildcardWeight property
+	
+	@return integer
+	@param integer $Value
+	*/
+	public function getSearchWildcardWeight()
+	{
+		return $this->_searchWildcardWeight;
+	}
+
+	public function setSearchWildcardWeight($Value)
+	{
+		$this->_searchWildcardWeight = $Value;
+	}
+
+	/*
+	SearchDBfield property
+	
+	@return string
+	@param string $Value
+	*/
+	public function getSearchDBfield()
+	{
+		return $this->_searchDBfield;
+	}
+
+	public function setSearchDBfield($Value)
+	{
+		$this->_searchDBfield = $Value;
 	}
 
 	/*

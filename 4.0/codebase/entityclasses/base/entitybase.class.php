@@ -40,7 +40,14 @@ class EntityBase extends Module
 
 	protected $_invalidPropertyName;
 
-	protected $_searchResultsAction = "view";
+	
+	protected $_searchEntityWeight;
+	protected $_searchTagMatchWeight;
+	protected $_searchTagWildcardWeight;
+	protected $_searchMessageWildcardWeight;
+	protected $_searchResultsAction;
+	
+	protected $_searchProperties;
 
     public function __construct($ID = null)
     {
@@ -49,6 +56,7 @@ class EntityBase extends Module
 		$this->_collectives = new DIarray();
 		$this->_collectiveProperties = new DIarray();
 		$this->_collectiveMethods = new DIarray();
+		$this->_searchProperties = new DIarray();
 
 		$this->_isOutput = false;
 
@@ -770,6 +778,18 @@ class EntityBase extends Module
 		$this->_isPropertiesSetup = true;
 	}
 
+	protected function SetupSearch()
+	{
+		$this->_searchEntityWeight = 5;
+		$this->_searchTagMatchWeight = 6;
+		$this->_searchTagWildcardWeight = 2;
+		$this->_searchMessageWildcardWeight = 1;
+		
+		$this->_searchResultsAction = "view";
+		
+		$this->_searchProperties->Clear();
+	}
+
 	public function Load($dr)
 	{
 		if (count($this->_properties) > 0)
@@ -999,6 +1019,28 @@ class EntityBase extends Module
 		{
 			$this->_primaryIDproperty = $newProperty;
 		}
+	}
+
+	final protected function AddSearchProperty($PropertyName, $IsMultiEntity = false, $MatchWeight = 6, $WildcardWeight = 3, $DBfield = null)
+	{
+		$key = strtolower($PropertyName);
+		
+		if (array_key_exists($key, $this->_properties))
+		{
+			$property = $this->_properties[$key];
+		}
+		else
+		{
+			$property = new Property($this, $PropertyName, "string", null, PROPERTY_READ_ONLY);
+			$this->_properties[$key] = $property;
+		}
+		
+		$property->IsMultiEntity = $IsMultiEntity;
+		$property->SearchMatchWeight = $MatchWeight;
+		$property->SearchWildcardWeight = $WildcardWeight;
+		$property->SearchDBfield = $DBfield;
+		
+		$this->_searchProperties[$key] = $property;
 	}
 
 	final protected function AddCollective($Name, $Type)
@@ -1245,6 +1287,22 @@ class EntityBase extends Module
 
 		return self::SearchMultipleEntity($SearchTerm);
 	}
+	
+	public function GenerateSearchSQL($LikeClause, $MaxResults, $IsMulti)
+	{
+		if (count($this->_searchProperties) == 0)
+		{
+			$this->SetupSearch();
+		}
+		
+		if (count($this->_searchProperties) > 0)
+		{
+			
+		}
+		
+		return $returnValue;
+	}
+
 
 }
 ?>

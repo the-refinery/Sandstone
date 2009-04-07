@@ -76,6 +76,17 @@ class User extends EntityBase
 		parent::SetupProperties();
 	}
 
+	public function SetupSearch()
+	{
+		parent::SetupSearch();
+		
+		$this->AddSearchProperty("UserName");
+		$this->AddSearchProperty("FirstLastName", true, 6, 3, "CONCAT(a.FirstName, ' ', a.LastName)");
+		$this->AddSearchProperty("LastFirstNameNoSpace", true, 6, 3, "CONCAT(a.LastName, ',', a.FirstName)");
+		$this->AddSearchProperty("LastFirstNameSpace", true, 6, 3, "CONCAT(a.LastName, ', ', a.FirstName)");
+
+	}
+	
 	/*
 	Gender Property
 
