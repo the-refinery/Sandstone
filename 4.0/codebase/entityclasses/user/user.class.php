@@ -740,7 +740,7 @@ class User extends EntityBase
 		$whereClause = $this->GenerateBaseWhereClause();
 		$whereClause .= " AND a.UserID <> 1 ";
 
-		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username";
+		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username ";
 
         $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
@@ -776,7 +776,7 @@ class User extends EntityBase
 		}
 
 
-		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username";
+		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username ";
 
         $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
