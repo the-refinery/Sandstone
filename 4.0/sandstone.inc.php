@@ -8,7 +8,7 @@
  * @author Dave Goerlich <dgoerlich@designinginteractive.com>
  *
  * @copyright 2007 Designing Interactive
- *
+ * 
  */
 
 //Error handling functions are required, so explicitely define them
