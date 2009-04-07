@@ -47,18 +47,6 @@ class User extends EntityBase
 
 	protected function SetupProperties()
 	{
-
-		//AddProperty Parameters:
-		// 1) Name
-		// 2) DataType
-		// 3) DBfieldName
-		// 4) IsReadOnly
-		// 5) IsRequired
-		// 6) IsPrimaryID
-		// 7) IsLoadedRequired
-		// 8) IsLoadOnDemand
-		// 9) LoadOnDemandFunctionName
-
 		$this->AddProperty("UserID","integer","UserID",PROPERTY_PRIMARY_ID);
 		$this->AddProperty("FirstName","string","FirstName",PROPERTY_REQUIRED);
 		$this->AddProperty("LastName","string","LastName",PROPERTY_REQUIRED);
