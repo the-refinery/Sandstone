@@ -17,4 +17,14 @@ BACKWHITE=$(tput setab 7)
 
 DEFAULTCOLOR=$(tput sgr0)
 
+Notify() {
+	if which -s growlnotify; then 
+		growlnotify -m "$1"
+	fi
+	  
+	if which -s mumbles-send; then
+  	 mumbles-send "$1"
+	fi
+}
+
 {Content}
