@@ -84,7 +84,7 @@ class DateSpec extends SpecBase
 	{
 		$this->_date->DateStamp = "5/24/1983";
 		
-		Check($this->_date->IsLeapYear)->ShouldBeEqualTo(false);
+		Check($this->_date->IsLeapYear)->ShouldNotBeTrue();
 	}
 	
 	public function ItShouldGetTheYear()
@@ -112,7 +112,7 @@ class DateSpec extends SpecBase
 	{
 		$this->_date->DateStamp = "5/24/1983";
 		
-		Check($this->_date->IsDST)->ShouldBeEqualTo(true);		
+		Check($this->_date->IsDST)->ShouldBeTrue();		
 	}
 	
 	public function ItShouldGetTheHour()
@@ -122,6 +122,13 @@ class DateSpec extends SpecBase
 		Check($this->_date->Hour)->ShouldBeEqualTo('03');
 	}
 	
+	public function ItShouldSetTheHour()
+	{
+		$this->_date->DateStamp = "5/24/1983 3:45:15";
+		$this->_date->Hour = "5";
+		Check($this->_date->Hour)->ShouldBeEqualTo('05');		
+	}
+	
 	public function ItShouldGetTheMinute()
 	{
 		$this->_date->DateStamp = "5/24/1983 3:45";
@@ -129,11 +136,70 @@ class DateSpec extends SpecBase
 		Check($this->_date->Minute)->ShouldBeEqualTo('45');		
 	}
 	
+	public function ItShouldSetTheMinute()
+	{
+		$this->_date->DateStamp = "5/24/1983 3:45:15";
+		$this->_date->Minute = "30";
+		Check($this->_date->Minute)->ShouldBeEqualTo('30');		
+	}
+	
 	public function ItShouldGetTheSecond()
 	{
 		$this->_date->DateStamp = "5/24/1983 3:45:15";
 		
 		Check($this->_date->Second)->ShouldBeEqualTo('15');
+	}
+	
+	public function ItShouldSetTheSecond()
+	{
+		$this->_date->DateStamp = "5/24/1983 3:45:15";
+		$this->_date->Second = "25";
+		Check($this->_date->Second)->ShouldBeEqualTo('25');		
+	}
+	
+	public function ItShouldProveToBeInThePast()
+	{
+		$this->_date->DateStamp = "5/24/1983";
+
+		Check($this->_date->IsInPast)->ShouldBeTrue();
+	}
+	
+	public function ItShouldProveToBeInTheFuture()
+	{
+		$this->_date->DateStamp = "5/24/2037";
+
+		Check($this->_date->IsInFuture)->ShouldBeTrue();
+	}
+	
+	public function ItShouldCalculateTheDifferenceBetweenTwoDates()
+	{
+		$this->_date->DateStamp = "5/24/1983";
+		$testDate = new Date('5/25/1983');
+		
+		$results = $this->_date->DateDiff($testDate);
+		
+		Check($results['d'])->ShouldBeEqualTo(1);
+	}
+	
+	public function ItShouldGiveTheNameOfAMonthGivenAMonthNumber()
+	{
+		Check(Date::MonthName(5))->ShouldBeEqualTo('May');
+	}
+	
+	public function ItShouldAddDaysToTheDate()
+	{
+		$this->_date->DateStamp = "5/24/1983";
+		$checkValue = $this->_date->AddDays(5);
+
+		Check($checkValue->Day)->ShouldBeEqualTo('29');
+	}
+
+	public function ItShouldSubtractDaysFromtTheDate()
+	{
+		$this->_date->DateStamp = "5/24/1983";
+		$checkValue = $this->_date->SubtractDays(5);
+
+		Check($checkValue->Day)->ShouldBeEqualTo('19');
 	}
 }
 

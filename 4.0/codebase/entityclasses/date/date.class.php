@@ -150,9 +150,9 @@ class Date extends Module
 		return $this->FormatDate('h');
 	}
 
-	public function setHour($Hours)
+	public function setHour($Hour)
 	{
-		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$Hours}:{$this->Minutes}:{$this->Seconds}";
+		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$Hour}:{$this->Minute}:{$this->Second}";
 	}
 
 	public function getMinute()
@@ -160,9 +160,9 @@ class Date extends Module
 		return $this->FormatDate('i');
 	}
 
-	public function setMinute($Minutes)
+	public function setMinute($Minute)
 	{
-		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hours}:{$Minutes}:{$this->Seconds}";
+		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hour}:{$Minute}:{$this->Second}";
 	}
 
 	public function getSecond()
@@ -170,9 +170,9 @@ class Date extends Module
 		return $this->FormatDate('s');
 	}
 
-	public function setSecond($Seconds)
+	public function setSecond($Second)
 	{
-		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hours}:{$this->Minutes}:{$Seconds}";
+		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hour}:{$this->Minute}:{$Second}";
 	}
 
 	public function setTime($Time)
@@ -392,7 +392,7 @@ class Date extends Module
 	}
 
 
-	protected function Addtime($Name, $Parameters)
+	protected function AddTime($Name, $Parameters)
 	{	
 		$uom = strtolower(substr($Name, 3));
 		
@@ -445,7 +445,6 @@ class Date extends Module
 
 	protected function DateMath($Modifier, $Value, $UOM)
 	{
-		
 		$newDateStamp = strtotime("{$Modifier}{$Value} {$UOM}", $this->_dateStamp);
 		
 		$returnValue = new Date($newDateStamp);
