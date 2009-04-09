@@ -70,19 +70,13 @@ class Date extends Module
 	{
 		$Name = strtolower($Name);
 		
-		$getter='get'.$Name;
-		
-		if(method_exists($this,$getter))
-		{
-			$returnValue = $this->$getter();
-		}
-		elseif(array_key_exists($Name, $this->_types))
+		if(array_key_exists($Name, $this->_types))
 		{
 			$returnValue = $this->FormatDate($this->_types[$Name]);
 		}
 		else
 		{
-			throw new InvalidPropertyException("No Readable Property: $Name", get_class($this), $Name);
+			$returnValue = parent::__get($Name);			
 		}
 		
 		return $returnValue;
