@@ -84,7 +84,7 @@ class DateSpec extends SpecBase
 	{
 		$this->_date->DateStamp = "5/24/1983";
 		
-		Check($this->_date->IsLeapYear)->ShouldNotBeTrue();
+		Check($this->_date->IsLeapYear)->ShouldBeEqualTo('0');
 	}
 	
 	public function ItShouldGetTheYear()
@@ -112,7 +112,7 @@ class DateSpec extends SpecBase
 	{
 		$this->_date->DateStamp = "5/24/1983";
 		
-		Check($this->_date->IsDST)->ShouldBeTrue();		
+		Check($this->_date->IsDST)->ShouldBeEqualTo('1');		
 	}
 	
 	public function ItShouldGetTheHour()
@@ -200,6 +200,15 @@ class DateSpec extends SpecBase
 		$checkValue = $this->_date->SubtractDays(5);
 
 		Check($checkValue->Day)->ShouldBeEqualTo('19');
+	}
+	
+	public function ItShouldCalculateAge()
+	{
+		$this->_date->DateStamp = "1/1/1983";
+
+		$currentYear = new Date();
+		
+		Check($this->_date->Age)->ShouldBeEqualTo($currentYear->Year - 1983);
 	}
 }
 

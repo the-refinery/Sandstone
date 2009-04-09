@@ -9,6 +9,22 @@ Date Class
 class Date extends Module
 {
 	protected $_dateStamp;
+	
+	protected $_types = array(	'day' => 'd',
+								'dayofweek' => 'l',
+								'dayofyear' => 'z',
+								'weekofyear' => 'W',
+								'month' => 'm',
+								'daysinmonth' => 't',
+								'year' => 'Y',
+								'isleapyear' => 'L',
+								'time' => 'h:i:s',
+								'isdst' => 'I',
+								'mysqltimestamp' => "Y-m-d H:i:s",
+								'hour' => 'h',
+								'minute' => 'i',
+								'second' => 's',
+								'monthname' => 'F');
 
 	public function __construct($dateStamp = null)
 	{
@@ -21,7 +37,7 @@ class Date extends Module
 			$this->setDateStamp($dateStamp);
 		}
 	}
-
+	
 	public function __toString()
 	{
 		$returnValue = $this->MySQLtimestamp . " ({$this->_dateStamp})";
@@ -49,6 +65,28 @@ class Date extends Module
 		
 		return $returnValue;
 	}
+	
+	public function __get($Name)
+	{
+		$Name = strtolower($Name);
+		
+		$getter='get'.$Name;
+		
+		if(method_exists($this,$getter))
+		{
+			$returnValue = $this->$getter();
+		}
+		elseif(array_key_exists($Name, $this->_types))
+		{
+			$returnValue = $this->FormatDate($this->_types[$Name]);
+		}
+		else
+		{
+			throw new InvalidPropertyException("No Readable Property: $Name", get_class($this), $Name);
+		}
+		
+		return $returnValue;
+	}
 
 	public function getDateStamp()
 	{
@@ -72,42 +110,9 @@ class Date extends Module
 		return $this->_dateStamp;
 	}
 
-	public function getMySQLtimestamp()
-	{
-		
-		$returnValue = $this->FormatDate("Y-m-d H:i:s");
-
-		return $returnValue;
-	}
-
-	public function getDay()
-	{
-		return $this->FormatDate('d');
-	}
-
 	public function setDay($Day)
 	{
 		$this->DateStamp = "{$this->Month}/{$Day}/{$this->Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
-	}
-
-	public function getDayOfWeek()
-	{
-		return $this->FormatDate('l');
-	}
-
-	public function getDayOfYear()
-	{
-		return $this->FormatDate('z');
-	}
-
-	public function getWeekOfYear()
-	{
-		return $this->FormatDate('W');
-	}
-
-	public function getMonth()
-	{
-		return $this->FormatDate('m');
 	}
 
 	public function setMonth($Month)
@@ -115,39 +120,9 @@ class Date extends Module
 		$this->DateStamp = "{$Month}/{$this->Day}/{$this->Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
 	}
 
-	public function getDaysInMonth()
-	{
-		return $this->FormatDate('t');
-	}
-
-	public function getIsLeapYear()
-	{
-		return ($this->FormatDate('L')) ? true : false;
-	}
-
-	public function getYear()
-	{
-		return $this->FormatDate('Y');
-	}
-
 	public function setYear($Year)
 	{
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
-	}
-
-	public function getTime()
-	{
-		return $this->FormatDate('h:i:s');
-	}
-
-	public function getIsDST()
-	{
-		return ($this->FormatDate('I')) ? true : false;
-	}
-
-	public function getHour()
-	{
-		return $this->FormatDate('h');
 	}
 
 	public function setHour($Hour)
@@ -155,19 +130,9 @@ class Date extends Module
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$Hour}:{$this->Minute}:{$this->Second}";
 	}
 
-	public function getMinute()
-	{
-		return $this->FormatDate('i');
-	}
-
 	public function setMinute($Minute)
 	{
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hour}:{$Minute}:{$this->Second}";
-	}
-
-	public function getSecond()
-	{
-		return $this->FormatDate('s');
 	}
 
 	public function setSecond($Second)
@@ -203,14 +168,9 @@ class Date extends Module
 		$ageInSeconds = time() - $this->_dateStamp;
 		$secondsInAYear = 31556926;
 
-		$age = floor($ageInSeconds / $secondsInAYear);
+		$age = (INT)floor($ageInSeconds / $secondsInAYear);
 
 		return $age;
-	}
-
-	public function getMonthName()
-	{
-		return $this->FormatDate('F');
 	}
 
 	public function FormatDate($dateFormat = null)

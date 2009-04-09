@@ -19,7 +19,7 @@ DEFAULTCOLOR=$(tput sgr0)
 
 Notify() {
 	if which -s growlnotify; then 
-		growlnotify -s -m "$1"
+		growlnotify -m "$1"
 	fi
 	  
 	if which -s mumbles-send; then
