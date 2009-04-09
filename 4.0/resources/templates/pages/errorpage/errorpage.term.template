@@ -1,0 +1,6 @@
+echo "${BOLD}${FORERED}{$ErrorMessage}${DEFAULTCOLOR}"
+echo ""
+echo "Line: {$LineNumber}"
+echo "File: {$ErrorFile}"
+
+Notify "{$ErrorMessage}"

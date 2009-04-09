@@ -32,9 +32,20 @@ class ErrorPage extends BasePage
 			
 			$this->_template->ExceptionType = $exceptionType;
 			$this->_template->ExceptionOutput = $EventParameters['Exception']->__toString();
+			
+			$this->_template->ErrorMessage = $EventParameters['Exception']->getMessage();
+			$this->_template->LineNumber = $EventParameters['Exception']->getLine();
+			$this->_template->ErrorFile = $EventParameters['Exception']->getFile();
 		}
 	}
 	
+	protected function TERM_Processor($EventParameters)
+	{
+		$this->_template->IsMasterLayoutUsed = true;
+
+		parent::TERM_Processor($EventParameters);		
+	}
+		
 	protected function DetermineSeverity($Severity)
 	{
 		switch ($Severity)
