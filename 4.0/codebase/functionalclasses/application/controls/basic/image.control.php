@@ -13,6 +13,7 @@ class ImageControl extends BaseControl
 	protected $_thumbnailWidth;
 	protected $_thumbnailHeight;
 	protected $_thumbnailMaxSize;
+	protected $_scalingUpProhibited;
 	protected $_relContent;
 	protected $_alternateText;
 
@@ -51,6 +52,16 @@ class ImageControl extends BaseControl
 		}
 	}
 
+	public function getScalingUpProhibited()
+	{
+		return $this->_scalingUpProhibited;
+	}
+	
+	public function setScalingUpProhibited($Value)
+	{
+		$this->_scalingUpProhibited = $Value;
+	}
+	
 	/*
 	ThumbnailWidth property
 
@@ -64,7 +75,10 @@ class ImageControl extends BaseControl
 
 	public function setThumbnailWidth($Value)
 	{
-		$this->_thumbnailWidth = $Value;
+		if (($this->_scalingUpProhibited == true && $this->_image->Width > $Value) || $this->_scalingUpProhibited == false)
+		{
+			$this->_thumbnailWidth = $Value;						
+		}
 	}
 
 	/*
@@ -80,7 +94,10 @@ class ImageControl extends BaseControl
 
 	public function setThumbnailHeight($Value)
 	{
-		$this->_thumbnailHeight = $Value;
+		if (($this->_scalingUpProhibited == true && $this->_image->Height > $Value) || $this->_scalingUpProhibited == false)
+		{
+			$this->_thumbnailHeight = $Value;						
+		}
 	}
 
 	/*
