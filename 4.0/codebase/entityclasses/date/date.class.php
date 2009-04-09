@@ -50,12 +50,6 @@ class Date extends Module
 		return $returnValue;
 	}
 
-	/*
-	Date property
-
-	@return date
-	@param date $Value
-	*/
 	public function getDateStamp()
 	{
 		return $this->_dateStamp;
@@ -73,21 +67,11 @@ class Date extends Module
 		}
 	}
 
-	/*
-	UnixTimestamp property
-
-	@return date
-	*/
 	public function getUnixTimestamp()
 	{
 		return $this->_dateStamp;
 	}
 
-	/*
-	MySQLtimestamp property
-
-	@return
-	*/
 	public function getMySQLtimestamp()
 	{
 		
@@ -96,11 +80,6 @@ class Date extends Module
 		return $returnValue;
 	}
 
-	/*
-	Day property
-
-	@return date
-	*/
 	public function getDay()
 	{
 		return $this->FormatDate('d');
@@ -108,44 +87,24 @@ class Date extends Module
 
 	public function setDay($Day)
 	{
-		$this->DateStamp = "{$this->Month}/{$Day}/{$this->Year} {$this->Hours}:{$this->Minutes}:{$this->Seconds}";
+		$this->DateStamp = "{$this->Month}/{$Day}/{$this->Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
 	}
 
-	/*
-	DayOfWeek property
-
-	@return date
-	*/
 	public function getDayOfWeek()
 	{
 		return $this->FormatDate('l');
 	}
 
-	/*
-	DayOfYear property
-
-	@return date
-	*/
 	public function getDayOfYear()
 	{
 		return $this->FormatDate('z');
 	}
 
-	/*
-	WeekOfYear property
-
-	@return date
-	*/
 	public function getWeekOfYear()
 	{
 		return $this->FormatDate('W');
 	}
 
-	/*
-	Month property
-
-	@return date
-	*/
 	public function getMonth()
 	{
 		return $this->FormatDate('m');
@@ -153,34 +112,19 @@ class Date extends Module
 
 	public function setMonth($Month)
 	{
-		$this->DateStamp = "{$Month}/{$this->Day}/{$this->Year} {$this->Hours}:{$this->Minutes}:{$this->Seconds}";
+		$this->DateStamp = "{$Month}/{$this->Day}/{$this->Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
 	}
 
-	/*
-	DaysInMonth property
-
-	@return date
-	*/
 	public function getDaysInMonth()
 	{
 		return $this->FormatDate('t');
 	}
 
-	/*
-	IsLeapYear property
-
-	@return boolean
-	*/
 	public function getIsLeapYear()
 	{
-		return $this->FormatDate('L');
+		return ($this->FormatDate('L')) ? true : false;
 	}
 
-	/*
-	Year property
-
-	@return date
-	*/
 	public function getYear()
 	{
 		return $this->FormatDate('Y');
@@ -188,72 +132,45 @@ class Date extends Module
 
 	public function setYear($Year)
 	{
-		$this->DateStamp = "{$this->Month}/{$this->Day}/{$Year} {$this->Hours}:{$this->Minutes}:{$this->Seconds}";
+		$this->DateStamp = "{$this->Month}/{$this->Day}/{$Year} {$this->Hour}:{$this->Minute}:{$this->Second}";
 	}
 
-	/*
-	Time property
-
-	@return date
-	*/
 	public function getTime()
 	{
-		return $this->FormatDate('g');
+		return $this->FormatDate('h:i:s');
 	}
 
-	/*
-	IsDST property
-
-	@return boolean
-
-	shows if Daylight Savings Time
-	*/
 	public function getIsDST()
 	{
-		return $this->FormatDate('I');
+		return ($this->FormatDate('I')) ? true : false;
 	}
 
-	/*
-	Minutes property
-
-	@return date
-	*/
-	public function getHours()
+	public function getHour()
 	{
 		return $this->FormatDate('h');
 	}
 
-	public function setHours($Hours)
+	public function setHour($Hours)
 	{
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$Hours}:{$this->Minutes}:{$this->Seconds}";
 	}
 
-	/*
-	Minutes property
-
-	@return date
-	*/
-	public function getMinutes()
+	public function getMinute()
 	{
 		return $this->FormatDate('i');
 	}
 
-	public function setMinutes($Minutes)
+	public function setMinute($Minutes)
 	{
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hours}:{$Minutes}:{$this->Seconds}";
 	}
 
-	/*
-	Seconds property
-
-	@return date
-	*/
-	public function getSeconds()
+	public function getSecond()
 	{
 		return $this->FormatDate('s');
 	}
 
-	public function setSeconds($Seconds)
+	public function setSecond($Seconds)
 	{
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$this->Hours}:{$this->Minutes}:{$Seconds}";
 	}
@@ -263,11 +180,6 @@ class Date extends Module
 		$this->DateStamp = "{$this->Month}/{$this->Day}/{$this->Year} {$Time}";
 	}
 
-	/*
-	FriendlyDate property
-
-	@return string
-	*/
 	public function getFriendlyDate()
 	{
 		return $this->BuildFriendlyDate();

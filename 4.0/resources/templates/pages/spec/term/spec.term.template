@@ -1,6 +1,6 @@
 failedTestNotify() {
 	if which -s growlnotify; then 
-		growlnotify -p 2 -t "Spec Results" -m "$1 Failing"
+		growlnotify -p 2 -a -t "Spec Results" -m "$1 Failing"
 	fi
 	
 	if which -s mumbles-send; then
