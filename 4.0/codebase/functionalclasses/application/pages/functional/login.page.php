@@ -58,11 +58,6 @@ class LoginPage extends BasePage
 		{
 			Application::Redirect(Routing::BuildURLbyRule('default'));
 		}
-
-		if (is_set($this->_template->NotificationMessage) == false)
-		{
-			$this->_template->NotificationMessage = "Please login to continue.";
-		}
 	}
 
 	/*** FORM PROCESSORS ***/
