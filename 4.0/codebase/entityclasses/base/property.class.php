@@ -664,5 +664,38 @@ class Property extends Module
 		echo parent::__toString();
 	}
 
+	public function CalculateSearchWeight($SearchTerm, $IsMultiEntitySearch)
+	{
+		$returnValue = 0;
+		
+		if ($IsMultiEntitySearch == false || ($IsMultiEntitySearch == true && $this->_isMultiEntity))
+		{
+			//Since this could be an object representing a dynamic property,
+			//instead of using the local value, get the public value of this
+			//property from the parent class
+			$propertyName = $this->_name;
+			$propertyValue = strtolower($this->ParentClass->$propertyName);
+	
+			//Is this a match?
+			if ($propertyValue == $SearchTerm)
+			{
+				//Dead Hit!
+				$returnValue = $this->_searchMatchWeight;
+			}
+			else
+			{
+				//Is this a wildcard match?			
+				$matchCount = substr_count($propertyValue, $SearchTerm);
+	
+				if ($matchCount > 0)
+				{
+					$returnValue = $matchCount * $this->_searchWildcardWeight;
+				}
+			}			
+		}
+		
+		return $returnValue;
+	}
+
 }
 ?>

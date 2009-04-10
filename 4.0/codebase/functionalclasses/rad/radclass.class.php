@@ -152,7 +152,7 @@ class RADclass extends Module
         $output->Template->BaseSelectClause = $this->GenerateBaseSelectClause();
         
         //Search
-        $output->Template->SearchFunctions = $this->GenerateSearchFunctions();
+        $output->Template->SearchFunction = $this->GenerateSearchFunction();
                 
         $returnValue = $output->Render();
         
@@ -402,42 +402,41 @@ class RADclass extends Module
         return $returnValue;
     }
 
-    protected function GenerateSearchFunctions()
+    protected function GenerateSearchFunction()
     {
         if ($this->_isSearchNeeded)
         {
             
-            $output = $this->SetupRenderable("singleentitysearch");
+            $addCalls = Array();
             
-            $output->Template->ClassName = $this->_name;
-            $output->Template->PrimaryIDpropertyName = $this->_primaryIDproperty->Name;
-            $output->Template->LimitClause = "LIMIT {\$MaxResults}";
-            $output->Template->WhereClauseAddition = "AND {\$searchClause}";
-            
-            $singleEntitySearches = Array();
-            $multiEntitySearches = Array();
-
+            //Get an array of the add search property calls
+            $output = $this->SetupRenderable("addsearchproperty");
+                        
             foreach ($this->_properties as $tempProperty)
             {    
                 if ($tempProperty->IsSearchable)
                 {
-                    $propertyClause = "LOWER({$tempProperty->DBfieldName}) {\$likeClause} ";
-                    
-                    $singleEntitySearches[] = $propertyClause;
-                    
+                    $output->Template->PropertyName = $tempProperty->Name;
+                                        
                     if ($tempProperty->IsSearchableMultiEntity)
-                    {
-                        $multiEntitySearches[] = $propertyClause;
-                        
-                        $output->Template->IsMultiSearchNeeded = true;
+                    {                        
+                        $output->Template->IsMultiEntity = "true";
                     }
+                    else
+                    {
+                        $output->Template->IsMultiEntity = "false";
+                    }
+                    
+                    $addCalls[] = $output->Render();
                 }
+                
+                
             }
-
-            $tabs = "\t\t\t\t\t\t\t";
-                       
-            $output->Template->SingleSearchClause = "\t" . implode("\n" . $tabs . "OR ", $singleEntitySearches);
-            $output->Template->MultiSearchClause = "\t" . implode("\n" . $tabs . "OR ", $multiEntitySearches);
+            
+            //Build the function itself            
+            $output = $this->SetupRenderable("searchfunction");
+            
+            $output->Template->AddSearchProperties = implode("\n", $addCalls);
             
             $returnValue = $output->Render();
         }

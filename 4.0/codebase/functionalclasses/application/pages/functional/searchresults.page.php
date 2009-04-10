@@ -59,9 +59,6 @@ class SearchResultsPage extends BasePage
 			$this->Search->AddType($tempType);
 		}
 
-
-
-
    		parent::BuildControlArray($EventParameters);
 	}
 

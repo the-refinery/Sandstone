@@ -20,6 +20,8 @@ class NameSpace extends Module
 
  	protected $_templateSearchPath;
 
+	protected $_classesByNamespace = Array();
+
 	protected  function __construct()
 	{
 

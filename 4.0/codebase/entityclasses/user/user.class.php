@@ -14,12 +14,10 @@ NameSpace::Using("Sandstone.Phone");
 
 class User extends EntityBase
 {
-
 	protected $_passwordSalt;
 
 	public function __construct($ID = null)
 	{
-
 		//We handle the $ID paramer differently, so don't pass
 		//it to our parent
 		parent::__construct();
@@ -68,11 +66,12 @@ class User extends EntityBase
 	{
 		parent::SetupSearch();
 		
-		$this->AddSearchProperty("UserName");
+		$this->AddSearchProperty("UserName", false, 6, 6);
 		$this->AddSearchProperty("FirstLastName", true, 6, 3, "CONCAT(a.FirstName, ' ', a.LastName)");
 		$this->AddSearchProperty("LastFirstNameNoSpace", true, 6, 3, "CONCAT(a.LastName, ',', a.FirstName)");
 		$this->AddSearchProperty("LastFirstNameSpace", true, 6, 3, "CONCAT(a.LastName, ', ', a.FirstName)");
 
+		$this->_searchWhereClauseAddition = "AND a.UserID <> 1 ";
 	}
 	
 	/*
@@ -820,59 +819,6 @@ class User extends EntityBase
 	static public function GenerateBaseFromClause()
 	{
 		$returnValue = "	FROM	core_UserMaster a ";
-
-		return $returnValue;
-	}
-
-	/*
-	Search Query Functions
-	 */
-	static public function SearchMultipleEntity($SearchTerm, $MaxResults)
-	{
-		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
-
-		$searchClause = "LOWER(CONCAT(a.FirstName, ' ', a.LastName)) {$likeClause} ";
-		$searchClause .= "OR		LOWER(CONCAT(a.LastName, ', ', a.FirstName)) {$likeClause} ";
-		$searchClause .= "OR 		LOWER(CONCAT(a.LastName, ',', a.FirstName)) {$likeClause} ";
-
-		$whereClause = self::GenerateBaseWhereClause();
-		$whereClause .= "AND a.UserID <> 1 AND ({$searchClause}) ";
-
-		$returnValue = self::PerformSearch($whereClause, $MaxResults);
-
-		return $returnValue;
-	}
-
-	static public function SearchSingleEntity($SearchTerm, $MaxResults)
-	{
-		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
-
-		$searchClause = "LOWER(a.UserName) {$likeClause} ";
-		$searchClause .= "OR		LOWER(CONCAT(a.FirstName, ' ', a.LastName)) {$likeClause} ";
-		$searchClause .= "OR		LOWER(CONCAT(a.LastName, ', ', a.FirstName)) {$likeClause} ";
-		$searchClause .= "OR 		LOWER(CONCAT(a.LastName, ',', a.FirstName)) {$likeClause} ";
-
-		$whereClause = self::GenerateBaseWhereClause();
-		$whereClause .= "AND a.UserID <> 1 AND ({$searchClause}) ";
-
-		$returnValue = self::PerformSearch($whereClause, $MaxResults);
-
-		return $returnValue;
-	}
-
-	static protected function PerformSearch($WhereClause, $MaxResults)
-	{
-		$query = new Query();
-
-		$selectClause = self::GenerateBaseSelectClause();
-		$fromClause = self::GenerateBaseFromClause();
-		$limitClause = " LIMIT {$MaxResults} ";
-
-		$query->SQL = $selectClause . $fromClause . $WhereClause . $limitClause;
-
-		$query = new Query();
-
-		$returnValue = new ObjectSet($query->Results, "User", "UserID");
 
 		return $returnValue;
 	}

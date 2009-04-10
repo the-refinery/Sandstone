@@ -13,8 +13,6 @@ class Search extends Module
 
 	const DEFAULT_MAX_RESULTS = 30;
 
-	protected $_availableTypes;
-
 	protected $_types;
 	protected $_searchTerm;
 
@@ -28,8 +26,6 @@ class Search extends Module
 		$this->_types = new DIarray();
         $this->_tags = new DIarray();
         $this->_results = new DIarray();
-
-		$this->LoadAvailableTypes();
 
 		//Set the default Max Results
 		$this->_maxResults = self::DEFAULT_MAX_RESULTS;
@@ -49,16 +45,10 @@ class Search extends Module
 	SearchTerm property
 
 	@return string
-	@param string $Value
 	*/
 	public function getSearchTerm()
 	{
 		return $this->_searchTerm;
-	}
-
-	public function setSearchTerm($Value)
-	{
-		$this->_searchTerm = $Value;
 	}
 
 	/*
@@ -104,224 +94,143 @@ class Search extends Module
 		}
 	}
 
-	public function LoadAvailableTypes()
+	public function getIsMultiEntitySearch()
 	{
-		$returnValue = false;
-
-		$this->_availableTypes = new DIarray();
-
-		$query = new Query();
-
-		$selectClause = SearchEntity::GenerateBaseSelectClause();
-		$fromClause = SearchEntity::GenerateBaseFromClause();
-
-		$whereClause = "WHERE	IsActive = 1 ";
-
-		$query->SQL = $selectClause . $fromClause . $whereClause;
-
-		$query->Execute();
-
-		if ($query->SelectedRows > 0)
-		{
-			$query->LoadEntityArray($this->_availableTypes, "SearchEntity", "ClassName");
+		if (count($this->_types) > 1)
+        {
 			$returnValue = true;
+        }
+		else
+		{
+			$returnValue = false;
 		}
-
+		
 		return $returnValue;
 	}
 
 	public function AddType($ClassName)
 	{
+		
+		$returnValue = false;
+		
 		$classNameKey = strtolower($ClassName);
 
-		//Validate that the supplied type exists
-		if (array_key_exists($classNameKey, $this->_availableTypes))
+		if (array_key_exists($classNameKey, $this->_types) == false)
 		{
-			$this->_types[$classNameKey] = $this->_availableTypes[$classNameKey];
-
-            //Any change to the search criteria clears previous results
-            $this->_tags->Clear();
-            $this->_results->Clear();
-
-			$returnValue = true;
+			if (class_exists($ClassName))
+			{
+				$tempClass = new $ClassName ();
+				
+				if ($tempClass instanceof EntityBase && $tempClass->IsSearchable)
+				{
+					$this->_types[$classNameKey] = $tempClass;
+					
+					$this->ClearResults();
+					
+					$returnValue = true;
+				}
+			}			
 		}
 		else
 		{
-			$returnValue = false;
+			$returnValue = true;
 		}
-
+		
 		return $returnValue;
+	}
+
+	protected function ClearResults()
+	{
+		$this->_tags->Clear();
+		$this->_results->Clear();		
 	}
 
 	public function RemoveType($ClassName)
 	{
 		unset($this->_types[strtolower($ClassName)]);
 
-        //Any change to the search criteria clears previous results
-        $this->_tags->Clear();
-        $this->_results->Clear();
+		$this->ClearResults();
 
 	}
 
     public function Search($SearchTerm)
     {
-        //Clear any previous results
-        $this->_tags->Clear();
-        $this->_results->Clear();
+		$this->ClearResults();
 
         $this->_searchTerm = $SearchTerm;
 
-		$returnValue = $this->SetupTypesArray();
+		//Setup our grouped results array
+		$groupedResults = new DIarray();
 
-        if ($returnValue == true)
-        {
-			//Build a CSV of all active class names
-			//This is used in Tag and Message Searches to limit the results
-			//to only the specific types selected
-			$typeNamesCSV = $this->BuildTypesCSV();
+		//Perform the search on each type
+		$this->PerformTypesSearch($SearchTerm, $groupedResults);
 
-            //Setup our grouped results array
-            $groupedResults = new DIarray();
+		//Perform a tag search, and add it's results to our GroupedResults array
+		$this->PerformTagSearch($SearchTerm, $groupedResults);
 
-			//Perform the search on each type
-			$this->PerformTypesSearch($SearchTerm, $groupedResults);
-
-			//Perform a tag search, and add it's results to our GroupedResults array
-			$this->PerformTagSearch($SearchTerm, $groupedResults, $typeNamesCSV);
-
-			//Perform a message search, and add it's results to our GroupedResults array
-			//$this->PerformMessageSearch($SearchTerm, $groupedResults, $typeNamesCSV);
-
-            //Do we have results?
-            if (count($groupedResults) > 0)
-            {
-				//Calculate each results rank
-				$this->CalculateResultsRank($SearchTerm, $groupedResults);
-
-				//Now build the final sorted results array
-				$this->BuildFinalResults($groupedResults);
-
-				$returnValue = true;
-			}
-            else
-            {
-                $returnValue = false;
-            }
-        }
-
-        return $returnValue;
-    }
-
-	protected function SetupTypesArray()
-	{
-
-        //Has the user supplied specific types to search?
-        if (count($this->_types) == 0)
-        {
-            //No - default to all available, did we any available?
-            if (count($this->_availableTypes) > 0)
-            {
-                $this->_types = $this->_availableTypes;
-                $returnValue = true;
-            }
-            else
-            {
-                $returnValue = false;
-            }
-        }
-        else
-        {
-        	$returnValue = true;
-        }
-
-		return $returnValue;
-	}
-
-	protected function BuildTypesCSV()
-	{
-
-		foreach ($this->_types as $tempType)
+		//Do we have results?
+		if (count($groupedResults) > 0)
 		{
-			$tempClassNames[] = "'{$tempType->ClassName}'";
-		}
-		$returnValue = implode(",", $tempClassNames);
+			$this->BuildFinalResults($groupedResults);
 
-		return $returnValue;
-	}
-
-	protected function PerformTypesSearch($SearchTerm, $GroupedResults)
-	{
-
-        //Are we searching across multiple types or a single type?
-        if (count($this->_types) == 1)
-        {
-            //Single Entity Search
-            $isSingleEntitySearch = true;
-        }
-        else
-        {
-            //Multiple Entity Search
-            $isSingleEntitySearch = false;
-        }
-
-	    //Loop through each of the types and get it's
-	    //dataset of all matches
-	    foreach ($this->_types as $tempType)
-	    {
-	        $typeResults  = $this->PerformIndividualTypeSearch($tempType, $SearchTerm, $isSingleEntitySearch);
-
-	        if (is_set($typeResults))
-	        {
-	            $GroupedResults[strtolower($tempType->ClassName)] = $typeResults;
-	        }
-	    }
-
-		return true;
-	}
-
-    protected function PerformIndividualTypeSearch($CurrentType, $SearchTerm, $IsSingleEntitySearch)
-    {
-
-		//Make sure we have the necessary namespace in use
-		Namespace::Using($CurrentType->RequiredNamespace);
-
-		//Since we have a dynamic class name, we have to build the
-		//search statement then eval it.
-		if ($IsSingleEntitySearch)
-		{
-			$functionName = "SearchSingleEntity";
-		}
-		else
-		{
-			$functionName = "SearchMultipleEntity";
-		}
-
-		$cmd = "\$objectSet= {$CurrentType->ClassName}::{$functionName}(\"{$SearchTerm}\", {$this->_maxResults});";
-
-		//Perform the search
-		eval($cmd);
-
-		$returnValue = $objectSet->ItemsByKey;
-
-    	return $returnValue;
-    }
-
-	protected function PerformTagSearch($SearchTerm, $GroupedResults, $TypeNamesCSV)
-	{
-
-		$success = $this->LoadMatchingTags($SearchTerm, $TypeNamesCSV);
-
-		if ($success)
-		{
-			$returnValue = $this->LoadTagResults($GroupedResults, $TypeNamesCSV);
+			$returnValue = true;
 		}
 		else
 		{
 			$returnValue = false;
 		}
 
+        return $returnValue;
+    }
+
+	protected function PerformTypesSearch($SearchTerm, $GroupedResults)
+	{
+		
+		$query = new Query();
+		
+		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
+
+	    foreach ($this->_types as $tempKey=>$tempType)
+	    {
+			$typeResults = $tempType->Search($query, $SearchTerm, $likeClause, $this->_maxResults, $this->IsMultiEntitySearch);
+	    	
+	        if ($typeResults->Count > 0)
+	        {
+	            $GroupedResults[$tempKey] = $typeResults->ItemsByKey;
+	        }
+	    }
+
+	}
+
+
+	protected function PerformTagSearch($SearchTerm, $GroupedResults)
+	{
+		$typeNamesCSV = $this->GenerateTypeNamesCSV();
+
+		$returnValue = $this->LoadMatchingTags($SearchTerm, $typeNamesCSV);
+
+		if ($returnValue == true)
+		{
+			$returnValue = $this->LoadTagResults($GroupedResults, $typeNamesCSV, $SearchTerm);
+		}
+
 		return $returnValue;
 
+	}
+
+	protected function GenerateTypeNamesCSV()
+	{
+		
+		$typeNames = Array();
+		
+		foreach($this->_types as $tempType)
+		{
+			$typeNames[] = "'" . get_class($tempType) . "'";
+		}
+		
+		$returnValue = implode(", ", $typeNames);
+		
+		return $returnValue;
 	}
 
 	protected function LoadMatchingTags($SearchTerm, $TypeNamesCSV)
@@ -332,10 +241,7 @@ class Search extends Module
 		$query = new Query();
 
 		$tagText  = Tag::FormatTextForTag($SearchTerm);
-
 		$tagText = mysql_real_escape_string($tagText);
-
-		$likeClause = "LIKE '%{$tagText}%' ";
 
 		$accountID = Application::License()->AccountID;
 
@@ -345,7 +251,7 @@ class Search extends Module
 								INNER JOIN core_EntityTag b ON
 									b.TagID = a.TagID
 									AND  b.AssociatedEntityType IN ({$TypeNamesCSV})
-						WHERE	a.TagText {$likeClause}
+						WHERE	a.TagText LIKE '%{$tagText}%' 
 						AND		a.AccountID = {$accountID}
 						ORDER BY TagText ";
 
@@ -361,7 +267,7 @@ class Search extends Module
 		return $returnValue;
 	}
 
-	protected function LoadTagResults($GroupedResults, $TypeNamesCSV)
+	protected function LoadTagResults($GroupedResults, $TypeNamesCSV, $SearchTerm)
 	{
 		$query = new Query();
 
@@ -376,12 +282,12 @@ class Search extends Module
 
 		$query->Execute();
 
-		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $query);
+		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $query, $SearchTerm);
 
 		return $returnValue;
 	}
 
-	protected function LoadResultsFromTypeIDdataset($GroupedResults, $Query)
+	protected function LoadResultsFromTypeIDdataset($GroupedResults, $Query, $SearchTerm)
 	{
 
 		if ($Query->SelectedRows > 0)
@@ -393,6 +299,8 @@ class Search extends Module
 				$tempEntityID = $dr['AssociatedEntityID'];
 
 				$tempEntity = new $tempEntityType ($tempEntityID);
+				
+				$tempEntity->CalculateSearchWeight($SearchTerm, $this->IsMultiEntitySearch);
 
 				//Make sure an array for this EntityType Exists
 				if (array_key_exists(strtolower($tempEntityType), $GroupedResults) == false)
@@ -403,7 +311,7 @@ class Search extends Module
 				//Add the object to the array for that entity type
 				$GroupedResults[strtolower($tempEntityType)][$tempEntityID] = $tempEntity;
 			}
-
+			
 			$returnValue = true;
 		}
 		else
@@ -411,48 +319,8 @@ class Search extends Module
 			$returnValue = false;
 		}
 
-
 		return $returnValue;
 
-	}
-
-	protected function PerformMessageSearch($SearchTerm, $GroupedResults, $TypeNamesCSV)
-	{
-
-
-		$query = new Query();
-
-		$SearchTerm = mysql_real_escape_string($SearchTerm);
-
-		$likeClause = "LIKE '%" . strtolower($SearchTerm) . "%' ";
-
-		$query->SQL = "	SELECT	DISTINCT a.AssociatedEntityType,
-								a.AssociatedEntityID
-						FROM	core_MessageMaster a
-								LEFT JOIN core_MessageCommentMaster b ON b.MessageID = a.MessageID
-						WHERE	LOWER(a.Subject) {$likeClause}
-						OR		LOWER(a.Content) {$likeClause}
-						OR		LOWER(b.Content) {$likeClause} ";
-
-		$query->Execute();
-
-		$returnValue = $this->LoadResultsFromTypeIDdataset($GroupedResults, $query);
-
-		return $returnValue;
-
-	}
-
-	protected function CalculateResultsRank($SearchTerm, $GroupedResults)
-	{
-		foreach ($GroupedResults as $tempTypeName=>$tempObjects)
-		{
-			$currentSearchEntity = $this->_types[$tempTypeName];
-
-			foreach ($tempObjects as $tempResultObject)
-			{
-				$currentSearchEntity->CalculateResultRank($SearchTerm, $tempResultObject);
-			}
-		}
 	}
 
 	protected function BuildFinalResults($GroupedResults)
@@ -468,7 +336,7 @@ class Search extends Module
 				$preLimitResults[] = $tempObject;
 			}
 		}
-
+		
 		//Sort the results, with the highest rank on top
 		$preLimitResults = DIarray::SortByObjectProperty($preLimitResults, SearchRank, true, false);
 
@@ -487,6 +355,5 @@ class Search extends Module
 			$i++;
 		}
 	}
-
 }
 ?>
