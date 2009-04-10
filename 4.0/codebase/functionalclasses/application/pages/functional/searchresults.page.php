@@ -2,7 +2,7 @@
 
 NameSpace::Using("Sandstone.Search");
 
-class SearchResultsPage extends BasePage
+class SearchResultsPage extends ApplicationPage
 {
 
 	protected $_isLoginRequired = false;

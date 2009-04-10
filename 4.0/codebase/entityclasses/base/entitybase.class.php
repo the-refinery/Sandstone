@@ -577,10 +577,13 @@ class EntityBase extends EntityBaseFunctionality
 			$Query->Execute();
 		
 			$returnValue = new ObjectSet($Query->Results, get_class($this), $this->_primaryIDproperty->Name);
-			
-			foreach ($returnValue->ItemsByKey as $tempResult)
+
+			if ($returnValue->Count > 0)
 			{
-				$tempResult->CalculateSearchWeight($SearchTerm, $IsMulti);
+				foreach ($returnValue->ItemsByKey as $tempResult)
+				{
+					$tempResult->CalculateSearchWeight($SearchTerm, $IsMulti);
+				}				
 			}
 		}
 		
