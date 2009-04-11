@@ -186,7 +186,7 @@ class SpecAssertionBase extends Module
 		}
 		
 		return $returnValue;
-	}
+	}	
 }
 
 ?>
