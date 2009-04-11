@@ -8,6 +8,8 @@ class SpecAssertionBase extends Module
 	protected $_actualValue;
 	protected $_testResult;
 	protected $_message;
+	protected $_file;
+	protected $_line;
 	
 	public function __construct($ActualValue)
 	{
@@ -28,7 +30,17 @@ class SpecAssertionBase extends Module
 	{
 		return $this->_message;
 	}
-
+	
+	public function getFile()
+	{
+		return $this->_file;
+	}
+	
+	public function getLine()
+	{
+		return $this->_line;
+	}
+	
 	public function __call($Method, $Arguments)
 	{
 		$callStack = debug_backtrace();
@@ -39,6 +51,9 @@ class SpecAssertionBase extends Module
 		$this->_testName = $callStack[2]['function'];
 		$testSpec = $callStack[2]['object'];
 		$parameter = $Arguments[0];
+		
+		$this->_file = $callStack[1]['file'];
+		$this->_line = $callStack[1]['line'];
 		
 		// Determine wether this is a ShouldBe or ShouldNotBe
 		if (stristr($Method,'shouldnot'))

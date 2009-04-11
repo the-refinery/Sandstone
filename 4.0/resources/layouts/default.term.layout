@@ -27,4 +27,14 @@ Notify() {
 	fi
 }
 
+EditFile() {
+	if which -s mate; then
+		if [[ "$2" != "" ]]; then
+			mate $1 --line $2
+		else
+			mate $1
+		fi
+	fi
+}
+
 {Content}

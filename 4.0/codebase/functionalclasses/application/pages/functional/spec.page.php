@@ -50,6 +50,9 @@ class SpecPage extends BasePage
 	{
 		$Template->TestName = $CurrentElement->FriendlyTestName;
 		$Template->Message = $CurrentElement->Message;
+		
+		$Template->File = $CurrentElement->File;
+		$Template->Line = $CurrentElement->Line;
 	}
 	
 	public function TestClassesCallback($CurrentElement, $Template)
