@@ -256,7 +256,7 @@ class Date extends Module
 	protected function BuildFriendlyDate()
 	{
 
-		$diff = $this->DateDiff();
+		$diff = $this->DateDiff(null, "w");
 
 		if ($diff['y'] == 0)
 		{
