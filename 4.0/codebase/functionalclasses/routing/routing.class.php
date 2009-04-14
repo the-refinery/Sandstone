@@ -553,7 +553,7 @@ class Routing extends Module
 	{
 
 		//Make sure the file exists
-        if (file_exists($XMLfileSpec))
+		if (file_exists($XMLfileSpec))
 		{
 			//Load it's contents
 			$xml = file_get_contents($XMLfileSpec);

@@ -21,6 +21,7 @@ require("codebase/baseclasses/debug.class.php");
 require("codebase/baseclasses/module.class.php");
 require("codebase/baseclasses/namespace.class.php");
 require("codebase/baseclasses/diarray.class.php");
+require("codebase/baseclasses/factory.class.php");
 
 //These are also foundational, so we will explicitly require them here too.
 require("codebase/functionalclasses/utilities/file.func.php");
