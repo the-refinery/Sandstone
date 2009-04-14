@@ -1,65 +1,65 @@
 <?php
 /*
-Debug Class File
+    Debug Class File
 
-@package Sandstone
-@subpackage BaseClasses
-*/
+    @package Sandstone
+    @subpackage BaseClasses
+    */
 
 class Debug extends Component
 {
-	/*
-	Show a blackbox view of the current object
-	*/
-	public function Inspect()
-	{
-		$DebugObject = new ReflectionClass(get_class($this));
-		$DebugModule = new ReflectionClass('module');
+    /*
+        Show a blackbox view of the current object
+        */
+    public function Inspect()
+    {
+        $DebugObject = new ReflectionClass(get_class($this));
+        $DebugModule = new ReflectionClass('module');
 
-		$returnValue = "<fieldset style=\"background: #E5EEF5;\"><legend>". get_class($this) ."</legend>";
+        $returnValue = "<fieldset style=\"background: #E5EEF5;\"><legend>". get_class($this) ."</legend>";
 
-		$tempMethods = $this->GetDebugMethods($DebugObject);
-		$tempProperties = $this->ExtractDebugProperties($tempMethods);
+        $tempMethods = $this->GetDebugMethods($DebugObject);
+        $tempProperties = $this->ExtractDebugProperties($tempMethods);
 
-		// Display Properties
-		$returnValue .= "<fieldset style=\"background: #ddd;\"><legend>Properties</legend><ul>";
-		foreach ($tempProperties as $Key => $Value)
-		{
-			$returnValue .= "<li>" . $Key . "</li>";
-		}
-		$returnValue .= "</ul></fieldset>";
+        // Display Properties
+        $returnValue .= "<fieldset style=\"background: #ddd;\"><legend>Properties</legend><ul>";
+        foreach ($tempProperties as $Key => $Value)
+        {
+            $returnValue .= "<li>" . $Key . "</li>";
+        }
+        $returnValue .= "</ul></fieldset>";
 
-		// Display Methods
-		$returnValue .= "<fieldset style=\"background: #ddd;\"><legend>Methods</legend><ul>";
+        // Display Methods
+        $returnValue .= "<fieldset style=\"background: #ddd;\"><legend>Methods</legend><ul>";
 
-		foreach ($tempMethods as $Key => $Value)
-		{
-			if (substr($Key,0,2) != "__" && substr($Key,0,3) != "get" && substr($Key,0,3) != "set" && (! $DebugModule->hasMethod($Key)))
-			{
-				unset($Parameters);
+        foreach ($tempMethods as $Key => $Value)
+        {
+            if (substr($Key,0,2) != "__" && substr($Key,0,3) != "get" && substr($Key,0,3) != "set" && (! $DebugModule->hasMethod($Key)))
+            {
+                unset($Parameters);
 
-				foreach ($Value as $Parameter)
-				{
-					$Parameters[] = $Parameter->getName();
-				}
+                foreach ($Value as $Parameter)
+                {
+                    $Parameters[] = $Parameter->getName();
+                }
 
-				if (is_array($Parameters))
-				{
-					$returnValue .= "<li>$Key(\$" . implode(", \$", $Parameters) .")</li>";
-				}
-				else
-				{
-					$returnValue .= "<li>$Key()</li>";
-				}
-			}
-		}
+                if (is_array($Parameters))
+                {
+                    $returnValue .= "<li>$Key(\$" . implode(", \$", $Parameters) .")</li>";
+                }
+                else
+                {
+                    $returnValue .= "<li>$Key()</li>";
+                }
+            }
+        }
 
-		$returnValue .= "</ul></fieldset>";
+        $returnValue .= "</ul></fieldset>";
 
-		$returnValue .= "</fieldset>";
+        $returnValue .= "</fieldset>";
 
-		return $returnValue;
-	}
+        return $returnValue;
+    }
 
     public function __toString()
     {
@@ -73,10 +73,10 @@ class Debug extends Component
         $anchorID = "{$className}_{$randomID}";
 
         $detailJS = "    document.getElementById('{$anchorID}_summary').style.display = 'none';
-                        document.getElementById('{$anchorID}_detail').style.display = 'block';";
+        document.getElementById('{$anchorID}_detail').style.display = 'block';";
 
         $summaryJS = "    document.getElementById('{$anchorID}_detail').style.display = 'none';
-                        document.getElementById('{$anchorID}_summary').style.display = 'block';";
+        document.getElementById('{$anchorID}_summary').style.display = 'block';";
 
 
         $returnValue = "<a id=\"{$anchorID}\"></a>";
@@ -106,14 +106,14 @@ class Debug extends Component
             }
             elseif (is_object($value))
             {
-            	if (method_exists($value, "__toString"))
-            	{
-            		$returnValue .= $value->__toString();
-            	}
-            	else
-            	{
-            		$returnValue .= get_class($value) . " object";
-            	}
+                if (method_exists($value, "__toString"))
+                {
+                    $returnValue .= $value->__toString();
+                }
+                else
+                {
+                    $returnValue .= get_class($value) . " object";
+                }
             }
             else
             {
@@ -139,143 +139,143 @@ class Debug extends Component
         return $returnValue;
     }
 
-	protected function GetDebugProtectedData($DebugObject)
-	{
-		$tempProperties = $DebugObject->getProperties();
+    protected function GetDebugProtectedData($DebugObject)
+    {
+        $tempProperties = $DebugObject->getProperties();
 
-		foreach ($tempProperties as $Property)
-		{
-			$tempPropertyName = $Property->name;
-			$tempPropertyValue = $this->$tempPropertyName;
+        foreach ($tempProperties as $Property)
+        {
+            $tempPropertyName = $Property->name;
+            $tempPropertyValue = $this->$tempPropertyName;
 
-			if (is_null($tempPropertyValue))
-			{
-				$returnValue[$tempPropertyName] = "null";
-			}
-			elseif ($tempPropertyValue === false)
-			{
-				$returnValue[$tempPropertyName] = "false";
-			}
-			elseif (is_object($tempPropertyValue))
-			{
+            if (is_null($tempPropertyValue))
+            {
+                $returnValue[$tempPropertyName] = "null";
+            }
+            elseif ($tempPropertyValue === false)
+            {
+                $returnValue[$tempPropertyName] = "false";
+            }
+            elseif (is_object($tempPropertyValue))
+            {
                 $returnValue[$tempPropertyName] = $tempPropertyValue;
-			}
-			elseif (is_array($tempPropertyValue))
-			{
-				$returnValue[$tempPropertyName] = $this->DebugArrayDisplay($tempPropertyValue);
-			}
-			else
-			{
-				$returnValue[$tempPropertyName] = $tempPropertyValue;
-			}
-		}
+            }
+            elseif (is_array($tempPropertyValue))
+            {
+                $returnValue[$tempPropertyName] = $this->DebugArrayDisplay($tempPropertyValue);
+            }
+            else
+            {
+                $returnValue[$tempPropertyName] = $tempPropertyValue;
+            }
+        }
 
-		return $returnValue;
-	}
+        return $returnValue;
+    }
 
-	protected function DebugArrayDisplay($Array)
-	{
-		if (count($Array) > 0)
-		{
-			foreach ($Array as $key => $value)
-			{
-				$returnValue .= "<fieldset><legend>$key</legend>";
-				if (is_array($value))
-				{
-					$this->DebugArrayDisplay($value);
-				}
-				elseif (is_object($value))
-				{
-					$returnValue .= $this->DebugObjectDisplay($value);
-				}
-				else
-				{
-					$returnValue .= $value;
-				}
-				$returnValue .= "</fieldset>";
-			}
-		}
-		else
-		{
-			$returnValue .= "array()";
-		}
+    protected function DebugArrayDisplay($Array)
+    {
+        if (count($Array) > 0)
+        {
+            foreach ($Array as $key => $value)
+            {
+                $returnValue .= "<fieldset><legend>$key</legend>";
+                if (is_array($value))
+                {
+                    $this->DebugArrayDisplay($value);
+                }
+                elseif (is_object($value))
+                {
+                    $returnValue .= $this->DebugObjectDisplay($value);
+                }
+                else
+                {
+                    $returnValue .= $value;
+                }
+                $returnValue .= "</fieldset>";
+            }
+        }
+        else
+        {
+            $returnValue .= "array()";
+        }
 
-		return $returnValue;
-	}
+        return $returnValue;
+    }
 
-	protected function DebugObjectDisplay($Object)
-	{
-		if ($Object instanceof Component || $Object instanceof DIarray)
-		{
-			$returnValue = $Object->__toString();
-		}
-		else
-		{
-			$returnValue = "This Object cannot be debugged!";
-		}
+    protected function DebugObjectDisplay($Object)
+    {
+        if ($Object instanceof Component || $Object instanceof DIarray)
+        {
+            $returnValue = $Object->__toString();
+        }
+        else
+        {
+            $returnValue = "This Object cannot be debugged!";
+        }
 
-		return $returnValue;
-	}
+        return $returnValue;
+    }
 
-	protected function GetDebugMethods($DebugObject)
-	{
-		$tempMethods = $DebugObject->getMethods();
-		foreach ($tempMethods as $Method)
-		{
-			if ($Method->isPublic())
-			{
-				$tempMethodName = $Method->name;
-				$returnValue[$tempMethodName] = $Method->getParameters();
-			}
-		}
+    protected function GetDebugMethods($DebugObject)
+    {
+        $tempMethods = $DebugObject->getMethods();
+        foreach ($tempMethods as $Method)
+        {
+            if ($Method->isPublic())
+            {
+                $tempMethodName = $Method->name;
+                $returnValue[$tempMethodName] = $Method->getParameters();
+            }
+        }
 
-		return $returnValue;
-	}
+        return $returnValue;
+    }
 
-	protected function ExtractDebugProperties($DebugMethods)
-	{
-		foreach ($DebugMethods as $Key => $Value)
-		{
-			if (strpos($Key, 'get') === 0)
-			{
-				try
-				{
-					$propertyValue = $this->$Key();
-				}
-				catch (exception $e)
-				{
-					$propertyValue = "Exception Thrown!";
-				}
+    protected function ExtractDebugProperties($DebugMethods)
+    {
+        foreach ($DebugMethods as $Key => $Value)
+        {
+            if (strpos($Key, 'get') === 0)
+            {
+                try
+                {
+                    $propertyValue = $this->$Key();
+                }
+                catch (exception $e)
+                {
+                    $propertyValue = "Exception Thrown!";
+                }
 
-				$propertyName = substr($Key,3);
+                $propertyName = substr($Key,3);
 
-				if (is_null($propertyValue))
-				{
-					$returnValue[$propertyName] = "null";
-				}
-				elseif ($propertyValue === false)
-				{
-					$returnValue[$propertyName] = "false";
-				}
-				elseif (is_object($propertyValue))
-				{
-					$returnValue[$propertyName] = $this->DebugObjectDisplay($propertyValue);
-				}
-				elseif (is_array($propertyValue))
-				{
-					$returnValue[$propertyName] = $this->DebugArrayDisplay($propertyValue);
-				}
-				else
-				{
-					$returnValue[$propertyName] = $propertyValue;
-				}
+                if (is_null($propertyValue))
+                {
+                    $returnValue[$propertyName] = "null";
+                }
+                elseif ($propertyValue === false)
+                {
+                    $returnValue[$propertyName] = "false";
+                }
+                elseif (is_object($propertyValue))
+                {
+                    $returnValue[$propertyName] = $this->DebugObjectDisplay($propertyValue);
+                }
+                elseif (is_array($propertyValue))
+                {
+                    $returnValue[$propertyName] = $this->DebugArrayDisplay($propertyValue);
+                }
+                else
+                {
+                    $returnValue[$propertyName] = $propertyValue;
+                }
 
-				$propertyValue = "";
-				$propertyName = "";
-			}
-		}
-		return $returnValue;
-	}
+                $propertyValue = "";
+                $propertyName = "";
+            }
+        }
+        return $returnValue;
+    }
 }
 
 ?>
