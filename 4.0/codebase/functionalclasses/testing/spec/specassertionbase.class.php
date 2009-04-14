@@ -187,6 +187,20 @@ class SpecAssertionBase extends Module
 		
 		return $returnValue;
 	}	
+
+	public function HaveCalled($MethodName)
+	{
+		$returnValue = false;
+	
+		$MethodName = strtolower($MethodName);
+
+		if ($this->_actualValue instanceof Dingus && in_array($MethodName."()", $this->_actualValue->stack()))
+		{
+			$returnValue = true;
+		}
+
+		return $returnValue;
+	}
 }
 
 ?>

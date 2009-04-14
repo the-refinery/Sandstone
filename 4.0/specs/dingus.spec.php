@@ -1,5 +1,7 @@
 <?php
 
+Namespace::Using("Sandstone.Dingus.Database");
+
 class DingusSpec extends SpecBase
 {
 	protected $_dingus;
@@ -62,7 +64,7 @@ class DingusSpec extends SpecBase
 		$this->_dingus->SetReturnValue('TestCustomProperty', true);
 
 		Check($this->_dingus->TestCustomProperty)->ShouldBeTrue();
-	}
+	}	
 }
 
 ?>

@@ -75,7 +75,6 @@ class NameSpace extends Module
 		$returnValue = $ns->RequireClassFile($ClassName);
 
 		return $returnValue;
-
 	}
 
 	static public function PageSpace($PageClassName)
@@ -460,7 +459,6 @@ class NameSpace extends Module
 
 		if (key_exists($ClassName, $this->_includedFiles))
 		{
-
 			$this->RequireFile($this->_includedFiles[$ClassName]);
 
 			$returnValue = true;

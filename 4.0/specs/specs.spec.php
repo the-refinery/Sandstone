@@ -127,6 +127,15 @@ class SpecsSpec extends SpecBase
 		$foo = new SpecAssertion(new User(1));
 		Check($foo->BeLoaded())->ShouldBeTrue();				
 	}
+
+	public function ItShouldAssertThatADingusHasCalledAMethod()
+	{
+		$foo = new Dingus('testdingus');
+		$foo->CallOne();
+		$foo->CallTwo();
+
+		Check($foo)->ShouldHaveCalled('CallOne');
+	}
 }
 
 ?>
