@@ -185,7 +185,6 @@ class RepeaterControl extends BaseControl
 
 	protected function CreateRepeaterItem($CurrentElement, $ElementIncrement)
 	{
-
 		//Setup a repeater item
 		$returnValue = new RepeaterItem();
 		$returnValue->ParentContainer = $this;

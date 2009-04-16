@@ -47,6 +47,7 @@ class EntityBase extends EntityBaseFunctionality
 	protected $_searchResultsAction;
 	
 	protected $_searchProperties;
+	protected $_searchFromClauseAddition;
 	protected $_searchWhereClauseAddition;
 
     public function __construct($ID = null)
@@ -593,7 +594,7 @@ class EntityBase extends EntityBaseFunctionality
 	protected function GenerateSearchSQL($LikeClause, $MaxResults, $IsMultiEntitySearch)
 	{
 		$selectClause = $this->GenerateBaseSelectClause();
-		$fromClause = $this->GenerateBaseFromClause();
+		$fromClause = $this->GenerateBaseFromClause() . $this->_searchFromClauseAddition;
 		$whereClause = $this->GenerateBaseWhereClause() . $this->_searchWhereClauseAddition;
 	
 		foreach ($this->_searchProperties as $tempProperty)
