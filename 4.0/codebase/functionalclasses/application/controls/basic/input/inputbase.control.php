@@ -9,7 +9,7 @@ Input Base Control Class File
 class InputBaseControl extends BaseControl
 {
 
-    protected $_inputType;
+	protected $_inputType;
 
 	protected $_defaultValue;
 
@@ -19,12 +19,12 @@ class InputBaseControl extends BaseControl
 	{
 		parent::__construct();
 
-        $this->_isValueReturned = true;
+		$this->_isValueReturned = true;
 
 		//Setup the default style classes
 		$this->_controlStyle->AddClass('input_general');
 		$this->_bodyStyle->AddClass('input_body');
-    }
+	}
 
 	/*
 	DefaultValue property
@@ -84,27 +84,27 @@ class InputBaseControl extends BaseControl
 	public function Render()
 	{
 		//Set some template variables
-        $this->_template->Type = $this->_inputType;
+		$this->_template->Type = $this->_inputType;
 		$this->_template->InputValue = "value=\"{$this->RenderDisplayValue()}\"";
 
-        //Do we need to pick a template still?
-        if (is_set($this->_template->FileName) == false)
-        {
-            //Which template should we use?
-            if (is_set($this->_labelText))
-            {
-                $this->_template->FileName = "inputandlabel";
-            }
-            else
-            {
-                $this->_template->FileName = "input";
-            }
-        }
+		//Do we need to pick a template still?
+		if (is_set($this->_template->FileName) == false)
+		{
+				//Which template should we use?
+				if (is_set($this->_labelText))
+				{
+						$this->_template->FileName = "inputandlabel";
+				}
+				else
+				{
+						$this->_template->FileName = "input";
+				}
+		}
 
-        //Now call our parent's render method to generate the actual output.
-        $returnValue =  parent::Render();
+		//Now call our parent's render method to generate the actual output.
+		$returnValue =  parent::Render();
 
-        return $returnValue;
+		return $returnValue;
 	}
 
 }

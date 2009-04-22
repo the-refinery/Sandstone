@@ -19,11 +19,11 @@ class DatePickerControl extends TextBoxControl
 		$this->_inputType = "text";
 		$this->_isValueReturned = true;
 
-        //Setup the default style classes
-        $this->_controlStyle->AddClass('datepicker_general');
-        $this->_bodyStyle->AddClass('datepicker_body');
+		//Setup the default style classes
+		$this->_controlStyle->AddClass('datepicker_general');
+		$this->_bodyStyle->AddClass('datepicker_body');
 
-        $this->_template->FileName = "datepicker";
+		$this->_template->FileName = "datepicker";
 
 	}
 	
@@ -31,7 +31,7 @@ class DatePickerControl extends TextBoxControl
 	{		
 		$tempValue = DIunescape($this->_eventParameters[strtolower($this->Name)]);
 
-		if (is_set($tempValue))
+		if (is_set($tempValue) && strlen($tempValue) > 0)
 		{
 			$this->_value = new Date($tempValue);
 		}

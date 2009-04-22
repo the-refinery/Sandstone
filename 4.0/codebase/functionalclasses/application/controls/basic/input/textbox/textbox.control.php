@@ -15,7 +15,7 @@ class TextBoxControl extends InputBaseControl
 	{
 		parent::__construct();
 
-        $this->_inputType = "text";
+		$this->_inputType = "text";
 
 		//Setup the default style classes
 		$this->_controlStyle->AddClass('textbox_general');
@@ -71,10 +71,10 @@ class TextBoxControl extends InputBaseControl
 
 		$this->_template->Parameters = $parameters;
 
-        //Now call our parent's render method to generate the actual output.
-        $returnValue =  parent::Render();
+		//Now call our parent's render method to generate the actual output.
+		$returnValue =  parent::Render();
 
-        return $returnValue;
+		return $returnValue;
 	}
 
 }
