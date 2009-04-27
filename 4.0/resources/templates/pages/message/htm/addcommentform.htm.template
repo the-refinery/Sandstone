@@ -1,2 +1,7 @@
-{+Content}
-{+Submit}
+<div class="FormBlock">
+	{+Content}
+</div>
+
+<div class="FormBlock">
+	{+Submit}
+</div>
