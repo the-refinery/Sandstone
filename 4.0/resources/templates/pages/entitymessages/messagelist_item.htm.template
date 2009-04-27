@@ -1,4 +1,4 @@
 <li id="{$ControlName}" class="{$MessageStatusClass}">
-    <a href="{$MessageURL}">{$Element->Subject}</a> <em>{$Element->Timestamp->FriendlyDate}</em><br />
+    <a href="{$MessageURL}">{$Element->Subject}</a> <em>started: {$PostDate}</em><br />
     by {$Element->User->FirstName} {$Element->User->LastName}
 </li>

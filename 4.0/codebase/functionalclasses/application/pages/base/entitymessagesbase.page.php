@@ -20,7 +20,8 @@ class EntityMessagesBasePage extends ApplicationPage
 	{
 
 		$Template->MessageURL = Routing::BuildURLbyEntity($CurrentElement, "view");
-        
+    $Template->PostDate = $CurrentElement->Timestamp->FormatDate('m/d/Y'); 
+
         if ($CurrentElement->CheckReadStatus(Application::CurrentUser()) == true)
         {
             $Template->MessageStatusClass = "message_read";
