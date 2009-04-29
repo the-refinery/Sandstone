@@ -8,7 +8,7 @@ Search Class File
 
 Namespace::Using("Sandstone.Database");
 
-class SearchBase extends Module
+class Search extends Module
 {
 
 	const DEFAULT_MAX_RESULTS = 30;

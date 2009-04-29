@@ -71,6 +71,7 @@ class SearchControl extends BaseControl
 		$this->SearchText->LabelText = "Search...";
 
 		$this->Submit = new SubmitButtonControl();
+		$this->Submit->LabelText = "Search";
 
 		$this->SearchTypes = new HiddenControl();
 

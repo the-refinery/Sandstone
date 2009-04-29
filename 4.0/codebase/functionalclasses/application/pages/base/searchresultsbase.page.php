@@ -12,7 +12,7 @@ class SearchResultsBasePage extends ApplicationPage
 	protected $_searchTerm;
 	protected $_types;
 
-    protected function Generic_PreProcessor(&$EventParameters)
+	protected function Generic_PreProcessor(&$EventParameters)
 	{
 		$valueName = strtolower($EventParameters['controlname'] . "_searchtext");
 		$typesName = strtolower($EventParameters['controlname'] . "_searchtypes");
@@ -22,8 +22,9 @@ class SearchResultsBasePage extends ApplicationPage
 
 		unset($EventParameters[$valueName]);
 		unset($EventParameters[$typesName]);
-	}
 
+		parent::Generic_PreProcessor($EventParameters);
+	}
 
 	protected function HTM_Processor($EventParameters)
 	{
@@ -45,6 +46,8 @@ class SearchResultsBasePage extends ApplicationPage
 
 			$this->Results->Data = $this->_search->Results;
 		}
+
+		parent::HTM_Processor($EventParameters);
 	}
 
 	protected function BuildControlArray($EventParameters)
@@ -53,6 +56,8 @@ class SearchResultsBasePage extends ApplicationPage
 		$this->Results = new RepeaterControl();
 
 		$this->Search = new SearchControl();
+		$this->Search->SearchText->DefaultValue = $this->_searchTerm;
+
 		foreach ($this->_types as $tempType)
 		{
 			$this->Search->AddType($tempType);

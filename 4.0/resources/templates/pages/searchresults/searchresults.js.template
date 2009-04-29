@@ -1,2 +1,13 @@
 {+Results}
 {+Search}
+
+$(document).ready(function()
+{
+	$('#SearchAgain').hide();
+
+	$('#RefineSearch').click(function()
+	{
+		$(this).hide();
+		$('#SearchAgain').show('blind');
+	});
+});
