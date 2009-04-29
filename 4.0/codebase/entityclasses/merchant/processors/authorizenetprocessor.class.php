@@ -204,7 +204,20 @@ class AuthorizeNetProcessor extends ProcessorBase
 	protected function ProcessResult($ResultString, $TransactionTypeID, $Amount, $RelatedTransaction = null, $CreditCard = null)
 	{
 
-		$returnValue = new BaseCreditCardTransaction();
+		switch($TransactionTypeID)
+		{
+			case 1:
+				$returnValue = new AuthorizationTransaction();
+				break;
+
+			case 2:
+				$returnValue = new CaptureTransaction();
+				break;
+
+			case 3:
+				$returnValue = new CreditTransaction();
+				break;
+		}
 
 		//Explode the Results to an array
 		$resultsArray = explode(self::RESULT_DELIMITER, $ResultString);
