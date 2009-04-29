@@ -6,7 +6,6 @@ Credit Card Class
 @subpackage CreditCard
 */
 
-NameSpace::Using("Sandstone.Database");
 NameSpace::Using("Sandstone.Address");
 NameSpace::Using("Sandstone.Date");
 NameSpace::Using("Sandstone.Merchant");
@@ -14,7 +13,6 @@ NameSpace::Using("Sandstone.Merchant");
 class CreditCard extends Module
 {
 
-	protected $_creditCardID;
 	protected $_partA;
 	protected $_partB;
 	protected $_partC;
@@ -24,38 +22,14 @@ class CreditCard extends Module
 	protected $_billingAddress;
 	protected $_expirationDate;
 
-	protected $_transactions;
 	protected $_latestTransaction;
 
 	protected $_acceptedCardTypes;
 
-	public function __construct($ID = null)
+	public function __construct()
 	{
 
-		$this->_transactions = new DIarray();
 		$this->_acceptedCardTypes = new DIarray();
-
-		if (is_set($ID))
-		{
-			if (is_array($ID))
-			{
-				$this->Load($ID);
-			}
-			else
-			{
-				$this->LoadByID($ID);
-			}
-		}
-	}
-
-	/**
-	CreditCardID property
-
-	@return int
-	*/
-	public function getCreditCardID()
-	{
-		return $this->_creditCardID;
 	}
 
 	/**
@@ -68,9 +42,7 @@ class CreditCard extends Module
 	{
 		if (is_set($this->_partA))
 		{
-			$returnValue = $this->_partA;
-			$returnValue = str_pad($returnValue, strlen($this->_partB) + 4,  "x");
-			$returnValue .= $this->_partC;
+			$returnValue = $this->_partA . $this->_partB . $this->_partC;
 		}
 		else
 		{
@@ -104,23 +76,9 @@ class CreditCard extends Module
 
 	}
 
-	/**
-	PartB property
-
-	@return string
-	*/
-	public function getPartB()
+	public function getPartC()
 	{
-		if (is_set($this->_partB) && substr($this->_partB, 0, 1) != 'x')
-		{
-			$returnValue = $this->_partB;
-		}
-		else
-		{
-			$returnValue = null;
-		}
-
-		return $returnValue;
+		return $this->_partC;
 	}
 
 	/**
@@ -185,13 +143,28 @@ class CreditCard extends Module
 	{
 		if (is_set($Value))
 		{
-			$this->_nameOnCard = substr(trim($Value), 0, DB_NAME_MAX_LEN);
+			$this->_nameOnCard = $Value;
 		}
 		else
 		{
 			$this->_nameOnCard = null;
 		}
 	}
+
+	public function getFirstName()
+	{
+		$tempNameArray = explode(" ", $this->_nameOnCard);
+
+		return $tempNameArray[0];
+	}
+
+	public function getLastName()
+	{
+		$tempNameArray = explode(" ", $this->_nameOnCard);
+
+		return $tempNameArray[1];
+	}
+
 
 	/**
 	BillingAddress property
@@ -239,33 +212,8 @@ class CreditCard extends Module
 		}
 	}
 
-	/**
-	Transactions property
-
-	@return array
-	*/
-	public function getTransactions()
-	{
-		if (is_set($this->_transactions) == false)
-		{
-			$this->LoadTransactions();
-		}
-
-		return $this->_transactions;
-	}
-
-	/**
-	LatestTransaction property
-
-	@return transaction
-	*/
 	public function getLatestTransaction()
 	{
-		if (is_set($this->_latestTransaction) == false)
-		{
-			$this->LoadTransactions();
-		}
-
 		return $this->_latestTransaction;
 	}
 
@@ -316,82 +264,16 @@ class CreditCard extends Module
 		return $returnValue;
 	}
 
-	public function Load($dr)
+	public function getIsLoaded()
 	{
-		$this->_creditCardID = $dr['CreditCardID'];
+		$returnValue = false;
 
-		$this->_partA = $dr['PartA'];
-		$this->_partB = str_pad($this->_partB, $dr['NumberLength'] - 8,  "x");
-		$this->_partC = $dr['PartC'];
-
-		$this->_cardType = new CreditCardType($dr['CardTypeID']);
-
-		$this->_cvv = $dr['CVV'];
-
-		$this->_nameOnCard = $dr['NameOnCard'];
-
-		if (is_set($dr['AddressID']))
+		if(is_set($this->Number))
 		{
-			$this->_billingAddress = new Address($dr['AddressID']);
+			$returnValue = true;
 		}
 
-		$this->_expirationDate = new date($dr['ExpirationDate']);
-
-		$this->_isLoaded = true;
-
-		return true;
-	}
-
-	public function LoadByID($ID)
-	{
-
-		$query = new Query();
-
-		$query->SQL = "	SELECT 	CreditCardID,
-								PartA,
-								PartC,
-								NumberLength,
-								CardTypeID,
-								CVV,
-								NameOnCard,
-								AddressID,
-								ExpirationDate
-						FROM 	core_CreditCardMaster
-						WHERE 	CreditCardID = {$ID}";
-
-		$query->Execute();
-
-		$returnValue = $query->LoadEntity($this);
-
 		return $returnValue;
-
-	}
-
-	public function LoadTransactions()
-	{
-
-		$query = new Query();
-
-		$query->SQL = "	SELECT	TransactionID,
-								CreditCardID,
-								Timestamp,
-								Amount,
-								MerchantTransactionID,
-								IsSuccessful
-						FROM	core_CreditCardTransactionMaster
-						WHERE	CreditCardID = {$this->_creditCardID}
-						ORDER BY Timestamp";
-
-		$query->Execute();
-
-		$query->LoadEntityArray($this->_transactions, "CreditCardTransaction", "TransactionID", $this, "SetupLatestTransaction");
-
-		return true;
-	}
-
-	public function SetupLatestTransaction($Transaction)
-	{
-		$this->_latestTransaction = $Transaction;
 	}
 
 	public function LoadAcceptedCardTypes()
@@ -400,10 +282,10 @@ class CreditCard extends Module
 		$query = new Query();
 
 		$query->SQL = "	SELECT 	CardTypeID,
-								Name,
-								IsAccepted
-						FROM 	core_CreditCardTypeMaster
-						WHERE 	IsAccepted = 1";
+														Name,
+														IsAccepted
+										FROM		core_CreditCardTypeMaster
+										WHERE 	IsAccepted = 1";
 
 		$query->Execute();
 
@@ -411,127 +293,6 @@ class CreditCard extends Module
 
 		return true;
 
-	}
-
-	protected function LoadPartB()
-	{
-		if (is_numeric($this->_partB) == false)
-		{
-			$query = new Query();
-
-			$query->SQL = "	SELECT 	SecurityCode
-							FROM	core_TransactionCodeMaster
-							WHERE	TransactionID = {$this->_creditCardID}";
-
-			$query->Execute();
-
-			if ($query->SelectedRows > 0)
-			{
-				$this->_partB = $this->DecryptPartB($query->SingleRowResult['SecurityCode']);
-				$returnValue = true;
-			}
-			else
-			{
-				$returnValue = false;
-			}
-		}
-		else
-		{
-			$returnValue = true;
-		}
-
-		return $returnValue;
-
-	}
-
-	public function Save()
-	{
-		//Only save a new record if this is valid card info.
-		//We do not save any updates.
-		if ($this->getIsValid())
-		{
-			$this->SaveNewRecord();
-			$this->SavePartB();
-			$this->_isLoaded = true;
-		}
-
-	}
-
-	protected function SaveNewRecord()
-	{
-
-		$query = new Query();
-
-		$tempNumberLength = strlen($this->_partA . $this->_partB . $this->_partC);
-
-		$accountID = Application::License()->AccountID;
-
-		$query->SQL = "	INSERT INTO core_CreditCardMaster
-						(
-							AccountID,
-							PartA,
-							PartC,
-							NumberLength,
-							CardTypeID,
-							CVV,
-							NameOnCard,
-							AddressID,
-							ExpirationDate
-						)
-						VALUES
-						(
-							{$accountID},
-							{$query->SetTextField($this->_partA)},
-							{$query->SetTextField($this->_partC)},
-							{$tempNumberLength},
-							{$this->_cardType->CardTypeID},
-							'{$this->_cvv}',
-							{$query->SetTextField($this->_nameOnCard)},
-							{$this->_billingAddress->AddressID},
-							'{$this->_expirationDate->MySQLtimestamp}'
-						)";
-
-		$query->Execute();
-
-		//Get the new ID
-		$query->SQL = "SELECT LAST_INSERT_ID() newID ";
-
-		$query->Execute();
-
-		$this->_creditCardID = $query->SingleRowResult['newID'];
-
-	}
-
-	protected function SavePartB()
-	{
-		if (is_numeric($this->_partB))
-		{
-			$query = new Query();
-
-			//Clear any existing records
-			$query->SQL = "	DELETE
-							FROM	core_TransactionCodeMaster
-							WHERE	TransactionID = {$this->_creditCardID}";
-
-			$query->Execute();
-
-			//Encrypt the PartB
-			$encryptedPartB = $this->EncryptPartB($this->_partB);
-
-			//Insert a new record
-			$query->SQL = "	INSERT INTO core_TransactionCodeMaster
-							(
-								TransactionID,
-								SecurityCode
-							)
-							VALUES
-							(
-								{$this->_creditCardID},
-								'{$encryptedPartB}'
-							)";
-
-			$query->Execute();
-		}
 	}
 
 	protected function ValidateCardNumber()
@@ -678,101 +439,6 @@ class CreditCard extends Module
 
 	}
 
-	protected function EncryptPartB($PartB)
-	{
-		//Split the string into an array
-		$encryptArray = str_split($PartB);
-
-		//Loop through each character in the string.  Encode it
-		//then pair it with a random character.  This is level 1 encryption.
-		for ($i = 0; $i < count($encryptArray); $i++)
-		{
-			//Actual Data
-
-			//Choose Number, uppper or lowercase
-			$randType = mt_rand(1, 3);
-
-			switch($randType)
-			{
-				case 1:
-					//Number
-					$encodeA = $encryptArray[$i];
-					break;
-
-				case 2:
-					//Lowercase
-					$encodeA = chr(97 + $i + $encryptArray[$i]);
-					break;
-
-				case 3:
-					//Uppercase
-					$encodeA = chr(65 + $i + $encryptArray[$i]);
-					break;
-			}
-
-			//Random character
-
-			//Choose Number, uppper or lowercase
-			$randType = mt_rand(1, 3);
-
-			switch($randType)
-			{
-				case 1:
-					//Number
-					$encodeB = mt_rand(0, 9);
-					break;
-
-				case 2:
-					//Lowercase
-					$encodeB = chr(mt_rand(0,25) + 97);
-					break;
-
-				case 3:
-					//Uppercase
-					$encodeB = chr(mt_rand(0,25) + 65);
-					break;
-			}
-
-		   //Build the output string
-		   $levelOneEncrypt .= $encodeA . $encodeB;
-		}
-
-		//Perform the Level 2 encryption
-		$returnValue = DIencrypt::Encrypt($levelOneEncrypt);
-
-		return $returnValue;
-	}
-
-	protected function DecryptPartB($PartB)
-	{
-
-		//Decrypt the Level 2 Encode
-		$levelOneEncrypt = DIencrypt::Decrypt($PartB);
-
-		//Split resulting string into an array
-		$decryptArray = str_split($levelOneEncrypt);
-
-		//Decypt the Level 1 Encode
-		for ($i = 0; $i < count($decryptArray); $i++)
-		{
-			if ($i % 2 == 0)
-			{
-				if (is_numeric($decryptArray[$i]))
-				{
-					$returnValue .= $decryptArray[$i];
-				}
-				else
-				{
-					$returnValue .= (ord(strtoupper($decryptArray[$i])) - 65)	- ($i / 2);
-				}
-
-			}
-		}
-
-		return $returnValue;
-
-	}
-
 	public function ProcessAuthorization($Amount)
 	{
 		//Aquire the Authorization
@@ -785,25 +451,12 @@ class CreditCard extends Module
 
 	}
 
-	public function ProcessCharge($Amount, $AuthTransaction = null)
+	public function ProcessAuthorizationAndCapture($Amount )
 	{
 
 		//Process the Sale
 		$merchantAccount = Application::License()->ActiveMerchantAccount;
-		$newTransaction = $merchantAccount->ProcessCharge($this, $Amount, $AuthTransaction);
-
-		$returnValue = $this->HandleProcessedTransaction($newTransaction);
-
-		return $returnValue;
-
-	}
-
-	public function ProcessCredit($Amount, $ChargeTransaction = null)
-	{
-		//Process the Sale
-
-		$merchantAccount = Application::License()->ActiveMerchantAccount;
-		$newTransaction = $merchantAccount->ProcessCredit($this, $Amount, $ChargeTransaction);
+		$newTransaction = $merchantAccount->ProcessAuthorizationAndCapture($this, $Amount);
 
 		$returnValue = $this->HandleProcessedTransaction($newTransaction);
 
@@ -817,7 +470,6 @@ class CreditCard extends Module
 		if (is_set($NewTransaction))
 		{
 			//Save the transaction
-			$this->_transactions[$NewTransaction->TransactionID] = $NewTransaction;
 			$this->_latestTransaction = $NewTransaction;
 
 			//Determine return value

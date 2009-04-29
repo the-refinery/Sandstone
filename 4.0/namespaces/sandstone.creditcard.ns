@@ -1,3 +1,7 @@
 codebase/entityclasses/creditcard/creditcard.class.php
 codebase/entityclasses/creditcard/creditcardtype.class.php
 codebase/entityclasses/creditcard/creditcardtransaction.class.php
+codebase/entityclasses/creditcard/transaction/basecreditcardtransaction.class.php
+codebase/entityclasses/creditcard/transaction/authorizetransaction.class.php
+codebase/entityclasses/creditcard/transaction/capturetransaction.class.php
+codebase/entityclasses/creditcard/transaction/credittransaction.class.php

@@ -14,7 +14,6 @@ class MerchantAccount extends EntityBase
 
     public function __construct($ID = null)
     {
-
         $this->_isTagsDisabled = true;
         $this->_isMessagesDisabled = true;
 
@@ -83,7 +82,7 @@ class MerchantAccount extends EntityBase
 
 	}
 
-    public function LoadParameters()
+	public function LoadParameters()
 	{
 
 		$this->_parameters->Clear();
@@ -289,13 +288,11 @@ class MerchantAccount extends EntityBase
 
 		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded && $Amount > 0)
 		{
-			$processor = $this->SetupProcessor($CreditCard);
+			$processor = $this->SetupProcessor();
 
 			if (is_set($processor))
 			{
-				$returnValue = $processor->ProcessAuthorization($Amount);
-
-				$this->HandleProcessedTransaction($returnValue, "Authorization");
+				$returnValue = $processor->ProcessAuthorization($CreditCard, $Amount);
 			}
 		}
 
@@ -303,36 +300,47 @@ class MerchantAccount extends EntityBase
 
 	}
 
-	public function ProcessCharge($CreditCard, $Amount, $AuthTransaction = null)
+	public function ProcessAuthorizationAndCapture($CreditCard, $Amount)
 	{
 
 		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded && $Amount > 0)
 		{
-			$processor = $this->SetupProcessor($CreditCard);
+			$processor = $this->SetupProcessor();
 
 			if (is_set($processor))
 			{
-				$returnValue = $processor->ProcessCharge($Amount, $AuthTransaction);
-
-				$this->HandleProcessedTransaction($returnValue, "Charge");
+				$returnValue = $processor->ProcessAuthorizationAndCapture($CreditCard, $Amount);
 			}
 		}
 
 		return $returnValue;
 	}
 
-	public function ProcessCredit($CreditCard, $Amount, $ChargeTransaction = null)
+	public function ProcessPriorAuthorizationCapture($AuthorizationTransaction, $Amount = null)
 	{
-		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded && $Amount > 0)
+
+		if ($AuthorizationTransaction instanceof AuthorizeTransaction && $AuthorizationTransaction->IsLoaded) 
 		{
-			$processor = $this->SetupProcessor($CreditCard);
+			$processor = $this->SetupProcessor();
 
 			if (is_set($processor))
 			{
-				$returnValue = $processor->ProcessCredit($Amount, $ChargeTransaction);
+				$returnValue = $processor->ProcessPriorAuthorizationCapture($AuthorizationTransaction, $Amount);
+			}
+		}
 
-				$this->HandleProcessedTransaction($returnValue, "Credit");
+		return $returnValue;
+	}
 
+	public function ProcessCredit($CaptureTransaction, $Amount = null)
+	{
+		if ($CaptureTransaction instanceof CaptureTransaction && $CaptureTransaction->IsLoaded) 
+		{
+			$processor = $this->SetupProcessor();
+
+			if (is_set($processor))
+			{
+				$returnValue = $processor->ProcessCredit($CaptureTransaction, $Amount);
 			}
 		}
 
@@ -340,41 +348,12 @@ class MerchantAccount extends EntityBase
 
 	}
 
-	protected function SetupProcessor($CreditCard)
+	protected function SetupProcessor()
 	{
-
-    	//Creates an object of the class specified from the database.
+		//Creates an object of the class specified from the database.
 		$returnValue = new $this->_processorClassName ($this->Parameters);
 
-		$success = $CreditCard->SetupMerchantProcessor($returnValue);
-
-		if ($success = false)
-		{
-			$returnValue = null;
-		}
-
 		return $returnValue;
-	}
-
-	protected function HandleProcessedTransaction($Transaction, $Action)
-	{
-
-		if (is_set($Transaction))
-		{
-			if ($returnValue->IsSuccessful)
-			{
-				Action::Log("CreditCardProcessSuccessful", "Credit Card {$Action} Transaction Processing Successful", $CreditCard->CreditCardID);
-			}
-			else
-			{
-				Action::Log("CreditCardProcessFailed", "Credit Card {$Action} Transaction Processing Failed", $CreditCard->CreditCardID);
-			}
-		}
-		else
-		{
-			Action::Log("CreditCardProcessFailed", "Credit Card {$Action} Transaction Processing Failed", $CreditCard->CreditCardID);
-		}
-
 	}
 
 	/*

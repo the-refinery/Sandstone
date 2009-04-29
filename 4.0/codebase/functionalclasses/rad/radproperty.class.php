@@ -87,7 +87,8 @@ class RADproperty extends Module
                 break;
             
             case "varchar":
-            case "text":
+						case "text":
+						case "mediumtext":
                 $Value = "string";
                 break;
             
