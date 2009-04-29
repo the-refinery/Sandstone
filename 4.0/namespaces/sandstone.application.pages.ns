@@ -18,6 +18,7 @@ codebase/functionalclasses/application/pages/functional/image.page.php
 codebase/functionalclasses/application/pages/functional/login.page.php
 codebase/functionalclasses/application/pages/functional/resource.page.php
 codebase/functionalclasses/application/pages/functional/searchresults.page.php
+codebase/functionalclasses/application/pages/functional/searchresultsbase.page.php
 codebase/functionalclasses/application/pages/functional/system.page.php
 codebase/functionalclasses/application/pages/functional/application.page.php
 codebase/functionalclasses/application/pages/functional/spec.page.php
