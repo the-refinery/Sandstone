@@ -6,7 +6,6 @@ MerchantAccount Class File
 @subpackage Merchant
  */
 
-NameSpace::Using("Sandstone.Action");
 NameSpace::Using("Sandstone.CreditCard");
 
 class MerchantAccount extends EntityBase

@@ -9,7 +9,7 @@ XML Functions Abstract Class File
 class DIxml extends Module
 {
 
-	static public function ArrayToXML($SourceArray, $GroupName = null, $Key = null, $IsTopLevelIncluded = true, $IsFormatted = true, $IsDeclarationIncluded = false, $XMLversion = "1.0", $Encoding = "ISO-8859-1")
+	static public function ArrayToXML($SourceArray, $GroupName = null, $Key = null, $IsTopLevelIncluded = true, $IsFormatted = true, $IsDeclarationIncluded = false, $XMLversion = "1.0", $Encoding = "ISO-8859-1", $GroupAttributes = Array())
 	{
 
 		$returnValue = DIxml::ArrayToXMLprocessing($SourceArray, $GroupName, $Key, $IsTopLevelIncluded, $IsFormatted);
@@ -24,6 +24,16 @@ class DIxml extends Module
 			}
 
 			$returnValue = $declaration . $returnValue;
+		}
+
+		if (count($GroupAttributes) > 0)
+		{
+			foreach($GroupAttributes as $key=>$value)
+			{
+				$attributes .= " {$key}=\"{$value}\"";
+			}
+
+			$returnValue = str_replace("<{$GroupName}>", "<{$GroupName}{$attributes}>", $returnValue);
 		}
 
 
@@ -117,7 +127,7 @@ class DIxml extends Module
 	  	}
 	  	else
 	  	{
-			$xml = new SimpleXMLElement($SourceXML);
+			$xml = new SimpleXMLElement($SourceXML, LIBXML_NOWARNING);
    			$children = $xml->children();
 	  	}
 
