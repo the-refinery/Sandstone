@@ -100,6 +100,7 @@ class LoginPage extends BasePage
 			if ($loginTest == true)
 			{
 				$session = Application::Session();
+				Application::SetSessionVariable('notificationmessage', 'Login successful');
 
 				if (is_set($session['TargetRoutingString']))
 				{
