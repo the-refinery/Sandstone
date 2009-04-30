@@ -113,12 +113,12 @@ class LoginPage extends BasePage
 			}
 			else
 			{
-				Application::SetSessionVariable('NotificationMessage', "Invalid Username or Password");
+				Application::SetSessionVariable('notificationmessage', "Invalid Username or Password");
 			}
 		}
 		else
 		{
-			Application::SetSessionVariable('NotificationMessage', "Invalid Account");
+			Application::SetSessionVariable('notificationmessage', "Invalid Account");
 		}
 
 		return true;
