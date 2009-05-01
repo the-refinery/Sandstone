@@ -94,6 +94,7 @@ class CIMcustomerProfile extends CIMbase
 
 			if (array_key_exists("paymentProfiles", $responseArray['profile']))
 			{
+				$responseArray['profile']['paymentProfiles']['customerProfileId'] = $ID;
 				$this->_paymentProfile = new CIMpaymentProfile($responseArray['profile']['paymentProfiles']);
 			}
 

@@ -10,6 +10,7 @@ Namespace::Using("Sandstone.Address");
 
 class CIMpaymentProfile extends CIMbase
 {
+	protected $_customerProfileID;
 	protected $_paymentProfileID;
 	protected $_creditCardNumber;
 	protected $_expirationDate;
@@ -90,6 +91,7 @@ class CIMpaymentProfile extends CIMbase
 
 	public function Load($Data)
 	{
+		$this->_customerProfileID = $Data['customerProfileId'];
 		$this->_paymentProfileID = $Data['customerPaymentProfileId'];
 		$this->_billToName = $Data['billTo']['firstName'] . " " . $Data['billTo']['lastName']; 
 
@@ -118,14 +120,53 @@ class CIMpaymentProfile extends CIMbase
 
 		$success = $this->EvaluateRequestSuccess($responseArray);
 
-
 		if ($success == true)
 		{
+			$responseArray['customerProfileID'] = $CustomerProfileID;
 			$returnValue = $this->Load($responseArray['paymentProfile']);
 		}
 
 		return $returnValue;
 	}
 
+	public function ProcessAuthorization($Amount)
+	{
+		if ($Amount > 0)
+		{
+		}
 
+		return $returnValue;
+	}
+
+	public function ProcessAuthorizationAndCapture($Amount)
+	{
+		if ($Amount > 0)
+		{
+			$data['transaction']['profileTransAuthOnly']['amount'] = $Amount;
+			$data['transaction']['profileTransAuthOnly']['customerProfileId'] = $this->_customerProfileID;
+			$data['transaction']['profileTransAuthOnly']['customerPaymentProfileId'] = $this->_paymentProfileID;
+		}
+
+		return $returnValue;
+	}
+
+	public function ProcessPriorAuthorizationCapture($AuthorizationTransaction, $Amount = null)
+	{
+
+		if ($AuthorizationTransaction instanceof AuthorizeTransaction && $AuthorizationTransaction->IsLoaded) 
+		{
+		}
+
+		return $returnValue;
+	}
+
+	public function ProcessCredit($CaptureTransaction, $Amount = null)
+	{
+		if ($CaptureTransaction instanceof CaptureTransaction && $CaptureTransaction->IsLoaded) 
+		{
+		}
+
+		return $returnValue;
+
+	}
 }
