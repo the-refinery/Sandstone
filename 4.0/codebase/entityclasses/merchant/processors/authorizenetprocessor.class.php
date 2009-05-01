@@ -201,7 +201,7 @@ class AuthorizeNetProcessor extends ProcessorBase
 			return $returnValue;
 	}
 
-	protected function ProcessResult($ResultString, $TransactionTypeID, $Amount, $RelatedTransaction = null, $CreditCard = null)
+	public function ProcessResult($ResultString, $TransactionTypeID, $Amount, $RelatedTransaction = null, $CreditCard = null)
 	{
 
 		switch($TransactionTypeID)

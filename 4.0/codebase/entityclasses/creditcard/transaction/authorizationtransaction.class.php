@@ -1,13 +1,13 @@
 <?php
 /*
- AuthorizeTransaction Class File
+ Authorization Transaction  Class File
  
  @package Sandstone
  @subpackage CreditCard
 
  */
 
-class AuthorizeTransaction extends BaseCreditCardTransaction
+class AuthorizationTransaction extends BaseCreditCardTransaction
 {
 	public function ProcessPriorAuthorizationCapture($Amount = null)
 	{

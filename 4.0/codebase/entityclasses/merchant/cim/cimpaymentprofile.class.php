@@ -122,7 +122,7 @@ class CIMpaymentProfile extends CIMbase
 
 		if ($success == true)
 		{
-			$responseArray['customerProfileID'] = $CustomerProfileID;
+			$responseArray['paymentProfile']['customerProfileId'] = $CustomerProfileID;
 			$returnValue = $this->Load($responseArray['paymentProfile']);
 		}
 
@@ -133,6 +133,25 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
+			$data['transaction']['profileTransAuthOnly']['amount'] = $Amount;
+			$data['transaction']['profileTransAuthOnly']['customerProfileId'] = $this->_customerProfileID;
+			$data['transaction']['profileTransAuthOnly']['customerPaymentProfileId'] = $this->_paymentProfileID;
+
+			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $data, true);
+
+			$success = $this->EvaluateRequestSuccess($responseArray);
+
+			if ($success == true)
+			{
+				$processor = new AuthorizeNetProcessor($this->_processorParameters);
+
+				$transaction = $processor->ProcessResult($responseArray['directResponse'], 1, $Amount);
+
+				$this->RelateTransaction($transaction);
+
+				di_echo($transaction);
+			}
+
 		}
 
 		return $returnValue;
@@ -142,9 +161,6 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
-			$data['transaction']['profileTransAuthOnly']['amount'] = $Amount;
-			$data['transaction']['profileTransAuthOnly']['customerProfileId'] = $this->_customerProfileID;
-			$data['transaction']['profileTransAuthOnly']['customerPaymentProfileId'] = $this->_paymentProfileID;
 		}
 
 		return $returnValue;
@@ -168,5 +184,12 @@ class CIMpaymentProfile extends CIMbase
 
 		return $returnValue;
 
+	}
+
+	protected function RelateTransaction($Transaction)
+	{
+		$Transaction->CIMcustomerProfileID = $this->_customerProfileID;
+		$Transaction->CIMpaymentProfileID = $this->_paymentProfileID;
+		$Transaction->Save();
 	}
 }
