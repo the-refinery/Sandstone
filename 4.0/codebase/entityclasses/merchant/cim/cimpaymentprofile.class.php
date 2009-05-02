@@ -135,7 +135,7 @@ class CIMpaymentProfile extends CIMbase
 		{
 			$data = $this->SetupTransactionData('profileTransAuthOnly', $Amount);
 
-			$returnValue = $this->ProcessTransaction($data, 1);
+			$returnValue = $this->ProcessTransaction($data, 1, $Amount);
 		}
 
 		return $returnValue;
@@ -182,7 +182,7 @@ class CIMpaymentProfile extends CIMbase
 			return $returnValue;
 	}
 
-	protected function ProcessTransaction($Data, $TransactionTypeID)
+	protected function ProcessTransaction($Data, $TransactionTypeID, $Ammount)
 	{
 			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $Data, true);
 
