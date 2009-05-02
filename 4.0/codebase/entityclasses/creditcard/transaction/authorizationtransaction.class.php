@@ -13,7 +13,7 @@ class AuthorizationTransaction extends BaseCreditCardTransaction
 	{
 		if (is_set($this->_cimCustomerProfileID))
 		{
-			$returnValue = $This->ProcessCIMtransaction($Amount);
+			$returnValue = $this->ProcessCIMtransaction($Amount);
 		}
 		else
 		{
