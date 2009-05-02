@@ -145,6 +145,9 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
+			$data = $this->SetupTransactionData('profileTransAuthCapture', $Amount);
+
+			$returnValue = $this->ProcessTransaction($data, 2, $Amount);
 		}
 
 		return $returnValue;
