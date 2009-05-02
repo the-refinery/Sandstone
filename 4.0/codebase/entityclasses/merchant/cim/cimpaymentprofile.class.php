@@ -182,7 +182,7 @@ class CIMpaymentProfile extends CIMbase
 			return $returnValue;
 	}
 
-	protected function ProcessTransaction($Data, $TransactionTypeID, $Ammount)
+	protected function ProcessTransaction($Data, $TransactionTypeID, $Amount)
 	{
 			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $Data, true);
 
