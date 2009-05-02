@@ -156,7 +156,7 @@ class CIMpaymentProfile extends CIMbase
 	public function ProcessPriorAuthorizationCapture($AuthorizationTransaction, $Amount = null)
 	{
 
-		if ($AuthorizationTransaction instanceof AuthorizeTransaction && $AuthorizationTransaction->IsLoaded) 
+		if ($AuthorizationTransaction instanceof AuthorizationTransaction && $AuthorizationTransaction->IsLoaded) 
 		{
 			if (is_set($Amount) == false)
 			{
