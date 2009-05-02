@@ -133,9 +133,7 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
-			$data['transaction']['profileTransAuthOnly']['amount'] = $Amount;
-			$data['transaction']['profileTransAuthOnly']['customerProfileId'] = $this->_customerProfileID;
-			$data['transaction']['profileTransAuthOnly']['customerPaymentProfileId'] = $this->_paymentProfileID;
+			$data = $this->SetupTransactionData('profileTransAuthOnly', $Amount);
 
 			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $data, true);
 
@@ -145,11 +143,9 @@ class CIMpaymentProfile extends CIMbase
 			{
 				$processor = new AuthorizeNetProcessor($this->_processorParameters);
 
-				$transaction = $processor->ProcessResult($responseArray['directResponse'], 1, $Amount);
+				$returnValue = $processor->ProcessResult($responseArray['directResponse'], 1, $Amount);
 
-				$this->RelateTransaction($transaction);
-
-				di_echo($transaction);
+				$this->RelateTransaction($returnValue);
 			}
 
 		}
@@ -184,6 +180,18 @@ class CIMpaymentProfile extends CIMbase
 
 		return $returnValue;
 
+	}
+
+	protected function SetupTransactionData($TransactionType, $Amount, $OtherData = Array())
+	{
+			$transaction['amount'] = $Amount;
+			$transaction['customerProfileId'] = $this->_customerProfileID;
+			$transaction['customerPaymentProfileId'] = $this->_paymentProfileID;
+			$transaction = array_merge($transaction, $OtherData);
+
+			$returnValue['transaction'][$TransactionType] = $transaction;
+
+			return $returnValue;
 	}
 
 	protected function RelateTransaction($Transaction)
