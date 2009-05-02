@@ -11,10 +11,37 @@ class AuthorizationTransaction extends BaseCreditCardTransaction
 {
 	public function ProcessPriorAuthorizationCapture($Amount = null)
 	{
-		$merchantAccount = Application::License()->ActiveMerchantAccount;
-		$returnValue = $merchantAccount->ProcessPriorAuthorizationCapture($this, $Amount);
+		if (is_set($this->_cimCustomerProfileID))
+		{
+			$returnValue = $This->ProcessCIMtransaction($Amount);
+		}
+		else
+		{
+			$returnValue = $this->ProcessMerchantAccountTransaction($Amount);
+		}
 
 		return $returnValue;
+	}
+
+	protected function ProcessCIMtransaction($Amount)
+	{
+
+		$customerProfile = new CIMcustomerProfile($this->_cimCustomerProfileID);
+
+		if ($customerProfile->PaymentProfile->PaymentProfileID == $this->_cimPaymentProfileID)
+		{
+			$returnValue = $customerProfile->PaymentProfile->ProcessPriorAuthorizationCapture($this, $Amount);
+		}
+
+		return $returnValue;
+	}
+
+	protected function ProcessMerchantAccountTransaction($Amount)
+	{
+			$merchantAccount = Application::License()->ActiveMerchantAccount;
+			$returnValue = $merchantAccount->ProcessPriorAuthorizationCapture($this, $Amount);
+
+			return $returnValue;
 	}
 
 	static public function GenerateBaseWhereClause()
