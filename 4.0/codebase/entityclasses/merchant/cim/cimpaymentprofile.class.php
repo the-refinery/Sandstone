@@ -135,19 +135,7 @@ class CIMpaymentProfile extends CIMbase
 		{
 			$data = $this->SetupTransactionData('profileTransAuthOnly', $Amount);
 
-			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $data, true);
-
-			$success = $this->EvaluateRequestSuccess($responseArray);
-
-			if ($success == true)
-			{
-				$processor = new AuthorizeNetProcessor($this->_processorParameters);
-
-				$returnValue = $processor->ProcessResult($responseArray['directResponse'], 1, $Amount);
-
-				$this->RelateTransaction($returnValue);
-			}
-
+			$returnValue = $this->ProcessTransaction($data, 1);
 		}
 
 		return $returnValue;
@@ -190,6 +178,24 @@ class CIMpaymentProfile extends CIMbase
 			$transaction = array_merge($transaction, $OtherData);
 
 			$returnValue['transaction'][$TransactionType] = $transaction;
+
+			return $returnValue;
+	}
+
+	protected function ProcessTransaction($Data, $TransactionTypeID)
+	{
+			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $Data, true);
+
+			$success = $this->EvaluateRequestSuccess($responseArray);
+
+			if ($success == true)
+			{
+				$processor = new AuthorizeNetProcessor($this->_processorParameters);
+
+				$returnValue = $processor->ProcessResult($responseArray['directResponse'], $TransactionTypeID, $Amount);
+
+				$this->RelateTransaction($returnValue);
+			}
 
 			return $returnValue;
 	}
