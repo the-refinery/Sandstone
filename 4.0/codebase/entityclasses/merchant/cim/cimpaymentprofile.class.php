@@ -163,7 +163,7 @@ class CIMpaymentProfile extends CIMbase
 				$Amount = $AuthorizationTransaction->Amount;
 			}
 
-			$data = $this->SetupTransactionData('profileTransPriorAuthCapture', $Amount, Array('transID'=>$AuthorizationTransaction->MerchantTransactionID));
+			$data = $this->SetupTransactionData('profileTransPriorAuthCapture', $Amount, Array('transId'=>$AuthorizationTransaction->MerchantTransactionID));
 
 			$returnValue = $this->ProcessTransaction($data, 2, $Amount);
 
