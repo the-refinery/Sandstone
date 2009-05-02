@@ -176,6 +176,14 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($CaptureTransaction instanceof CaptureTransaction && $CaptureTransaction->IsLoaded) 
 		{
+			if (is_set($Amount) == false)
+			{
+				$Amount = $CaptureTransaction->Amount;
+			}
+
+			$data = $this->SetupTransactionData('profileTransRefund', $Amount, Array('transId'=>$CaptureTransaction->MerchantTransactionID));
+
+			$returnValue = $this->ProcessTransaction($data, 3, $Amount);
 		}
 
 		return $returnValue;
