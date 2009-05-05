@@ -163,7 +163,7 @@ class CIMcustomerProfile extends CIMbase
 	{
 		$returnValue = false;
 
-		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded)
+		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded && $CreditCard->IsValid)
 		{
 			$this->DeletePaymentProfile();
 
