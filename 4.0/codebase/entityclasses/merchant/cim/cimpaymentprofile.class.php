@@ -122,7 +122,7 @@ class CIMpaymentProfile extends CIMbase
 
 		if ($success == true)
 		{
-			$responseArray['customerProfileID'] = $CustomerProfileID;
+			$responseArray['paymentProfile']['customerProfileId'] = $CustomerProfileID;
 			$returnValue = $this->Load($responseArray['paymentProfile']);
 		}
 
@@ -133,6 +133,9 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
+			$data = $this->SetupTransactionData('profileTransAuthOnly', $Amount);
+
+			$returnValue = $this->ProcessTransaction($data, 1, $Amount);
 		}
 
 		return $returnValue;
@@ -142,9 +145,9 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($Amount > 0)
 		{
-			$data['transaction']['profileTransAuthOnly']['amount'] = $Amount;
-			$data['transaction']['profileTransAuthOnly']['customerProfileId'] = $this->_customerProfileID;
-			$data['transaction']['profileTransAuthOnly']['customerPaymentProfileId'] = $this->_paymentProfileID;
+			$data = $this->SetupTransactionData('profileTransAuthCapture', $Amount);
+
+			$returnValue = $this->ProcessTransaction($data, 2, $Amount);
 		}
 
 		return $returnValue;
@@ -153,8 +156,17 @@ class CIMpaymentProfile extends CIMbase
 	public function ProcessPriorAuthorizationCapture($AuthorizationTransaction, $Amount = null)
 	{
 
-		if ($AuthorizationTransaction instanceof AuthorizeTransaction && $AuthorizationTransaction->IsLoaded) 
+		if ($AuthorizationTransaction instanceof AuthorizationTransaction && $AuthorizationTransaction->IsLoaded) 
 		{
+			if (is_set($Amount) == false)
+			{
+				$Amount = $AuthorizationTransaction->Amount;
+			}
+
+			$data = $this->SetupTransactionData('profileTransPriorAuthCapture', $Amount, Array('transId'=>$AuthorizationTransaction->MerchantTransactionID));
+
+			$returnValue = $this->ProcessTransaction($data, 2, $Amount, $AuthorizationTransaction);
+
 		}
 
 		return $returnValue;
@@ -164,9 +176,54 @@ class CIMpaymentProfile extends CIMbase
 	{
 		if ($CaptureTransaction instanceof CaptureTransaction && $CaptureTransaction->IsLoaded) 
 		{
+			if (is_set($Amount) == false)
+			{
+				$Amount = $CaptureTransaction->Amount;
+			}
+
+			$data = $this->SetupTransactionData('profileTransRefund', $Amount, Array('transId'=>$CaptureTransaction->MerchantTransactionID));
+
+			$returnValue = $this->ProcessTransaction($data, 3, $Amount, $CaptureTransaction);
 		}
 
 		return $returnValue;
 
+	}
+
+	protected function SetupTransactionData($TransactionType, $Amount, $OtherData = Array())
+	{
+			$transaction['amount'] = $Amount;
+			$transaction['customerProfileId'] = $this->_customerProfileID;
+			$transaction['customerPaymentProfileId'] = $this->_paymentProfileID;
+			$transaction = array_merge($transaction, $OtherData);
+
+			$returnValue['transaction'][$TransactionType] = $transaction;
+
+			return $returnValue;
+	}
+
+	protected function ProcessTransaction($Data, $TransactionTypeID, $Amount, $RelatedTransaction = null)
+	{
+			$responseArray = $this->SendRequest("createCustomerProfileTransactionRequest", $Data);
+
+			$success = $this->EvaluateRequestSuccess($responseArray);
+
+			if ($success == true)
+			{
+				$processor = new AuthorizeNetProcessor($this->_processorParameters);
+
+				$returnValue = $processor->ProcessResult($responseArray['directResponse'], $TransactionTypeID, $Amount, $RelatedTransaction);
+
+				$this->RelateTransaction($returnValue);
+			}
+
+			return $returnValue;
+	}
+
+	protected function RelateTransaction($Transaction)
+	{
+		$Transaction->CIMcustomerProfileID = $this->_customerProfileID;
+		$Transaction->CIMpaymentProfileID = $this->_paymentProfileID;
+		$Transaction->Save();
 	}
 }

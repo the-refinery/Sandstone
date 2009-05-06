@@ -1,15 +1,15 @@
 <?php
 /*
- CaptureTransaction Class File
+ Authorization Transaction  Class File
  
  @package Sandstone
  @subpackage CreditCard
 
  */
 
-class CaptureTransaction extends BaseCreditCardTransaction
+class AuthorizationTransaction extends BaseCreditCardTransaction
 {
-	public function ProcessCredit($Amount = null)
+	public function ProcessPriorAuthorizationCapture($Amount = null)
 	{
 		if (is_set($this->_cimCustomerProfileID))
 		{
@@ -30,7 +30,7 @@ class CaptureTransaction extends BaseCreditCardTransaction
 
 		if ($customerProfile->PaymentProfile->PaymentProfileID == $this->_cimPaymentProfileID)
 		{
-			$returnValue = $customerProfile->PaymentProfile->ProcessCredit($this, $Amount);
+			$returnValue = $customerProfile->PaymentProfile->ProcessPriorAuthorizationCapture($this, $Amount);
 		}
 
 		return $returnValue;
@@ -38,17 +38,17 @@ class CaptureTransaction extends BaseCreditCardTransaction
 
 	protected function ProcessMerchantAccountTransaction($Amount)
 	{
-		$merchantAccount = Application::License()->ActiveMerchantAccount;
-		$returnValue = $merchantAccount->ProcessCredit($this, $Amount);
+			$merchantAccount = Application::License()->ActiveMerchantAccount;
+			$returnValue = $merchantAccount->ProcessPriorAuthorizationCapture($this, $Amount);
 
-		return $returnValue;
+			return $returnValue;
 	}
 
 	static public function GenerateBaseWhereClause()
 	{
 		$returnValue = parent::GenerateBaseWhereClause();
 
-		$returnValue .= "AND	a.CreditCardTransactionTypeID = 2 ";
+		$returnValue .= "AND	a.CreditCardTransactionTypeID = 1 ";
 
 		return $returnValue;
 	}

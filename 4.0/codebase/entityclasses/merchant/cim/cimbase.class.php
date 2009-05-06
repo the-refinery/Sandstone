@@ -11,6 +11,8 @@ class CIMbase extends Module
 	protected $_authenticationParameters;
 	protected $_apiURL;
 
+	protected $_processorParameters;
+
 	public function __construct()
 	{
 		$this->SetupAuthorizeNetParameters();
@@ -33,10 +35,10 @@ class CIMbase extends Module
 			$tempKey = $dr['ParameterName'];
 			$tempValue = $dr['ParameterValue'];
 
-			$parameters[$tempKey] = $tempValue;
+			$this->_processorParameters[$tempKey] = $tempValue;
 		}
 
-		if ($parameters['testmode'] == 1)
+		if ($this->_processorParameters['testmode'] == 1)
 		{
 			$this->_authenticationParameters['name'] = "6zz6m5N4Et";
 			$this->_authenticationParameters['transactionKey'] = "9V9wUv6Yd92t27t5";
@@ -44,8 +46,8 @@ class CIMbase extends Module
 		}
 		else
 		{
-			$this->_authenticationParameters['name'] = $parameters['x_login'];
-			$this->_authenticationParameters['transactionkey'] = $parameters['x_tran_key'];
+			$this->_authenticationParameters['name'] = $this->_processorParameters['x_login'];
+			$this->_authenticationParameters['transactionkey'] = $this->_processorParameters['x_tran_key'];
 			$this->_apiURL = "https://api.authorize.net/xml/v1/request.api";
 		}
 	}
@@ -74,11 +76,15 @@ class CIMbase extends Module
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		$response = curl_exec($ch);
 
+		if ($IsDebug)
+		{
+			echo "<textarea cols=100 rows=10>{$response}</textarea>";
+		}
+
 		$returnValue = DIxml::XMLtoArray($response);
 
 		if ($IsDebug)
 		{
-			echo "<textarea cols=100 rows=10>{$response}</textarea>";
 			di_var_dump($returnValue);
 		}
 

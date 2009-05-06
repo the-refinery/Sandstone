@@ -7,6 +7,8 @@
 
  */
 
+Namespace::Using("Sandstone.Merchant.CIM");
+
 class BaseCreditCardTransaction extends EntityBase
 {
 
@@ -26,6 +28,7 @@ class BaseCreditCardTransaction extends EntityBase
         $this->AddProperty("TransactionFee","decimal","TransactionFee",PROPERTY_READ_WRITE);
         $this->AddProperty("DiscountPercent","decimal","DiscountPercent",PROPERTY_READ_WRITE);
         $this->AddProperty("RelatedTransaction","BaseCreditCardTransaction","RelatedTransactionID",PROPERTY_LOADED_REQUIRED);
+        $this->AddProperty("CIMcustomerProfileID","integer","CIMcustomerProfileID",PROPERTY_READ_WRITE);
         $this->AddProperty("CIMpaymentProfileID","integer","CIMpaymentProfileID",PROPERTY_READ_WRITE);
         $this->AddProperty("PartC","integer","PartC",PROPERTY_READ_WRITE);
 				$this->AddProperty("TransactionMessages","array",null,PROPERTY_READ_ONLY,"LoadTransactionMessages");
@@ -74,6 +77,7 @@ class BaseCreditCardTransaction extends EntityBase
 							TransactionFee,
 							DiscountPercent,
 							RelatedTransactionID,
+							CIMcustomerProfileID,
 							CIMpaymentProfileID,
 							PartC
 						)
@@ -89,6 +93,7 @@ class BaseCreditCardTransaction extends EntityBase
 							{$query->SetNullNumericField($this->_transactionFee)},
 							{$query->SetNullNumericField($this->_discountPercent)},
 							{$query->SetNullNumericField($this->_relatedTransaction->TransactionID)},
+							{$query->SetNullNumericField($this->_cIMcustomerProfileID)},
 							{$query->SetNullNumericField($this->_cIMpaymentProfileID)},
 							{$query->SetNullNumericField($this->_partC)}
 						)";
@@ -141,6 +146,7 @@ class BaseCreditCardTransaction extends EntityBase
 							TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
 							DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)},
 							RelatedTransactionID = {$query->SetNullNumericField($this->_relatedTransaction->TransactionID)},
+							CIMcustomerProfileID = {$query->SetNullNumericField($this->_cIMcustomerProfileID)},
 							CIMpaymentProfileID = {$query->SetNullNumericField($this->_cIMpaymentProfileID)},
 							PartC = {$query->SetNullNumericField($this->_partC)}
 						WHERE TransactionID = {$this->_transactionID}";
@@ -174,6 +180,7 @@ class BaseCreditCardTransaction extends EntityBase
 									TransactionFee,
 									DiscountPercent,
 									RelatedTransactionID,
+									CIMcustomerProfileID,
 									CIMpaymentProfileID,
 									PartC ";
 
