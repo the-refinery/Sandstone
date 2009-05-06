@@ -9,13 +9,9 @@ class TemplateEngineSpec extends DISpec
 		$fakeTemplate = new FakeTemplate();
 		$engine = new TemplateEngine();
 
-		$expectedRenderedTemplateContent = "<h1>Hello, World</h1>";
+		$fakeTemplate->content_to_return = "Hello, World";
 
-		$fakeTemplate->content_to_return = $expectedRenderedTemplateContent;
-
-		$actualRenderedTemplateContent = $engine->Render($fakeTemplate);
-
-		$this->Expects($expectedRenderedTemplateContent)->ToBeEqualTo($actualRenderedTemplateContent);
+		$this->Expects($engine->Render($fakeTemplate))->ToBeEqualTo("Hello, World");
 	}
 
 	public function ItShouldRenderAnHtmlTemplate()
@@ -23,13 +19,9 @@ class TemplateEngineSpec extends DISpec
 		$fakeTemplate = new FakeTemplate();
 		$engine = new TemplateEngine();
 
-		$expectedRenderedTemplateContent = "Hello, World";
+		$fakeTemplate->content_to_return = "<h1>Hello, World</h1>";
 
-		$fakeTemplate->content_to_return = $expectedRenderedTemplateContent;
-
-		$actualRenderedTemplateContent = $engine->Render($fakeTemplate);
-
-		$this->Expects($expectedRenderedTemplateContent)->ToBeEqualTo($actualRenderedTemplateContent);
+		$this->Expects($engine->Render($fakeTemplate))->ToBeEqualTo("<h1>Hello, World</h1>");
 	}
 }
 
