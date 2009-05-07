@@ -1,35 +1,37 @@
 <?php
 
-class DISpec
+class DISpecSuite
 {
 	public function Expects($ExpectedValue)
 	{
 		return new TestsAssertion($ExpectedValue);
 	}
 
-	public function IsPending()
+	public function Run()
 	{
-		echo "PENDING!";
+		foreach ($this->FindSpecs() as $tempSpec)
+		{
+			$returnValue[$tempSpec] = $this->$tempSpec();
+		}
+
+		return $returnValue;
 	}
 
-	public function Run()
+	public function FindSpecs()
 	{
 		$reflector = new ReflectionClass($this);
 		$tempMethods = $reflector->getMethods();
+		$returnValue = array();
 
 		foreach ($tempMethods as $tempMethod)
 		{
-			$this->RunTest($tempMethod->name);
+			if ($this->DetermineIfMethodIsASpec($tempMethod->name))
+			{
+				$returnValue[] = $tempMethod->name;
+			}
 		}
-	}
-
-	protected function RunTest($MethodName)
-	{
-		if ($this->DetermineIfMethodIsASpec($MethodName))
-		{
-			echo $MethodName . ": ";
-			$this->$MethodName();
-		}
+		
+		return $returnValue;
 	}
 
 	protected function DetermineIfMethodIsASpec($MethodName)

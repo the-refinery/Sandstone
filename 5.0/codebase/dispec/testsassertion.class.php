@@ -2,27 +2,20 @@
 
 class TestsAssertion
 {
-	protected $_expectedValue;
+	public $ExpectedValue;
 
 	public function __construct($ExpectedValue)
 	{
-		$this->_expectedValue = $ExpectedValue;
-	}
-
-	protected function RespondToAssertion($Result)
-	{
-		if ($Result)
-		{
-			echo "PASSED!\n";
-		}
-		else
-		{
-			echo "FAILED!\n";
-		}
+		$this->ExpectedValue = $ExpectedValue;
 	}
 
 	public function ToBeEqualTo($ActualValue)
 	{
-		$this->RespondToAssertion($this->_expectedValue == $ActualValue);
+		return $this->ExpectedValue === $ActualValue;
+	}
+
+	public function ToBeInstanceOf($ActualValue)
+	{
+		return $this->ExpectedValue instanceof $ActualValue;
 	}
 }
