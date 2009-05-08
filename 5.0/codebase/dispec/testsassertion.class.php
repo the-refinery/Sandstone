@@ -9,13 +9,30 @@ class TestsAssertion
 		$this->ExpectedValue = $ExpectedValue;
 	}
 
-	public function ToBeEqualTo($ActualValue)
+	public function BeEqualTo($ActualValue)
 	{
-		return $this->ExpectedValue === $ActualValue;
+		return $this->ExpectedValue == $ActualValue;
 	}
-
-	public function ToBeInstanceOf($ActualValue)
+	
+	public function __call($Method, $Args)
 	{
-		return $this->ExpectedValue instanceof $ActualValue;
+		$parameter = $Args[0];
+
+		if (stripos($Method, 'tonot') === 0)
+		{
+			$assertion = substr($Method, 5);
+			$testCondition = $this->$assertion($parameter);
+
+			$returnValue = $testCondition == false;
+		}
+		elseif (stripos($Method, 'to') === 0)
+		{
+			$assertion = substr($Method, 2);
+			$testCondition = $this->$assertion($parameter);
+
+			$returnValue = $testCondition == true;
+		}
+		
+		return $returnValue;
 	}
 }
