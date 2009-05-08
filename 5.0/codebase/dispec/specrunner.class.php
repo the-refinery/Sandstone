@@ -35,7 +35,7 @@ class SpecRunner
 
 		foreach($suiteResults as $specName => $specResult)
 		{
-			$specSuiteName = get_class($tempSpecSuite);
+			$specSuiteName = get_class($Suite);
 
 			$this->OutputSpecResult($specSuiteName, $specName, $specResult);
 			$this->AnalyzeResult($specSuiteName, $specName, $specResult);

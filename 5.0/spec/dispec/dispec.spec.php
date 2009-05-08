@@ -1,6 +1,6 @@
 <?php
 
-include('dependencies.php');
+include_once('dependencies.php');
 
 class DISpecSuiteSpec extends DISpecSuite
 {
@@ -46,20 +46,6 @@ class DISpecSuiteSpec extends DISpecSuite
 		$runner->AddSpecSuite('FooSpec');
 
 		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeEqualTo(true);
-	}
-
-	public function ItShouldAssertEquals()
-	{
-		$assert = new TestsAssertion(5);
-
-		return $this->Expects($assert->ToBeEqualTo(5))->ToBeEqualTo(true);
-	}
-
-	public function ItShouldAssertNotEqualTo()
-	{
-		$assert = new TestsAssertion(5);
-
-		return $this->Expects($assert->ToNotBeEqualTo(4))->ToBeEqualTo(true);
 	}
 }
 

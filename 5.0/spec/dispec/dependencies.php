@@ -1,4 +1,4 @@
 <?php
 
-include("foo.spec.php");
+include_once("foo.spec.php");
 

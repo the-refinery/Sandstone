@@ -13,6 +13,11 @@ class TestsAssertion
 	{
 		return $this->ExpectedValue == $ActualValue;
 	}
+
+	public function BeTrue()
+	{
+		return $this->ExpectedValue === true;
+	}
 	
 	public function __call($Method, $Args)
 	{

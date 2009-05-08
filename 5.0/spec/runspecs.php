@@ -2,14 +2,16 @@
 
 // Include codebase
 $currentPath = dirname(__FILE__);
-include($currentPath . "/../include.php");
+include_once($currentPath . "/../include.php");
 
 // Include the specs to run
-include("dispec/dispec.spec.php");
-include("templateengine/templateengine.spec.php");
+include_once("dispec/dispec.spec.php");
+include_once("dispec/assertions.spec.php");
+include_once("templateengine/templateengine.spec.php");
 
 $SpecRunner = new ConsoleSpecRunner();
 $SpecRunner->AddSpecSuite('DISpecSuiteSpec');
+$SpecRunner->AddSpecSuite('AssertionsSpec');
 $SpecRunner->AddSpecSuite('TemplateEngineSpec');
 $SpecRunner->Run();
 

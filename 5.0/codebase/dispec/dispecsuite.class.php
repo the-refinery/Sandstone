@@ -9,6 +9,8 @@ class DISpecSuite
 
 	public function Run()
 	{
+		$returnValue = array();
+
 		foreach ($this->FindSpecs() as $tempSpec)
 		{
 			$returnValue[$tempSpec] = $this->$tempSpec();
