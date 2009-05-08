@@ -391,7 +391,7 @@ class RADclass extends Module
         {
             if (is_set($tempProperty->DBfieldName))
             {
-                $fields[] = $tempProperty->DBfieldName;    
+                $fields[] = "a." . $tempProperty->DBfieldName;    
             }            
         }
         
