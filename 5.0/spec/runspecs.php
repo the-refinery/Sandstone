@@ -10,5 +10,6 @@ include("templateengine/templateengine.spec.php");
 
 $SpecRunner = new ConsoleSpecRunner();
 $SpecRunner->AddSpecSuite('DISpecSuiteSpec');
+$SpecRunner->AddSpecSuite('TemplateEngineSpec');
 $SpecRunner->Run();
 

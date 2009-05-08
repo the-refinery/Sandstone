@@ -4,6 +4,12 @@ class SpecRunner
 {
 	public $SpecSuites = array();
 
+	protected $_alerts = array();
+
+	protected $_passCount = 0;
+	protected $_failCount = 0;
+	protected $_pendingCount = 0;
+
 	public function AddSpecSuite($SpecSuiteName)
 	{
 		$tempSpecSuite = new $SpecSuiteName();
@@ -13,44 +19,59 @@ class SpecRunner
 
 	public function Run()
 	{
+		$this->OutputBeginRun();
+
 		foreach ($this->SpecSuites as $tempSpecSuite)
 		{
-			$results = $tempSpecSuite->Run();
-
-			$this->OutputSpecSuiteName(get_class($tempSpecSuite));
-
-			foreach($results as $specName => $specResult)
-			{
-				$this->OutputSpecResult($specName, $specResult);
-			}	
+			$this->RunSuite($tempSpecSuite);
 		}
+
+		$this->OutputEndRun();
 	}
 
-	protected function TranslateResultToEnglish($Result)
+	protected function RunSuite($Suite)
 	{
-		if ($Result === true)
+		$suiteResults = $Suite->Run();
+
+		foreach($suiteResults as $specName => $specResult)
 		{
-			$returnValue = "PASS";
+			$specSuiteName = get_class($tempSpecSuite);
+
+			$this->OutputSpecResult($specSuiteName, $specName, $specResult);
+			$this->AnalyzeResult($specSuiteName, $specName, $specResult);
+		}	
+	}
+
+	protected function AnalyzeResult($SpecSuiteName, $SpecName, $SpecResult)
+	{
+		if ($SpecResult === true)
+		{
+			$this->_passCount++;
 		}
-		elseif ($Result === false)
+		elseif ($SpecResult === false)
 		{
-			$returnValue = "FAIL";
+			$this->_failCount++;
+			$this->_alerts[] = "{$SpecSuiteName}: {$SpecName}()";
 		}
 		else
 		{
-			$returnValue = "PENDING";
+			$this->_pendingCount++;
 		}
-
-		return $returnValue;
-	}
-	
-	protected function OutputSpecSuiteName($SpecSuiteName)
-	{
-
 	}
 
-	protected function OutputSpecResult($SpecName, $SpecResult)
+	protected function OutputSpecResult($SpecSuite, $SpecName, $SpecResult)
 	{
+	}
 
+	protected function OutputBeginRun()
+	{
+	}
+
+	protected function OutputEndRun()
+	{
+	}
+
+	protected function OutputAlert($Alert)
+	{
 	}
 }
