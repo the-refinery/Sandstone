@@ -74,6 +74,27 @@ class BilledLicense extends BaseLicense
 
 	}
 
+	protected function GenerateBaseDetailSelectClause()
+	{
+
+		$returnValue = "	SELECT	a.CompanyName,
+															a.SignupDate,
+															a.AddressID,
+															a.IsPastDue,
+															a.IsDisabled,
+															a.IsCancelled,
+															a.CIMcustomerProfileID ";
+
+		return $returnValue;
+	}
+
+	protected function GenerateBaseDetailWhereClause()
+	{
+		$returnValue = "WHERE	a.AccountID = {$this->_accountID} ";
+
+		return $returnValue;
+	}
+
 	public function LoadAdminUsers()
 	{
 		$returnValue = false;
