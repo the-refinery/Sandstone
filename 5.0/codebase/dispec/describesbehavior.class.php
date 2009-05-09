@@ -1,6 +1,6 @@
 <?php
 
-class DISpecSuite
+class DescribesBehavior
 {
 	public function Expects($ExpectedValue)
 	{

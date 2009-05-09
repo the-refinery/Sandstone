@@ -2,7 +2,7 @@
 
 include('dependencies.php');
 
-class TemplateEngineSpec extends DISpecSuite
+class TemplateEngineSpec extends DescribesBehavior
 {
 	public function ItShouldRenderAPlainTextTemplate()
 	{

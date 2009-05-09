@@ -2,11 +2,11 @@
 
 include_once('dependencies.php');
 
-class DISpecSuiteSpec extends DISpecSuite
+class DISpecSuiteSpec extends DescribesBehavior
 {
 	public function ItShouldSetTheExpectedValue()
 	{
-		$spec = new DISpecSuite();
+		$spec = new DescribesBehavior();
 		$condition = $spec->Expects('expectedValue');
 
 		return $this->Expects($condition->ExpectedValue)->ToBeEqualTo('expectedValue');
@@ -14,7 +14,7 @@ class DISpecSuiteSpec extends DISpecSuite
 
 	public function ItShouldSetTheActualValue()
 	{
-		$spec = new DISpecSuite();
+		$spec = new DescribesBehavior();
 		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
 
 		return $this->Expects($condition->ActualValue)->ToBeEqualTo('actualValue');
@@ -22,7 +22,7 @@ class DISpecSuiteSpec extends DISpecSuite
 
 	public function ItShouldSetTheNameOfTheSpec()
 	{
-		$spec = new DISpecSuite();
+		$spec = new DescribesBehavior();
 		$condition = $spec->Expects('expectedValue');
 
 		return $this->Expects($condition->Name)->ToBeEqualTo('ItShouldSetTheNameOfTheSpec');

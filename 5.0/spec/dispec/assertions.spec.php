@@ -2,7 +2,7 @@
 
 include_once('dependencies.php');
 
-class AssertionsSpec extends DISpecSuite
+class AssertionsSpec extends DescribesBehavior
 {
 	public function ItShouldAssertTo()
 	{

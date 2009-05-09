@@ -1,6 +1,6 @@
 <?php
 
-class FooSpec extends DISpecSuite
+class FooSpec extends DescribesBehavior
 {
 	public function ItIsAPendingSpec()
 	{
