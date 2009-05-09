@@ -2,16 +2,20 @@
 
 class TestsAssertion
 {
+	public $Name;
 	public $ExpectedValue;
+	public $ActualValue;
+	public $TestResult;
 
-	public function __construct($ExpectedValue)
+	public function __construct($ExpectedValue, $SpecName)
 	{
 		$this->ExpectedValue = $ExpectedValue;
+		$this->Name = $SpecName;
 	}
 
-	public function BeEqualTo($ActualValue)
+	public function BeEqualTo()
 	{
-		return $this->ExpectedValue == $ActualValue;
+		return $this->ExpectedValue == $this->ActualValue;
 	}
 
 	public function BeTrue()
@@ -21,23 +25,23 @@ class TestsAssertion
 	
 	public function __call($Method, $Args)
 	{
-		$parameter = $Args[0];
+		$this->ActualValue = $Args[0];
 
 		if (stripos($Method, 'tonot') === 0)
 		{
 			$assertion = substr($Method, 5);
-			$testCondition = $this->$assertion($parameter);
+			$testCondition = $this->$assertion();
 
-			$returnValue = $testCondition == false;
+			$this->TestResult = $testCondition == false;
 		}
 		elseif (stripos($Method, 'to') === 0)
 		{
 			$assertion = substr($Method, 2);
-			$testCondition = $this->$assertion($parameter);
+			$testCondition = $this->$assertion();
 
-			$returnValue = $testCondition == true;
+			$this->TestResult = $testCondition == true;
 		}
 		
-		return $returnValue;
+		return $this;
 	}
 }

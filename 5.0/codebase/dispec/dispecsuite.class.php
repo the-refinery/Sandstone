@@ -4,7 +4,10 @@ class DISpecSuite
 {
 	public function Expects($ExpectedValue)
 	{
-		return new TestsAssertion($ExpectedValue);
+		$callStack = debug_backtrace();
+		$specName = $callStack[1]['function'];
+		
+		return new TestsAssertion($ExpectedValue, $specName);
 	}
 
 	public function Run()

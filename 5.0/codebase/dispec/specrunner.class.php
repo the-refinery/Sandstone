@@ -37,21 +37,20 @@ class SpecRunner
 		{
 			$specSuiteName = get_class($Suite);
 
-			$this->OutputSpecResult($specSuiteName, $specName, $specResult);
 			$this->AnalyzeResult($specSuiteName, $specName, $specResult);
+			$this->OutputSpecResult($specSuiteName, $specName, $specResult);
 		}	
 	}
 
 	protected function AnalyzeResult($SpecSuiteName, $SpecName, $SpecResult)
 	{
-		if ($SpecResult === true)
+		if ($SpecResult->TestResult === true)
 		{
 			$this->_passCount++;
 		}
-		elseif ($SpecResult === false)
+		elseif ($SpecResult->TestResult === false)
 		{
 			$this->_failCount++;
-			$this->_alerts[] = "{$SpecSuiteName}: {$SpecName}()";
 		}
 		else
 		{

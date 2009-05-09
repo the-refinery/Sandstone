@@ -10,33 +10,38 @@ class ConsoleSpecRunner extends SpecRunner
 	protected function OutputEndRun()
 	{
 		echo "\n";
-
-		foreach ($this->_alerts as $alert)
-		{
-			$this->OutputAlert($alert);
-		}
-
 		echo "\n[[ {$this->_passCount} PASSED, {$this->_failCount} FAILED, {$this->_pendingCount} PENDING ]]\n";
-	}
-
-	protected function OutputAlert($Alert)
-	{
-		echo "\n\033[0;31mALERT {$Alert}\033[37m\n";
 	}
 
 	protected function OutputSpecResult($SpecSuiteName, $SpecName, $SpecResult)
 	{
-		if ($SpecResult === true)
+		if ($SpecResult->TestResult === true)
 		{
 			echo ".";
 		}
-		elseif ($SpecResult === false)
+		elseif ($SpecResult->TestResult === false)
 		{
-			echo "\033[0;31mF\033[37m";
+			echo $this->Red("F") . $this->Blank();
+			echo $this->Red("{$SpecSuiteName}: {$SpecResult->Name}") . $this->Blank();
 		}
 		else
 		{
-			echo "\033[1;33mS\033[37m";
+			echo $this->Yellow("S");
 		}
+	}
+
+	protected function Red($Text)
+	{
+			return "\033[0;31m{$Text}\033[37m";
+	}
+
+	protected function Yellow($Text)
+	{
+			return "\033[0;33m{$Text}\033[37m";
+	}
+	
+	protected function Blank()
+	{
+		return "\n\n";
 	}
 }
