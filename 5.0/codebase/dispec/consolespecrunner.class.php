@@ -4,7 +4,7 @@ class ConsoleSpecRunner extends SpecRunner
 {
 	protected function OutputBeginRun()
 	{
-		echo "\n";
+		echo $this->BlankLine();
 	}
 
 	protected function OutputEndRun()
@@ -21,8 +21,8 @@ class ConsoleSpecRunner extends SpecRunner
 		}
 		elseif ($SpecResult->TestResult === false)
 		{
-			echo $this->Red("F") . $this->Blank();
-			echo $this->Red("{$SpecSuiteName}: {$SpecResult->Name}") . $this->Blank();
+			echo $this->Red("F") . $this->BlankLine();
+			echo $this->Red("{$SpecSuiteName}: {$SpecResult->Name}") . $this->BlankLine();
 		}
 		else
 		{
@@ -40,7 +40,7 @@ class ConsoleSpecRunner extends SpecRunner
 			return "\033[0;33m{$Text}\033[37m";
 	}
 	
-	protected function Blank()
+	protected function BlankLine()
 	{
 		return "\n\n";
 	}

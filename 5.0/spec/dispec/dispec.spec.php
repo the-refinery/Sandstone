@@ -2,7 +2,7 @@
 
 include_once('dependencies.php');
 
-class DISpecSuiteSpec extends DescribesBehavior
+class DescribesBehaviorSpec extends DescribesBehavior
 {
 	public function ItShouldSetTheExpectedValue()
 	{
@@ -56,11 +56,4 @@ class DISpecSuiteSpec extends DescribesBehavior
 		return $this->Expects($spec->FindSpecs())->ToBeEqualTo(array('ItIsAPendingSpec','ItIsAPassingSpec','ItIsAFailingSpec'));
 	}
 
-	public function ItShouldRunSpecifiedSpecClasses()
-	{
-		$runner = new SpecRunner();
-		$runner->AddSpecSuite('FooSpec');
-
-		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeEqualTo(true);
-	}
 }
