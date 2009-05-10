@@ -8,7 +8,7 @@ class SpecRunner
 	public $Failing = array();
 	public $Pending = array();
 	
-	public function AddSpecSuite($SpecSuiteName)
+	public function DescribeBehavior($SpecSuiteName)
 	{
 		$tempSpecSuite = new $SpecSuiteName();
 

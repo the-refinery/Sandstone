@@ -11,9 +11,9 @@ include_once("testing/assertscondition.spec.php");
 include_once("templateengine/templateengine.spec.php");
 
 $SpecRunner = new ConsoleSpecRunner();
-$SpecRunner->AddSpecSuite('DescribesBehaviorSpec');
-$SpecRunner->AddSpecSuite('SpecRunnerSpec');
-$SpecRunner->AddSpecSuite('AssertsConditionSpec');
-$SpecRunner->AddSpecSuite('TemplateEngineSpec');
+$SpecRunner->DescribeBehavior('DescribesBehaviorSpec');
+$SpecRunner->DescribeBehavior('SpecRunnerSpec');
+$SpecRunner->DescribeBehavior('AssertsConditionSpec');
+$SpecRunner->DescribeBehavior('TemplateEngineSpec');
 $SpecRunner->Run();
 
