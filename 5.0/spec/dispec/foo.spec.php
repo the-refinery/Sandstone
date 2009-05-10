@@ -4,7 +4,7 @@ class FooSpec extends DescribesBehavior
 {
 	public function ItIsAPendingSpec()
 	{
-		// Pending
+		return $this->Pending();
 	}
 
 	public function ItIsAPassingSpec()

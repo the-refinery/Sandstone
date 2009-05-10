@@ -10,7 +10,11 @@ class ConsoleSpecRunner extends SpecRunner
 	protected function OutputEndRun()
 	{
 		echo "\n";
-		echo "\n[[ {$this->_passCount} PASSED, {$this->_failCount} FAILED, {$this->_pendingCount} PENDING ]]\n";
+		$PassCount = count($this->Passing);
+		$FailCount = count($this->Failing);
+		$PendingCount = count($this->Pending);
+
+		echo "\n[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]\n";
 	}
 
 	protected function OutputSpecResult($SpecSuiteName, $SpecName, $SpecResult)

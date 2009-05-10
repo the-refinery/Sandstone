@@ -4,12 +4,10 @@ class SpecRunner
 {
 	public $SpecSuites = array();
 
-	protected $_alerts = array();
-
-	protected $_passCount = 0;
-	protected $_failCount = 0;
-	protected $_pendingCount = 0;
-
+	public $Passing = array();
+	public $Failing = array();
+	public $Pending = array();
+	
 	public function AddSpecSuite($SpecSuiteName)
 	{
 		$tempSpecSuite = new $SpecSuiteName();
@@ -46,15 +44,15 @@ class SpecRunner
 	{
 		if ($SpecResult->TestResult === true)
 		{
-			$this->_passCount++;
+			$this->Passing[] = $SpecResult;
 		}
 		elseif ($SpecResult->TestResult === false)
 		{
-			$this->_failCount++;
+			$this->Failing[] = $SpecResult;
 		}
 		else
 		{
-			$this->_pendingCount++;
+			$this->Pending[] = $SpecResult;
 		}
 	}
 

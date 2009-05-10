@@ -7,7 +7,7 @@ class TestsAssertion
 	public $ActualValue;
 	public $TestResult;
 
-	public function __construct($ExpectedValue, $SpecName)
+	public function __construct($ExpectedValue = null, $SpecName)
 	{
 		$this->ExpectedValue = $ExpectedValue;
 		$this->Name = $SpecName;
@@ -21,6 +21,11 @@ class TestsAssertion
 	public function BeTrue()
 	{
 		return $this->ExpectedValue === true;
+	}
+
+	public function Exist()
+	{
+		return isset($this->ExpectedValue);
 	}
 	
 	public function __call($Method, $Args)

@@ -10,6 +10,14 @@ class DescribesBehavior
 		return new TestsAssertion($ExpectedValue, $specName);
 	}
 
+	public function Pending()
+	{
+		$callStack = debug_backtrace();
+		$specName = $callStack[1]['function'];
+		
+		return new TestsAssertion(null, $specName);
+	}
+
 	public function Run()
 	{
 		$returnValue = array();
