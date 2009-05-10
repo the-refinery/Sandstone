@@ -3,14 +3,17 @@
 class AssertsCondition
 {
 	public $Name;
+	public $Spec;
+
 	public $ExpectedValue;
 	public $ActualValue;
 	public $TestResult;
 
-	public function __construct($ExpectedValue = null, $SpecName)
+	public function __construct($ExpectedValue = null, $SpecName, $Spec)
 	{
 		$this->ExpectedValue = $ExpectedValue;
 		$this->Name = $SpecName;
+		$this->Spec = $Spec;
 	}
 
 	public function BeEqualTo()

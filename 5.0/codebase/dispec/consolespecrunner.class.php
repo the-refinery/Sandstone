@@ -21,7 +21,7 @@ class ConsoleSpecRunner extends SpecRunner
 			echo $this->NewLine();
 			foreach ($this->Failing as $failedResult)
 			{
-				echo $this->Red("{$failedResult->Name}") . $this->NewLine();
+				echo $this->Red("{$failedResult->Spec->Name} {$failedResult->Name}") . $this->NewLine();
 			}
 			echo $this->NewLine();
 		}
@@ -32,9 +32,9 @@ class ConsoleSpecRunner extends SpecRunner
 		if (count($this->Pending) > 0)
 		{
 			echo $this->NewLine();
-			foreach ($this->Pending as $failedResult)
+			foreach ($this->Pending as $pendingResult)
 			{
-				echo $this->Yellow("{$failedResult->Name}") . $this->NewLine();
+				echo $this->Yellow("{$pendingResult->Spec->Name} {$pendingResult->Name}") . $this->NewLine();
 			}
 			echo $this->NewLine();
 		}

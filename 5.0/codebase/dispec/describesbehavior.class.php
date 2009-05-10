@@ -2,12 +2,19 @@
 
 class DescribesBehavior
 {
+	public $Name;
+
+	public function __construct()
+	{
+		$this->Name = get_class($this);
+	}
+
 	public function Expects($ExpectedValue)
 	{
 		$callStack = debug_backtrace();
 		$specName = $callStack[1]['function'];
 		
-		return new AssertsCondition($ExpectedValue, $specName);
+		return new AssertsCondition($ExpectedValue, $specName, $this);
 	}
 
 	public function Pending()
@@ -15,7 +22,7 @@ class DescribesBehavior
 		$callStack = debug_backtrace();
 		$specName = $callStack[1]['function'];
 		
-		return new AssertsCondition(null, $specName);
+		return new AssertsCondition(null, $specName, $this);
 	}
 
 	public function Run()

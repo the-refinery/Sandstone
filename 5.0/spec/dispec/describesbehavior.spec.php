@@ -33,8 +33,7 @@ class DescribesBehaviorSpec extends DescribesBehavior
 		$spec = new FooSpec();
 		$condition = $spec->Expects('expectedValue');
 
-		return $this->Pending();
-		//return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooSpec');
+		return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooSpec');
 	}
 			
 	public function ItShouldReportASpecAsPassing()
