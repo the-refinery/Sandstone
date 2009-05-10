@@ -9,7 +9,8 @@ class ConsoleSpecRunner extends SpecRunner
 
 	protected function OutputEndRun()
 	{
-		echo $this->OutputFailingTests();	
+		$this->OutputPendingTests();
+		$this->OutputFailingTests();	
 		$this->OutputSpecResultCounts();
 	}
 
@@ -21,6 +22,19 @@ class ConsoleSpecRunner extends SpecRunner
 			foreach ($this->Failing as $failedResult)
 			{
 				echo $this->Red("{$failedResult->Name}") . $this->NewLine();
+			}
+			echo $this->NewLine();
+		}
+	}
+
+	protected function OutputPendingTests()
+	{
+		if (count($this->Pending) > 0)
+		{
+			echo $this->NewLine();
+			foreach ($this->Pending as $failedResult)
+			{
+				echo $this->Yellow("{$failedResult->Name}") . $this->NewLine();
 			}
 			echo $this->NewLine();
 		}
