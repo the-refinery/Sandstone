@@ -7,7 +7,7 @@ class SpecRunnerSpec extends DescribesBehavior
 		$runner = new SpecRunner();
 		$runner->DescribeBehavior('FooSpec');
 
-		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeEqualTo(true);
+		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeTrue();
 	}
 
 	public function ItShouldLogPassingSpecs()
@@ -35,6 +35,14 @@ class SpecRunnerSpec extends DescribesBehavior
 		$runner->Run();
 
 		return $this->Expects($runner->Pending[0])->ToExist();
+	}
+
+	public function ItShouldCreateAnEnglishSpecDescription()
+	{
+		$runner = new SpecRunner();
+		$testResult = $runner->CreateEnglishSpecDescription("SandstoneSpec", "ItShouldBeTheBestFrameworkEver");
+
+		return $this->Expects($testResult)->ToBeEqualTo("Sandstone should be the best framework ever");
 	}
 }
 

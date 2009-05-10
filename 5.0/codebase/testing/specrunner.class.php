@@ -27,6 +27,14 @@ class SpecRunner
 		$this->OutputEndRun();
 	}
 
+	public function CreateEnglishSpecDescription($DescribesBehavior, $SpecName)
+	{
+		$DescribesBehavior = substr($DescribesBehavior, 0, -4);
+		$SpecName = substr($SpecName, 2);
+
+		return FormatsString::CamelCaseToSentance($DescribesBehavior . $SpecName);
+	}
+
 	protected function RunSuite($Suite)
 	{
 		$suiteResults = $Suite->Run();
