@@ -9,12 +9,32 @@ class ConsoleSpecRunner extends SpecRunner
 
 	protected function OutputEndRun()
 	{
-		echo "\n";
+		echo $this->OutputFailingTests();	
+		$this->OutputSpecResultCounts();
+	}
+
+	protected function OutputFailingTests()
+	{
+		if (count($this->Failing) > 0)
+		{
+			echo $this->NewLine();
+			foreach ($this->Failing as $failedResult)
+			{
+				echo $this->Red("{$failedResult->Name}") . $this->NewLine();
+			}
+			echo $this->NewLine();
+		}
+	}
+
+	protected function OutputSpecResultCounts()
+	{
 		$PassCount = count($this->Passing);
 		$FailCount = count($this->Failing);
 		$PendingCount = count($this->Pending);
 
-		echo "\n[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]\n";
+		echo $this->NewLine();
+		echo "[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]\n";
+		echo $this->NewLine();
 	}
 
 	protected function OutputSpecResult($SpecSuiteName, $SpecName, $SpecResult)
@@ -25,8 +45,7 @@ class ConsoleSpecRunner extends SpecRunner
 		}
 		elseif ($SpecResult->TestResult === false)
 		{
-			echo $this->Red("F") . $this->BlankLine();
-			echo $this->Red("{$SpecSuiteName}: {$SpecResult->Name}") . $this->BlankLine();
+			echo $this->Red("F");
 		}
 		else
 		{
@@ -47,5 +66,10 @@ class ConsoleSpecRunner extends SpecRunner
 	protected function BlankLine()
 	{
 		return "\n\n";
+	}
+
+	protected function NewLine()
+	{
+		return "\n";
 	}
 }
