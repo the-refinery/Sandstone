@@ -7,7 +7,7 @@ class DescribesBehavior
 		$callStack = debug_backtrace();
 		$specName = $callStack[1]['function'];
 		
-		return new TestsAssertion($ExpectedValue, $specName);
+		return new AssertsCondition($ExpectedValue, $specName);
 	}
 
 	public function Pending()
@@ -15,7 +15,7 @@ class DescribesBehavior
 		$callStack = debug_backtrace();
 		$specName = $callStack[1]['function'];
 		
-		return new TestsAssertion(null, $specName);
+		return new AssertsCondition(null, $specName);
 	}
 
 	public function Run()

@@ -1,6 +1,6 @@
 <?php
 
-class TestsAssertion
+class AssertsCondition
 {
 	public $Name;
 	public $ExpectedValue;

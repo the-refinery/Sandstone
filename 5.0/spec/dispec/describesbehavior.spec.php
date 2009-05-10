@@ -27,6 +27,15 @@ class DescribesBehaviorSpec extends DescribesBehavior
 
 		return $this->Expects($condition->Name)->ToBeEqualTo('ItShouldSetTheNameOfTheSpec');
 	}
+
+	public function ItShouldSetTheNameOfTheDescribe()
+	{
+		$spec = new FooSpec();
+		$condition = $spec->Expects('expectedValue');
+
+		return $this->Pending();
+		//return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooSpec');
+	}
 			
 	public function ItShouldReportASpecAsPassing()
 	{
