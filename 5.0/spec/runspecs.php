@@ -10,6 +10,7 @@ include_once("testing/specrunner.spec.php");
 include_once("utilities/formatsstring.spec.php");
 include_once("utilities/outputtobash.spec.php");
 include_once("testing/assertscondition.spec.php");
+include_once("alterclass/alterclass.spec.php");
 include_once("templateengine/templateengine.spec.php");
 
 $SpecRunner = new ConsoleSpecRunner();
@@ -19,5 +20,6 @@ $SpecRunner->DescribeBehavior('AssertsConditionSpec');
 $SpecRunner->DescribeBehavior('FormatsStringSpec');
 $SpecRunner->DescribeBehavior('OutputToBashSpec');
 $SpecRunner->DescribeBehavior('TemplateEngineSpec');
+$SpecRunner->DescribeBehavior('AlterClassSpec');
 $SpecRunner->Run();
 

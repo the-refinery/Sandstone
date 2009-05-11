@@ -42,6 +42,13 @@ class AssertsConditionSpec extends DescribesBehavior
 		return $this->Expects($assert->ToExist()->TestResult)->ToBeEqualTo(true);
 	}
 
+	public function ItShouldAssertContains()
+	{
+		$assert = new AssertsCondition('123', "ItShouldntMatter", $this);
+
+		return $this->Expects(array('foo','bar'))->ToContain('bar');	
+	}
+
 	public function ItShouldExplainBooleanValue()
 	{
 		$assert = new AssertsCondition('123', "ItShouldntMatter", $this);
