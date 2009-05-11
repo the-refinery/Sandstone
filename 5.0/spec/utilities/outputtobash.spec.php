@@ -2,6 +2,11 @@
 
 class OutputToBashSpec extends DescribesBehavior
 {
+	public function ItShouldRenderText()
+	{
+		return $this->Expects(OutputToBash::Text('foo bar'))->ToBeEqualTo('foo bar');
+	}
+
 	public function ItShouldRenderANewLine()
 	{
 		return $this->Expects(OutputToBash::NewLine())->ToBeEqualTo("\n");

@@ -12,6 +12,11 @@ class OutputToBash
 		return "\n\n";
 	}
 
+	static public function Text($Text)
+	{
+		return $Text;
+	}
+
 	static public function ColoredText($Color, $Text)
 	{
 		$defaultColor = "\033[37m";

@@ -9,7 +9,7 @@ class TemplateEngineSpec extends DescribesBehavior
 		$fakeTemplate = new FakeTemplate();
 		$engine = new TemplateEngine();
 
-		$fakeTemplate->content_to_return = "Hello, World";
+		$fakeTemplate->content_to_return = "Hello, World2";
 
 		return $this->Expects($engine->Render($fakeTemplate))->ToBeEqualTo("Hello, World");
 	}

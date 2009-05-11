@@ -23,11 +23,8 @@ class ConsoleSpecRunner extends SpecRunner
 				echo OutputToBash::BlankLine();
 				$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
 				echo OutputToBash::ColoredText("Red", $englishDescription);
-				echo OutputToBash::NewLine();
-				echo OutputToBash::ColoredText("Red", "- Expected: " . $failedResult->ExplainValue($failedResult->ActualValue));
-				echo OutputToBash::NewLine();
-				echo OutputToBash::ColoredText("Red", "- Actual: " . $failedResult->ExplainValue($failedResult->ExpectedValue));
-				echo OutputToBash::NewLine();
+				echo OutputToBash::ColoredText("Red", " Expected: " . $failedResult->ExplainValue($failedResult->ActualValue));
+				echo OutputToBash::ColoredText("Red", " Actual: " . $failedResult->ExplainValue($failedResult->ExpectedValue));
 			}
 			echo OutputToBash::NewLine();
 		}
@@ -55,7 +52,7 @@ class ConsoleSpecRunner extends SpecRunner
 		$PendingCount = count($this->Pending);
 
 		echo OutputToBash::NewLine();
-		echo "[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]\n";
+		echo OutputToBash::Text("[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]");
 		echo OutputToBash::NewLine();
 	}
 
@@ -63,7 +60,7 @@ class ConsoleSpecRunner extends SpecRunner
 	{
 		if ($SpecResult->TestResult === true)
 		{
-			echo ".";
+			echo OutputToBash::Text(".");
 		}
 		elseif ($SpecResult->TestResult === false)
 		{
