@@ -4,7 +4,7 @@ class ConsoleSpecRunner extends SpecRunner
 {
 	protected function OutputBeginRun()
 	{
-		echo $this->BlankLine();
+		echo OutputToBash::BlankLine();
 	}
 
 	protected function OutputEndRun()
@@ -18,14 +18,14 @@ class ConsoleSpecRunner extends SpecRunner
 	{
 		if (count($this->Failing) > 0)
 		{
-			echo $this->NewLine();
+			echo OutputToBash::NewLine();
 			foreach ($this->Failing as $failedResult)
 			{
 				$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
-				echo $this->Red($englishDescription);
-				echo $this->NewLine();
+				echo OutputToBash::ColoredText("Red",$englishDescription);
+				echo OutputToBash::NewLine();
 			}
-			echo $this->NewLine();
+			echo OutputToBash::NewLine();
 		}
 	}
 
@@ -33,14 +33,14 @@ class ConsoleSpecRunner extends SpecRunner
 	{
 		if (count($this->Pending) > 0)
 		{
-			echo $this->NewLine();
+			echo OutputToBash::NewLine();
 			foreach ($this->Pending as $pendingResult)
 			{
 				$englishDescription = $this->CreateEnglishSpecDescription($pendingResult->Spec->Name, $pendingResult->Name);
-				echo $this->Yellow($englishDescription);
-				echo $this->NewLine();
+				echo OutputToBash::ColoredText("Yellow",$englishDescription);
+				echo OutputToBash::NewLine();
 			}
-			echo $this->NewLine();
+			echo OutputToBash::NewLine();
 		}
 	}
 
@@ -50,9 +50,9 @@ class ConsoleSpecRunner extends SpecRunner
 		$FailCount = count($this->Failing);
 		$PendingCount = count($this->Pending);
 
-		echo $this->NewLine();
+		echo OutputToBash::NewLine();
 		echo "[[ {$PassCount} PASSED, {$FailCount} FAILED, {$PendingCount} PENDING ]]\n";
-		echo $this->NewLine();
+		echo OutputToBash::NewLine();
 	}
 
 	protected function OutputSpecResult($SpecSuiteName, $SpecName, $SpecResult)
@@ -63,31 +63,11 @@ class ConsoleSpecRunner extends SpecRunner
 		}
 		elseif ($SpecResult->TestResult === false)
 		{
-			echo $this->Red("F");
+			echo OutputToBash::ColoredText("Red","F");
 		}
 		else
 		{
-			echo $this->Yellow("S");
+			echo OutputToBash::ColoredText("Yellow","S");
 		}
-	}
-
-	protected function Red($Text)
-	{
-			return "\033[0;31m{$Text}\033[37m";
-	}
-
-	protected function Yellow($Text)
-	{
-			return "\033[0;33m{$Text}\033[37m";
-	}
-	
-	protected function BlankLine()
-	{
-		return "\n\n";
-	}
-
-	protected function NewLine()
-	{
-		return "\n";
 	}
 }
