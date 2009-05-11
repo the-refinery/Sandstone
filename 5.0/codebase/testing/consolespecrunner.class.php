@@ -24,9 +24,9 @@ class ConsoleSpecRunner extends SpecRunner
 				$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
 				echo OutputToBash::ColoredText("Red", $englishDescription);
 				echo OutputToBash::NewLine();
-				echo OutputToBash::ColoredText("Red", "- Expected: " . $failedResult->ExplainValue($failedResult->ExpectedValue));
+				echo OutputToBash::ColoredText("Red", "- Expected: " . $failedResult->ExplainValue($failedResult->ActualValue));
 				echo OutputToBash::NewLine();
-				echo OutputToBash::ColoredText("Red", "- Actual: " . $failedResult->ExplainValue($failedResult->ActualValue));
+				echo OutputToBash::ColoredText("Red", "- Actual: " . $failedResult->ExplainValue($failedResult->ExpectedValue));
 				echo OutputToBash::NewLine();
 			}
 			echo OutputToBash::NewLine();
