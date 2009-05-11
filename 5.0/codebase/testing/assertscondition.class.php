@@ -30,6 +30,11 @@ class AssertsCondition
 	{
 		return isset($this->ExpectedValue);
 	}
+
+	public function Contain()
+	{
+		return in_array($this->ActualValue, $this->ExpectedValue);
+	}
 	
 	public function __call($Method, $Args)
 	{

@@ -22,9 +22,10 @@ class ConsoleSpecRunner extends SpecRunner
 			{
 				echo OutputToBash::BlankLine();
 				$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
-				echo OutputToBash::ColoredText("Red", $englishDescription);
-				echo OutputToBash::ColoredText("Red", " Expected: " . $failedResult->ExplainValue($failedResult->ActualValue));
-				echo OutputToBash::ColoredText("Red", " Actual: " . $failedResult->ExplainValue($failedResult->ExpectedValue));
+				echo OutputToBash::ColoredText("Red", $englishDescription . " Expected: ");
+				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ActualValue));
+				echo OutputToBash::ColoredText("Red", " Actual: ");
+				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ExpectedValue));
 			}
 			echo OutputToBash::NewLine();
 		}
