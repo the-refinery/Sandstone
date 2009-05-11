@@ -52,4 +52,56 @@ class AssertsCondition
 		
 		return $this;
 	}
+
+	public function ExplainValue($Value = null)
+	{
+		if (is_null($Value))
+		{
+			$englishType = "null";
+			$englishValue = "";
+		}
+		elseif (is_bool($Value))
+		{
+			$englishType = "boolean";	
+			$englishValue = $this->ExplainBooleanValue($Value);
+		}
+		elseif (is_numeric($Value))
+		{
+			$englishType = "numeric";
+			$englishValue = $Value;
+		}
+		elseif (is_string($Value))
+		{
+			$englishType = "string";
+			$englishValue = "\"{$Value}\"";
+		}
+		elseif (is_array($Value))
+		{
+			$englishType = "array";
+			$englishValue = $this->ExplainArrayValue($Value);
+		}
+		elseif (is_object($Value))
+		{
+			$englishType = "object";
+			$englishValue = get_class($Value);
+		}
+		
+		return "({$englishType}) {$englishValue}";
+	}
+
+	protected function ExplainBooleanValue($Value = false)
+	{
+		return ($Value === true) ? "true" : "false";
+	}
+
+	protected function ExplainArrayValue($Array)
+	{
+		foreach ($Array as $key => $value)
+		{
+			$returnValue .= "[{$key}] => {$value}, ";
+		}
+
+		$returnValue = substr($returnValue, 0, -2);
+		return "({$returnValue})";
+	}
 }
