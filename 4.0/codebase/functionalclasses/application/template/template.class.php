@@ -240,12 +240,18 @@ class Template extends Module
 		$this->_additionalTemplatePath = $Value;
 	}
 
-    public function Display()
-    {
+	public function Display()
+	{
+		echo $this->BuildDisplayOutput();
+		die();
+	}
 
-        $divColor = "#9cc";
-        $liColor = "#ffc";
-        $liBorder = "#fcc";
+	public function BuildDisplayOutput()
+	{
+
+		$divColor = "#9cc";
+		$liColor = "#ffc";
+		$liBorder = "#fcc";
 
 		$templateFound = $this->SetupTemplateString();
 		$templateOutput = $this->Render();
@@ -275,53 +281,68 @@ class Template extends Module
 
 		$returnValue .= "</ul>";
 
-        $returnValue .= "<h1 style=\"padding: 0; margin: 0; border-bottom: 1px solid #000;\">Template Variables</h1>";
-        $returnValue .= "<ul style=\"list-style: none; margin: 4px;\">";
+		$returnValue .= $this->BuildTemplateVariableDisplayOutput();
 
-        foreach ($this->_templateVariables as $key=>$value)
-        {
-            $returnValue .= "<li style=\"border: 1px solid {$liBorder}; margin: 2px; padding: 4px; background-color: {$liColor};\">";
+		$returnValue .= "</div>";
 
-            $returnValue .= "<strong>{$key}: </strong> ";
+		return $returnValue;
 
-            if ($value instanceof DIarray)
-            {
-                $returnValue .= $value->__toString();
-            }
-            elseif (is_object($value))
-            {
-                $returnValue .= $value->__toString();
-            }
-            else
-            {
-                if (is_numeric($value) || $value == "null")
-                {
-                    $returnValue .= "{$value}";
-                }
-                else
-                {
-                    $returnValue .= "\"{$value}\"";
-                }
-            }
+	}
 
-            $returnValue .= "</li>";
-        }
+	protected function BuildTemplateVariableDisplayOutput()
+	{
+		$divColor = "#9cc";
+		$liColor = "#ffc";
+		$liBorder = "#fcc";
 
-        $returnValue .= "</ul>";
+		$returnValue .= "<h1 style=\"padding: 0; margin: 0; border-bottom: 1px solid #000;\">Template Variables</h1>";
+		$returnValue .= "<ul style=\"list-style: none; margin: 4px;\">";
 
-        $returnValue .= "</div>";
+		foreach ($this->_templateVariables as $key=>$value)
+		{
+			if (substr($key, 0, 5) != "debug")
+			{
+				$returnValue .= "<li style=\"border: 1px solid {$liBorder}; margin: 2px; padding: 4px; background-color: {$liColor};\">";
 
-        echo  $returnValue;
+				$returnValue .= "<strong>{$key}: </strong> ";
 
-        die();
+				if ($value instanceof DIarray)
+				{
+					$returnValue .= $value->__toString();
+				}
+				elseif (is_object($value))
+				{
+					$returnValue .= $value->__toString();
+				}
+				else
+				{
+					if (is_numeric($value) || $value == "null")
+					{
+						$returnValue .= "{$value}";
+					}
+					else
+					{
+						$returnValue .= "\"{$value}\"";
+					}
+				}
 
-    }
+				$returnValue .= "</li>";
+			}
+		}
+
+		$returnValue .= "</ul>";
+
+		return $returnValue;
+	}
 
 	public function Render()
 	{
 
 		if ($this->_isRendered)
 		{
+
+			$this->_templateVariables["debugtvdisplay"] = $this->BuildTemplateVariableDisplayOutput();
+
 
 			//Do we need to load a template file?
 			if (strlen($this->_templateString) == 0)
