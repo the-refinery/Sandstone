@@ -129,7 +129,7 @@ class LoginPage extends BasePage
 
 	/*** CONTROLS ***/
 
-	protected function OldBuildControlArray($EventParameters)
+	protected function BuildControlArray($EventParameters)
 	{
 		$this->LoginForm = new PageForm($EventParameters);
 
@@ -148,7 +148,7 @@ class LoginPage extends BasePage
 		parent::BuildControlArray($EventParameters);
 	}
 
-	protected function OldLoadControlData($EventParameters)
+	protected function LoadControlData($EventParameters)
 	{
 		if ($EventParameters['subdomain'])
 		{
