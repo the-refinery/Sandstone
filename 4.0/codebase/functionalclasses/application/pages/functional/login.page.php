@@ -131,6 +131,7 @@ class LoginPage extends BasePage
 
 	protected function BuildControlArray($EventParameters)
 	{
+		di_break(true);
 		$this->LoginForm = new PageForm($EventParameters);
 
 		di_break();
