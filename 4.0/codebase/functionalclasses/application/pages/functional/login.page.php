@@ -145,7 +145,7 @@ class LoginPage extends BasePage
 		$this->LoginForm->Submit = new SubmitButtonControl();
 		$this->LoginForm->Submit->LabelText = "Login";
 
-		//parent::BuildControlArray($EventParameters);
+		parent::BuildControlArray($EventParameters);
 	}
 
 	protected function LoadControlData($EventParameters)
