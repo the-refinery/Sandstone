@@ -2,7 +2,7 @@
 
 include_once('dependencies.php');
 
-class AssertsConditionSpec extends DescribesBehavior
+class AssertConditionSpec extends DescribesBehavior
 {
 	public function ItShouldAssertTo()
 	{

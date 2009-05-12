@@ -1,6 +1,6 @@
 <?php
 
-class SpecRunner
+class RunSpecs
 {
 	public $SpecSuites = array();
 

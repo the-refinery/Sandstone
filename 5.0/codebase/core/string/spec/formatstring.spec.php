@@ -1,6 +1,6 @@
 <?php
 
-class FormatsStringSpec extends DescribesBehavior
+class FormatStringSpec extends DescribesBehavior
 {
 	public function ItShouldConvertCamelCaseToEnglish()
 	{

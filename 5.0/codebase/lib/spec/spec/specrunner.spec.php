@@ -1,6 +1,6 @@
 <?php
 
-class SpecRunnerSpec extends DescribesBehavior
+class RunSpecsSpec extends DescribesBehavior
 {
 	public function ItShouldRunSpecifiedSpecClasses()
 	{

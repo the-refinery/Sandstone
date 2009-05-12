@@ -1,6 +1,6 @@
 <?php
 
-class AssertsCondition
+class AssertCondition
 {
 	public $Name;
 	public $Spec;

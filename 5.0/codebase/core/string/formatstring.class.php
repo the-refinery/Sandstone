@@ -1,6 +1,6 @@
 <?php
 
-class FormatsString
+class FormatString
 {
 	static function FormatSentanceCase($String)
 	{

@@ -2,7 +2,7 @@
 
 include_once('dependencies.php');
 
-class DescribesBehaviorSpec extends DescribesBehavior
+class DescribeBehaviorSpec extends DescribesBehavior
 {
 	public function ItShouldSetTheExpectedValue()
 	{

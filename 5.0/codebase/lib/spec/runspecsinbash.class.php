@@ -1,6 +1,6 @@
 <?php
 
-class ConsoleSpecRunner extends SpecRunner
+class RunSpecsInConsole extends SpecRunner
 {
 	protected function OutputBeginRun()
 	{

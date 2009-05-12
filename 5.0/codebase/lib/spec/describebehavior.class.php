@@ -1,6 +1,6 @@
 <?php
 
-class DescribesBehavior
+class DescribeBehavior
 {
 	public $Name;
 
