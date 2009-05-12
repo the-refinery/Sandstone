@@ -131,22 +131,17 @@ class LoginPage extends BasePage
 
 	protected function BuildControlArray($EventParameters)
 	{
-		di_break(true);
 		$this->LoginForm = new PageForm($EventParameters);
 
-		di_break();
 		$this->LoginForm->AccountName = new TextboxControl();
 		$this->LoginForm->AccountName->LabelText = "Account Name:";
 
-		di_break();
 		$this->LoginForm->Username = new TextboxControl();
 		$this->LoginForm->Username->LabelText = "Username:";
 
-		di_break();
 		$this->LoginForm->Password = new PasswordControl();
 		$this->LoginForm->Password->LabelText = "Password:";
 
-		di_break();
 		$this->LoginForm->Submit = new SubmitButtonControl();
 		$this->LoginForm->Submit->LabelText = "Login";
 
