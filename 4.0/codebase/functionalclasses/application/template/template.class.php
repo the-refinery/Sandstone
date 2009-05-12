@@ -35,6 +35,7 @@ class Template extends Module
 		if ($ParentObject instanceof Renderable)
 		{
 			$this->_parentObject = $ParentObject;
+			$this->_templateVariables["debugparentobjecttype"] = get_class($this->_parentObject);
 		}
 
 		$this->_isRendered = true;
@@ -321,15 +322,6 @@ class Template extends Module
 
 		if ($this->_isRendered)
 		{
-			//Add a these TV's just for debugging
-			if (is_set($this->_parentObject))
-			{
-				$this->DEBUG_ParentObjectType = get_class($this->_parentObject);
-			}
-			else
-			{
-				$this->DEBUG_ParentObjectType = "No Parent Object";
-			}
 
 			//Do we need to load a template file?
 			if (strlen($this->_templateString) == 0)
