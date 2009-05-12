@@ -133,17 +133,21 @@ class LoginPage extends BasePage
 	{
 		$this->LoginForm = new PageForm($EventParameters);
 
+		di_break();
 		$this->LoginForm->AccountName = new TextboxControl();
-		//$this->LoginForm->AccountName->LabelText = "Account Name:";
+		$this->LoginForm->AccountName->LabelText = "Account Name:";
 
+		di_break();
 		$this->LoginForm->Username = new TextboxControl();
-		//$this->LoginForm->Username->LabelText = "Username:";
+		$this->LoginForm->Username->LabelText = "Username:";
 
+		di_break();
 		$this->LoginForm->Password = new PasswordControl();
-		//$this->LoginForm->Password->LabelText = "Password:";
+		$this->LoginForm->Password->LabelText = "Password:";
 
+		di_break();
 		$this->LoginForm->Submit = new SubmitButtonControl();
-		//$this->LoginForm->Submit->LabelText = "Login";
+		$this->LoginForm->Submit->LabelText = "Login";
 
 		parent::BuildControlArray($EventParameters);
 	}
