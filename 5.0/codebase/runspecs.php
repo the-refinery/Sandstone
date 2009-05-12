@@ -11,6 +11,7 @@ include_once("lib/spec/spec/describebehavior.spec.php");
 include_once("lib/spec/spec/runspecs.spec.php");
 include_once("lib/spec/spec/assertcondition.spec.php");
 include_once("lib/alterclass/spec/alterclass.spec.php");
+include_once("lib/baseclasses/spec/component.spec.php");
 
 $SpecRunner = new RunSpecsInBash();
 $SpecRunner->DescribeBehavior('FormatStringSpec');
@@ -19,5 +20,6 @@ $SpecRunner->DescribeBehavior('DescribeBehaviorSpec');
 $SpecRunner->DescribeBehavior('RunSpecsSpec');
 $SpecRunner->DescribeBehavior('AssertConditionSpec');
 $SpecRunner->DescribeBehavior('AlterClassSpec');
+$SpecRunner->DescribeBehavior('ComponentSpec');
 $SpecRunner->Run();
 
