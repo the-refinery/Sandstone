@@ -1,6 +1,6 @@
 <?php
 
-include_once('describesbehavior.class.php');
-include_once('assertscondition.class.php');
-include_once('specrunner.class.php');
-include_once('consolespecrunner.class.php');
+include_once('describebehavior.class.php');
+include_once('assertcondition.class.php');
+include_once('runspecs.class.php');
+include_once('runspecsinbash.class.php');

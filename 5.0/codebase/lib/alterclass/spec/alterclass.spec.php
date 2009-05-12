@@ -2,14 +2,14 @@
 
 include_once('dependencies.php');
 
-class AlterClassSpec extends DescribesBehavior
+class AlterClassSpec extends DescribeBehavior
 {
 	public function ItShouldMixClasses()
 	{
-		AlterClass::Mixin('TargetClass', 'SourceClass');
+		AlterClass::Mixin('Target', 'Source');
 
-		$target = new TargetClass();
-
-		return $this->Expects($target->String('foobar'))->ToBeEqualTo('foobar');
+		$target = new Target;
+		
+		return $this->Expects($target->Foo())->ToBeEqualTo('foo');
 	}
 }

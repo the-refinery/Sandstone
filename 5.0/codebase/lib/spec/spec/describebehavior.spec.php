@@ -2,11 +2,11 @@
 
 include_once('dependencies.php');
 
-class DescribeBehaviorSpec extends DescribesBehavior
+class DescribeBehaviorSpec extends DescribeBehavior
 {
 	public function ItShouldSetTheExpectedValue()
 	{
-		$spec = new DescribesBehavior();
+		$spec = new DescribeBehavior();
 		$condition = $spec->Expects('expectedValue');
 
 		return $this->Expects($condition->ExpectedValue)->ToBeEqualTo('expectedValue');
@@ -14,7 +14,7 @@ class DescribeBehaviorSpec extends DescribesBehavior
 
 	public function ItShouldSetTheActualValue()
 	{
-		$spec = new DescribesBehavior();
+		$spec = new DescribeBehavior();
 		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
 
 		return $this->Expects($condition->ActualValue)->ToBeEqualTo('actualValue');
@@ -22,7 +22,7 @@ class DescribeBehaviorSpec extends DescribesBehavior
 
 	public function ItShouldSetTheNameOfTheSpec()
 	{
-		$spec = new DescribesBehavior();
+		$spec = new DescribeBehavior();
 		$condition = $spec->Expects('expectedValue');
 
 		return $this->Expects($condition->Name)->ToBeEqualTo('ItShouldSetTheNameOfTheSpec');

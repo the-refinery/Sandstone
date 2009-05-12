@@ -1,7 +1,7 @@
 <?php
 
-include("codebase/core/baseclasses/component.class.php");
-include("codebase/alterclass/include.php");
-include("codebase/testing/include.php");
-include("codebase/utilities/include.php");
-include("codebase/core/templateengine/templateengine.class.php");
+include_once("codebase/lib/baseclasses/component.class.php");
+include_once("codebase/lib/alterclass/include.php");
+include_once("codebase/lib/spec/include.php");
+include_once("codebase/core/string/formatstring.class.php");
+include_once("codebase/core/console/outputtobash.class.php");

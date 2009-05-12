@@ -32,7 +32,7 @@ class RunSpecs
 		$DescribesBehavior = substr($DescribesBehavior, 0, -4);
 		$SpecName = substr($SpecName, 2);
 
-		return FormatsString::CamelCaseToSentance($DescribesBehavior . $SpecName);
+		return FormatString::CamelCaseToSentance($DescribesBehavior . $SpecName);
 	}
 
 	protected function RunSuite($Suite)

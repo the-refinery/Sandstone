@@ -18,7 +18,7 @@ class FormatString
 			preg_match_all('/[A-Z][^A-Z]*/', $Subject, $results);
 
 			$results = implode(' ', $results[0]);
-			$results = FormatsString::FormatSentanceCase($results);
+			$results = FormatString::FormatSentanceCase($results);
 		}
 
 		return $results;

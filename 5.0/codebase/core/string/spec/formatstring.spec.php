@@ -1,11 +1,11 @@
 <?php
 
-class FormatStringSpec extends DescribesBehavior
+class FormatStringSpec extends DescribeBehavior
 {
 	public function ItShouldConvertCamelCaseToEnglish()
 	{
 		$testString = "SplitThisStringIntoEnglish";
-		$sentanceResult = FormatsString::CamelCaseToSentance($testString);
+		$sentanceResult = FormatString::CamelCaseToSentance($testString);
 		
 		return $this->Expects($sentanceResult)->ToBeEqualTo("Split this string into english");
 	}	
@@ -13,7 +13,7 @@ class FormatStringSpec extends DescribesBehavior
 	public function ItShouldConvertAStringToSentanceCase()
 	{
 		$testString = "this is a test sentance";
-		$sentanceResult = FormatsString::FormatSentanceCase($testString);
+		$sentanceResult = FormatString::FormatSentanceCase($testString);
 
 		return $this->Expects($sentanceResult)->ToBeEqualTo("This is a test sentance");
 	}

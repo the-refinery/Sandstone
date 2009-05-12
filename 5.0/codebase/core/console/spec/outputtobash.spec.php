@@ -1,6 +1,6 @@
 <?php
 
-class OutputToBashSpec extends DescribesBehavior
+class OutputToBashSpec extends DescribeBehavior
 {
 	public function ItShouldRenderText()
 	{

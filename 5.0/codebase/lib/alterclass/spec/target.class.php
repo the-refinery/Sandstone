@@ -1,9 +1,6 @@
 <?php
 
-class TargetClass extends Component
+class Target extends Component
 {
-	function Integer($Integer) 
-	{
-		return $Integer;
-	}
 }
+

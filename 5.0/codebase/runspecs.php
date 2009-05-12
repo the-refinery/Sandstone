@@ -5,21 +5,19 @@ $currentPath = dirname(__FILE__);
 include_once($currentPath . "/../include.php");
 
 // Include the specs to run
-include_once("testing/describesbehavior.spec.php");
-include_once("testing/specrunner.spec.php");
-include_once("utilities/formatsstring.spec.php");
-include_once("utilities/outputtobash.spec.php");
-include_once("testing/assertscondition.spec.php");
-include_once("alterclass/alterclass.spec.php");
-include_once("templateengine/templateengine.spec.php");
+include_once("core/string/spec/formatstring.spec.php");
+include_once("core/console/spec/outputtobash.spec.php");
+include_once("lib/spec/spec/describebehavior.spec.php");
+include_once("lib/spec/spec/runspecs.spec.php");
+include_once("lib/spec/spec/assertcondition.spec.php");
+include_once("lib/alterclass/spec/alterclass.spec.php");
 
-$SpecRunner = new ConsoleSpecRunner();
-$SpecRunner->DescribeBehavior('DescribesBehaviorSpec');
-$SpecRunner->DescribeBehavior('SpecRunnerSpec');
-$SpecRunner->DescribeBehavior('AssertsConditionSpec');
-$SpecRunner->DescribeBehavior('FormatsStringSpec');
+$SpecRunner = new RunSpecsInBash();
+$SpecRunner->DescribeBehavior('FormatStringSpec');
 $SpecRunner->DescribeBehavior('OutputToBashSpec');
-$SpecRunner->DescribeBehavior('TemplateEngineSpec');
+$SpecRunner->DescribeBehavior('DescribeBehaviorSpec');
+$SpecRunner->DescribeBehavior('RunSpecsSpec');
+$SpecRunner->DescribeBehavior('AssertConditionSpec');
 $SpecRunner->DescribeBehavior('AlterClassSpec');
 $SpecRunner->Run();
 

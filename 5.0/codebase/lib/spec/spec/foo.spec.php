@@ -1,6 +1,6 @@
 <?php
 
-class FooSpec extends DescribesBehavior
+class FooSpec extends DescribeBehavior
 {
 	public function ItIsAPendingSpec()
 	{

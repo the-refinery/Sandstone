@@ -1,10 +1,10 @@
 <?php
 
-class RunSpecsSpec extends DescribesBehavior
+class RunSpecsSpec extends DescribeBehavior
 {
 	public function ItShouldRunSpecifiedSpecClasses()
 	{
-		$runner = new SpecRunner();
+		$runner = new RunSpecs();
 		$runner->DescribeBehavior('FooSpec');
 
 		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeTrue();
@@ -12,7 +12,7 @@ class RunSpecsSpec extends DescribesBehavior
 
 	public function ItShouldLogPassingSpecs()
 	{
-		$runner = new SpecRunner();
+		$runner = new RunSpecs();
 		$runner->DescribeBehavior('FooSpec');
 		$runner->Run();
 
@@ -21,7 +21,7 @@ class RunSpecsSpec extends DescribesBehavior
 		
 	public function ItShouldLogFailingSpecs()
 	{
-		$runner = new SpecRunner();
+		$runner = new RunSpecs();
 		$runner->DescribeBehavior('FooSpec');
 		$runner->Run();
 
@@ -30,7 +30,7 @@ class RunSpecsSpec extends DescribesBehavior
 		
 	public function ItShouldLogPendingSpecs()
 	{
-		$runner = new SpecRunner();
+		$runner = new RunSpecs();
 		$runner->DescribeBehavior('FooSpec');
 		$runner->Run();
 
@@ -39,7 +39,7 @@ class RunSpecsSpec extends DescribesBehavior
 
 	public function ItShouldCreateAnEnglishSpecDescription()
 	{
-		$runner = new SpecRunner();
+		$runner = new RunSpecs();
 		$testResult = $runner->CreateEnglishSpecDescription("SandstoneSpec", "ItShouldBeTheBestFrameworkEver");
 
 		return $this->Expects($testResult)->ToBeEqualTo("Sandstone should be the best framework ever");
