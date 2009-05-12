@@ -57,11 +57,18 @@ class DescribeBehaviorSpec extends DescribeBehavior
 		return $this->Expects($spec->ItIsAPendingSpec()->TestResult)->ToBeEqualTo(null);
 	}
 
+	public function ItShouldTestForException()
+	{
+		$spec = new FooSpec();
+
+		return $this->Expects($spec->Execute("ItIsThrowingException"))->ToThrowException();
+	}
+
 	public function ItShouldFindSpecsToRun()
 	{
 		$spec = new FooSpec();
 
-		return $this->Expects($spec->FindSpecs())->ToBeEqualTo(array('ItIsAPendingSpec','ItIsAPassingSpec','ItIsAFailingSpec'));
+		return $this->Expects($spec->FindSpecs())->ToContain('ItIsAPendingSpec');
 	}
 
 }

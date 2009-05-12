@@ -43,12 +43,12 @@ class RunSpecs
 		{
 			$specSuiteName = get_class($Suite);
 
-			$this->AnalyzeResult($specSuiteName, $specName, $specResult);
+			$this->AnalyzeResult($specResult);
 			$this->OutputSpecResult($specSuiteName, $specName, $specResult);
 		}	
 	}
 
-	protected function AnalyzeResult($SpecSuiteName, $SpecName, $SpecResult)
+	protected function AnalyzeResult($SpecResult)
 	{
 		if ($SpecResult->TestResult === true)
 		{

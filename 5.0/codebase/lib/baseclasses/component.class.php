@@ -12,6 +12,10 @@ class Component
 		{
 			$returnValue = $this->$getter();
 		}
+		else
+		{
+			throw new Exception('Invalid Property');
+		}
 		
 		return $returnValue;
 	}

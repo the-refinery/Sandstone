@@ -31,6 +31,11 @@ class AssertCondition
 		return isset($this->ExpectedValue);
 	}
 
+	public function ThrowException()
+	{
+		return $this->ExpectedValue instanceof Exception;
+	}
+
 	public function Contain()
 	{
 		return in_array($this->ActualValue, $this->ExpectedValue);
