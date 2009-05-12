@@ -10,6 +10,6 @@ class AlterClassSpec extends DescribesBehavior
 
 		$target = new TargetClass();
 
-		return $this->Expects($target->String('foobar')->ToBeEqualTo('foobar'));
+		return $this->Expects($target->String('foobar'))->ToBeEqualTo('foobar');
 	}
 }

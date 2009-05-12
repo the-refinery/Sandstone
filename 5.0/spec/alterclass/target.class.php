@@ -4,6 +4,6 @@ class TargetClass extends Component
 {
 	function Integer($Integer) 
 	{
-		return $integer;
+		return $Integer;
 	}
 }

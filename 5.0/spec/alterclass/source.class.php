@@ -1,6 +1,6 @@
 <?php
 
-abstract class SourceClass extends Component
+abstract class SourceClass
 {
 	public function String($String)
 	{
