@@ -1,1 +1,2 @@
 <h1>Sandstone Default Page Template</h1>
+Parent Object Type: {$DEBUG_ParentObjectType}

@@ -116,7 +116,8 @@ class Template extends Module
         }
 	}
 
-	/*
+	/*$this->_template = new Template($this);
+
 	FileName property
 
 	@return string
@@ -320,6 +321,9 @@ class Template extends Module
 
 		if ($this->_isRendered)
 		{
+			//Add a these TV's just for debugging
+			$this->DEBUG_ParentObjectType = get_class($this->_parentObject);
+
 			//Do we need to load a template file?
 			if (strlen($this->_templateString) == 0)
 			{
