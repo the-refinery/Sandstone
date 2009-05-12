@@ -58,6 +58,8 @@ class LoginPage extends BasePage
 		{
 			Application::Redirect(Routing::BuildURLbyRule('default'));
 		}
+
+		parent::HTM_Processor($EventParameters);
 	}
 
 	/*** FORM PROCESSORS ***/

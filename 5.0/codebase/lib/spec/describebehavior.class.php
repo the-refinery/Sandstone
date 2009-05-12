@@ -31,21 +31,7 @@ class DescribeBehavior
 
 		foreach ($this->FindSpecs() as $tempSpec)
 		{
-			$returnValue[$tempSpec] = $this->Execute($tempSpec);
-		}
-
-		return $returnValue;
-	}
-
-	public function Execute($SpecMethodName)
-	{
-		try
-		{
-			$returnValue =  $this->$SpecMethodName();
-		}	
-		catch (Exception $e)
-		{
-			$returnValue = $e;
+			$returnValue[$tempSpec] = $this->$tempSpec();
 		}
 
 		return $returnValue;

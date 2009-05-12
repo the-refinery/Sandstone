@@ -61,7 +61,7 @@ class DescribeBehaviorSpec extends DescribeBehavior
 	{
 		$spec = new FooSpec();
 
-		return $this->Expects($spec->Execute("ItIsThrowingException"))->ToThrowException();
+		return $this->Expects($spec->ItIsThrowingException())->ToThrowException();
 	}
 
 	public function ItShouldFindSpecsToRun()
