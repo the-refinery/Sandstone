@@ -129,7 +129,7 @@ class LoginPage extends BasePage
 
 	/*** CONTROLS ***/
 
-	protected function BuildControlArray($EventParameters)
+	protected function OldBuildControlArray($EventParameters)
 	{
 		$this->LoginForm = new PageForm($EventParameters);
 
