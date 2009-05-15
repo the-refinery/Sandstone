@@ -67,7 +67,7 @@ class RunSpecsInBash extends RunSpecs
 		{
 			echo OutputToBash::ColoredText("Red","F");
 		}
-		else
+		elseif ($SpecResult->TestResult === RunSpecs::PENDING)
 		{
 			echo OutputToBash::ColoredText("Yellow","S");
 		}

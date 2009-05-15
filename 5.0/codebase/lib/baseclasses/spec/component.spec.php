@@ -11,13 +11,6 @@ class ComponentSpec extends DescribeBehavior
 		return $this->Expects($generalObject->Foo)->ToBeEqualTo('foo');
 	}
 
-	public function ItShouldThrowExceptionForInvalidProperty()
-	{
-		$generalObject = new GeneralObject();
-
-		return $this->Expects($generalObject->Bar)->ToThrowException();
-	}
-
 	public function ItShouldSetAPropertyValue()
 	{
 		$generalObject = new GeneralObject();

@@ -17,11 +17,6 @@ class FooSpec extends DescribeBehavior
 		return $this->Expects(true)->ToBeEqualTo(false);
 	}
 
-	public function ItIsThrowingException()
-	{
-		throw new Exception('Oh no!');
-	}
-
 	public function ThisIsNotASpec() {}
 }
 

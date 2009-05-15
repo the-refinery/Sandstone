@@ -31,9 +31,9 @@ class AssertCondition
 		return isset($this->ExpectedValue);
 	}
 
-	public function ThrowException()
+	public function BeInstanceOf()
 	{
-		return $this->ExpectedValue instanceof Exception;
+		return $this->ExpectedValue instanceof $this->ActualValue;
 	}
 
 	public function Contain()
@@ -59,7 +59,11 @@ class AssertCondition
 
 			$this->TestResult = $testCondition == true;
 		}
-		
+		else
+		{
+			throw new Exception('Unknown Assertion');
+		}
+
 		return $this;
 	}
 

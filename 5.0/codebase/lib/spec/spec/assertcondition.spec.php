@@ -49,6 +49,27 @@ class AssertConditionSpec extends DescribeBehavior
 		return $this->Expects(array('foo','bar'))->ToContain('bar');	
 	}
 
+	public function ItShouldAssertInstanceOf()
+	{
+		$foo = new FooSpec();
+
+		return $this->Expects($foo)->ToBeInstanceOf('DescribeBehavior');
+	}
+
+	public function ItShouldAssertException()
+	{
+		try
+		{
+			throw new Exception('Test Exception');
+		}
+		catch (Exception $e)
+		{
+			$exception = $e;
+		}
+
+		return $this->Expects($exception)->ToBeInstanceOf('exception');
+	}
+
 	public function ItShouldExplainBooleanValue()
 	{
 		$assert = new AssertCondition('123', "ItShouldntMatter", $this);

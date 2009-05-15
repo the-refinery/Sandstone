@@ -22,7 +22,10 @@ class DescribeBehavior
 		$callStack = debug_backtrace();
 		$specName = $callStack[1]['function'];
 		
-		return new AssertCondition(null, $specName, $this);
+		$returnValue = new AssertCondition(null, $specName, $this);
+		$returnValue->TestResult = RunSpecs::PENDING;
+
+		return $returnValue;
 	}
 
 	public function Run()

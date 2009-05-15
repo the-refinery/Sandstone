@@ -2,6 +2,8 @@
 
 class RunSpecs
 {
+	const PENDING = -1;
+
 	public $SpecSuites = array();
 
 	public $Passing = array();
@@ -58,7 +60,7 @@ class RunSpecs
 		{
 			$this->Failing[] = $SpecResult;
 		}
-		else
+		elseif ($SpecResult->TestResult === self::PENDING)
 		{
 			$this->Pending[] = $SpecResult;
 		}
