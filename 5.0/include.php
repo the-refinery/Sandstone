@@ -1,5 +1,8 @@
 <?php
 
+require('codebase/core/handleerrors.php');
+set_error_handler("HandleError", E_ALL);
+
 include_once("codebase/lib/baseclasses/component.class.php");
 include_once("codebase/lib/alterclass/include.php");
 include_once("codebase/lib/spec/include.php");
