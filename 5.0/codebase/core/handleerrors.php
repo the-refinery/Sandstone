@@ -2,6 +2,7 @@
 
 function HandleError($ErrorNumber, $ErrorMessage, $ErrorFileName, $ErrorLineNumber)
 {
+
 	switch($ErrorNumber){
 		case E_ERROR:               
 			$errorType = "Error";
@@ -13,7 +14,7 @@ function HandleError($ErrorNumber, $ErrorMessage, $ErrorFileName, $ErrorLineNumb
 			$errorType = "Parse Error";
 			break;
 		case E_NOTICE:
-			// Do nothing, Notice's are ignored in Sandstone
+			$errorType = null;
 			break;
 		case E_CORE_ERROR:
 			$errorType = "Core Error";
