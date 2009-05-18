@@ -2,11 +2,12 @@
 
 class NamespaceSpec extends DescribeBehavior
 {
-	public function ItShouldIncludeClass()
+	public function ItShouldIncludeClasses()
 	{
-		Namespace::Using("lib/namespace/spec/utility/namespacetest.class.php");
+		Namespace::Using("lib/namespace/spec/utility/");
 
-		return $this->Expects(class_exists("NamespaceTest"))->ToBeEqualTo(true);
+		$condition = class_exists("NamespaceTest") && class_exists("NamespaceTest2");
+
+		return $this->Expects($condition)->ToBeEqualTo(true);
 	}
-
 }

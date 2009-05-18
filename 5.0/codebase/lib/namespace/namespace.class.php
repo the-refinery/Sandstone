@@ -21,9 +21,14 @@ class Namespace
 
 	static public function Using($Namespace)
 	{
-		$Namespace = "codebase/" . $Namespace;
+		$BasePath = "codebase/" . $Namespace;
 
-		require_once($Namespace);
+		$files = glob($BasePath . "*.*.php");
+
+		foreach ($files as $tempFile)
+		{
+			require_once($tempFile);
+		}
 	}
 
 	static public function AutoLoad($ClassName)
