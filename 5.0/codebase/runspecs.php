@@ -7,6 +7,7 @@ include_once($currentPath . "/../include.php");
 // Include the specs to run
 include_once("core/string/spec/formatstring.spec.php");
 include_once("core/console/spec/outputtobash.spec.php");
+include_once("core/filesystem/spec/parseadirectory.spec.php");
 include_once("lib/spec/spec/describebehavior.spec.php");
 include_once("lib/spec/spec/runspecs.spec.php");
 include_once("lib/spec/spec/assertcondition.spec.php");
@@ -23,5 +24,6 @@ $SpecRunner->DescribeBehavior('AssertConditionSpec');
 $SpecRunner->DescribeBehavior('AlterClassSpec');
 $SpecRunner->DescribeBehavior('componentspec');
 $SpecRunner->DescribeBehavior('NamespaceSpec');
+$SpecRunner->DescribeBehavior('ParseADirectorySpec');
 $SpecRunner->Run();
 

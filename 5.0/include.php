@@ -9,3 +9,4 @@ include_once("codebase/lib/namespace/namespace.class.php");
 include_once("codebase/lib/spec/include.php");
 include_once("codebase/core/string/formatstring.class.php");
 include_once("codebase/core/console/outputtobash.class.php");
+include_once("codebase/core/filesystem/parseadirectory.class.php");

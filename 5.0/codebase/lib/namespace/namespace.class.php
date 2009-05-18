@@ -23,7 +23,9 @@ class Namespace
 	{
 		$BasePath = "codebase/" . $Namespace;
 
-		$files = glob($BasePath . "*.*.php");
+		$parser = new ParseADirectory();
+
+		$files = $parser->FindFilesInADirectory($BasePath . "*.*.php");
 
 		foreach ($files as $tempFile)
 		{
