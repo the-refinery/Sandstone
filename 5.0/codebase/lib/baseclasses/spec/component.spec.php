@@ -4,19 +4,22 @@ include_once("dependencies.php");
 
 class ComponentSpec extends DescribeBehavior
 {
+	protected $_generalObject;
+
+	public function BeforeEach()
+	{
+		$this->_generalObject = new GeneralObject();
+	}
+
 	public function ItShouldGetAPropertyValue()
 	{
-		$generalObject = new GeneralObject();
-		
-		return $this->Expects($generalObject->Foo)->ToBeEqualTo('foo');
+		return $this->Expects($this->_generalObject->Foo)->ToBeEqualTo('foo');
 	}
 
 	public function ItShouldSetAPropertyValue()
 	{
-		$generalObject = new GeneralObject();
+		$this->_generalObject->Foo = "bar";
 
-		$generalObject->Foo = "bar";
-
-		return $this->Expects($generalObject->_foo)->ToBeEqualTo('bar');
+		return $this->Expects($this->_generalObject->_foo)->ToBeEqualTo('bar');
 	}
 }

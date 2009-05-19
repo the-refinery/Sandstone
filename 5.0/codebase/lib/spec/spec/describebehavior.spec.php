@@ -4,80 +4,75 @@ include_once('dependencies.php');
 
 class DescribeBehaviorSpec extends DescribeBehavior
 {
+	protected $_spec;
+	protected $_fooSpec;
+
+	public function BeforeEach()
+	{
+		$this->_spec = new DescribeBehavior();
+		$this->_fooSpec = new FooSpec();
+	}
+
 	public function ItShouldSetTheExpectedValue()
 	{
-		$spec = new DescribeBehavior();
-		$condition = $spec->Expects('expectedValue');
+		$condition = $this->_spec->Expects('expectedValue');
 
 		return $this->Expects($condition->ExpectedValue)->ToBeEqualTo('expectedValue');
 	}
 
 	public function ItShouldSetTheActualValue()
 	{
-		$spec = new DescribeBehavior();
-		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
+		$condition = $this->_spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
 
 		return $this->Expects($condition->ActualValue)->ToBeEqualTo('actualValue');
 	}
 
 	public function ItShouldKnowTheNameOfTheFile()
 	{
-		$spec = new DescribeBehavior();
-		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
+		$condition = $this->_spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
 
 		return $this->Expects($condition->Filename)->ToExist();
 	}
 
 	public function ItShouldKnowTheLineNumber()
 	{
-		$spec = new DescribeBehavior();
-		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
+		$condition = $this->_spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
 
 		return $this->Expects($condition->LineNumber)->ToExist();
 	}
 
 	public function ItShouldSetTheNameOfTheSpec()
 	{
-		$spec = new DescribeBehavior();
-		$condition = $spec->Expects('expectedValue');
+		$condition = $this->_spec->Expects('expectedValue');
 
 		return $this->Expects($condition->Name)->ToBeEqualTo('ItShouldSetTheNameOfTheSpec');
 	}
 
 	public function ItShouldSetTheNameOfTheDescribe()
 	{
-		$spec = new FooSpec();
-		$condition = $spec->Expects('expectedValue');
+		$condition = $this->_fooSpec->Expects('expectedValue');
 
 		return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooSpec');
 	}
 			
 	public function ItShouldReportASpecAsPassing()
 	{
-		$spec = new FooSpec();
-
-		return $this->Expects($spec->ItIsAPassingSpec()->TestResult)->ToBeEqualTo(true);
+		return $this->Expects($this->_fooSpec->ItIsAPassingSpec()->TestResult)->ToBeEqualTo(true);
 	}
 
 	public function ItShouldReportASpecAsFailing()
 	{
-		$spec = new FooSpec();
-
-		return $this->Expects($spec->ItIsAFailingSpec()->TestResult)->ToBeEqualTo(false);
+		return $this->Expects($this->_fooSpec->ItIsAFailingSpec()->TestResult)->ToBeEqualTo(false);
 	}
 
 	public function ItShouldReportASpecAsPending()
 	{
-		$spec = new FooSpec();
-
-		return $this->Expects($spec->ItIsAPendingSpec()->TestResult)->ToBeEqualTo(RunSpecs::PENDING);
+		return $this->Expects($this->_fooSpec->ItIsAPendingSpec()->TestResult)->ToBeEqualTo(RunSpecs::PENDING);
 	}
 
 	public function ItShouldFindSpecsToRun()
 	{
-		$spec = new FooSpec();
-
-		return $this->Expects($spec->FindSpecs())->ToContain('ItIsAPendingSpec');
+		return $this->Expects($this->_fooSpec->FindSpecs())->ToContain('ItIsAPendingSpec');
 	}
 
 }
