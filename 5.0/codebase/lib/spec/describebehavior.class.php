@@ -25,12 +25,16 @@ class DescribeBehavior
 	public function Run()
 	{
 		$returnValue = array();
+		$this->BeforeAll();
 
 		foreach ($this->FindSpecs() as $tempSpec)
 		{
+			$this->BeforeEach();
 			$returnValue[$tempSpec] = $this->$tempSpec();
+			$this->AfterEach();
 		}
 
+		$this->AfterAll();
 		return $returnValue;
 	}
 
@@ -55,4 +59,9 @@ class DescribeBehavior
 	{
 		return strpos($MethodName, 'It') === 0;
 	}
+
+	public function BeforeAll() {}
+	public function BeforeEach() {}
+	public function AfterEach() {}
+	public function AfterAll() {}
 }
