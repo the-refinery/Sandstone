@@ -5,14 +5,21 @@ class AssertCondition
 	public $Name;
 	public $Spec;
 
+	public $Filename;
+	public $LineNumber;
+		
 	public $ExpectedValue;
 	public $ActualValue;
 	public $TestResult;
 
-	public function __construct($ExpectedValue = null, $SpecName, $Spec)
+	public function __construct($ExpectedValue = null, $Spec)
 	{
+		$callStack = debug_backtrace();
+		$this->Name = $callStack[2]['function'];
+		$this->Filename = $callStack[1]['file'];
+		$this->LineNumber = $callStack[1]['line'];
+
 		$this->ExpectedValue = $ExpectedValue;
-		$this->Name = $SpecName;
 		$this->Spec = $Spec;
 	}
 
@@ -23,11 +30,13 @@ class AssertCondition
 
 	public function BeTrue()
 	{
-		return $this->ExpectedValue === true;
+		$this->ActualValue = true;
+		return $this->ExpectedValue === $this->ActualValue;
 	}
 
 	public function Exist()
 	{
+		$this->ActualValue = true;
 		return isset($this->ExpectedValue);
 	}
 

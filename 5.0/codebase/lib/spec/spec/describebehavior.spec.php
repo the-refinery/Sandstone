@@ -20,6 +20,22 @@ class DescribeBehaviorSpec extends DescribeBehavior
 		return $this->Expects($condition->ActualValue)->ToBeEqualTo('actualValue');
 	}
 
+	public function ItShouldKnowTheNameOfTheFile()
+	{
+		$spec = new DescribeBehavior();
+		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
+
+		return $this->Expects($condition->Filename)->ToExist();
+	}
+
+	public function ItShouldKnowTheLineNumber()
+	{
+		$spec = new DescribeBehavior();
+		$condition = $spec->Expects('expectedValue')->ToBeEqualTo('actualValue');
+
+		return $this->Expects($condition->LineNumber)->ToExist();
+	}
+
 	public function ItShouldSetTheNameOfTheSpec()
 	{
 		$spec = new DescribeBehavior();

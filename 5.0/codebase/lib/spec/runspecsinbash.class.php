@@ -26,6 +26,8 @@ class RunSpecsInBash extends RunSpecs
 				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ActualValue));
 				echo OutputToBash::ColoredText("Red", " Actual: ");
 				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ExpectedValue));
+				echo OutputToBash::NewLine();
+				echo OutputToBash::ColoredText("Red", " - In " . basename($failedResult->Filename) . " on line " . $failedResult->LineNumber);
 			}
 			echo OutputToBash::NewLine();
 		}

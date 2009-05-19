@@ -11,18 +11,12 @@ class DescribeBehavior
 
 	public function Expects($ExpectedValue)
 	{
-		$callStack = debug_backtrace();
-		$specName = $callStack[1]['function'];
-		
-		return new AssertCondition($ExpectedValue, $specName, $this);
+		return new AssertCondition($ExpectedValue, $this);
 	}
 
 	public function Pending()
 	{
-		$callStack = debug_backtrace();
-		$specName = $callStack[1]['function'];
-		
-		$returnValue = new AssertCondition(null, $specName, $this);
+		$returnValue = new AssertCondition(null, $this);
 		$returnValue->TestResult = RunSpecs::PENDING;
 
 		return $returnValue;
