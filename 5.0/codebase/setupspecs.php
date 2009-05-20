@@ -11,7 +11,7 @@ include_once("core/filesystem/spec/parseadirectory.spec.php");
 include_once("lib/spec/spec/describebehavior.spec.php");
 include_once("lib/spec/spec/runspecs.spec.php");
 include_once("lib/spec/spec/assertcondition.spec.php");
-include_once("lib/spec/spec/dingus.spec.php");
+include_once("lib/spec/spec/genericmock.spec.php");
 include_once("lib/alterclass/spec/alterclass.spec.php");
 include_once("lib/baseclasses/spec/component.spec.php");
 include_once("lib/namespace/spec/namespace.spec.php");

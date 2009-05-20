@@ -1,22 +1,22 @@
 <?php
 
-class Dingus
+class GenericMock
 {
 	protected $_properties = array();
 	protected $_methods = array();
 
 	public $Recorder = array();
-	public $DingusName;
+	public $MockName;
 
 	public function __construct($Name = null)
 	{
 		if (is_null($Name))
 		{
-			$this->DingusName = 'dingus_' . spl_object_hash($this);
+			$this->MockName = 'mock_' . spl_object_hash($this);
 		}
 		else
 		{
-			$this->DingusName = $Name;
+			$this->MockName = $Name;
 		}
 	}
 
@@ -32,7 +32,7 @@ class Dingus
 		}
 		else
 		{
-			$returnValue = new Dingus();
+			$returnValue = new GenericMock();
 		}
 
 		return $returnValue;
@@ -56,7 +56,7 @@ class Dingus
 
 		if (array_key_exists($MethodName, $this->_methods) == false)
 		{
-			$this->SetReturnValue($MethodName, new Dingus());
+			$this->SetReturnValue($MethodName, new GenericMock());
 		}
 
 		return $this->_methods[$MethodName];
