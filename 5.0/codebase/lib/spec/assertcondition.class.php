@@ -40,6 +40,12 @@ class AssertCondition
 		return isset($this->ExpectedValue);
 	}
 
+	public function BeEmpty()
+	{
+		$this->ActualValue = array();
+		return count($this->ExpectedValue) == 0;
+	}
+
 	public function BeInstanceOf()
 	{
 		return $this->ExpectedValue instanceof $this->ActualValue;

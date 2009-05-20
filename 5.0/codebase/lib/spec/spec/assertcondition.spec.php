@@ -42,6 +42,13 @@ class AssertConditionSpec extends DescribeBehavior
 		return $this->Expects($assert->ToExist()->TestResult)->ToBeEqualTo(true);
 	}
 
+	public function ItShouldAssertEmpty()
+	{
+		$assert = new AssertCondition('123', $this);
+
+		return $this->Expects(array())->ToBeEmpty();
+	}
+
 	public function ItShouldAssertContains()
 	{
 		$assert = new AssertCondition('123', $this);
