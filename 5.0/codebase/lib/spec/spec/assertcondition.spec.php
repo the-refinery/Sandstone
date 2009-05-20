@@ -1,7 +1,5 @@
 <?php
 
-include_once('dependencies.php');
-
 class AssertConditionSpec extends DescribeBehavior
 {
 	public function ItShouldAssertTo()

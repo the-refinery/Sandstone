@@ -1,7 +1,5 @@
 <?php
 
-include_once('dependencies.php');
-
 class DescribeBehaviorSpec extends DescribeBehavior
 {
 	protected $_spec;

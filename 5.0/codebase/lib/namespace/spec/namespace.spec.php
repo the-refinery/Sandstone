@@ -25,7 +25,6 @@ class NamespaceSpec extends DescribeBehavior
 		}
 	
 		return $this->Expects($condition)->ToBeEqualTo(true);
-	
 	}
 
 	public function ItShouldAllowNamespacesToBeUsedMultipleTimes()
@@ -36,6 +35,13 @@ class NamespaceSpec extends DescribeBehavior
 		$condition = class_exists("NamespaceTest");
 
 		return $this->Expects($condition)->ToBeEqualTo(true);
+	}
+
+	public function ItShouldIncludeWildcardNamespaces()
+	{
+		Namespace::Using("lib.namespace.spec.utility.*");
+
+		return $this->Expects(class_exists("WildcardTest"))->ToBeEqualTo(true);
 	}
 
 }

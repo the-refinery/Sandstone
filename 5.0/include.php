@@ -3,10 +3,11 @@
 require('codebase/core/handleerrors.php');
 set_error_handler("HandleError", E_ALL);
 
+//directly include files necessary for namespacing to work
 include_once("codebase/lib/baseclasses/component.class.php");
-include_once("codebase/lib/alterclass/include.php");
-include_once("codebase/lib/namespace/namespace.class.php");
-include_once("codebase/lib/spec/include.php");
-include_once("codebase/core/string/formatstring.class.php");
-include_once("codebase/core/console/outputtobash.class.php");
 include_once("codebase/core/filesystem/parseadirectory.class.php");
+include_once("codebase/lib/namespace/namespace.class.php");
+
+Namespace::Using("lib.alterclass");
+Namespace::Using("core.string");
+Namespace::Using("core.console");

@@ -1,7 +1,5 @@
 <?php
 
-include_once("dependencies.php");
-
 class ComponentSpec extends DescribeBehavior
 {
 	protected $_generalObject;

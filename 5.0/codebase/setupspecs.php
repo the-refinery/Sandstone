@@ -4,14 +4,14 @@
 $currentPath = dirname(__FILE__);
 include_once($currentPath . "/../include.php");
 
+Namespace::Using("lib.spec");
+
 // Include the specs to run
-include_once("core/string/spec/formatstring.spec.php");
-include_once("core/console/spec/outputtobash.spec.php");
-include_once("core/filesystem/spec/parseadirectory.spec.php");
-include_once("lib/spec/spec/describebehavior.spec.php");
-include_once("lib/spec/spec/runspecs.spec.php");
-include_once("lib/spec/spec/assertcondition.spec.php");
-include_once("lib/spec/spec/genericmock.spec.php");
-include_once("lib/alterclass/spec/alterclass.spec.php");
-include_once("lib/baseclasses/spec/component.spec.php");
-include_once("lib/namespace/spec/namespace.spec.php");
+Namespace::Using("core.string.spec");
+Namespace::Using("core.console.spec");
+Namespace::Using("core.filesystem.spec");
+Namespace::Using("lib.spec.spec");
+Namespace::Using("lib.alterclass.spec");
+Namespace::Using("lib.baseclasses.spec");
+Namespace::Using("lib.namespace.spec");
+

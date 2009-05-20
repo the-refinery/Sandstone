@@ -1,6 +1,6 @@
 <?php
 
-class Namespace
+class Namespace extends Component
 {
 	protected $_includedClasses;
 	protected $_usedNamespaces;
@@ -54,12 +54,10 @@ class Namespace
 
 			$this->_usedNamespaces[$Namespace] = $namespaceDirectory;
 		}
-
 	}
 
 	protected function GenerateBasePathFromNamespace($Namespace)
 	{
-		
 		$returnValue = strtolower($Namespace);
 
 		$returnValue = str_replace(".", "/", $returnValue);
@@ -81,8 +79,14 @@ class Namespace
 		$fileNameStart = strrpos($FileSpec, "/") + 1;
 		$fileName = substr($FileSpec, $fileNameStart);
 
-		$classNameEnd = strpos($fileName, ".");
-		$returnValue = strtolower(substr($fileName, 0, $classNameEnd));
+		$fileNameParts = explode(".", strtolower($fileName));
+
+		if ($fileNameParts[1] == "spec")
+		{
+			$fileNameParts[0] .= "spec";
+		}
+
+		$returnValue = $fileNameParts[0];
 
 		return $returnValue;
 	}

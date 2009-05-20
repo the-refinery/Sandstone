@@ -1,7 +1,5 @@
 <?php
 
-include_once('dependencies.php');
-
 class AlterClassSpec extends DescribeBehavior
 {
 	public function ItShouldMixClasses()
