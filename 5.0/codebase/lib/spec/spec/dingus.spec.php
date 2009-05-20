@@ -30,4 +30,11 @@ class DingusSpec extends DescribeBehavior
 
 		return $this->Expects($this->_dingus->TestProperty)->ToBeEqualTo('abc');
 	}
+
+	public function ItShouldReturnTheSameDingusEachTimeYouCallTheSameMethod()
+	{
+		$this->_dingus->FooBar()->TestProperty = 'abc';
+
+		return $this->Expects($this->_dingus->FooBar()->TestProperty)->ToBeEqualTo('abc');
+	}
 }

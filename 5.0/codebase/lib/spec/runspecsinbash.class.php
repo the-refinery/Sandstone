@@ -18,17 +18,16 @@ class RunSpecsInBash extends RunSpecs
 	{
 		if (count($this->Failing) > 0)
 		{
-			foreach ($this->Failing as $failedResult)
-			{
-				echo OutputToBash::BlankLine();
-				$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
-				echo OutputToBash::ColoredText("Red", $englishDescription . " Expected: ");
-				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ActualValue));
-				echo OutputToBash::ColoredText("Red", " Actual: ");
-				echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ExpectedValue));
-				echo OutputToBash::NewLine();
-				echo OutputToBash::ColoredText("Red", " - In " . basename($failedResult->Filename) . " on line " . $failedResult->LineNumber);
-			}
+			$failedResult = $this->Failing[0];
+
+			echo OutputToBash::BlankLine();
+			$englishDescription = $this->CreateEnglishSpecDescription($failedResult->Spec->Name, $failedResult->Name);
+			echo OutputToBash::ColoredText("Red", $englishDescription . " Expected: ");
+			echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ActualValue));
+			echo OutputToBash::ColoredText("Red", " Actual: ");
+			echo OutputToBash::Text($failedResult->ExplainValue($failedResult->ExpectedValue));
+			echo OutputToBash::NewLine();
+			echo OutputToBash::ColoredText("Red", " - In " . basename($failedResult->Filename) . " on line " . $failedResult->LineNumber);
 			echo OutputToBash::NewLine();
 		}
 	}

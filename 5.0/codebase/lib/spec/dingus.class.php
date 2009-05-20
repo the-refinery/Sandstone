@@ -3,6 +3,7 @@
 class Dingus
 {
 	protected $_properties = array();
+	protected $_methods = array();
 
 	public function __get($PropertyName)
 	{
@@ -30,6 +31,13 @@ class Dingus
 
 	public function __call($MethodName, $Parameters)
 	{
-		return new Dingus();
+		$MethodName = strtolower($MethodName);
+
+		if (array_key_exists($MethodName, $this->_methods) == false)
+		{
+			$this->_methods[$MethodName] = new Dingus();
+		}
+
+		return $this->_methods[$MethodName];
 	}
 }
