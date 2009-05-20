@@ -53,6 +53,23 @@ class DingusSpec extends DescribeBehavior
 		return $this->Expects($this->_dingus->FooBar())->ToBeEqualTo('abcdefg');
 	}
 
+	public function ItShouldHaveAnEmptyRecorderOnInstantiation()
+	{
+		return $this->Expects($this->_dingus->Recorder)->ToBeEmpty();
+	}
+
+	public function ItShouldCreateANameWhenCreatingAnUnnamedDingus()
+	{
+		return $this->Expects($this->_dingus->DingusName)->ToExist();
+	}
+
+	public function ItShouldCreateANamedDingus()
+	{
+		$this->_dingus = new Dingus('something');
+
+		return $this->Expects($this->_dingus->DingusName)->ToBeEqualTo('something');
+	}
+
 	public function ItShouldRecordMethodCalls()
 	{
 		$this->_dingus->TestOne();

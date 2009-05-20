@@ -6,6 +6,19 @@ class Dingus
 	protected $_methods = array();
 
 	public $Recorder = array();
+	public $DingusName;
+
+	public function __construct($Name = null)
+	{
+		if (is_null($Name))
+		{
+			$this->DingusName = 'dingus_' . spl_object_hash($this);
+		}
+		else
+		{
+			$this->DingusName = $Name;
+		}
+	}
 
 	public function __get($PropertyName)
 	{
