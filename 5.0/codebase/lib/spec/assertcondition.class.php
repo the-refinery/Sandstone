@@ -28,6 +28,32 @@ class AssertCondition
 		return $this->ExpectedValue == $this->ActualValue;
 	}
 
+	public function BeNull()
+	{
+		$this->ActualValue = null;
+		return is_null($this->ExpectedValue);
+	}
+
+	public function BeGreaterThan()
+	{
+		return $this->ExpectedValue > $this->ActualValue;
+	}
+
+	public function BeLessThan()
+	{
+		return $this->ExpectedValue < $this->ActualValue;
+	}
+
+	public function BeGreaterThanOrEqualTo()
+	{
+		return $this->ExpectedValue >= $this->ActualValue;
+	}
+
+	public function BeLessThanOrEqualTo()
+	{
+		return $this->ExpectedValue <= $this->ActualValue;
+	}
+
 	public function BeTrue()
 	{
 		$this->ActualValue = true;
@@ -46,14 +72,24 @@ class AssertCondition
 		return count($this->ExpectedValue) == 0;
 	}
 
+	public function Contain()
+	{
+		return in_array($this->ActualValue, $this->ExpectedValue);
+	}
+
+	public function HaveKey()
+	{
+		return array_key_exists($this->ActualValue, $this->ExpectedValue);
+	}
+
 	public function BeInstanceOf()
 	{
 		return $this->ExpectedValue instanceof $this->ActualValue;
 	}
 
-	public function Contain()
+	public function MatchRegex()
 	{
-		return in_array($this->ActualValue, $this->ExpectedValue);
+		return preg_match($this->ActualValue, $this->ExpectedValue);
 	}
 	
 	public function __call($Method, $Args)

@@ -28,6 +28,41 @@ class AssertConditionSpec extends DescribeBehavior
 		return $this->Expects($result)->ToBeTrue();
 	}
 
+	public function ItShouldAssertNull()
+	{
+		$assert = new AssertCondition(2, $this);
+
+		return $this->Expects(null)->ToBeNull();
+	}
+
+	public function ItShouldAssertGreaterThan()
+	{
+		$assert = new AssertCondition(2, $this);
+
+		return $this->Expects(2)->ToBeGreaterThan(1);
+	}
+
+	public function ItShouldAssertLessThan()
+	{
+		$assert = new AssertCondition(2, $this);
+
+		return $this->Expects(2)->ToBeLessThan(5);
+	}
+
+	public function ItShouldAssertGreaterThanOrEqualTo()
+	{
+		$assert = new AssertCondition(2, $this);
+
+		return $this->Expects(2)->ToBeGreaterThanOrEqualTo(1);
+	}
+
+	public function ItShouldAssertLessThanOrEqualTo()
+	{
+		$assert = new AssertCondition(2, $this);
+
+		return $this->Expects(2)->ToBeLessThanOrEqualTo(5);
+	}
+
 	public function ItShouldAssertTrue()
 	{
 		$assert = new AssertCondition(true, $this);
@@ -56,11 +91,25 @@ class AssertConditionSpec extends DescribeBehavior
 		return $this->Expects(array('foo','bar'))->ToContain('bar');	
 	}
 
+	public function ItShouldAssertHasKey()
+	{
+		$assert = new AssertCondition('123', $this);
+	
+		return $this->Expects(array('foo' => 'bar'))->ToHaveKey('foo');
+	}
+
 	public function ItShouldAssertInstanceOf()
 	{
 		$foo = new FooSpec();
 
 		return $this->Expects($foo)->ToBeInstanceOf('DescribeBehavior');
+	}
+
+	public function ItShouldMatchRegularExpression()
+	{
+		$assert = new AssertCondition('123', $this);
+
+		return $this->Expects('http://www.designinginteractive.com/')->ToMatchRegex('@^(?:http://)?([^/]+)@i');
 	}
 
 	public function ItShouldAssertException()
