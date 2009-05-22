@@ -8,7 +8,7 @@ $SpecRunner->DescribeBehavior('OutputToBashSpec');
 $SpecRunner->DescribeBehavior('DescribeBehaviorSpec');
 $SpecRunner->DescribeBehavior('RunSpecsSpec');
 $SpecRunner->DescribeBehavior('AssertConditionSpec');
-$SpecRunner->DescribeBehavior('GenericMockSpec');
+$SpecRunner->DescribeBehavior('MockSpec');
 $SpecRunner->DescribeBehavior('AlterClassSpec');
 $SpecRunner->DescribeBehavior('componentspec');
 $SpecRunner->DescribeBehavior('NamespaceSpec');

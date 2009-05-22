@@ -1,6 +1,6 @@
 <?php
 
-class GenericMock
+class Mock
 {
 	protected $_properties = array();
 	protected $_methods = array();
@@ -32,7 +32,7 @@ class GenericMock
 		}
 		else
 		{
-			$returnValue = new GenericMock();
+			$returnValue = new Mock();
 		}
 
 		return $returnValue;
@@ -56,7 +56,7 @@ class GenericMock
 
 		if (array_key_exists($MethodName, $this->_methods) == false)
 		{
-			$this->SetReturnValue($MethodName, new GenericMock());
+			$this->SetReturnValue($MethodName, new Mock());
 		}
 
 		return $this->_methods[$MethodName];
