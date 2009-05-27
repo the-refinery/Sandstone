@@ -37,6 +37,13 @@ class Namespace extends Component
 		$ns->ProcessAutoLoad($ClassName);
 	}
 
+	static public function Display()
+	{
+		$ns = Namespace::Instance();
+
+		$ns->ProcessDisplay();
+	}
+
 	public function ProcessUsing($Namespace)
 	{
 		if (array_key_exists(strtolower($Namespace), $this->_usedNamespaces) == false)
@@ -99,6 +106,12 @@ class Namespace extends Component
 		{
 			require_once($this->_includedClasses[$ClassName]);
 		}
+	}
+
+	public function ProcessDisplay()
+	{
+		var_dump($this->_usedNamespaces);
+		var_dump($this->_includedClasses);
 	}
 }
 

@@ -39,9 +39,18 @@ class NamespaceSpec extends DescribeBehavior
 
 	public function ItShouldIncludeWildcardNamespaces()
 	{
-		Namespace::Using("lib.namespace.spec.utility.*");
+		Namespace::Using("lib.namespace.spec.utility.wildcard.*");
 
 		return $this->Expects(class_exists("WildcardTest"))->ToBeEqualTo(true);
+	}
+
+	public function ItShouldOverwriteClassDefinitions()
+	{
+		Namespace::Using("lib.namespace.spec.utility.override");
+
+		$test = new OverrideTest();
+
+		return $this->Expects($test->IsNewClass)->ToBeEqualTo(true);
 	}
 
 }
