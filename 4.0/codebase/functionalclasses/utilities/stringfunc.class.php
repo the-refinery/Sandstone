@@ -75,9 +75,11 @@ class StringFunc
 
 	static function FormatPercent($Value, $DecimalPlaces = 0)
 	{
-		$returnValue = StringFunc::FormatNumber($Value * 100, $DecimalPlaces);
-
-		$returnValue .= "%";
+		if (is_numeric($Value))
+		{
+			$returnValue = StringFunc::FormatNumber($Value * 100, $DecimalPlaces);
+			$returnValue .= "%";
+		}
 
 		return $returnValue;
 	}
