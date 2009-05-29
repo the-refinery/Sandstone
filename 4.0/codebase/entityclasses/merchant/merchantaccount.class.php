@@ -58,10 +58,7 @@ class MerchantAccount extends EntityBase
 			$this->_isActive = false;
 		}
 
-		if ($returnValue == true)
-		{
-			$returnValue = $this->LoadParameters();	
-		}
+		$this->LoadParameters();	
 
 	}
 
