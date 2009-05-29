@@ -40,7 +40,7 @@ class MerchantAccount extends EntityBase
 		$this->AddProperty("TransactionFee","decimal","TransactionFee",false,false,false,false,false,null);
 		$this->AddProperty("DiscountPercent","decimal","DiscountPercent",false,false,false,false,false,null);
 		$this->AddProperty("IsActive","boolean",null,true,false,false,false,false,null);
-		$this->AddProperty("Parameters","array",null,true,false,false,false,true,"LoadParameters");
+		$this->AddProperty("Parameters","array",null,true,false,false,false,false,null);
 
 		parent::SetupProperties();
 	}
@@ -57,6 +57,12 @@ class MerchantAccount extends EntityBase
 		{
 			$this->_isActive = false;
 		}
+
+		if ($returnValue == true)
+		{
+			$returnValue = $this->LoadParameters();	
+		}
+
 	}
 
 	public function LoadActive()
@@ -167,9 +173,6 @@ class MerchantAccount extends EntityBase
 							AND		AccountID = {$this->AccountID}";
 
 			$query->Execute();
-
-			//Make sure our parameters are Loaded
-			$this->LoadParameters();
 
 			//Clear any existing parameters from the database.
 			$this->ClearParameters();
