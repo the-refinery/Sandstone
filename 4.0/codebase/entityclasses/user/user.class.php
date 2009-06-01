@@ -336,17 +336,6 @@ class User extends EntityBase
 		return true;
 	}
 
-	protected function GeneratePasswordSalt()
-	{
-
-		for ($i = 0; $i < 32; $i++)
-     	{
-          	$newSalt .= chr(rand(35, 126));
-     	}
-
-         $this->_passwordSalt = $newSalt;
-
-	}
 
 	public function Login($UserName, $Password)
 	{
@@ -656,6 +645,11 @@ class User extends EntityBase
 		return $returnValue;
 	}
 
+	protected function GeneratePasswordSalt()
+	{
+		$this->_passwordSalt = User::GenerateSalt();
+	}
+
 	public function GenerateNewPassword($Syllables = 2)
 	{
 		
@@ -855,5 +849,14 @@ class User extends EntityBase
 		return $returnValue;
 	}
 
+	static public function GenerateSalt()
+	{
+		for ($i = 0; $i < 32; $i++)
+		{
+			$returnValue .= chr(rand(35, 126));
+		}
+
+		return $returnValue;
+	}
 }
 ?>
