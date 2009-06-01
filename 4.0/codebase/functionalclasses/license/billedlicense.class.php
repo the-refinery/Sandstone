@@ -165,10 +165,12 @@ class BilledLicense extends BaseLicense
 				$this->_cimCustomerProfile = $newCustomerProfile;
 			}
 
-			$this->_cimCustomerProfile->SetupCreditCard($CreditCard);
+			$returnValue = $this->_cimCustomerProfile->SetupCreditCard($CreditCard);
 
-			$returnValue = $this->Save();
-			
+			if ($returnValue == true)
+			{
+				$returnValue = $this->Save();
+			}
 		}
 
 		return $returnValue;

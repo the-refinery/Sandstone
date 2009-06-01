@@ -22,28 +22,16 @@ class Message extends EntityBase
 
 	protected function SetupProperties()
 	{
-
-		//AddProperty Parameters:
-		// 1) Name
-		// 2) DataType
-		// 3) DBfieldName
-		// 4) IsReadOnly
-		// 5) IsRequired
-		// 6) IsPrimaryID
-		// 7) IsLoadedRequired
-		// 8) IsLoadOnDemand
-		// 9) LoadOnDemandFunctionName
-
-		$this->AddProperty("MessageID","integer","MessageID",true,false,true,false,false,null);
-		$this->AddProperty("AssociatedEntityType","string","AssociatedEntityType",false,true,false,false,false,null);
-		$this->AddProperty("AssociatedEntityID","integer","AssociatedEntityID",false,true,false,false,false,null);
-		$this->AddProperty("User","User","UserID",false,true,false,true,false,null);
-		$this->AddProperty("Timestamp","date","Timestamp",true,false,false,false,false,null);
-		$this->AddProperty("Subject","string","Subject",false,true,false,false,false,null);
-		$this->AddProperty("Content","string","Content",false,true,false,false,false,null);
-		$this->AddProperty("IsEmailOnComment","boolean","IsEmailOnComment",false,false,false,false,false,null);
-		$this->AddProperty("Comments","array",null,true,false,false,false,true,"LoadComments");
-		$this->AddProperty("LatestComment","MessageComment",null,true,false,false,false,true,"LoadComments");
+		$this->AddProperty("MessageID","integer","MessageID",PROPERTY_PRIMARY_ID);
+		$this->AddProperty("AssociatedEntityType","string","AssociatedEntityType",PROPERTY_REQUIRED);
+		$this->AddProperty("AssociatedEntityID","integer","AssociatedEntityID",PROPERTY_REQUIRED);
+		$this->AddProperty("User","User","UserID",PROPERTY_REQUIRED + PROPERTY_LOADED_REQUIRED);
+		$this->AddProperty("Timestamp","date","Timestamp",PROPERTY_READ_ONLY);
+		$this->AddProperty("Subject","string","Subject",PROPERTY_REQUIRED);
+		$this->AddProperty("Content","string","Content",PROPERTY_REQUIRED);
+		$this->AddProperty("IsEmailOnComment","boolean","IsEmailOnComment",PROPERTY_READ_WRITE);
+		$this->AddProperty("Comments","array",null,PROPERTY_READ_ONLY,"LoadComments");
+		$this->AddProperty("LatestComment","MessageComment",null,PROPERTY_READ_ONLY,"LoadComments");
 
 		parent::SetupProperties();
 	}
