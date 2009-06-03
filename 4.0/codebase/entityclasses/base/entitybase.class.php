@@ -443,6 +443,27 @@ class EntityBase extends EntityBaseFunctionality
 		}
 	}
 
+	public function HasTag($TagText)
+	{
+		$returnValue = false;
+
+		if ($this->_isTagsDisabled != true && is_string($TagText))
+		{
+
+			$searchText = Tag::FormatTextForTag($TagText);
+	
+			foreach ($this->Tags as $tempTag)
+			{
+				if ($tempTag->Text == $searchText);
+				{
+					$returnValue = true;
+				}
+			}
+		}
+
+		return $returnValue;
+	}
+
 	public function SortChildren($Children, $OrderArray, $LoadFunction)
 	{
 		$returnValue = false;
