@@ -13,4 +13,5 @@ $SpecRunner->DescribeBehavior('AlterClassSpec');
 $SpecRunner->DescribeBehavior('componentspec');
 $SpecRunner->DescribeBehavior('NamespaceSpec');
 $SpecRunner->DescribeBehavior('ParseADirectorySpec');
+$SpecRunner->DescribeBehavior('BenchmarkSpec');
 $SpecRunner->Run();

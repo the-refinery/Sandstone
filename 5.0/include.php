@@ -11,3 +11,4 @@ include_once("codebase/lib/namespace/namespace.service.php");
 Namespace::Using("lib.alterclass");
 Namespace::Using("core.string");
 Namespace::Using("core.console");
+Namespace::Using("core.benchmark");

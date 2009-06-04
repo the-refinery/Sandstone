@@ -10,6 +10,7 @@ Namespace::Using("lib.spec");
 Namespace::Using("core.string.spec");
 Namespace::Using("core.console.spec");
 Namespace::Using("core.filesystem.spec");
+Namespace::Using("core.benchmark.spec");
 Namespace::Using("lib.spec.spec");
 Namespace::Using("lib.alterclass.spec");
 Namespace::Using("lib.baseclasses.spec");
