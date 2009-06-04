@@ -13,4 +13,8 @@ class GeneralObject extends Component
 	{
 		$this->_foo = $Value;
 	}
+
+	public function setSetOnlyProperty($Value)
+	{
+	}
 }

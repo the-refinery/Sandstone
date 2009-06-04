@@ -30,6 +30,14 @@ class Component
 		}
 	}
 
+	public function HasProperty($PropertyName)
+	{
+		$getter = 'get' . $PropertyName;
+		$setter = 'set' . $PropertyName;
+
+		return method_exists($this, $getter) || method_exists($this, $setter);
+	}
+
 	// Mixins
 	function __call($Func, $Args) 
 	{

@@ -20,4 +20,18 @@ class ComponentSpec extends DescribeBehavior
 
 		return $this->Expects($this->_generalObject->_foo)->ToBeEqualTo('bar');
 	}
+
+	public function ItShouldCheckThatAPropertyExistsForReading()
+	{
+		$testExists = $this->_generalObject->HasProperty('Foo');
+
+		return $this->Expects($testExists)->ToBeTrue();
+	}
+
+	public function ItShouldCheckThatAPropertyExistsForWriting()
+	{
+		$testExists = $this->_generalObject->HasProperty('SetOnlyProperty');
+
+		return $this->Expects($testExists)->ToBeTrue();
+	}
 }
