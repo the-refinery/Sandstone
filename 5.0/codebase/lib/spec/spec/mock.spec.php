@@ -53,6 +53,13 @@ class MockSpec extends DescribeBehavior
 		return $this->Expects($this->_Mock->FooBar())->ToBeEqualTo('abcdefg');
 	}
 
+	public function ItShouldAllowInjectingAPropertyValue()
+	{
+		$this->_Mock->SetPropertyValue('foobar', 'abcdefg');
+
+		return $this->Expects($this->_Mock->FooBar)->ToBeEqualTo('abcdefg');
+	}
+
 	public function ItShouldHaveAnEmptyRecorderOnInstantiation()
 	{
 		return $this->Expects($this->_Mock->Recorder)->ToBeEmpty();

@@ -71,6 +71,15 @@ class Mock
 		return true;
 	}
 
+	public function SetPropertyValue($PropertyName, $Value)
+	{
+		$PropertyName = strtolower($PropertyName);
+
+		$this->_properties[$PropertyName] = $Value;
+
+		return true;
+	}
+
 	protected function RecordMethodCall($MethodName, $Arguments)
 	{
 		$argumentOutput = implode($Arguments, ', ');
