@@ -66,12 +66,19 @@ class Namespace extends Component
 	protected function GenerateBasePathFromNamespace($Namespace)
 	{
 		$returnValue = strtolower($Namespace);
-
 		$returnValue = str_replace(".", "/", $returnValue);
 
-		$returnValue = "codebase/" . $returnValue . "/";
+		$returnValue = $this->DetermineApplicationRoot() . "codebase/" . $returnValue . "/";
 
 		return $returnValue;
+	}
+
+	protected function DetermineApplicationRoot()
+	{
+		$path = dirname(__FILE__);
+		$path =  substr($path, 0, strpos($path, 'codebase'));
+
+		return $path;
 	}
 
 	protected function ProcessFile($FileSpec)

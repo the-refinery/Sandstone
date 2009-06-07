@@ -1,0 +1,10 @@
+Options +FollowSymLinks
+RewriteEngine on
+
+#Redirect to front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?routing=$1 [QSA,L]
+
+php_flag magic_quotes_gpc off
+

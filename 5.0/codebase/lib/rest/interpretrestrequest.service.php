@@ -5,7 +5,7 @@ class InterpretRestRequest extends Component
 	protected $_server;
 	protected $_request;
 
-	public function __construct($Server, $Request)
+	public function __construct(HTTPRequest $Server, array $Request)
 	{
 		$this->_server = $Server;
 		$this->_request = $Request;

@@ -15,5 +15,6 @@ Namespace::Using("lib.spec.spec");
 Namespace::Using("lib.alterclass.spec");
 Namespace::Using("lib.baseclasses.spec");
 Namespace::Using("lib.namespace.spec");
+Namespace::Using("lib.dispatchapplication.spec");
 Namespace::Using("lib.httprequest.spec");
 Namespace::Using("lib.rest.spec");
