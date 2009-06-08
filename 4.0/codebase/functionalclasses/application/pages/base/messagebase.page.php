@@ -32,6 +32,7 @@ class MessageBasePage extends ApplicationPage
                 $this->_entity = new $this->_message->AssociatedEntityType ($this->_message->AssociatedEntityID);
                 
                 $this->_template->Message = $this->_message;
+								$this->_template->MessageContent = nl2br($this->_message->Content);
                 $this->_template->Entity = $this->_entity;
                 $this->_template->IsModerator = $this->IsModerator;
             }
