@@ -10,6 +10,7 @@ include_once("codebase/lib/namespace/namespace.service.php");
 
 Namespace::Using("lib.alterclass");
 Namespace::Using("lib.dispatchapplication");
+Namespace::Using("lib.controller");
 Namespace::Using("lib.httprequest");
 Namespace::Using("lib.rest");
 Namespace::Using("core.string");
