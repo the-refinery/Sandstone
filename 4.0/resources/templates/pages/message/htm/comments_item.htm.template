@@ -4,6 +4,6 @@
     {!?IsModerator,comment_delete.htm.template}
 
     <div class="MessageContent">
-        {$Element->Content}
+        {$MessageContent}
     </div>
 </li>

@@ -89,6 +89,7 @@ class MessageBasePage extends ApplicationPage
 	public function CommentsCallback($CurrentElement, $Template)
 	{
 		$Template->IsModerator = $this->IsModerator;
+		$Template->MessageContent = nl2br($CurrentElement->Content);
 	}
         
 	protected function BuildControlArray($EventParameters)
