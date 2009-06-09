@@ -23,6 +23,8 @@ class MessageBasePage extends ApplicationPage
 	protected function Generic_PreProcessor(&$EventParameters)
 	{
 
+		parent::Generic_PreProcessor($EventParameters);
+
 		if (is_set($EventParameters['messageid']))
 		{
 			$this->_message = new Message($EventParameters['messageid']);
