@@ -628,25 +628,7 @@ class Template extends Module
         //Save the Application IncludePath
         $applicationIncludePath = get_include_path();
 
-        //First, let's build a custom include path for templates
-        if ($this->_parentObject->hasProperty("Page"))
-        {
-	        $templateIncludePath = $this->_parentObject->Page->TemplateSearchPath;
-
-	        if (strlen($templateIncludePath) > 0)
-	        {
-	            $templateIncludePath .= PATH_SEPARATOR;
-	        }
-        }
-
-        //Now add the path for the application, sandstone and any used top level namespaces
-        $templateIncludePath .= Namespace::TemplateSearchPath();
-
-		//If we have some additional path, add it to the end
-		if (is_set($this->_additionalTemplatePath))
-		{
-			$templateIncludePath .= PATH_SEPARATOR . $this->_additionalTemplatePath;
-		}
+				$templateIncludePath = $this->BuildTemplateIncludePath();
 
         //Set the actual PHP include path
         set_include_path($templateIncludePath);
@@ -668,6 +650,31 @@ class Template extends Module
 
         return $returnValue;
     }
+
+	protected function BuildTemplateIncludePath()
+	{
+		//First, let's build a custom include path for templates
+		if ($this->_parentObject->hasProperty("Page"))
+		{
+			$returnValue = $this->_parentObject->Page->TemplateSearchPath;
+
+			if (strlen($returnValue) > 0)
+			{
+				$returnValue .= PATH_SEPARATOR;
+			}
+		}
+
+		//Now add the path for the application, sandstone and any used top level namespaces
+		$returnValue .= Namespace::TemplateSearchPath();
+
+		//If we have some additional path, add it to the end
+		if (is_set($this->_additionalTemplatePath))
+		{
+			$returnValue .= PATH_SEPARATOR . $this->_additionalTemplatePath;
+		}
+
+		return $returnValue;
+	}
 
 	protected function ParseTemplateComments($Template)
 	{
