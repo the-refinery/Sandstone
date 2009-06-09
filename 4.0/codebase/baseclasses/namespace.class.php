@@ -19,6 +19,7 @@ class NameSpace extends Module
  	protected $_nameSpaceEnvironmentBases;
 
  	protected $_templateSearchPath;
+	protected $_additionalTemplateSearchPath;
 
 	protected $_classesByNamespace = Array();
 
@@ -161,6 +162,14 @@ class NameSpace extends Module
 		return $returnValue;
 
 	}
+
+	static public function AddAdditionalTemplateSearchPath($Path)
+	{
+		$ns = Namespace::Instance();
+
+		$ns->ProcessAddAdditionalTemplateSearchPath($Path);
+	}
+
 
 	protected function SetupNameSpaceEnvironments($NameSpaceEnvironments)
 	{
@@ -649,6 +658,20 @@ class NameSpace extends Module
 
 		echo "</table>";
 
+		echo "<h1>Template Search Path</h1>";
+
+		$tsp = $this->GetTemplateSearchPath();
+		$paths = explode(PATH_SEPARATOR, $tsp);
+
+		echo "<ol>";
+		foreach ($paths as $tempPath)
+		{
+			echo "<li>{$tempPath}</li>";
+		}
+		echo "</ol>";
+
+
+
 	}
 
 	protected function GetClassNames()
@@ -712,6 +735,17 @@ class NameSpace extends Module
 			//We will search the application first
 			$this->_templateSearchPath = $applicationTemplates;
 
+			//After the application, any manually added paths
+			if (strlen($this->_additionalTemplateSearchPath) > 0)
+			{
+				if (strlen($this->_templateSearchPath) > 0)
+				{
+					$this->_templateSearchPath .= PATH_SEPARATOR;
+				}
+
+				$this->_templateSearchPath .= $this->_additionalTemplateSearchPath;
+			}
+
 			//Then anything in the general namespaces
 			if (strlen($namespaceTemplates) > 0)
 			{
@@ -737,6 +771,19 @@ class NameSpace extends Module
 		}
 
 		return $this->_templateSearchPath;
+	}
+
+	public function ProcessAddAdditionalTemplateSearchPath($Path)
+	{
+		//Any change here should force the overall search path to be rebuilt
+		$this->_templateSearchPath = null;
+
+		if (strlen($this->_additionalTemplateSearchPath) > 0)
+		{
+			$this->_additionalTemplateSearchPath .= PATH_SEPARATOR;
+		}
+		
+		$this->_additionalTemplateSearchPath .= $Path;
 	}
 }
 
