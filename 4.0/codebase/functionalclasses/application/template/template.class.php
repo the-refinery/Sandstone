@@ -1013,7 +1013,7 @@ class Template extends Module
 
 		$returnValue = Array();
 
-		$cacheFileSpec = $Directory . "templatedirs.txt";
+		$cacheFileSpec = $Directory . "templatedirs.cache";
 		
 		if (file_exists($cacheFileSpec))
 		{
