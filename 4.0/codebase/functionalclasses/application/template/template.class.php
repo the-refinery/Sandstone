@@ -1013,13 +1013,20 @@ class Template extends Module
 	public static function FindDirectoriesWithTemplates($Directory)
 	{
 
-		if (Application::Registry()->DevMode == 1)
+		if (file_exists($Directory))
 		{
-			$returnValue = Template::FindDirectoriesDevelopmentMode($Directory);
+			if (Application::Registry()->DevMode == 1)
+			{
+				$returnValue = Template::FindDirectoriesDevelopmentMode($Directory);
+			}
+			else
+			{
+				$returnValue = Template::FindDirectoriesProductionMode($Directory);
+			}
 		}
 		else
 		{
-			$returnValue = Template::FindDirectoriesProductionMode($Directory);
+			$returnValue = Array();
 		}
 
 		return $returnValue;
