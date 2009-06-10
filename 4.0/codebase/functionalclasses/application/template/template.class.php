@@ -9,6 +9,8 @@ Template Class File
 class Template extends Module
 {
 
+	const CACHE_FILE_NAME = "templatedirs.cache";
+
 	protected $_parentObject;
 	protected $_requestFileType;
 
@@ -1011,50 +1013,118 @@ class Template extends Module
 	public static function FindDirectoriesWithTemplates($Directory)
 	{
 
-		$returnValue = Array();
-
-		$cacheFileSpec = $Directory . "templatedirs.cache";
-		
-		if (file_exists($cacheFileSpec))
+		if (Application::Registry()->DevMode == 1)
 		{
-			$directoryList = ReadFileContents($cacheFileSpec);
-
-			foreach ($directoryList as $tempDirectory)
-			{
-				if ($tempDirectory == ".")
-				{
-					$returnValue[] = $Directory;
-				}
-				else
-				{
-					$returnValue[] = $Directory . $tempDirectory;
-				}
-			}
+			$returnValue = Template::FindDirectoriesDevelopmentMode($Directory);
 		}
 		else
 		{
-			//First, does the directory we are passed contain templates?
-			$pattern = $Directory . "*.template";
-			$templates = glob($pattern);
+			$returnValue = Template::FindDirectoriesProductionMode($Directory);
+		}
 
-			if (count($templates) > 0)
+		return $returnValue;
+	}
+
+	protected static function FindDirectoriesProductionMode($Directory)
+	{
+
+		$cacheFileSpec = $Directory . Template::CACHE_FILE_NAME;
+
+		if (file_exists($cacheFileSpec))
+		{
+			$returnValue = Template::FindDirectoriesFromCacheFile($Directory, $cacheFileSpec);
+		}
+		else
+		{
+			$returnValue = Template::FindDirectoriesFromFileSystem($Directory);
+
+			//Build the cache File
+			$handle = fopen($cacheFileSpec, "w");
+			
+			foreach ($returnValue as $tempDirectory)
 			{
-				//There are templates here
-				$returnValue[] = $Directory;
+				if ($tempDirectory == $Directory)
+				{
+					$content = ".";
+				}
+				else
+				{
+					$content = substr($tempDirectory, strlen($Directory));
+				}
+
+				fwrite($handle, $content . "\n");
 			}
 
-			//Second, are there any sub directories?
-			$pattern = $Directory . "*";
-			$subDirs = glob($pattern, GLOB_ONLYDIR + GLOB_MARK);
 
-			foreach ($subDirs as $tempDirectory)
+		}
+
+		return $returnValue;
+
+	}
+
+	protected static function FindDirectoriesDevelopmentMode($Directory)
+	{
+		$cacheFileSpec = $Directory . Template::CACHE_FILE_NAME;
+
+		if (file_exists($cacheFileSpec))
+		{
+			unlink($cacheFileSpec);
+		}
+
+		$returnValue = Template::FindDirectoriesFromFileSystem($Directory);
+
+		
+		return $returnValue;
+	}
+
+
+	protected static function FindDirectoriesFromCacheFile($Directory, $CacheFileSpec)
+	{
+		$returnValue = Array();
+
+		$directoryList = ReadFileContents($CacheFileSpec);
+
+		foreach ($directoryList as $tempDirectory)
+		{
+			if ($tempDirectory == ".")
 			{
-				$subPaths = Template::FindDirectoriesWithTemplates($tempDirectory);
-				$returnValue = array_merge($returnValue, $subPaths);
+				$returnValue[] = $Directory;
+			}
+			else
+			{
+				$returnValue[] = $Directory . $tempDirectory;
 			}
 		}
 
 		return $returnValue;
+	}
+
+	protected static function FindDirectoriesFromFileSystem($Directory)
+	{
+		$returnValue = Array();
+
+		//First, does the directory we are passed contain templates?
+		$pattern = $Directory . "*.template";
+		$templates = glob($pattern);
+
+		if (count($templates) > 0)
+		{
+			//There are templates here
+			$returnValue[] = $Directory;
+		}
+
+		//Second, are there any sub directories?
+		$pattern = $Directory . "*";
+		$subDirs = glob($pattern, GLOB_ONLYDIR + GLOB_MARK);
+
+		foreach ($subDirs as $tempDirectory)
+		{
+			$subPaths = Template::FindDirectoriesFromFileSystem($tempDirectory);
+			$returnValue = array_merge($returnValue, $subPaths);
+		}
+
+		return $returnValue;
+	
 	}
 
 }
