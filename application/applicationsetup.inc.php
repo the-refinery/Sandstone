@@ -1,5 +1,12 @@
 <?php
 
+$accountBase = substr($_SERVER['SCRIPT_FILENAME'], 0, strlen($_SERVER['SCRIPT_FILENAME']) - 21);
+
+if (file_exists("{$accountBase}accountsettings.inc.php"))
+{
+	require("{$accountBase}accountsettings.inc.php");
+}
+
 //What is this application's root location?
 $applicationName = trim(strtolower(file_get_contents("application.name")));
 
@@ -58,6 +65,7 @@ NameSpace::SetEnvironment($nameSpaceEnvironments);
 //for everything else.  We'll start by using the Sandstone Application namespaces
 //and the current application namespaces.
 NameSpace::Using("Sandstone.Application.*");
+NameSpace::Using("Sandstone.Routing");
 
 NameSpace::Using("Application.*");
 
