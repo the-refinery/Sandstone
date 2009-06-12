@@ -19,10 +19,11 @@ class BilledLicense extends BaseLicense
 	{
 		$this->AddProperty("CompanyName","string","CompanyName",PROPERTY_REQUIRED);
 		$this->AddProperty("SignupDate","date","SignupDate",PROPERTY_READ_ONLY);
+		$this->AddProperty("AnniversaryDay","integer","AnniversaryDay",PROPERTY_READ_ONLY);
 		$this->AddProperty("Address","Address",null,PROPERTY_READ_WRITE);
 		$this->AddProperty("CIMcustomerProfile","CIMcustomerProfile","CIMcustomerProfileID",PROPERTY_READ_ONLY);
-		$this->AddProperty("IsPastDue","boolean","IsPastDue",PROPERTY_READ_WRITE);
-		$this->AddProperty("IsDisabled","boolean","IsDisabled",PROPERTY_READ_WRITE);
+		$this->AddProperty("PastDueTimestamp","date","PastDueTimestamp",PROPERTY_READ_ONLY);
+		$this->AddProperty("DisabledTimestamp","date","DisabledTimestamp",PROPERTY_READ_ONLY);
 
 		$this->AddProperty("AdminUsers","array",null,PROPERTY_READ_ONLY,"LoadAdminUsers");
 		$this->AddProperty("PrimaryAdminUser","user",null,PROPERTY_READ_ONLY,"LoadAdminUsers");
@@ -62,6 +63,30 @@ class BilledLicense extends BaseLicense
 		}
 	}
 
+
+	public function getIsPastDue()
+	{
+		if (is_set($this->_pastDueTimestamp))
+		{
+			$returnValue = true;
+		}
+		else
+		{
+			$returnValue = false;
+		}
+
+		return $returnValue;
+	}
+
+	public function setIsPastDue()
+	{
+		if (is_set($this->_pastDueTimestamp) == false)
+		{
+			$this->_pastDueTimestamp = new Date();
+		}
+	}
+
+
 	public function Load($dr)
 	{
 
@@ -79,9 +104,10 @@ class BilledLicense extends BaseLicense
 
 		$returnValue = "	SELECT	a.CompanyName,
 															a.SignupDate,
+															a.AnniversaryDay,
 															a.AddressID,
-															a.IsPastDue,
-															a.IsDisabled,
+															a.PastDueTimestamp,
+															a.DisabledTimestamp,
 															a.IsCancelled,
 															a.CIMcustomerProfileID ";
 
