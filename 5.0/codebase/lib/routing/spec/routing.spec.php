@@ -63,4 +63,11 @@ class RoutingSpec extends DescribeBehavior
 
 		return $this->Expects($foo->FileType)->ToBeEqualTo('htm');
 	}
+
+	public function ItShouldHaveNamedKeysForEachParameter()
+	{
+		$foo = new Route("Home");
+
+		return $this->Expects($foo->Parameters)->ToHaveKey("home");
+	}
 }

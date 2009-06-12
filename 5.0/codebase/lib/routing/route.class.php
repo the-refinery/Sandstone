@@ -32,8 +32,14 @@ class Route extends Component
 		$Path = strtolower($Path);
 		$this->_fileType = $this->DetermineFileType($Path);
 		$Path = $this->RemoveFileExtension($Path);
-		$returnValue = explode('/', $Path);
-		$returnValue = array_filter($returnValue); // Remove empty elements
+
+		$parameters = explode('/', $Path);
+		$parameters = array_filter($parameters); // Remove empty elements
+
+		foreach ($parameters as $tempParameter)
+		{
+			$returnValue[$tempParameter] = $tempParameter;
+		}
 
 		return $returnValue;
 	}
