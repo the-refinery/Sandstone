@@ -14,4 +14,5 @@ $SpecRunner->DescribeBehavior('componentspec');
 $SpecRunner->DescribeBehavior('NamespaceSpec');
 $SpecRunner->DescribeBehavior('ParseADirectorySpec');
 $SpecRunner->DescribeBehavior('BenchmarkSpec');
+$SpecRunner->DescribeBehavior('RoutingSpec');
 $SpecRunner->Run();

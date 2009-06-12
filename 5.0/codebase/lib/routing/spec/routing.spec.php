@@ -24,28 +24,36 @@ class RoutingSpec extends DescribeBehavior
 		return $this->Expects($match)->ToBeTrue();
 	}
 
-	public function ItShouldMatchAStaticRouteWithMixedCase()
+	public function ItShouldSanitizeAStaticRouteWithMixedCase()
 	{
 		$foo = new Route("Foo/Bar");
-		$match = $foo->CheckRoutingMatch("FOO/BAR");
+		$sanitized = $foo->SanitizePath("FOO/BAR");
 
-		return $this->Expects($match)->ToBeTrue();
+		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
 	}
 
-	public function ItShouldMatchWithATrailingSlash()
+	public function ItShouldSanitizeWithATrailingSlash()
 	{
 		$foo = new Route("Foo/Bar");
-		$match = $foo->CheckRoutingMatch("foo/bar/");
+		$sanitized = $foo->SanitizePath("foo/bar/");
 
-		return $this->Expects($match)->ToBeTrue();
+		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
 	}
 
-	public function ItShouldMatchWithAFileType()
+	public function ItShouldSanitizeWithBlankParameters()
 	{
 		$foo = new Route("Foo/Bar");
-		$match = $foo->CheckRoutingMatch("foo/bar.htm");
+		$sanitized = $foo->SanitizePath("foo//bar//");
 
-		return $this->Expects($match)->ToBeTrue();
+		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
+	}
+
+	public function ItShouldSanitizeWithAFileType()
+	{
+		$foo = new Route("Foo/Bar");
+		$sanitized = $foo->SanitizePath("foo/bar.htm");
+
+		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
 	}
 
 	public function ItShouldRecordTheFileType()
@@ -69,5 +77,28 @@ class RoutingSpec extends DescribeBehavior
 		$foo = new Route("Home");
 
 		return $this->Expects($foo->Parameters)->ToHaveKey("home");
+	}
+
+	public function ItShouldHaveNamedKeysForVariableParameters()
+	{
+		$foo = new Route("Foo/:FooID");
+
+		return $this->Expects($foo->Parameters)->ToHaveKey('fooid');
+	}
+
+	public function ItShouldBuildARegexStringForStaticRoutes()
+	{
+		$foo = new Route("Foo/Bar");
+		$pattern = $foo->GenerateMatchPattern($foo->Parameters);
+
+		return $this->Expects($pattern)->ToBeEqualTo('@^foo/bar$@i');
+	}
+
+	public function ItShouldBuildARegexStringForVariableRoutes()
+	{
+		$foo = new Route("Foo/:FooID");
+		$pattern = $foo->GenerateMatchPattern($foo->Parameters);
+
+		return $this->Expects($pattern)->ToBeEqualTo("@^foo/[a-zA-Z0-9_-]+$@i");
 	}
 }

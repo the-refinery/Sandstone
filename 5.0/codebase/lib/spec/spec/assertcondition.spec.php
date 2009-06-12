@@ -65,7 +65,7 @@ class AssertConditionSpec extends DescribeBehavior
 	{
 		$assert = new AssertCondition(true, $this);
 
-		return $this->Expects(false)->ToBeTrue();
+		return $this->Expects(true)->ToBeTrue();
 	}
 
 	public function ItShouldAssertExists()

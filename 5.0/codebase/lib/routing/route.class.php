@@ -7,6 +7,8 @@ class Route extends Component
 
 	public function __construct($Path)
 	{
+		$Path = $this->SanitizePath($Path);
+
 		$this->_parameters = $this->ConvertPathToParameters($Path);
 	}
 
@@ -22,23 +24,50 @@ class Route extends Component
 
 	public function CheckRoutingMatch($Path)
 	{
-		$incomingParameters = $this->ConvertPathToParameters($Path);
+		$this->_fileType = $this->DetermineFileType($Path);
+		$Path = $this->SanitizePath($Path);
+		$pattern = $this->GenerateMatchPattern($this->_parameters);
 
-		return $incomingParameters == $this->_parameters;
+		return preg_match($pattern, $Path) >= 1;
+	}
+
+	public function GenerateMatchPattern($Parameters)
+	{
+		$path = implode("/", $Parameters);
+
+		return "@^{$path}$@i";
+	}
+
+	public function SanitizePath($Path)
+	{
+		$Path = strtolower($Path);
+		$parameters = explode('/', $Path);
+		$parameters = array_filter($parameters);
+		$returnValue = implode('/', $parameters);
+		$returnValue = $this->RemoveFileExtension($returnValue);
+
+		return $returnValue;
 	}
 
 	protected function ConvertPathToParameters($Path)
 	{
-		$Path = strtolower($Path);
-		$this->_fileType = $this->DetermineFileType($Path);
-		$Path = $this->RemoveFileExtension($Path);
+		$Path = $this->SanitizePath($Path);
 
 		$parameters = explode('/', $Path);
-		$parameters = array_filter($parameters); // Remove empty elements
-
 		foreach ($parameters as $tempParameter)
 		{
-			$returnValue[$tempParameter] = $tempParameter;
+			if (strpos($tempParameter, ":") === 0)
+			{
+				$key = substr($tempParameter, 1);
+				$value = "[a-zA-Z0-9_-]+";
+			}
+			else
+			{
+				$key = $tempParameter;
+				$value = $tempParameter;
+			}
+
+			$returnValue[$key] = $value;
 		}
 
 		return $returnValue;
@@ -47,7 +76,6 @@ class Route extends Component
 	protected function DetermineFileType($Path)
 	{
 		$pathInfo = pathinfo($Path);
-
 		$extension = $pathInfo['extension'];
 
 		if (is_null($extension))
