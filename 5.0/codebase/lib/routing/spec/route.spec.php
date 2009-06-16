@@ -114,6 +114,6 @@ class RouteSpec extends DescribeBehavior
 		$foo = new Route("Foo/:FooID");
 		$foo->AddParameter('Gorp', true);
 
-		return $this->Expects($foo->Parameters)->ToHaveKey('Gorp');
+		return $this->Expects($foo->Parameters)->ToHaveKey('gorp');
 	}
 }

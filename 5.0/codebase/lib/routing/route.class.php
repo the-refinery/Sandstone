@@ -26,6 +26,9 @@ class Route extends Component
 
 	public function AddParameter($Key, $Value)
 	{
+		$Key = strtolower($Key);
+		$Value = strtolower($Value);
+
 		$this->_extraParameters[$Key] = $Value;
 	}
 
