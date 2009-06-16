@@ -108,4 +108,12 @@ class RouteSpec extends DescribeBehavior
 
 		return $this->Expects($foo->Path)->ToBeEqualTo('foo/:fooid');
 	}
+
+	public function ItShouldAllowNonUrlParameters()
+	{
+		$foo = new Route("Foo/:FooID");
+		$foo->AddParameter('Gorp', true);
+
+		return $this->Expects($foo->Parameters)->ToHaveKey('Gorp');
+	}
 }

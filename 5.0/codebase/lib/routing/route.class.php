@@ -23,6 +23,11 @@ class Route extends Component
 		return $this->_parameters;
 	}
 
+	public function AddParameter($Key, $Value)
+	{
+		$this->_parameters[$Key] = $Value;
+	}
+
 	public function getFileType()
 	{
 		return $this->_fileType;
