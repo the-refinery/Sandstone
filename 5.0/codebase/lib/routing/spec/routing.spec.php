@@ -51,7 +51,7 @@ class RoutingSpec extends DescribeBehavior
 	public function ItShouldMatchARestfulEditAction()
 	{
 		$routing = new Routing();
-		$result = $routing->FindMatchingRoute('Cars/4/Edit');
+		$result = $routing->FindMatchingRoute('Car/4/Edit');
 
 		return $this->Expects($result->Path)->ToBeEqualTo(':controller/:id/edit');
 	}
