@@ -101,4 +101,11 @@ class RouteSpec extends DescribeBehavior
 
 		return $this->Expects($pattern)->ToBeEqualTo("@^foo/[a-zA-Z0-9_-]+$@i");
 	}
+
+	public function ItShouldReportTheDefinedPath()
+	{
+		$foo = new Route("Foo/:FooID");
+
+		return $this->Expects($foo->Path)->ToBeEqualTo('foo/:fooid');
+	}
 }

@@ -2,14 +2,20 @@
 
 class Route extends Component
 {
+	protected $_path;
 	protected $_parameters = array();
 	protected $_fileType;
 
 	public function __construct($Path)
 	{
-		$Path = $this->SanitizePath($Path);
+		$this->_path = $this->SanitizePath($Path);
 
-		$this->_parameters = $this->ConvertPathToParameters($Path);
+		$this->_parameters = $this->ConvertPathToParameters($this->_path);
+	}
+
+	public function getPath()
+	{
+		return $this->_path;
 	}
 
 	public function getParameters()
