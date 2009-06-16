@@ -4,6 +4,7 @@ class Route extends Component
 {
 	protected $_path;
 	protected $_parameters = array();
+	protected $_extraParameters = array();
 	protected $_fileType;
 
 	public function __construct($Path)
@@ -20,12 +21,12 @@ class Route extends Component
 
 	public function getParameters()
 	{
-		return $this->_parameters;
+		return array_merge($this->_parameters, $this->_extraParameters);
 	}
 
 	public function AddParameter($Key, $Value)
 	{
-		$this->_parameters[$Key] = $Value;
+		$this->_extraParameters[$Key] = $Value;
 	}
 
 	public function getFileType()
