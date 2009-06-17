@@ -193,7 +193,7 @@ class CIMcustomerProfile extends CIMbase
 		$returnValue['lastName'] = $CreditCard->LastName;
 		$returnValue['address'] = $CreditCard->BillingAddress->Street;
 		$returnValue['city'] = $CreditCard->BillingAddress->City;
-		$returnValue['state'] = $CredidCard->BillingAddress->ProvinceCode;
+		$returnValue['state'] = $CreditCard->BillingAddress->ProvinceCode;
 		$returnValue['zip'] = $CreditCard->BillingAddress->PostalCode;
 		$returnValue['country'] = $CreditCard->BillingAddress->CountryCode;
 
