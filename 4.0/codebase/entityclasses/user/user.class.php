@@ -223,6 +223,27 @@ class User extends EntityBase
 		return $returnValue;
 	}
 
+	public function LoadByUserName($UserName)
+	{
+
+		$query = new Query();
+
+		$selectClause = self::GenerateBaseSelectClause();
+		$fromClause = self::GenerateBaseFromClause();
+
+		$whereClause = self::GenerateBaseWhereClause();
+		$whereClause .= "	AND		Username LIKE '{$UserName}'
+							AND		IsDisabled = 0 ";
+
+		$query->SQL = $selectClause . $fromClause . $whereClause;
+
+		$query->Execute();
+
+		$returnValue = $query->LoadEntity($this);
+
+		return $returnValue;
+	}
+
 	public function LoadToken()
 	{
 		$query = new Query();
