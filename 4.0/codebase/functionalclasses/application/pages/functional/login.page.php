@@ -142,6 +142,9 @@ class LoginPage extends BasePage
 		$this->LoginForm->Password = new PasswordControl();
 		$this->LoginForm->Password->LabelText = "Password:";
 
+		$this->LoginForm->ForgotPassword = new HiddenControl();
+		$this->LoginForm->ForgotPassword->DefaultValue = '0';
+
 		$this->LoginForm->Submit = new SubmitButtonControl();
 		$this->LoginForm->Submit->LabelText = "Login";
 
