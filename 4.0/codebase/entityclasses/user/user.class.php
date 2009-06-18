@@ -739,21 +739,6 @@ class User extends EntityBase
 		return $Array[$index];
 	}
 	
-	public function ResetPassword()
-	{
-		if ($this->_isLoaded)
-		{
-		
-			$returnValue = $this->GenerateNewPassword();
-			
-			$this->Password = $returnValue;
-				
-			$this->Save();
-		}
-		
-		return $returnValue;
-	}
-
 	protected function Lookup_All($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 
