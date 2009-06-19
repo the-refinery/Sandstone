@@ -1,5 +1,7 @@
 <?php
 
+Namespace::Using("Sandstone.Email.Mailer");
+
 class LoginPage extends BasePage
 {
 	public function __construct()
@@ -95,6 +97,53 @@ class LoginPage extends BasePage
 
 		if ($accountCheck == true)
 		{
+			if ($this->LoginForm->ForgotPassword->Value == 1)
+			{
+				$this->ForgotPassword();
+			}
+			else
+			{
+				$this->AttemptLogin();
+			}
+		}
+		else
+		{
+			Application::SetSessionVariable('notificationmessage', "Invalid Account");
+		}
+
+		return true;
+	}
+
+	protected function ForgotPassword()
+	{
+		$license = Application::License();		
+
+		$tempUser = new User();
+		$tempUser->LoadByUserName($this->LoginForm->Username->Value);
+
+		$newPassword = $tempUser->GenerateNewPassword();
+		$tempUser->Password = $newPassword;
+		$tempUser->Save();
+
+		// SEND EMAIL
+		$sendEmail = new SendMail();
+		$sendEmail->ToName = "{$tempUser->FirstName} {$tempUser->LastName}";
+		$sendEmail->ToEmail = $tempUser->PrimaryEmail->Address;
+
+		$sendEmail->SenderName = "Prfessor.com Password Reset";
+		$sendEmail->SenderEmail = "donotreply@prfessor.com";
+		$sendEmail->Subject = "Prfessor password reset";
+
+		$sendEmail->Template->Filename = "passwordreset";
+		$sendEmail->Template->User = $tempUser;
+		$sendEmail->Template->NewPassword = $newPassword;
+		$sendEmail->Send();
+		
+		Application::SetSessionVariable('notificationmessage', "A new password has been emailed to you");
+	}
+
+	protected function AttemptLogin()
+	{
 			$tempUser = new User();
 
 			$loginTest = $tempUser->Login($this->LoginForm->Username->Value, $this->LoginForm->Password->Value);
@@ -118,13 +167,6 @@ class LoginPage extends BasePage
 			{
 				Application::SetSessionVariable('notificationmessage', "Invalid Username or Password");
 			}
-		}
-		else
-		{
-			Application::SetSessionVariable('notificationmessage', "Invalid Account");
-		}
-
-		return true;
 	}
 
 	/*** CONTROLS ***/

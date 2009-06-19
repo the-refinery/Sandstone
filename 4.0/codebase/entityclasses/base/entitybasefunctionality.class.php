@@ -10,7 +10,6 @@ class EntityBaseFunctionality extends Module
 {
 	public function __get($Name)
 	{
-
 		//Is this a call to a protected field?
 		if (substr($Name, 0, 1) == "_")
 		{
@@ -261,7 +260,6 @@ class EntityBaseFunctionality extends Module
 
 	protected function ProcessGetProtectedField($RequestedName)
 	{
-
 		//Determine the associated property name
 		$propertyName = strtolower(substr($RequestedName, 1, strlen($RequestedName) - 1));
 

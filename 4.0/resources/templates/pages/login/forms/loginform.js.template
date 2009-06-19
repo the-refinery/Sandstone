@@ -8,6 +8,7 @@ $(document).ready(function()
 			$('#EnterPassword').hide('blind');
 			$('#LoginForm_Password').attr('value','');
 			$('#LoginForm_Submit').attr('value', "Reset my Password");
+			$('#LoginForm_ForgotPassword').attr('value', '1');
 		});
 
 	$('a#CancelReset').click(function()
@@ -17,5 +18,6 @@ $(document).ready(function()
 			$('#EnterPassword').show('blind');
 			$('#ResetPrompt').parent().show('blind');
 			$('#LoginForm_Submit').attr('value', "Login");
+			$('#LoginForm_ForgotPassword').attr('value', '0');
 		});
 });
