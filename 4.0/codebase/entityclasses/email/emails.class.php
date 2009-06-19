@@ -12,11 +12,11 @@ class Emails extends CollectiveBase
 	protected $_emailsByType;
 	protected $_primaryEmail;
 
-	public function __construct($Name = null, $ParentEntity = null)
+	public function __construct($Name = null, $ParentEntity = null, $AssociatedEntityType = null)
 	{
 		$this->_emailsByType = new DIarray();
 
-		parent::__construct($Name, $ParentEntity);
+		parent::__construct($Name, $ParentEntity, $AssociatedEntityType);
 
 		$this->_elementType = "Email";
 
@@ -94,7 +94,6 @@ class Emails extends CollectiveBase
 
 			$query = new Query();
 
-			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
 
 			$selectClause = Email::GenerateBaseSelectClause();
@@ -104,7 +103,7 @@ class Emails extends CollectiveBase
 			$fromClause = Email::GenerateBaseFromClause();
 			$fromClause .= "	INNER JOIN core_EntityEmail b ON b.EmailID = a.EmailID ";
 
-			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
+			$whereClause = "	WHERE	b.AssociatedEntityType = '{$this->_associatedEntityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
 			$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -161,7 +160,6 @@ class Emails extends CollectiveBase
 			//Now add the new email
 			$query = new Query();
 
-			$associatedEntityType = get_class($this->_parentEntity);
 			$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 			$query->SQL = "	INSERT INTO core_EntityEmail
@@ -174,7 +172,7 @@ class Emails extends CollectiveBase
 							)
 							VALUES
 							(
-								{$query->SetTextField($associatedEntityType)},
+								{$query->SetTextField($this->_associatedEntityType)},
 								{$associatedEntityID},
 								{$NewElement->EmailID},
 								{$NewElement->EmailType->EmailTypeID},
@@ -199,12 +197,11 @@ class Emails extends CollectiveBase
 
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityEmail
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		EmailID = {$OldElement->EmailID}";
 
@@ -218,12 +215,11 @@ class Emails extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityEmail
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}";
 
 		$query->Execute();
@@ -238,13 +234,12 @@ class Emails extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	UPDATE core_EntityEmail SET
 							EmailTypeID = {$CurrentElement->EmailType->EmailTypeID},
 							IsPrimary = {$query->SetBooleanField($CurrentElement->IsPrimary)}
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		EmailID = {$CurrentElement->EmailID} ";
 

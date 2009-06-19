@@ -11,11 +11,11 @@ class Phones extends CollectiveBase
 
 	protected $_phonesByType;
 
-	public function __construct($Name = null, $ParentEntity = null)
+	public function __construct($Name = null, $ParentEntity = null, $AssociatedEntityType = null)
 	{
 		$this->_phonesByType = new DIarray();
 
-		parent::__construct($Name, $ParentEntity);
+		parent::__construct($Name, $ParentEntity, $AssociatedEntityType);
 
 		$this->_elementType = "Phone";
 
@@ -42,7 +42,6 @@ class Phones extends CollectiveBase
 
 			$query = new Query();
 
-			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
 
 			$selectClause = Phone::GenerateBaseSelectClause();
@@ -51,7 +50,7 @@ class Phones extends CollectiveBase
 			$fromClause = Phone::GenerateBaseFromClause();
 			$fromClause .= "	INNER JOIN core_EntityPhone b ON b.PhoneID = a.PhoneID ";
 
-			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
+			$whereClause = "	WHERE	b.AssociatedEntityType = '{$this->_associatedEntityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
 			$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -94,7 +93,6 @@ class Phones extends CollectiveBase
 			//Now add the new Phone
 			$query = new Query();
 
-			$associatedEntityType = get_class($this->_parentEntity);
 			$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 			$query->SQL = "	INSERT INTO core_EntityPhone
@@ -106,7 +104,7 @@ class Phones extends CollectiveBase
 							)
 							VALUES
 							(
-								{$query->SetTextField($associatedEntityType)},
+								{$query->SetTextField($this->_associatedEntityType)},
 								{$associatedEntityID},
 								{$NewElement->PhoneID},
 								{$NewElement->PhoneType->PhoneTypeID}
@@ -130,12 +128,11 @@ class Phones extends CollectiveBase
 
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityPhone
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		PhoneID = {$OldElement->PhoneID}";
 
@@ -149,12 +146,11 @@ class Phones extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityPhone
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}";
 
 		$query->Execute();
@@ -168,12 +164,11 @@ class Phones extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	UPDATE core_EntityPhone SET
 							PhoneTypeID = {$CurrentElement->PhoneType->PhoneTypeID}
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		PhoneID = {$CurrentElement->PhoneID} ";
 

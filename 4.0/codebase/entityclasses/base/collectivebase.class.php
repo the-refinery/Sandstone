@@ -14,6 +14,7 @@ class CollectiveBase extends Module
 	protected $_name;
 
 	protected $_parentEntity;
+	protected $_associatedEntityType;
 
 	protected $_elementType;
 	protected $_elements;
@@ -21,7 +22,7 @@ class CollectiveBase extends Module
 	protected $_registeredProperties;
 	protected $_registeredMethods;
 
-	public function __construct($Name = null, $ParentEntity = null)
+	public function __construct($Name = null, $ParentEntity = null, $AssociatedEntityType = null)
 	{
 
 		$this->_elements = new DIarray();
@@ -31,6 +32,15 @@ class CollectiveBase extends Module
 		if ($ParentEntity instanceof EntityBase)
 		{
 			$this->_parentEntity = $ParentEntity;
+
+			if (is_set($AssociatedEntityType))
+			{
+				$this->_associatedEntityType = $AssociatedEntityType;
+			}
+			else
+			{
+				$this->_associatedEntityType = get_class($this->_parentEntity);
+			}
 		}
 
 	}
@@ -62,6 +72,8 @@ class CollectiveBase extends Module
 		{
 			$returnValue .= "<em>not set</em>";
 		}
+
+		$returnValue .= "<h2 style=\"padding: 0; margin: 10px 0 0 0;\">Associated Entity Type: {$this->_associatedEntityType}</h2>";
 
 		$returnValue .= "<h2 style=\"padding: 0; margin: 10px 0 0 0;\">Elements</h2>";
 

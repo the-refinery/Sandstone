@@ -666,10 +666,10 @@ class EntityBaseFunctionality extends Module
 		$this->_searchProperties[$key] = $property;
 	}
 
-	final protected function AddCollective($Name, $Type)
+	final protected function AddCollective($Name, $Type, $AssociatedEntityType = null)
 	{
 
-		$newCollective = new $Type($Name, $this);
+		$newCollective = new $Type($Name, $this, $AssociatedEntityType);
 
 		$this->_collectives[strtolower($Name)] = $newCollective;
 

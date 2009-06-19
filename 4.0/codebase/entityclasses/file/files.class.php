@@ -9,9 +9,9 @@ Files Collective Class
 class Files extends CollectiveBase
 {
 
-	public function __construct($Name = null, $ParentEntity = null)
+	public function __construct($Name = null, $ParentEntity = null, $AssociatedEntityType = null)
 	{
-		parent::__construct($Name, $ParentEntity);
+		parent::__construct($Name, $ParentEntity, $AssociatedEntityType);
 
 		$this->_elementType = "File";
 	}
@@ -25,7 +25,6 @@ class Files extends CollectiveBase
 
 			$query = new Query();
 
-			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
 
 			$selectClause = File::GenerateBaseSelectClause();
@@ -33,7 +32,7 @@ class Files extends CollectiveBase
 			$fromClause = File::GenerateBaseFromClause();
 			$fromClause .= "	INNER JOIN core_EntityFile b ON b.FileID = a.FileID ";
 
-			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
+			$whereClause = "	WHERE	b.AssociatedEntityType = '{$this->_associatedEntityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
 			$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -61,7 +60,6 @@ class Files extends CollectiveBase
 		//Add the new File
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	INSERT INTO core_EntityFile
@@ -72,7 +70,7 @@ class Files extends CollectiveBase
 						)
 						VALUES
 						(
-							{$query->SetTextField($associatedEntityType)},
+							{$query->SetTextField($this->_associatedEntityType)},
 							{$associatedEntityID},
 							{$NewElement->FileID}
 						)";
@@ -87,12 +85,11 @@ class Files extends CollectiveBase
 
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityFile
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		FileID = {$OldElement->FileID}";
 
@@ -106,12 +103,11 @@ class Files extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityFile
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}";
 
 		$query->Execute();

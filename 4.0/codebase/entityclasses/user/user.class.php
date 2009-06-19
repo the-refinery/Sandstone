@@ -56,8 +56,8 @@ class User extends EntityBase
 		$this->AddProperty("Token","string",null,PROPERTY_READ_WRITE,"LoadToken");
 		$this->AddProperty("Roles","array",null,PROPERTY_READ_ONLY,"LoadRoles");
 
-		$this->AddCollective("Emails", "Emails");
-		$this->AddCollective("Phones", "Phones");
+		$this->AddCollective("Emails", "Emails", "User");
+		$this->AddCollective("Phones", "Phones", "User");
 
 		parent::SetupProperties();
 	}

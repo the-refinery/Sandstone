@@ -11,9 +11,9 @@ class Images extends CollectiveBase
 
 	protected $_primaryImage;
 
-	public function __construct($Name = null, $ParentEntity = null)
+	public function __construct($Name = null, $ParentEntity = null, $AssociatedEntityType = null)
 	{
-		parent::__construct($Name, $ParentEntity);
+		parent::__construct($Name, $ParentEntity, $AssociatedEntityType);
 
 		$this->_elementType = "Image";
 
@@ -79,7 +79,6 @@ class Images extends CollectiveBase
 
 			$query = new Query();
 
-			$entityType = get_class($this->_parentEntity);
 			$entityID = $this->_parentEntity->PrimaryIDproperty->Value;
 
 			$selectClause = Image::GenerateBaseSelectClause();
@@ -88,7 +87,7 @@ class Images extends CollectiveBase
 			$fromClause = Image::GenerateBaseFromClause();
 			$fromClause .= "	INNER JOIN core_EntityImage b ON b.ImageID = a.ImageID ";
 
-			$whereClause = "	WHERE	b.AssociatedEntityType = '{$entityType}'
+			$whereClause = "	WHERE	b.AssociatedEntityType = '{$this->_associatedEntityType}'
 								AND		b.AssociatedEntityID = {$entityID} ";
 
 			$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -130,7 +129,6 @@ class Images extends CollectiveBase
 		//Now add the new image
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	INSERT INTO core_EntityImage
@@ -142,7 +140,7 @@ class Images extends CollectiveBase
 						)
 						VALUES
 						(
-							{$query->SetTextField($associatedEntityType)},
+							{$query->SetTextField($this->_associatedEntityType)},
 							{$associatedEntityID},
 							{$NewElement->ImageID},
 							{$query->SetBooleanField($NewElement->IsPrimary)}
@@ -158,12 +156,11 @@ class Images extends CollectiveBase
 
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityImage
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		ImageID = {$OldElement->ImageID}";
 
@@ -177,12 +174,11 @@ class Images extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	DELETE
 						FROM	core_EntityImage
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}";
 
 		$query->Execute();
@@ -197,12 +193,11 @@ class Images extends CollectiveBase
 	{
 		$query = new Query();
 
-		$associatedEntityType = get_class($this->_parentEntity);
 		$associatedEntityID = $this->_parentEntity->PrimaryID;
 
 		$query->SQL = "	UPDATE core_EntityImage SET
 							IsPrimary = {$query->SetBooleanField($CurrentElement->IsPrimary)}
-						WHERE	AssociatedEntityType = {$query->SetTextField($associatedEntityType)}
+						WHERE	AssociatedEntityType = {$query->SetTextField($this->_associatedEntityType)}
 						AND		AssociatedEntityID = {$associatedEntityID}
 						AND		ImageID = {$CurrentElement->ImageID} ";
 
