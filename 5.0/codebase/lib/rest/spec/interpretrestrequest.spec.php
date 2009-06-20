@@ -4,37 +4,28 @@ class InterpretRestRequestSpec extends DescribeBehavior
 {
 	public function ItShouldDecodeAGetRequest()
 	{
-		$mockServer = array('REQUEST_METHOD' => 'GET');
-		$server = new HTTPRequest($mockServer);
-		$decodeRest = new InterpretRestRequest($server, array());
+		$decodeRest = new InterpretRestRequest('GET');
 
 		return $this->Expects($decodeRest->Verb)->ToBeEqualTo('GET');
 	}
 
 	public function ItShouldDecodeAPostRequest()
 	{
-		$mockServer = array('REQUEST_METHOD' => 'POST');
-		$server = new HTTPRequest($mockServer);
-		$decodeRest = new InterpretRestRequest($server, array());
+		$decodeRest = new InterpretRestRequest('POST');
 
 		return $this->Expects($decodeRest->Verb)->ToBeEqualTo('POST');
 	}
 
 	public function ItShouldDecodeAPutRequest()
 	{
-		$server = new HTTPRequest(array());
-		$request = array('_method' => 'PUT');
-		$decodeRest = new InterpretRestRequest($server, $request);
+		$decodeRest = new InterpretRestRequest('POST', 'PUT');
 
 		return $this->Expects($decodeRest->Verb)->ToBeEqualTo('PUT');
 	}
 
 	public function ItShouldDecodeADeleteRequest()
 	{
-		$server = new HttpRequest(array());
-		$request = array('_method' => 'DELETE');
-
-		$decodeRest = new InterpretRestRequest($server, $request);
+		$decodeRest = new InterpretRestRequest('POST', 'DELETE');
 
 		return $this->Expects($decodeRest->Verb)->ToBeEqualTo('DELETE');
 	}
