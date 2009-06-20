@@ -2,16 +2,6 @@
 
 class RunSpecsAsMake extends RunSpecs
 {
-	protected function OutputFailingTests()
-	{
-		if (count($this->Failing) > 0)
-		{
-			foreach ($this->Failing as $failedResult)
-			{
-			}
-		}
-	}
-
 	protected function OutputSpecResult($SpecSuiteName, $SpecName, $SpecResult)
 	{
 		if ($SpecResult->TestResult === false)
@@ -21,6 +11,8 @@ class RunSpecsAsMake extends RunSpecs
 				. ":" . $this->CreateEnglishSpecDescription($SpecResult->Spec->Name, $SpecResult->Name)
 				. " > Expected: " . $SpecResult->ExplainValue($SpecResult->ActualValue)
 				. " Actual: " . $SpecResult->ExplainValue($SpecResult->ExpectedValue);
+
+			die(); // in Vim, we only want the first failing
 		}
 	}
 }

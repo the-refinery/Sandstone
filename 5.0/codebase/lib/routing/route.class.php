@@ -9,7 +9,8 @@ class Route extends Component
 
 	public function __construct($Path)
 	{
-		$this->_path = $this->SanitizePath($Path);
+		$sanitize = new SanitizePath($Path);
+		$this->_path = $sanitize->Path;
 
 		$this->_parameters = $this->ConvertPathToParameters($this->_path);
 	}
@@ -40,7 +41,10 @@ class Route extends Component
 	public function CheckRoutingMatch($Path)
 	{
 		$this->_fileType = $this->DetermineFileType($Path);
-		$Path = $this->SanitizePath($Path);
+
+		$sanitize = new SanitizePath($Path);
+		$Path = $sanitize->Path;
+
 		$pattern = $this->GenerateMatchPattern($this->_parameters);
 
 		return preg_match($pattern, $Path) >= 1;
@@ -53,21 +57,8 @@ class Route extends Component
 		return "@^{$path}$@i";
 	}
 
-	public function SanitizePath($Path)
-	{
-		$Path = strtolower($Path);
-		$parameters = explode('/', $Path);
-		$parameters = array_filter($parameters);
-		$returnValue = implode('/', $parameters);
-		$returnValue = $this->RemoveFileExtension($returnValue);
-
-		return $returnValue;
-	}
-
 	protected function ConvertPathToParameters($Path)
 	{
-		$Path = $this->SanitizePath($Path);
-
 		$parameters = explode('/', $Path);
 		foreach ($parameters as $tempParameter)
 		{
@@ -99,17 +90,5 @@ class Route extends Component
 		}
 
 		return $extension;
-	}
-
-	protected function RemoveFileExtension($Path)
-	{
-		$extension = strrchr($Path, '.'); 
-
-		if($extension) 
-		{ 
-			$Path = substr($Path, 0, -strlen($extension)); 
-		} 
-
-		return $Path; 
 	}
 }

@@ -24,38 +24,6 @@ class RouteSpec extends DescribeBehavior
 		return $this->Expects($match)->ToBeTrue();
 	}
 
-	public function ItShouldSanitizeAStaticRouteWithMixedCase()
-	{
-		$foo = new Route("Foo/Bar");
-		$sanitized = $foo->SanitizePath("FOO/BAR");
-
-		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
-	}
-
-	public function ItShouldSanitizeWithATrailingSlash()
-	{
-		$foo = new Route("Foo/Bar");
-		$sanitized = $foo->SanitizePath("foo/bar/");
-
-		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
-	}
-
-	public function ItShouldSanitizeWithBlankParameters()
-	{
-		$foo = new Route("Foo/Bar");
-		$sanitized = $foo->SanitizePath("foo//bar//");
-
-		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
-	}
-
-	public function ItShouldSanitizeWithAFileType()
-	{
-		$foo = new Route("Foo/Bar");
-		$sanitized = $foo->SanitizePath("foo/bar.htm");
-
-		return $this->Expects($sanitized)->ToBeEqualTo('foo/bar');
-	}
-
 	public function ItShouldRecordTheFileType()
 	{
 		$foo = new Route("Foo/Bar");
