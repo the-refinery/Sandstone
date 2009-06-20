@@ -1,6 +1,6 @@
 <?php
 
-class Routing extends Component
+class RoutePath extends Component
 {
 	protected $_routes = array();
 

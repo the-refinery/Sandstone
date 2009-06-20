@@ -1,10 +1,10 @@
 <?php
 
-class RoutingSpec extends DescribeBehavior
+class RoutePathSpec extends DescribeBehavior
 {
 	public function ItShouldAddARoute()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$routing->AddRoute('foobar/:foobarid');
 
 		return $this->Expects(count($routing->Routes))->ToBeGreaterThanOrEqualTo(1);
@@ -12,7 +12,7 @@ class RoutingSpec extends DescribeBehavior
 
 	public function ItShouldFindTheFirstMatchingRoute()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$routing->AddRoute('foobar/:foobarid');
 		$routing->AddRoute('barfoo/:barfooid');
 		$routing->AddRoute('gorp');
@@ -26,7 +26,7 @@ class RoutingSpec extends DescribeBehavior
 	
 	public function ItShouldMatchAnyRestfulIndexAction()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$result = $routing->FindMatchingRoute('Cars');
 
 		return $this->Expects($result->Path)->ToBeEqualTo(':controller');
@@ -34,7 +34,7 @@ class RoutingSpec extends DescribeBehavior
 
 	public function ItShouldMatchARestfulShowAction()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$result = $routing->FindMatchingRoute('Car/4');
 
 		return $this->Expects($result->Path)->ToBeEqualTo(':controller/:id');
@@ -42,7 +42,7 @@ class RoutingSpec extends DescribeBehavior
 
 	public function ItShouldMatchARestfulNewAction()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$result = $routing->FindMatchingRoute('Cars/New');
 
 		return $this->Expects($result->Path)->ToBeEqualTo(':controller/new');
@@ -50,7 +50,7 @@ class RoutingSpec extends DescribeBehavior
 
 	public function ItShouldMatchARestfulEditAction()
 	{
-		$routing = new Routing();
+		$routing = new RoutePath();
 		$result = $routing->FindMatchingRoute('Car/4/Edit');
 
 		return $this->Expects($result->Path)->ToBeEqualTo(':controller/:id/edit');
