@@ -78,15 +78,6 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
-	public function setIsPastDue()
-	{
-		if (is_set($this->_pastDueTimestamp) == false)
-		{
-			$this->_pastDueTimestamp = new Date();
-		}
-	}
-
-
 	public function Load($dr)
 	{
 
@@ -226,6 +217,24 @@ class BilledLicense extends BaseLicense
 		$returnValue->AddEmail($email);
 
 		return $returnValue;
+	}
+
+	public function MarkPastDue($NumberOfDays = 0)
+	{
+		$now = new Date();
+		$now->Time = "00:00:00";
+		
+		$this->_pastDueTimestamp = $now->AddDays($NumberOfDays);
+
+		$this->Save();
+			
+	}
+
+	public function ClearPastDue()
+	{
+		$this->_pastDueTimestamp = null;
+
+		$this->Save();
 	}
 
 }
