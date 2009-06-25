@@ -375,6 +375,11 @@ class Application extends Module
 			//Determine our routing for this request
 			$EventParameters = Routing::ParseRequest();
 
+			if (is_set($EventParameters['sslredirect']))
+			{
+				Application::Redirect($EventParameters['sslredirect']);
+			}
+
 			//Do we have a valid license?
             $eventResults = $this->LicenseCheck($EventParameters);
 

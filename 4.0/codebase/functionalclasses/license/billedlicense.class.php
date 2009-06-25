@@ -63,10 +63,23 @@ class BilledLicense extends BaseLicense
 		}
 	}
 
-
 	public function getIsPastDue()
 	{
 		if (is_set($this->_pastDueTimestamp))
+		{
+			$returnValue = true;
+		}
+		else
+		{
+			$returnValue = false;
+		}
+
+		return $returnValue;
+	}
+
+	public function getIsDisabled()
+	{
+		if (is_set($this->_disabledTimestamp))
 		{
 			$returnValue = true;
 		}
@@ -233,6 +246,24 @@ class BilledLicense extends BaseLicense
 	public function ClearPastDue()
 	{
 		$this->_pastDueTimestamp = null;
+
+		$this->Save();
+	}
+
+	public function MarkDisabled()
+	{
+		$now = new Date();
+		$now->Time = "00:00:00";
+		
+		$this->_disabledTimestamp = $now;
+
+		$this->Save();
+			
+	}
+
+	public function MarkEnabled()
+	{
+		$this->_disabledTimestamp = null;
 
 		$this->Save();
 	}
