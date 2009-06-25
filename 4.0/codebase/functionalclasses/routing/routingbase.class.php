@@ -416,10 +416,12 @@ class RoutingBase extends Module
 
 		$returnValue['matchedrule'] = $RuleName;
 
+		$matchedRule = $this->_routingRules[$RuleName];
+
 		//Does this rule have a page value?
-		if (strlen($this->_routingRules[$RuleName]['page']) > 0)
+		if (strlen($matchedRule['page']) > 0)
 		{
-			$returnValue['page'] = $this->_routingRules[$RuleName]['page'];
+			$returnValue['page'] = $matchedRule['page'];
 		}
 		else
 		{
@@ -428,7 +430,7 @@ class RoutingBase extends Module
 		}
 
 		//Add the parms from the URL
-		$rule = explode("/", $this->_routingRules[$RuleName]['url']);
+		$rule = explode("/", $matchedRule['url']);
 		$routing = explode("/", $RoutingString);
 
 		foreach ($rule as $index=>$tempPart)
@@ -442,11 +444,19 @@ class RoutingBase extends Module
 		}
 
 		//Add the parms from the rule
-		if (count($this->_routingRules[$RuleName]['eventparameters']) > 0)
+		if (count($matchedRule['eventparameters']) > 0)
 		{
-			foreach ($this->_routingRules[$RuleName]['eventparameters'] as $name=>$value)
+			foreach ($matchedRule['eventparameters'] as $name=>$value)
 			{
 				$returnValue[$name] = $value;
+			}
+		}
+
+		if (is_set($matchedRule['sslrequired']))
+		{
+			if (strlen($_SERVER['HTTPS']) == 0 && Application::Registry()->DevMode <> 1)
+			{
+				$returnValue['sslredirect'] = Routing::BuildSecureURL() . $RoutingString;
 			}
 		}
 
