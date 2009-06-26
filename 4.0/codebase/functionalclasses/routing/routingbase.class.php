@@ -772,7 +772,7 @@ class RoutingBase extends Module
 					{
 						if (strlen($_SERVER['HTTPS']) == 0 && Application::Registry()->DevMode <> 1)
 						{
-							$IsFullFormat = true;
+							$IsSSLformat = true;
 						}
 					}
 
@@ -801,6 +801,10 @@ class RoutingBase extends Module
 		if ($IsFullFormat)
 		{
 			$returnValue = $this->ProcessGetPageBaseURL() . $url;
+		}
+		elseif ($IsSSLformat)
+		{
+			$returnValue = $this->ProcessGetSecureURL() . $url;
 		}
 		else
 		{
