@@ -804,7 +804,7 @@ class RoutingBase extends Module
 		}
 		elseif ($IsSSLformat)
 		{
-			$returnValue = $this->ProcessGetSecureURL() . $url;
+			$returnValue = $this->BuildSecureURL() . $url;
 		}
 		else
 		{
