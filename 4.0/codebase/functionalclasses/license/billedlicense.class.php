@@ -189,7 +189,7 @@ class BilledLicense extends BaseLicense
 			{
 				$newCustomerProfile = new CIMcustomerProfile();
 				$newCustomerProfile->CustomerID = $this->_accountID;
-				$newCustomerProfile->Description = $this->_companyName;
+				$newCustomerProfile->Description = $this->_name;
 				$newCustomerProfile->Save();
 
 				$this->_cimCustomerProfile = $newCustomerProfile;

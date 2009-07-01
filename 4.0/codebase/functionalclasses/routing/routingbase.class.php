@@ -765,7 +765,16 @@ class RoutingBase extends Module
         	if (array_key_exists('isexplicithtm', $this->_routingRules[$RuleName]))
         	{
         		$isExplicitHTM = true;
-        	}
+					}
+
+					//Check for SSL required
+					if (is_set($this->_routingRules[$RuleName]['sslrequired']))
+					{
+						if (strlen($_SERVER['HTTPS']) == 0 && Application::Registry()->DevMode <> 1)
+						{
+							$IsSSLformat = true;
+						}
+					}
 
 		}
 		else
@@ -792,6 +801,10 @@ class RoutingBase extends Module
 		if ($IsFullFormat)
 		{
 			$returnValue = $this->ProcessGetPageBaseURL() . $url;
+		}
+		elseif ($IsSSLformat)
+		{
+			$returnValue = $this->BuildSecureURL() . $url;
 		}
 		else
 		{

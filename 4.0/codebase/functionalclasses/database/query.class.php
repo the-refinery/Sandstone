@@ -183,6 +183,12 @@ class Query extends Module
 		return $returnValue;
 	}
 
+	public function SetSearchTextField($Value)
+	{
+		$returnValue = "'%" . $this->_conn->real_escape_string($Value) . "%'";
+		return $returnValue;
+	}
+
 	/*
 	Allows for easy setting of null database text fields
 

@@ -241,7 +241,6 @@ class Search extends Module
 		$query = new Query();
 
 		$tagText  = Tag::FormatTextForTag($SearchTerm);
-		$tagText = mysql_real_escape_string($tagText);
 
 		$accountID = Application::License()->AccountID;
 
@@ -251,7 +250,7 @@ class Search extends Module
 								INNER JOIN core_EntityTag b ON
 									b.TagID = a.TagID
 									AND  b.AssociatedEntityType IN ({$TypeNamesCSV})
-						WHERE	a.TagText LIKE '%{$tagText}%' 
+						WHERE	a.TagText LIKE {$query->SetSearchTextField($tagText)} 
 						AND		a.AccountID = {$accountID}
 						ORDER BY TagText ";
 
