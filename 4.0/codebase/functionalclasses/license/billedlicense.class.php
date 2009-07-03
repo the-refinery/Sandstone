@@ -14,6 +14,7 @@ class BilledLicense extends BaseLicense
 {
 
 	protected $_addressID;
+	protected $_cimProfileID;
 	
 	protected function SetupProperties()
 	{
@@ -21,7 +22,7 @@ class BilledLicense extends BaseLicense
 		$this->AddProperty("SignupDate","date","SignupDate",PROPERTY_READ_ONLY);
 		$this->AddProperty("AnniversaryDay","integer","AnniversaryDay",PROPERTY_READ_ONLY);
 		$this->AddProperty("Address","Address",null,PROPERTY_READ_WRITE);
-		$this->AddProperty("CIMcustomerProfile","CIMcustomerProfile","CIMcustomerProfileID",PROPERTY_READ_ONLY);
+		$this->AddProperty("CIMcustomerProfile","CIMcustomerProfile",null,PROPERTY_READ_ONLY, "LoadCIMprofile");
 		$this->AddProperty("PastDueTimestamp","date","PastDueTimestamp",PROPERTY_READ_ONLY);
 		$this->AddProperty("DisabledTimestamp","date","DisabledTimestamp",PROPERTY_READ_ONLY);
 
@@ -102,6 +103,15 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 
 	}
+
+	public function LoadCIMprofile()
+	{
+		if (is_set($this->_cimProfileID))
+		{
+			$this->_cimCustomerProfile = new CIMcustomerProfile($this->_cimProfileID);
+		}
+	}
+
 
 	protected function GenerateBaseDetailSelectClause()
 	{
