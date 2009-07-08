@@ -35,12 +35,34 @@ class MatchRouteSpec extends DescribeBehavior
 		return $this->Expects($check)->ToBeTrue();
 	}
 
-	public function ItShouldMatchADynaicRoute()
+	public function ItShouldMatchADynamicRoute()
 	{
 		$route = new Route("foo/:fooid/bar/:barid");
 		$foo = new MatchRoute($route);
 
 		$check = $foo->CheckMatch("Foo/5/bar/3");
 		return $this->Expects($check)->ToBeTrue();
+	}
+
+	public function ItShouldFindTheValueOfAKey()
+	{
+		$route = new Route("foo/bar");
+		$foo = new MatchRoute($route);
+		$foo->CheckMatch("Foo/Bar");
+
+		$keyValue = $foo->GetParameter('bar');
+
+		return $this->Expects($keyValue)->ToBeEqualTo('Bar');
+	}
+
+	public function ItShouldFindTheValueOfAVariableKey()
+	{
+		$route = new Route("foo/:barid/test");
+		$foo = new MatchRoute($route);
+		$foo->CheckMatch("Foo/tester/test");
+
+		$keyValue = $foo->GetParameter('barid');
+
+		return $this->Expects($keyValue)->ToBeEqualTo('tester');
 	}
 }

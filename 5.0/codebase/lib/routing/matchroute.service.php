@@ -3,9 +3,10 @@
 class MatchRoute extends Component
 {
 	protected $_route;
-	protected $_keys;
+	protected $_keys = array();
+	protected $_matchValues = array();
 
-	public function __construct(Route $Route)
+	public function __construct($Route)
 	{
 		$this->_route = $Route;
 	}
@@ -18,6 +19,18 @@ class MatchRoute extends Component
 		}
 
 		return $this->_keys;
+	}
+
+	public function GetParameter($Key)
+	{
+		$keyIndex = array_search($Key, $this->getKeys());
+
+		if ($keyIndex !== false)
+		{
+			$returnValue = $this->_matchValues[$keyIndex];
+		}
+
+		return $returnValue;
 	}
 
 	public function getMatchPattern()
@@ -35,7 +48,14 @@ class MatchRoute extends Component
 
 	public function CheckMatch($Path)
 	{
-		return (bool)preg_match($this->getMatchPattern(), $Path);
+		$returnValue = (bool)preg_match($this->getMatchPattern(), $Path);
+
+		if ($returnValue)
+		{
+			$this->ConvertMatchPathToValues($Path);
+		}
+
+		return $returnValue;
 	}
 
 	protected function ConvertParametersToKeys($Parameters)
@@ -69,5 +89,10 @@ class MatchRoute extends Component
 		}
 
 		return $Parameter;
+	}
+
+	protected function ConvertMatchPathToValues($Path)
+	{
+		$this->_matchValues = explode("/", $Path);
 	}
 }
