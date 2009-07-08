@@ -23,7 +23,8 @@ class Routing extends Component
 
 		foreach ($this->_routes as $tempRoute)
 		{
-			if ($tempRoute->CheckRoutingMatch($Path))
+			$matcher = new MatchRoute($tempRoute);
+			if ($matcher->CheckMatch($Path))
 			{
 				$returnValue = $tempRoute;
 				break;
