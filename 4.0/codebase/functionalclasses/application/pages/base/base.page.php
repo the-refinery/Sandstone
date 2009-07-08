@@ -345,7 +345,7 @@ class BasePage extends ControlContainer
 		switch ($EventParameters['filetype'])
 		{
 			case "htm":
-				header('Content-Type: text/html');
+				header('Content-Type: text/html; charset=utf-8');
 				break;
 
 			case "txt":
