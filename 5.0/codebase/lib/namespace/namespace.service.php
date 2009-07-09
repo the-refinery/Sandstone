@@ -44,6 +44,18 @@ class Namespace extends Component
 		$ns->ProcessDisplay();
 	}
 
+	static public function Classes()
+	{
+		$ns = Namespace::Instance();
+
+		return $ns->Classes;
+	}
+
+	public function getClasses()
+	{
+		return array_keys($this->_includedClasses);
+	}
+
 	public function ProcessUsing($Namespace)
 	{
 		if (array_key_exists(strtolower($Namespace), $this->_usedNamespaces) == false)

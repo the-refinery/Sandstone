@@ -53,5 +53,11 @@ class NamespaceSpec extends DescribeBehavior
 		return $this->Expects($test->IsNewClass)->ToBeEqualTo(true);
 	}
 
+	public function ItShouldGiveAListOfIncludedClasses()
+	{
+		Namespace::Using("lib.namespace.spec.utility");
+
+		return $this->Expects(Namespace::Classes())->ToContain("wildcardtest");
+	}
 }
 
