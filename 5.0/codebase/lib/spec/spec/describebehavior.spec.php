@@ -8,7 +8,7 @@ class DescribeBehaviorSpec extends DescribeBehavior
 	public function BeforeEach()
 	{
 		$this->_spec = new DescribeBehavior();
-		$this->_fooSpec = new FooSpec();
+		$this->_fooSpec = new FooTest();
 	}
 
 	public function ItShouldSetTheExpectedValue()
@@ -50,7 +50,7 @@ class DescribeBehaviorSpec extends DescribeBehavior
 	{
 		$condition = $this->_fooSpec->Expects('expectedValue');
 
-		return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooSpec');
+		return $this->Expects($condition->Spec->Name)->ToBeEqualTo('FooTest');
 	}
 			
 	public function ItShouldReportASpecAsPassing()

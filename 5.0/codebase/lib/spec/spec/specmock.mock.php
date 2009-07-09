@@ -1,6 +1,6 @@
 <?php
 
-class FooSpec extends DescribeBehavior
+class SpecMock extends Mock
 {
 	public function ItIsAPendingSpec()
 	{

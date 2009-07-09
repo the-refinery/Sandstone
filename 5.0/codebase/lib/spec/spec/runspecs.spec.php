@@ -5,7 +5,7 @@ class RunSpecsSpec extends DescribeBehavior
 	public function ItShouldRunSpecifiedSpecClasses()
 	{
 		$runner = new RunSpecs();
-		$runner->DescribeBehavior('FooSpec');
+		$runner->DescribeBehavior('FooTest');
 
 		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeTrue();
 	}
@@ -13,7 +13,7 @@ class RunSpecsSpec extends DescribeBehavior
 	public function ItShouldLogPassingSpecs()
 	{
 		$runner = new RunSpecs();
-		$runner->DescribeBehavior('FooSpec');
+		$runner->DescribeBehavior('FooTest');
 		$runner->Run();
 
 		return $this->Expects($runner->Passing[0])->ToExist();
@@ -22,7 +22,7 @@ class RunSpecsSpec extends DescribeBehavior
 	public function ItShouldLogFailingSpecs()
 	{
 		$runner = new RunSpecs();
-		$runner->DescribeBehavior('FooSpec');
+		$runner->DescribeBehavior('FooTest');
 		$runner->Run();
 
 		return $this->Expects($runner->Failing[0])->ToExist();
@@ -31,7 +31,7 @@ class RunSpecsSpec extends DescribeBehavior
 	public function ItShouldLogPendingSpecs()
 	{
 		$runner = new RunSpecs();
-		$runner->DescribeBehavior('FooSpec');
+		$runner->DescribeBehavior('FooTest');
 		$runner->Run();
 
 		return $this->Expects($runner->Pending[0])->ToExist();

@@ -98,7 +98,7 @@ class AssertConditionSpec extends DescribeBehavior
 
 	public function ItShouldAssertInstanceOf()
 	{
-		$foo = new FooSpec();
+		$foo = new FooTest();
 
 		return $this->Expects($foo)->ToBeInstanceOf('DescribeBehavior');
 	}
@@ -170,7 +170,7 @@ class AssertConditionSpec extends DescribeBehavior
 	{
 		$assert = new AssertCondition('123', $this);
 
-		return $this->Expects($assert->ExplainValue(new FooSpec()))->ToBeEqualTo('(object) FooSpec');
+		return $this->Expects($assert->ExplainValue(new FooTest()))->ToBeEqualTo('(object) FooTest');
 	}
 
 }
