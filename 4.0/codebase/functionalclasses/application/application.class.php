@@ -423,7 +423,6 @@ class Application extends Module
 		{
 			throw new InvalidSystemException("Magic_Quotes_Runtime is enabled.  Please disable to continue.");
 		}
-
 	}
 
 	protected function ApplicationSystemCheck()

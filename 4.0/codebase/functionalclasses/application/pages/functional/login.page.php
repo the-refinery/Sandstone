@@ -121,25 +121,32 @@ class LoginPage extends BasePage
 		$tempUser = new User();
 		$tempUser->LoadByUserName($this->LoginForm->Username->Value);
 
-		$newPassword = $tempUser->GenerateNewPassword();
-		$tempUser->Password = $newPassword;
-		$tempUser->Save();
+		if ($tempUser->IsLoaded)
+		{
+			$newPassword = $tempUser->GenerateNewPassword();
+			$tempUser->Password = $newPassword;
+			$tempUser->Save();
 
-		// SEND EMAIL
-		$sendEmail = new SendMail();
-		$sendEmail->ToName = "{$tempUser->FirstName} {$tempUser->LastName}";
-		$sendEmail->ToEmail = $tempUser->PrimaryEmail->Address;
+			// SEND EMAIL
+			$sendEmail = new SendMail();
+			$sendEmail->ToName = "{$tempUser->FirstName} {$tempUser->LastName}";
+			$sendEmail->ToEmail = $tempUser->PrimaryEmail->Address;
 
-		$sendEmail->SenderName = "Prfessor.com Password Reset";
-		$sendEmail->SenderEmail = "donotreply@prfessor.com";
-		$sendEmail->Subject = "Prfessor password reset";
+			$sendEmail->SenderName = "Prfessor.com Password Reset";
+			$sendEmail->SenderEmail = "donotreply@prfessor.com";
+			$sendEmail->Subject = "Prfessor password reset";
 
-		$sendEmail->Template->Filename = "passwordreset";
-		$sendEmail->Template->User = $tempUser;
-		$sendEmail->Template->NewPassword = $newPassword;
-		$sendEmail->Send();
-		
-		Application::SetSessionVariable('notificationmessage', "A new password has been emailed to you");
+			$sendEmail->Template->Filename = "passwordreset";
+			$sendEmail->Template->User = $tempUser;
+			$sendEmail->Template->NewPassword = $newPassword;
+			$sendEmail->Send();
+			
+			Application::SetSessionVariable('notificationmessage', "A new password has been emailed to you");
+		}
+		else
+		{
+			Application::SetSessionVariable('notificationmessage', "Invalid username, please try again.");
+		}
 	}
 
 	protected function AttemptLogin()
