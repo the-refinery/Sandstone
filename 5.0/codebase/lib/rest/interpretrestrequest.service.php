@@ -2,34 +2,32 @@
 
 class InterpretRestRequest extends Component
 {
-	protected $_server;
-	protected $_request;
+	protected $_verb;
 
-	public function __construct(HTTPRequest $Server, array $Request)
+	public function __construct($ServerMethod, $InjectedMethod = null) 
 	{
-		$this->_server = $Server;
-		$this->_request = $Request;
+		if ($ServerMethod == "GET")
+		{
+			$verb = "GET";
+		}
+		elseif ($InjectedMethod == "PUT")
+		{
+			$verb = "PUT";
+		}
+		elseif ($InjectedMethod == "DELETE")
+		{
+			$verb = "DELETE";
+		}
+		elseif ($ServerMethod == "POST")
+		{
+			$verb = "POST";
+		}
+
+		$this->_verb = $verb;
 	}
 
 	public function getVerb()
 	{
-		if ($this->_server->Method == "GET")
-		{
-			$returnValue = "GET";
-		}
-		elseif ($this->_request['_method'] == "PUT")
-		{
-			$returnValue = "PUT";
-		}
-		elseif ($this->_request['_method'] == "DELETE")
-		{
-			$returnValue = "DELETE";
-		}
-		elseif ($this->_server->Method == "POST")
-		{
-			$returnValue = "POST";
-		}
-
-		return $returnValue;
+		return $this->_verb;
 	}
 }
