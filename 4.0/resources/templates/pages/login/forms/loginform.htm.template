@@ -16,5 +16,7 @@
 	{+ForgotPassword}
 </div>
 
-{+Submit} <span style="display:none;">or <a class="JSAction" id="CancelReset">cancel</a></span>
+<div class="FormBlock">
+	{+Submit} <span style="display:none;">or <a class="JSAction" id="CancelReset">cancel</a></span>
+</div>
 
