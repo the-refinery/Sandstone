@@ -120,7 +120,7 @@ class CIMcustomerProfile extends CIMbase
 	public function SaveNew()
 	{
 		$returnValue = false;
-		
+
 		if (is_set($this->_customerID))
 		{
 			$data = $this->BuildSaveData();

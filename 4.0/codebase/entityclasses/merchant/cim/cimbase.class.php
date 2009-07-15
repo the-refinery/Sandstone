@@ -47,7 +47,7 @@ class CIMbase extends Module
 		else
 		{
 			$this->_authenticationParameters['name'] = $this->_processorParameters['x_login'];
-			$this->_authenticationParameters['transactionkey'] = $this->_processorParameters['x_tran_key'];
+			$this->_authenticationParameters['transactionKey'] = $this->_processorParameters['x_tran_key'];
 			$this->_apiURL = "https://api.authorize.net/xml/v1/request.api";
 		}
 	}
