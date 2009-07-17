@@ -6,8 +6,7 @@ Namespace::Using("Sandstone.Utilities.String");
 
 class ApplicationBasePage extends BasePage
 {
-	
-	protected function HTM_Processor($EventParameters)
+	protected function Generic_PreProcessor(&$EventParameters)
 	{
 		$this->SetupDefaultTemplateVariables();
 	}
