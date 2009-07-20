@@ -1,8 +1,8 @@
 <?php
 
-class ParseADirectory
+class ParseADirectory extends BaseService
 {
-	public function FindFilesInADirectory($Pattern)
+	static function FindFilesInADirectory($Pattern)
 	{
 		return glob($Pattern);
 	}
