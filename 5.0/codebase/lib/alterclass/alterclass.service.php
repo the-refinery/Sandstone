@@ -1,6 +1,6 @@
 <?php
 
-class AlterClass
+class AlterClass extends BaseService
 {
 	static function Mixin($Target, $Mixin) 
 	{
