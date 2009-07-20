@@ -1,6 +1,6 @@
 <?php
 
-class Benchmark extends BasePrimitive
+class Benchmark extends BaseSingleton
 {
 	protected $_marks = array();
 
