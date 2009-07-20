@@ -1,17 +1,13 @@
 <?php
 
-class RoutingSpec extends DescribeBehavior
+class FindMatchingRouteSpec extends DescribeBehavior
 {
-	public function ItShouldAddARoute()
-	{
-		$routing = new Routing();
-		$routing->AddRoute('foobar/:foobarid');
-
-		return $this->Expects(count($routing->Routes))->ToBeGreaterThanOrEqualTo(1);
-	}
-
 	public function ItShouldFindTheFirstMatchingRoute()
 	{
+		$route1 = new Route(array('foobar',':foobarid');
+		$route2 = new Route(array('barfoo',':barfooid');
+		$route3 = new Route(array('gorp');
+
 		$routing = new Routing();
 		$routing->AddRoute('foobar/:foobarid');
 		$routing->AddRoute('barfoo/:barfooid');
