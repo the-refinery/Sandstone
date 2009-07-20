@@ -1,6 +1,6 @@
 <?php
 
-class FormatString
+class FormatString extends BaseService
 {
 	static function FormatSentanceCase($String)
 	{
