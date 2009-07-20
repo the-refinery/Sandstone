@@ -287,7 +287,7 @@ class ControlContainer extends Renderable
 	{
 		$returnValue = $this;
 
-		while (($returnValue instanceof BasePage) == false)
+		while (isset($returnValue) && ($returnValue instanceof BasePage) == false)
 		{
 			$returnValue = $returnValue->ParentContainer;
 		}

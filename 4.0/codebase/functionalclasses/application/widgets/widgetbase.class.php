@@ -7,7 +7,7 @@ Widget Base Class File
 */
 
 
-class WidgetBase extends Renderable
+class WidgetBase extends ControlContainer
 {
     public function __construct()
     {
