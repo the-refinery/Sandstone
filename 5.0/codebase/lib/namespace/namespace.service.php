@@ -1,6 +1,6 @@
 <?php
 
-class Namespace extends BasePrimitive
+class Namespace extends BaseSingleton
 {
 	protected $_includedClasses;
 	protected $_usedNamespaces;

@@ -1,5 +1,5 @@
 <?php
 
-class BaseSingleton
+class BaseSingleton extends Base
 {
 }
