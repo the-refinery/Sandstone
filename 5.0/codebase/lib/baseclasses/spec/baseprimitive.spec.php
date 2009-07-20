@@ -1,6 +1,6 @@
 <?php
 
-class ComponentSpec extends DescribeBehavior
+class BasePrimitiveSpec extends DescribeBehavior
 {
 	protected $_generalObject;
 

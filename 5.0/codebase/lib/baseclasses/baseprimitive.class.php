@@ -1,6 +1,6 @@
 <?php
 
-class Component
+class BasePrimitive
 {
 	static $_mixins = array();
 

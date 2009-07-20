@@ -1,6 +1,6 @@
 <?php
 
-class GeneralObject extends Component
+class GeneralObject extends BasePrimitive
 {
 	public $_foo = 'foo';
 

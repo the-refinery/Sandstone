@@ -1,6 +1,6 @@
 <?php
 
-class Target extends Component
+class Target extends BasePrimitive
 {
 }
 

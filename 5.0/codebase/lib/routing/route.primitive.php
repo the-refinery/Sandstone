@@ -1,6 +1,6 @@
 <?php
 
-class Route extends Component
+class Route extends BasePrimitive
 {
 	protected $_parameters;
 	

@@ -1,6 +1,6 @@
 <?php
 
-class SanitizePath extends Component
+class SanitizePath extends BasePrimitive
 {
 	protected $_path;
 

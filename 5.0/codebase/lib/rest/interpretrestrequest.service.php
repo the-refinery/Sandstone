@@ -1,6 +1,6 @@
 <?php
 
-class InterpretRestRequest extends Component
+class InterpretRestRequest extends BasePrimitive
 {
 	protected $_verb;
 

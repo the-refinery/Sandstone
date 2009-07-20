@@ -4,7 +4,8 @@ require('codebase/core/handleerrors.php');
 set_error_handler("HandleError", E_ALL);
 
 //directly include files necessary for namespacing to work
-include_once("codebase/lib/baseclasses/component.class.php");
+include_once("codebase/lib/baseclasses/baseprimitive.class.php");
+include_once("codebase/lib/baseclasses/baseservice.class.php");
 include_once("codebase/core/filesystem/parseadirectory.service.php");
 include_once("codebase/lib/namespace/namespace.service.php");
 

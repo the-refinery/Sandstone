@@ -1,6 +1,6 @@
 <?php
 
-class Routing extends Component
+class Routing extends BasePrimitive
 {
 	protected $_routes = array();
 

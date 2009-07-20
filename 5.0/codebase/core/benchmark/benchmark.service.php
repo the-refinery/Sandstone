@@ -1,6 +1,6 @@
 <?php
 
-class Benchmark extends Component
+class Benchmark extends BasePrimitive
 {
 	protected $_marks = array();
 

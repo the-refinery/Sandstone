@@ -1,6 +1,6 @@
 <?php
 
-class MatchRoute extends Component
+class MatchRoute extends BasePrimitive
 {
 	protected $_route;
 	protected $_keys = array();

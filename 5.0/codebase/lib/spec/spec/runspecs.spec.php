@@ -7,7 +7,7 @@ class RunSpecsSpec extends DescribeBehavior
 		$runner = new RunSpecs();
 		$runner->DescribeBehavior('FooTest');
 
-		return $this->Expects($runner->SpecSuites[0] instanceof FooSpec)->ToBeTrue();
+		return $this->Expects($runner->SpecSuites[0])->ToBeInstanceOf('FooTest');
 	}
 
 	public function ItShouldLogPassingSpecs()

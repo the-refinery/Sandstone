@@ -1,6 +1,6 @@
 <?php
 
-class Namespace extends Component
+class Namespace extends BasePrimitive
 {
 	protected $_includedClasses;
 	protected $_usedNamespaces;

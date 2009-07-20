@@ -1,5 +1,5 @@
 <?php
 
-class DispatchApplication extends Component
+class DispatchApplication extends BaseService
 {
 }
