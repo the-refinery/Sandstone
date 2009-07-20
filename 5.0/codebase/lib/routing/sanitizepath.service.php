@@ -1,26 +1,19 @@
 <?php
 
-class SanitizePath extends BasePrimitive
+class SanitizePath extends BaseService
 {
-	protected $_path;
-
-	public function __construct($Path)
+	static function Sanitize($Path)
 	{
 		$Path = strtolower($Path);
 		$parameters = explode('/', $Path);
 		$parameters = array_filter($parameters);
 		$Path = implode('/', $parameters);
-		$Path = $this->RemoveFileExtension($Path);
+		$Path = self::RemoveFileExtension($Path);
 
-		$this->_path = $Path;
+		return $Path;
 	}
 
-	public function getPath()
-	{
-		return $this->_path;
-	}
-	
-	protected function RemoveFileExtension($Path)
+	public function RemoveFileExtension($Path)
 	{
 		$extension = strrchr($Path, '.'); 
 
