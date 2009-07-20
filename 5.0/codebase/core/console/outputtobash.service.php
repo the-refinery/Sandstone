@@ -1,6 +1,6 @@
 <?php
 
-class OutputToBash
+class OutputToBash extends BaseService
 {
 	static public function NewLine()
 	{
@@ -19,12 +19,12 @@ class OutputToBash
 
 	static public function ColoredText($Color, $Text)
 	{
-		$defaultColor = "\033[37m";
-		$colorLegend = array('red'    => "\033[0;31m",
+		$colorLegend = array('default' => "\033[37m",
+												 'red'    => "\033[0;31m",
 												 'yellow' => "\033[0;33m");
 
 		$colorEscape = $colorLegend[strtolower($Color)];	
 
-		return $colorEscape . $Text . $defaultColor;
+		return $colorEscape . $Text . $colorLegend['default'];
 	}
 }
