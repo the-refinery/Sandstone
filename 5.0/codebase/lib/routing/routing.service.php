@@ -11,7 +11,8 @@ class Routing extends BasePrimitive
 
 	public function AddRoute($Path)
 	{
-		$tempRoute = new Route($Path);
+		$routeParameters = ConvertPathToParameters::Convert($Path);
+		$tempRoute = new Route($routeParameters);
 
 		// prepended to the start of the array so that they are matched last
 		array_unshift($this->_routes, $tempRoute);

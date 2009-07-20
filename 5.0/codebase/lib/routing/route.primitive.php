@@ -3,13 +3,10 @@
 class Route extends BasePrimitive
 {
 	protected $_parameters;
-	
-	public function __construct($Path)
-	{
-		$sanitize = new SanitizePath($Path);
-		$Path = $sanitize->Path;
 
-		$this->_parameters = $this->ConvertPathToParameters($Path);
+	public function __construct($Parameters = array())
+	{
+		$this->_parameters = $Parameters;
 	}
 
 	public function getParameters()
@@ -20,10 +17,5 @@ class Route extends BasePrimitive
 	public function getPath()
 	{
 		return implode("/", $this->_parameters);
-	}
-
-	protected function ConvertPathToParameters($Path)
-	{
-		return explode("/",$Path);
 	}
 }

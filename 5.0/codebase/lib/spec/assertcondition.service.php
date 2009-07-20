@@ -1,6 +1,10 @@
 <?php
 
-class AssertCondition
+// This should be converted to a true service once 
+// we have upgraded to a version on PHP which allows
+// for __staticCall functionality
+
+class AssertCondition extends BaseService
 {
 	public $Name;
 	public $Spec;
