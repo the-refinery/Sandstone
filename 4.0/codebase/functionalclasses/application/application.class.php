@@ -381,13 +381,13 @@ class Application extends Module
 			}
 
 			//Do we have a valid license?
-            $eventResults = $this->LicenseCheck($EventParameters);
+			$eventResults = $this->LicenseCheck($EventParameters);
 
-            //Make sure the License check didn't fire a 403 page
-            if (is_set($eventResults) == false)
-            {
-            	$eventResults = $this->ProcessRaiseEvent($EventParameters);
-            }
+			//Make sure the License check didn't fire a 403 page
+			if (is_set($eventResults) == false)
+			{
+				$eventResults = $this->ProcessRaiseEvent($EventParameters);
+			}
 
 			$eventResults->Flush();
 		}
@@ -482,7 +482,7 @@ class Application extends Module
 					}
 				}
 
-				if (is_set($_SESSION['AccountID']))
+				if (is_set($this->Session['AccountID']))
 				{
 					$this->_license = new License($_SESSION['AccountID']);
 
@@ -630,28 +630,24 @@ class Application extends Module
 
 		if (is_set($this->Cookie['DItoken']))
 		{
-			$token = $this->Cookie['DItoken'];
-		}
-		elseif (is_set($this->Session['DItoken']))
-		{
-			$token = $this->Session['DItoken'];
-		}
+			$this->_currentUser = new User($this->Cookie['DItoken']);
 
-		if (is_set($token))
-		{
-			$this->_currentUser = new User($token);
-
-			//If we didn't load one successfully from that token,
-			//clear the field
 			if ($this->_currentUser->IsLoaded == false)
 			{
 				$this->_currentUser = null;
 			}
 		}
-		else
+
+		if (is_set($this->_currentUser) == false && is_set($this->Session['DItoken']))
 		{
-			$this->_currentUser = null;
+			$this->_currentUser = new User($this->Session['DItoken']);
+
+			if ($this->_currentUser->IsLoaded == false)
+			{
+				$this->_currentUser = null;
+			}
 		}
+
 	}
 
 	protected function AuthenticateUser($TargetPage, $EventParameters)
