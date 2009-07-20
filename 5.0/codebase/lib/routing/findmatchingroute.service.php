@@ -8,8 +8,7 @@ class FindMatchingRoute extends BaseService
 
 		foreach ($Routes as $tempRoute)
 		{
-			$matcher = new MatchRoute($tempRoute);
-			if ($matcher->CheckMatch($Path))
+			if (MatchRoute::CheckMatch($tempRoute, $Path))
 			{
 				$returnValue = $tempRoute;
 				break;
