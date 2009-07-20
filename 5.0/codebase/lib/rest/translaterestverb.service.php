@@ -1,10 +1,8 @@
 <?php
 
-class InterpretRestRequest extends BasePrimitive
+class TranslateRestVerb extends BaseService
 {
-	protected $_verb;
-
-	public function __construct($ServerMethod, $InjectedMethod = null) 
+	static function Translate($ServerMethod, $InjectedMethod = null) 
 	{
 		if ($ServerMethod == "GET")
 		{
@@ -23,11 +21,6 @@ class InterpretRestRequest extends BasePrimitive
 			$verb = "POST";
 		}
 
-		$this->_verb = $verb;
-	}
-
-	public function getVerb()
-	{
-		return $this->_verb;
+		return $verb;
 	}
 }
