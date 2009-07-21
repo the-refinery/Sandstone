@@ -479,6 +479,7 @@ class Application extends Module
 					elseif (is_set($EventParameters['subdomain']))
 					{
 						Application::SelectAccount($EventParameters['subdomain']);
+						$returnValue = $this->Fire404response;
 					}
 				}
 
@@ -494,7 +495,7 @@ class Application extends Module
 				else
 				{
 					//No account ID set, redirect to the login page.
-					$returnValue = $this->Fire404response();
+					$returnValue = $this->HandleLoginOr403($EventParameters);
 				}
 			}
 		}
