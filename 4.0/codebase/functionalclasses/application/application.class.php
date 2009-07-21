@@ -478,8 +478,12 @@ class Application extends Module
 					}
 					elseif (is_set($EventParameters['subdomain']))
 					{
-						Application::SelectAccount($EventParameters['subdomain']);
-						$returnValue = $this->Fire404response;
+						$success = Application::SelectAccount($EventParameters['subdomain']);
+
+						if ($success == false)
+						{
+							$returnValue = $this->Fire404response();
+						}
 					}
 				}
 
