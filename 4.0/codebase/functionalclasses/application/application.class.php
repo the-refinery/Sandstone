@@ -487,7 +487,7 @@ class Application extends Module
 					}
 				}
 
-				if (is_set($this->Session['AccountID']) && is_set($returnValue) == false)
+				if (is_set($this->Session['AccountID']))
 				{
 					$this->_license = new License($_SESSION['AccountID']);
 
@@ -498,8 +498,11 @@ class Application extends Module
 				}
 				else
 				{
-					//No account ID set, redirect to the login page.
-					$returnValue = $this->HandleLoginOr403($EventParameters);
+					if (is_set($returnValue) == false)
+					{
+						//No account ID set, redirect to the login page.
+						$returnValue = $this->HandleLoginOr403($EventParameters);
+					}
 				}
 			}
 		}
