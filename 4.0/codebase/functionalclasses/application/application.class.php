@@ -495,7 +495,6 @@ class Application extends Module
 				{
 					//No account ID set, redirect to the login page.
 					$returnValue = $this->Fire404response();
-					//$returnValue = $this->HandleLoginOr403($EventParameters);
 				}
 			}
 		}
