@@ -487,7 +487,7 @@ class Application extends Module
 					}
 				}
 
-				if (is_set($this->Session['AccountID']))
+				if (is_set($this->Session['AccountID']) && is_set($returnValue) == false)
 				{
 					$this->_license = new License($_SESSION['AccountID']);
 
