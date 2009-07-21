@@ -494,7 +494,8 @@ class Application extends Module
 				else
 				{
 					//No account ID set, redirect to the login page.
-					$returnValue = $this->HandleLoginOr403($EventParameters);
+					$returnValue = $this->Fire404response();
+					//$returnValue = $this->HandleLoginOr403($EventParameters);
 				}
 			}
 		}
@@ -575,6 +576,20 @@ class Application extends Module
 		$eventParameters['page'] = "Error403";
 		$eventParameters['pageclass'] = "Error403Page";
 		$eventParameters['filetype'] = "htm403";
+		$eventParameters['event'] = "GET";
+
+		$targetPage = new $eventParameters['pageclass'] ();
+
+		$returnValue = $targetPage->RaiseEvent($eventParameters);
+
+		return $returnValue;
+	}
+
+	protected function Fire404response()
+	{
+		$eventParameters['page'] = "Error404";
+		$eventParameters['pageclass'] = "Error404Page";
+		$eventParameters['filetype'] = "htm404";
 		$eventParameters['event'] = "GET";
 
 		$targetPage = new $eventParameters['pageclass'] ();
