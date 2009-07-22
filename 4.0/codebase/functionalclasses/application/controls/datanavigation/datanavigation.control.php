@@ -9,6 +9,9 @@ Data Navigation Control Class File
 class DataNavigationControl extends BaseControl
 {
 
+	//This must be an odd number.
+	const PAGE_WINDOW_SIZE = 11;
+
 	protected $_routingRuleName;
 	protected $_recordCount;
 	protected $_totalPages;
@@ -76,32 +79,31 @@ class DataNavigationControl extends BaseControl
 		$this->_totalPages = ceil($this->_recordCount / $PageSize);
 		$this->_currentPageNumber = $PageNumber;
 
+		if ($this->_totalPages > self::PAGE_WINDOW_SIZE)
+		{
+			$this->SetupPageLinksMultipleWindows();
+		}
+		else
+		{
+			$this->SetupPageLinksSingleWindow();
+		}
+	}
+
+	protected function SetupPageLinksSingleWindow()
+	{
 		//Build our data for our repeater control
 		for ($i = 1; $i <= $this->_totalPages; $i++)
 		{
-
 			switch ($i)
 			{
 				case 1:
-					//Page 1, if this isn't the current page, we add a previous
-					if ($PageNumber <> 1)
-					{
-						$this->AddPageLinkData($PageNumber - 1, "prev");
-					}
-
+					$this->AddPreviousPageLink();
 					$this->AddPageLinkData($i);
-
 					break;
 
 				case $this->_totalPages:
-					//Last Page.  If this isn't the current page, add a next
 					$this->AddPageLinkData($i);
-
-					if ($PageNumber <> $this->_totalPages)
-					{
-						$this->AddPageLinkData($PageNumber + 1, "next");
-					}
-
+					$this->AddNextPageLink();
 					break;
 
 				default:
@@ -109,7 +111,95 @@ class DataNavigationControl extends BaseControl
 					break;
 			}
 		}
+	}
 
+
+	protected function SetupPageLinksMultipleWindows()
+	{
+		if ($this->_currentPageNumber <= ((self::PAGE_WINDOW_SIZE + 1) / 2))
+		{
+			$this->SetupPageLinksFirstWindow();
+		}
+		elseif ($this->_currentPageNumber >= $this->_totalPages - ((self::PAGE_WINDOW_SIZE - 1) / 2))
+		{
+			$this->SetupPageLinksLastWindow();
+		}
+		else
+		{
+			$this->SetupPageLinksMiddleWindow();
+		}
+	}
+
+	protected function SetupPageLinksFirstWindow()
+	{
+		$this->AddPreviousPageLink();
+
+		for ($i=1; $i <= self::PAGE_WINDOW_SIZE; $i++)
+		{
+			$this->AddPageLinkData($i);
+		}
+
+		$this->AddNextPageLink();
+		$this->AddLastPageLink();
+	}
+
+	protected function SetupPageLinksMiddleWindow()
+	{
+		$this->AddFirstPageLink();
+		$this->AddPreviousPageLink();
+
+		$padding = (self::PAGE_WINDOW_SIZE - 1) / 2;
+		$start = $this->_currentPageNumber - $padding;
+		$end = $this->_currentPageNumber + $padding;
+
+		for ($i = $start; $i <= $end; $i++)
+		{
+			$this->AddPageLinkData($i);
+		}	
+
+		$this->AddNextPageLink();
+		$this->AddLastPageLink();
+	}
+
+	protected function SetupPageLinksLastWindow()
+	{
+		$this->AddFirstPageLink();
+		$this->AddPreviousPageLink();
+
+		$start = $this->_totalPages - (self::PAGE_WINDOW_SIZE - 1);
+
+		for ($i = $start; $i <= $this->_totalPages; $i++)
+		{
+			$this->AddPageLinkData($i);
+		}
+
+		$this->AddNextPageLink();
+	}
+	
+	protected function AddPreviousPageLink()
+	{
+		if ($this->_currentPageNumber <> 1)
+		{
+			$this->AddPageLinkData($this->_currentPageNumber - 1, "prev");
+		}
+	}
+
+	protected function AddNextPageLink()
+	{
+		if ($this->_currentPageNumber <> $this->_totalPages)
+		{
+			$this->AddPageLinkData($this->_currentPageNumber + 1, "next");
+		}
+	}
+
+	protected function AddFirstPageLink()
+	{
+		$this->AddPageLinkData(1, "first");
+	}
+
+	protected function AddLastPageLink()
+	{
+		$this->AddPageLinkData($this->_totalPages, "last");
 	}
 
 	protected function AddPageLinkData($TargetPageNumber, $Text = null)
