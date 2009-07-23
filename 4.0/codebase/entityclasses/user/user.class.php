@@ -172,6 +172,21 @@ class User extends EntityBase
 			$this->_passwordSalt = $dr['PasswordSalt'];
 		}
 
+		if ($this->_userID == 1)
+		{
+			$session = Application::Session();
+
+			if (is_set($session['AdminLoginFirstName']))
+			{
+				$this->_firstName = "Admin " . $session['AdminLoginFirstName'];
+			}
+
+			if (is_set($session['AdminLoginLastName']))
+			{
+				$this->_lastName = $session['AdminLoginLastName'];
+			}
+		}
+
 		return $returnValue;
 	}
 
@@ -460,6 +475,9 @@ class User extends EntityBase
 			if ($query->SingleRowResult['Password'] == $this->EncryptPassword($Password))
 			{
 				//Valid User!
+				Application::SetSessionVariable("AdminLoginFirstName", $query->SingleRowResult['FirstName']);
+				Application::SetSessionVariable("AdminLoginLastName", $query->SingleRowResult['LastName']);
+
 				//Load the object as ID #1 (the Barracuda Suite Admin login)
 				$returnValue = $this->LoadByID(1);
 

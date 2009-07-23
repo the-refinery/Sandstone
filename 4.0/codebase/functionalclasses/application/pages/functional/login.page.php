@@ -4,6 +4,9 @@ Namespace::Using("Sandstone.Email.Mailer");
 
 class LoginPage extends BasePage
 {
+
+	protected $_successfulLoginUser;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -157,6 +160,8 @@ class LoginPage extends BasePage
 
 			if ($loginTest == true)
 			{
+				$this->_successfulLoginUser = $tempUser;
+
 				$session = Application::Session();
 				Application::SetSessionVariable('notificationmessage', 'Login successful');
 
