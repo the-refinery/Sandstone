@@ -13,6 +13,7 @@ class DataNavigationControl extends BaseControl
 	const PAGE_WINDOW_SIZE = 11;
 
 	protected $_routingRuleName;
+	protected $_routingRuleParameters;
 	protected $_recordCount;
 	protected $_totalPages;
 	protected $_currentPageNumber;
@@ -45,6 +46,22 @@ class DataNavigationControl extends BaseControl
 	public function setRoutingRuleName($Value)
 	{
 		$this->_routingRuleName = $Value;
+	}
+
+	/*
+	RoutingRuleParameters property
+
+	@return array
+	@param array $Value
+	 */
+	public function getRoutingRuleParameters()
+	{
+		return $this->_routingRuleParameters;
+	}
+
+	public function setRoutingRuleParameters($Value)
+	{
+		$this->_routingRuleParameters = $Value;
 	}
 
 	/*
@@ -232,7 +249,14 @@ class DataNavigationControl extends BaseControl
 		{
 			$Template->FileName = "datanavigation_links_otherpage_item";
 
-			$Template->TargetPageURL = Routing::BuildURLbyRule($this->_routingRuleName, Array("pagenumber"=>$CurrentElement->PageNumber));
+			if (is_array($this->_routingRuleParameters) == false)
+			{
+				$this->_routingRuleParameters = Array();
+			}
+
+			$this->_routingRuleParameters['pagenumber'] = $CurrentElement->PageNumber;
+
+			$Template->TargetPageURL = Routing::BuildURLbyRule($this->_routingRuleName, $this->_routingRuleParameters);
 
 		}
 
