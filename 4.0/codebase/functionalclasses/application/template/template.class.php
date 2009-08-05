@@ -960,7 +960,7 @@ class Template extends Module
         switch (count($BuildParameters))
         {
             case 2:
-                //Entity and Action
+								//Entity and Action
                 $returnValue = Routing::BuildURLbyEntity($entity, $action);
                 break;
 

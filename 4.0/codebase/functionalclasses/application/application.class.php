@@ -748,10 +748,18 @@ class Application extends Module
 			}
 			
 			$domain = str_replace("http://", "", Application::BaseURL());
-		
+
+			if (substr($domain,-1,1) == "/")
+			{
+				$domain = substr($domain,0,-1);
+			}
+
 			setcookie($Name, $Value, $expires, "/", $domain);
+
 			$this->_cookie[$Name] = $Value;
 		}
+
+		return $returnValue;
 
 	}
 
