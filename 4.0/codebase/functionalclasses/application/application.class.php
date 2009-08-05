@@ -756,10 +756,6 @@ class Application extends Module
 					$domain = substr($domain,0,-1);
 				}
 			}
-			else
-			{
-				di_echo($domain);
-			}
 
 			setcookie($Name, $Value, $expires, "/", $domain);
 
