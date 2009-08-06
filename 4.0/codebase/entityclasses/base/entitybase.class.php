@@ -715,8 +715,9 @@ class EntityBase extends EntityBaseFunctionality
 	{
 
 		$session = Application::Session();
+		$accountID = Application::License()->AccountID;
 
-		if (array_key_exists("IsAccountLimitOverride", $session) && $session['IsAccountLimitOverride'] == true)
+		if ((array_key_exists("IsAccountLimitOverride", $session) && $session['IsAccountLimitOverride'] == true) || $accountID == 1)
 		{
 			$returnValue = "	WHERE	a.AccountID = a.AccountID ";
 		}

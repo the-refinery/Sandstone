@@ -92,6 +92,23 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
+	public function getNextBillingDate()
+	{	
+		if (is_set($this->_anniversaryDay))
+		{
+			$returnValue = new Date();
+
+			if ($returnValue->Day >= $this->_anniversaryDay)
+			{
+				$returnValue = $returnValue->AddMonth(1);
+			}
+
+			$returnValue->Day = $this->_anniversaryDay;
+		}
+
+		return $returnValue;
+	}
+
 	public function Load($dr)
 	{
 
