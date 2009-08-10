@@ -118,7 +118,6 @@ textarea.textarea_body
 	background:#fff;
 	border:1px solid;
 	border-color:#848484 #dbdbdb #dbdbdb #848484;
-	line-height:1.5em;
 }
 
 textarea.textarea_body:focus, textarea.textarea_body:hover

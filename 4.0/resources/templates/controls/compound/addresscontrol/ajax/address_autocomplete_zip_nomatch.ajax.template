@@ -1,2 +1,2 @@
 SetControlMessage('{$ControlName}',  "Unknown Postal Code");
-{$ControlName}_ClosePickList();
+$('.address_picklist').remove();

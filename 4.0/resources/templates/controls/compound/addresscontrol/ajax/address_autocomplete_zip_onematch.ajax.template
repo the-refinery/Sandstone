@@ -1,4 +1,4 @@
 $('#{$ControlName}_CityStateZip').val('{$CityStateZip}');
 $('#{$ControlName}_CountryCode').val('{$CountryCode}');
-{$ControlName}_ClosePickList();
+$('.address_picklist').remove();
 SetControlMessage('{$ControlName}', "");

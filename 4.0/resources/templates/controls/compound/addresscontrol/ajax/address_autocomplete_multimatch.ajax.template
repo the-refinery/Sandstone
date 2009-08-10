@@ -2,7 +2,7 @@ var IsReplacement;
 
 if ($('#{$ControlName}_PickList').length)
 {
-	{$ControlName}_ClosePickList();
+	$('.address_picklist').remove();
 	IsReplacement = true;
 }
 

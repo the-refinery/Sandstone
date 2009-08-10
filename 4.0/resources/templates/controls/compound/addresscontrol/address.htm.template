@@ -1,7 +1,7 @@
 <div id="{$ControlName}">
 	{+Street}
 
-	<div id="{$ControlName}_Locale">
+	<div id="{$ControlName}_Locale" class="address_locale">
 		{+CityStateZip}{+CountryCode}
 	</div>
 </div>

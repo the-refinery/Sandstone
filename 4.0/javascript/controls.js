@@ -103,4 +103,41 @@ $(document).ready(function()
 	{
 		$(this).datepicker();
 	});
+
+	// === Address ===
+	$("input.address_citystatezipitem").bind("blur", function(event)
+	{
+		var isEntered;
+
+		var controlName = $(this).attr('id');
+		var controlLabelText = $('#' + controlName + '_Label').html();
+		var parentControlName = $(this).parent().parent().attr('id');
+
+		if ($(this).val() == '' || $(this).val() == controlLabelText)
+		{
+			isEntered = false;
+		}
+		else
+		{
+			isEntered = true;
+		}
+
+		if (isEntered)
+		{
+			RaiseAJAXevent(parentControlName, 'autocomplete', {'zipcode': $(this).val()});
+		}
+	});
+
+	$('li.address_picklist_item').live('click', function()
+	{
+		var localeDiv = $(this).closest('div').find('.address_locale');
+		var citystatezipInput = localeDiv.find('.address_citystatezipitem');
+		var countrycodeInput = localeDiv.find('.address_countrycode');
+
+		console.log(countrycodeInput);
+		citystatezipInput.val($(this).html());
+		countrycodeInput.val($(this).attr('countrycode'));
+
+		$('.address_picklist').remove();
+	});
 });

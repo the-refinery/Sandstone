@@ -148,12 +148,12 @@ class AddressControl extends BaseControl
 
 		$this->Street = new TextAreaControl();
 		$this->Street->ControlStyle->AddClass("address_streetitem");
-		$this->Street->Rows = 2;
+		$this->Street->Rows = 1;
 		$this->Street->Columns = 30;
 		$this->Street->LabelText = "Street:";		
 
-   		$this->CityStateZip= new TitleTextBoxControl();
-		$this->CityStateZip->ControlStyle->AddClass("address_citystatezipitem");
+		$this->CityStateZip= new TitleTextBoxControl();
+		$this->CityStateZip->BodyStyle->AddClass("address_citystatezipitem");
 		$this->CityStateZip->Template->FileName = "addresscitystatezip";
 		$this->CityStateZip->LabelText = "City, State  Zip (or Zip Only)";
 
@@ -162,6 +162,7 @@ class AddressControl extends BaseControl
 		$this->PickList->Template->FileName = "address_picklist";
 
 		$this->CountryCode = new HiddenControl();
+		$this->CountryCode->BodyStyle->AddClass("address_countrycode");
 
 	}
 
@@ -170,7 +171,7 @@ class AddressControl extends BaseControl
 
 		$Processor->Template->ControlName = $this->Name;
 
-		$cityStateZip = $this->ParseCityStateZip($this->CityStateZip->Value);
+		$cityStateZip = $this->ParseCityStateZip($Processor->EventParameters['zipcode']);
 
 		if (count($cityStateZip) == 3)
 		{
@@ -301,12 +302,7 @@ class AddressControl extends BaseControl
 
 		if ($IsMineIncluded)
 		{
-			$returnValue = "\$('#{$this->PickList->Name}_KeepMine').bind('click', {$this->Name}_ClosePickList);\n";
-		}
-
-		for($i = 1; $i <= count($PostalCode->Cities); $i++)
-		{
-			$returnValue .= "\$('#{$this->PickList->Name}_Item_{$i}').bind('click', {$this->PickList->Name}_ChooseCity);\n";
+			$returnValue = "\$('#{$this->PickList->Name}_KeepMine').bind('click', function(event){\$(.address_picklist).remove();});\n";
 		}
 
 		return $returnValue;
