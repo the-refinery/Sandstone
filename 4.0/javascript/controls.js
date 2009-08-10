@@ -134,7 +134,6 @@ $(document).ready(function()
 		var citystatezipInput = localeDiv.find('.address_citystatezipitem');
 		var countrycodeInput = localeDiv.find('.address_countrycode');
 
-		console.log(countrycodeInput);
 		citystatezipInput.val($(this).html());
 		countrycodeInput.val($(this).attr('countrycode'));
 
