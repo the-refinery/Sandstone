@@ -1,1 +1,1 @@
-<div id="{$ControlName}_Message" class="control_message" {$MessageDisplayStyle}>{$ValidationMessage}</div>
+<div id="{$ControlName}_Message" class="control_message error" {$MessageDisplayStyle}>{$ValidationMessage}</div>
