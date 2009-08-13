@@ -14,7 +14,6 @@ class WidgetBase extends ControlContainer
         parent::__construct();
         
         $this->_template->Filename = strtolower(get_class($this));
-        
     }
 
 }

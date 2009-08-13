@@ -5,6 +5,8 @@ class AxisChartBase extends ChartBase
 
 	protected $_isVerticalGridDrawn;
 	protected $_isHorizontalGridDrawn;
+	
+	protected $_isLegendDrawn;
 
 	protected $_xAxis;
 	protected $_yAxis;
@@ -20,6 +22,7 @@ class AxisChartBase extends ChartBase
 		
 		$this->_rangeMarkers = Array();
 
+		$this->_isLegendDrawn = true;
 	}
 
 	/*
@@ -52,6 +55,22 @@ class AxisChartBase extends ChartBase
 	public function setIsHorizontalGridDrawn($Value)
 	{
 		$this->_isHorizontalGridDrawn = $Value;
+	}
+	
+	/*
+	IsLegendDrawn property
+
+	@return boolean
+	@param boolean $Value
+	 */
+	public function getIsLegendDrawn()
+	{
+		return $this->_isLegendDrawn;
+	}
+
+	public function setIsLegendDrawn($Value)
+	{
+		$this->_isLegendDrawn = $Value;
 	}
 
 	public function AddXaxis($Labels, $Color=null, $FontSize=null, $Alignment=ChartAxis::CENTER_LABEL_ALIGN)
@@ -129,14 +148,15 @@ class AxisChartBase extends ChartBase
 
 	protected function SetupSeriesLegendURLqueryParameter()
 	{
-
-		foreach ($this->_dataSeries as $tempDataSeries)
+		if ($this->_isLegendDrawn)
 		{
-			$legends[] = urlencode($tempDataSeries->Legend);
+			foreach ($this->_dataSeries as $tempDataSeries)
+			{
+				$legends[] = urlencode($tempDataSeries->Legend);
+			}
+
+			$this->_urlQueryParameters[] = "chdl=" . implode("|", $legends);
 		}
-
-		$this->_urlQueryParameters[] = "chdl=" . implode("|", $legends);
-
 	}
 
 	protected function SetupAxisURLqueryParameters()
