@@ -392,7 +392,8 @@ class BasePage extends ControlContainer
 
 		//Get any Notification Message that's been set, and push it into a template variable
 		$this->_template->NotificationMessage = $session['notificationmessage'];
-
+		$this->_template->NotificationMessageType = $session['notificationmessagetype'];
+		
 		//Do we have a specific file type processor?
 		$processorName = $EventParameters['filetype'] . "_Processor";
 
@@ -410,6 +411,7 @@ class BasePage extends ControlContainer
 
 		//Since we've used it, let's clear the NotificationMessage
 		Application::ClearSessionVariable("notificationmessage");
+		Application::ClearSessionVariable("notificationmessagetype");
 
 		$returnValue->Value = true;
 		$returnValue->Complete();
@@ -574,6 +576,7 @@ class BasePage extends ControlContainer
 			if (is_set($this->_postedForm->EntitySaveSuccessNotification))
 			{
 				Application::SetSessionVariable('notificationmessage', $this->_postedForm->EntitySaveSuccessNotification);
+				Application::SetSessionVariable('notificationmessagetype', "success");
 			}
 
 			//Set the Redirect Target (if an action is specified)
@@ -588,6 +591,7 @@ class BasePage extends ControlContainer
 			if (is_set($this->_postedForm->EntitySaveFailureNotification))
 			{
 				Application::SetSessionVariable('notificationmessage', $this->_postedForm->EntitySaveFailureNotification);
+				Application::SetSessionVariable('notificationmessagetype', "error");
 			}
 
 		}

@@ -112,6 +112,7 @@ class LoginPage extends BasePage
 		else
 		{
 			Application::SetSessionVariable('notificationmessage', "Invalid Account");
+			Application::SetSessionVariable('notificationmessagetype', "error");
 		}
 
 		return true;
@@ -145,10 +146,12 @@ class LoginPage extends BasePage
 			$sendEmail->Send();
 			
 			Application::SetSessionVariable('notificationmessage', "A new password has been emailed to you");
+			Application::SetSessionVariable('notificationmessagetype', "success");
 		}
 		else
 		{
 			Application::SetSessionVariable('notificationmessage', "Invalid username, please try again.");
+			Application::SetSessionVariable('notificationmessagetype', "error");
 		}
 	}
 
@@ -164,6 +167,7 @@ class LoginPage extends BasePage
 
 				$session = Application::Session();
 				Application::SetSessionVariable('notificationmessage', 'Login successful');
+				Application::SetSessionVariable('notificationmessagetype', "success");
 
 				if (is_set($session['TargetRoutingString']))
 				{
@@ -178,6 +182,7 @@ class LoginPage extends BasePage
 			else
 			{
 				Application::SetSessionVariable('notificationmessage', "Invalid Username or Password");
+				Application::SetSessionVariable('notificationmessagetype', "error");
 			}
 	}
 

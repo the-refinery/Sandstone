@@ -18,9 +18,11 @@ class ApplicationBasePage extends BasePage
 		$this->_template->License = $license;
 	}
 		
-	protected function SetNotificationMessage($Message)
+	// Type can be anything you want, but generally "error", "notice" or "success"
+	protected function SetNotificationMessage($Message, $Type = 'success')
 	{
 		Application::SetSessionVariable('notificationmessage', $Message);
+		Application::SetSessionVariable('notificationmessagetype', $Type);
 	}
     
 } 
