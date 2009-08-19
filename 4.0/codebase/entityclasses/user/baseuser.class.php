@@ -172,21 +172,6 @@ class BaseUser extends EntityBase
 			$this->_passwordSalt = $dr['PasswordSalt'];
 		}
 
-		if ($this->_userID == 1)
-		{
-			$session = Application::Session();
-
-			if (is_set($session['AdminLoginFirstName']))
-			{
-				$this->_firstName = "Admin " . $session['AdminLoginFirstName'];
-			}
-
-			if (is_set($session['AdminLoginLastName']))
-			{
-				$this->_lastName = $session['AdminLoginLastName'];
-			}
-		}
-
 		return $returnValue;
 	}
 
