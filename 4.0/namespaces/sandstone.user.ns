@@ -1,2 +1,3 @@
+codebase/entityclasses/user/baseuser.class.php
 codebase/entityclasses/user/user.class.php
 codebase/entityclasses/user/role.class.php
