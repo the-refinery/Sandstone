@@ -308,6 +308,11 @@ class Application extends Module
 			$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
 		}
 
+		if (strlen($_SERVER['HTTPS']) > 0 && Application::Registry()->DevMode <> 1)
+		{
+			$returnValue = $this->SecureURL;
+		}
+
 		return $returnValue;
 	}
 
