@@ -65,7 +65,7 @@ class BaseUser extends EntityBase
 	public function SetupSearch()
 	{
 		parent::SetupSearch();
-		
+
 		$this->AddSearchProperty("UserName", false, 6, 6);
 		$this->AddSearchProperty("FirstLastName", true, 6, 3, "CONCAT(a.FirstName, ' ', a.LastName)");
 		$this->AddSearchProperty("LastFirstNameNoSpace", true, 6, 3, "CONCAT(a.LastName, ',', a.FirstName)");
@@ -73,7 +73,7 @@ class BaseUser extends EntityBase
 
 		$this->_searchWhereClauseAddition = "AND a.UserID <> 1 ";
 	}
-	
+
 	/*
 	Gender Property
 
@@ -81,22 +81,22 @@ class BaseUser extends EntityBase
 
 	@return string
 	@param string $Value
-	*/
+	 */
 	public function getGender()
 	{
 		switch (strtolower($this->_gender))
 		{
-			case "m":
-				$returnValue = "Male";
-				break;
+		case "m":
+			$returnValue = "Male";
+			break;
 
-			case "f":
-				$returnValue = "Female";
-				break;
+		case "f":
+			$returnValue = "Female";
+			break;
 
-			default:
-				$returnValue = "Not Specified";
-				break;
+		default:
+			$returnValue = "Not Specified";
+			break;
 		}
 
 		return $returnValue;
@@ -108,18 +108,18 @@ class BaseUser extends EntityBase
 
 		switch ($Value)
 		{
-			case "M":
+		case "M":
 			case "MALE":
 				$this->_gender = "M";
 				break;
 
 			case "F":
-			case "FEMALE":
-				$this->_gender = "F";
-				break;
+				case "FEMALE":
+					$this->_gender = "F";
+					break;
 
-			default:
-				$this->_gender = null;
+				default:
+					$this->_gender = null;
 		}
 
 	}
@@ -129,7 +129,7 @@ class BaseUser extends EntityBase
 		$this->_password = $this->EncryptPassword($Value);
 	}
 
-    public function getSearchResultsText()
+	public function getSearchResultsText()
 	{
 		return $this->FirstLastName;
 	}
@@ -193,13 +193,13 @@ class BaseUser extends EntityBase
 			$whereClause .= "AND UserID = {$ID} ";
 		}
 
-        $query->SQL = $selectClause . $fromClause . $whereClause;
+		$query->SQL = $selectClause . $fromClause . $whereClause;
 
-        $query->Execute();
+		$query->Execute();
 
 		$returnValue = $query->LoadEntity($this);
 
-        return $returnValue;
+		return $returnValue;
 
 	}
 
@@ -233,7 +233,7 @@ class BaseUser extends EntityBase
 
 		$whereClause = self::GenerateBaseWhereClause();
 		$whereClause .= "	AND		Username LIKE '{$UserName}'
-							AND		IsDisabled = 0 ";
+			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
 
@@ -249,8 +249,8 @@ class BaseUser extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	SELECT 	Token
-						FROM 	core_UserToken
-						WHERE 	UserID = {$this->_userID}";
+			FROM 	core_UserToken
+			WHERE 	UserID = {$this->_userID}";
 
 		$query->Execute();
 
@@ -305,35 +305,35 @@ class BaseUser extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	INSERT INTO core_UserMaster
-						(
-							AccountID,
-							FirstName,
-							LastName,
-							Gender,
-							UserName,
-							Password,
-							PasswordSalt,
-							IsBulkMailAllowed,
-							IsDisabled
-						)
-						VALUES
-						(
-							{$this->AccountID},
-							{$query->SetTextField($this->_firstName)},
-							{$query->SetTextField($this->_lastName)},
-							{$query->SetNullTextField($this->_gender)},
-							{$query->SetNullTextField($this->_userName)},
-							{$query->SetNullTextField($this->_password)},
-							{$query->SetTextField($this->_passwordSalt)},
-							{$query->SetBooleanField($this->_isBulkMailAllowed)},
-							{$query->SetBooleanField($this->_isDisabled)}
-						)";
+			(
+				AccountID,
+				FirstName,
+				LastName,
+				Gender,
+				UserName,
+				Password,
+				PasswordSalt,
+				IsBulkMailAllowed,
+				IsDisabled
+			)
+			VALUES
+			(
+	{$this->AccountID},
+	{$query->SetTextField($this->_firstName)},
+	{$query->SetTextField($this->_lastName)},
+	{$query->SetNullTextField($this->_gender)},
+	{$query->SetNullTextField($this->_userName)},
+	{$query->SetNullTextField($this->_password)},
+	{$query->SetTextField($this->_passwordSalt)},
+	{$query->SetBooleanField($this->_isBulkMailAllowed)},
+	{$query->SetBooleanField($this->_isDisabled)}
+)";
 
 		$query->Execute();
 
 		$this->GetNewPrimaryID();
 
-        Action::Log("UserCreated", "User {$this->_firstName} {$this->_lastName} (ID: {$this->_userID}) was created.", $this->_userID);
+		Action::Log("UserCreated", "User {$this->_firstName} {$this->_lastName} (ID: {$this->_userID}) was created.", $this->_userID);
 
 		return true;
 	}
@@ -343,14 +343,14 @@ class BaseUser extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	UPDATE core_UserMaster SET
-							FirstName = {$query->SetTextField($this->_firstName)},
-							LastName = {$query->SetTextField($this->_lastName)},
-							Gender = {$query->SetNullTextField($this->_gender)},
-							UserName = {$query->SetNullTextField($this->_userName)},
-							Password = {$query->SetNullTextField($this->_password)},
-							IsBulkMailAllowed = {$query->SetBooleanField($this->_isBulkMailAllowed)},
-							IsDisabled = {$query->SetBooleanField($this->_isDisabled)}
-						WHERE UserID = {$this->_userID}";
+			FirstName = {$query->SetTextField($this->_firstName)},
+				LastName = {$query->SetTextField($this->_lastName)},
+				Gender = {$query->SetNullTextField($this->_gender)},
+				UserName = {$query->SetNullTextField($this->_userName)},
+				Password = {$query->SetNullTextField($this->_password)},
+				IsBulkMailAllowed = {$query->SetBooleanField($this->_isBulkMailAllowed)},
+				IsDisabled = {$query->SetBooleanField($this->_isDisabled)}
+				WHERE UserID = {$this->_userID}";
 
 		$query->Execute();
 
@@ -400,7 +400,7 @@ class BaseUser extends EntityBase
 
 		$whereClause = self::GenerateBaseWhereClause();
 		$whereClause .= "	AND		Username LIKE '{$UserName}'
-							AND		IsDisabled = 0 ";
+			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
 
@@ -446,7 +446,7 @@ class BaseUser extends EntityBase
 		$fromClause = self::GenerateBaseFromClause();
 
 		$whereClause .= "	WHERE 	Username LIKE '{$UserName}'
-							AND		IsDisabled = 0 ";
+			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
 
@@ -518,20 +518,20 @@ class BaseUser extends EntityBase
 		//First, clear all database entries
 		$this->ClearToken();
 
-        $query = new Query();
+		$query = new Query();
 
 		$query->SQL = "	INSERT INTO core_UserToken
-						(
-							UserID,
-							Token,
-							AccountID
-						)
-						VALUES
-						(
-							{$this->_userID},
-							{$query->SetTextField($this->_token)},
-							{$this->AccountID}
-						)";
+			(
+				UserID,
+				Token,
+				AccountID
+			)
+			VALUES
+			(
+	{$this->_userID},
+	{$query->SetTextField($this->_token)},
+	{$this->AccountID}
+)";
 
 		$query->Execute();
 	}
@@ -542,8 +542,8 @@ class BaseUser extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	DELETE
-						FROM 	core_UserToken
-						WHERE 	UserID = {$this->_userID}";
+			FROM 	core_UserToken
+			WHERE 	UserID = {$this->_userID}";
 
 		$query->Execute();
 
@@ -584,21 +584,21 @@ class BaseUser extends EntityBase
 				$query = new Query();
 
 				$query->SQL = "	INSERT INTO core_UserRole
-								(
-									UserID,
-									RoleID
-								)
-								VALUES
-								(
-									{$this->_userID},
-									{$NewRole->RoleID}
-								)";
+					(
+						UserID,
+						RoleID
+					)
+					VALUES
+					(
+			{$this->_userID},
+			{$NewRole->RoleID}
+		)";
 
 				$query->Execute();
 
 				$this->LoadRoles();
 
-                Action::Log("UserRoleChanged", "User {$this->_firstName} {$this->_lastName} was added to the {$NewRole->Description} role.", $this->_userID);
+				Action::Log("UserRoleChanged", "User {$this->_firstName} {$this->_lastName} was added to the {$NewRole->Description} role.", $this->_userID);
 			}
 
 			$returnValue = true;
@@ -621,9 +621,9 @@ class BaseUser extends EntityBase
 				$query = new Query();
 
 				$query->SQL = "	DELETE
-								FROM	core_UserRole
-								WHERE	UserID = {$this->_userID}
-								AND		RoleID = {$OldRole->RoleID} ";
+					FROM	core_UserRole
+					WHERE	UserID = {$this->_userID}
+					AND		RoleID = {$OldRole->RoleID} ";
 
 				$query->Execute();
 
@@ -676,38 +676,38 @@ class BaseUser extends EntityBase
 
 	public function GenerateNewPassword($Syllables = 2)
 	{
-		
+
 		//prefixes
 		$prefix = array('aero', 'anti', 'auto', 'bi', 'bio',
-						'cine', 'deca', 'demo', 'dyna', 'eco',
-						'ergo', 'geo', 'gyno', 'hypo', 'kilo',
-						'mega', 'tera', 'mini', 'nano', 'duo');
-	
+			'cine', 'deca', 'demo', 'dyna', 'eco',
+			'ergo', 'geo', 'gyno', 'hypo', 'kilo',
+			'mega', 'tera', 'mini', 'nano', 'duo');
+
 		//suffixes
 		$suffix = array('dom', 'ity', 'ment', 'sion', 'ness',
-						'ence', 'er', 'ist', 'tion', 'or'); 
-	
+			'ence', 'er', 'ist', 'tion', 'or'); 
+
 		//vowel sounds 
 		$vowels = array('a', 'o', 'e', 'i', 'y', 'u', 'ou', 'oo'); 
-	
+
 		//consonants 
 		$consonants = array('w', 'r', 't', 'p', 's', 'd', 'f', 'g', 'h', 'j', 
-							'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'qu');
-		
+			'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'qu');
+
 		$doubles = array('n', 'm', 't', 's');
-	
+
 		//Special characters
 		$specialCharacters = array("+", "-", "_", "*", "&", "%", "$", "#", "@", "!", "?");
-	
+
 		$password = $this->RandomElement($prefix);
 
 		$password_suffix = $this->RandomElement($suffix);
-	
+
 		for($i=0; $i<$Syllables; $i++)
 		{
 			// selecting random consonant
 			$selectedConsonant = $this->RandomElement($consonants);
-			
+
 			if (in_array($selectedConsonant, $doubles)&&($i!=0)) { // maybe double it
 				if (rand(0, 2) == 1) // 33% probability
 					$selectedConsonant .= $selectedConsonant;
@@ -716,32 +716,32 @@ class BaseUser extends EntityBase
 
 			// selecting random vowel
 			$returnValue .= $this->RandomElement($vowels);
-	
+
 			if ($i == $syllables - 1) // if suffix begin with vovel
 				if (in_array($password_suffix[0], $vowels)) // add one more consonant 
 					$returnValue .= $this->RandomElement($consonants);
-	
+
 		}
-	
+
 		// selecting random suffix
 		$returnValue .= $password_suffix;
-	
+
 		//select a special character
 		$returnValue .= $this->RandomElement($specialCharacters);
-	
+
 		//Add a numeric value
 		$returnValue .=  rand(1, 999);
-	
+
 		return $returnValue;
 	}
 
 	protected function RandomElement($Array)
 	{
 		$index = rand(0, sizeof($Array)-1);
-		
+
 		return $Array[$index];
 	}
-	
+
 	protected function Lookup_All($Parameters, $LookupType, $PageSize = null, $PageNumber = null)
 	{
 
@@ -755,7 +755,7 @@ class BaseUser extends EntityBase
 
 		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username ";
 
-        $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
+		$limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
 		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
@@ -791,7 +791,7 @@ class BaseUser extends EntityBase
 
 		$orderByClause = "ORDER BY a.LastName, a.FirstName, a.Username ";
 
-        $limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
+		$limitClause = $this->GenerateLookupLimitClause($PageSize, $PageNumber);
 
 		$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause . $limitClause;
 
@@ -807,14 +807,14 @@ class BaseUser extends EntityBase
 	static public function GenerateBaseSelectClause()
 	{
 		$returnValue = "	SELECT	a.UserID,
-										a.FirstName,
-										a.LastName,
-										a.Gender,
-										a.UserName,
-										a.Password,
-										a.PasswordSalt,
-										a.IsBulkMailAllowed,
-										a.IsDisabled ";
+			a.FirstName,
+			a.LastName,
+			a.Gender,
+			a.UserName,
+			a.Password,
+			a.PasswordSalt,
+			a.IsBulkMailAllowed,
+			a.IsDisabled ";
 
 		return $returnValue;
 	}
