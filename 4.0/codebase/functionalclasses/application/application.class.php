@@ -307,12 +307,19 @@ class Application extends Module
 		}
 		else
 		{
-			$returnValue = Application::Registry()->BaseURL;
+			$returnValue = $this->GenareateBaseNonSecureURL();
+		}
 
-			if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
-			{
-				$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
-			}
+		return $returnValue;
+	}
+
+	protected function GenerateBaseNonSecureURL()
+	{
+		$returnValue = Application::Registry()->BaseURL;
+
+		if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
+		{
+			$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
 		}
 
 		return $returnValue;
@@ -327,7 +334,7 @@ class Application extends Module
 		}
 		else
 		{
-			$baseURL = $this->BaseURL;
+			$baseURL = $this->GenareateBaseNonSecureURL();
 			$returnValue = substr_replace($baseURL, 'https', 0, 4);
 		}
 
