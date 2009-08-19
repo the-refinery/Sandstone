@@ -301,16 +301,18 @@ class Application extends Module
 	public function getBaseURL()
 	{
 
-		$returnValue = Application::Registry()->BaseURL;
-
-		if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
-		{
-			$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
-		}
-
 		if (strlen($_SERVER['HTTPS']) > 0 && Application::Registry()->DevMode <> 1)
 		{
 			$returnValue = $this->SecureURL;
+		}
+		else
+		{
+			$returnValue = Application::Registry()->BaseURL;
+
+			if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
+			{
+				$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
+			}
 		}
 
 		return $returnValue;
