@@ -212,9 +212,11 @@ class BaseUser extends EntityBase
 		$fromClause .= "INNER JOIN core_UserToken b ON  b.UserID = a.UserID ";
 
 		$whereClause = self::GenerateBaseWhereClause();
-		$whereClause = "AND b.Token = '{$Token}' ";
+		$whereClause .= "AND b.Token = '{$Token}' ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
+//di_echo($query->SQL);
+
 
 		$query->Execute();
 
@@ -822,6 +824,16 @@ class BaseUser extends EntityBase
 	static public function GenerateBaseFromClause()
 	{
 		$returnValue = "	FROM	core_UserMaster a ";
+
+		return $returnValue;
+	}
+
+	static public function GenerateBaseWhereClause()
+	{
+
+		$accountID = Application::License()->AccountID;
+
+		$returnValue = "WHERE (a.AccountID = {$accountID} OR a.AccountID = 1) ";
 
 		return $returnValue;
 	}
