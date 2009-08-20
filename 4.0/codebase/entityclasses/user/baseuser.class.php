@@ -830,7 +830,6 @@ class BaseUser extends EntityBase
 
 	static public function GenerateBaseWhereClause()
 	{
-
 		$accountID = Application::License()->AccountID;
 
 		$returnValue = "WHERE (a.AccountID = {$accountID} OR a.AccountID = 1) ";
