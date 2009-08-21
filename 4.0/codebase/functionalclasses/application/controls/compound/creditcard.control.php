@@ -27,7 +27,7 @@ class CreditCardControl extends BaseControl
 		// Default Start and End Years
 		$currentDate = new Date();
 		$this->_startYear = $currentDate->Year;
-		$this->_endYear = $currentDate->Year + 4;
+		$this->_endYear = $currentDate->Year + 8;
 
 		//Load our dropdowns
 		$this->LoadCardTypeDropDown();
