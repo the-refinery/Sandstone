@@ -761,12 +761,7 @@ class Application extends Module
 				$expires = time()+60*60*24*30;
 			}
 			
-			$domain = str_replace("http://", "", Application::BaseURL());
-
-			if (substr_count($domain, "/") > 0)
-			{
-				$domain = substr($domain, 0, strpos($domain, "/"));
-			}
+			$domain = $this->DetermineCookieDomain();
 
 			setcookie($Name, $Value, $expires, "/", $domain);
 
@@ -779,13 +774,25 @@ class Application extends Module
 
 	public function ProcessClearCookie($Name)
 	{
-
 		if (strlen($Name) > 0)
 		{
-			setcookie($Name,"",time() - 5000,"/");
+			$domain = $this->DetermineCookieDomain();
+
+			setcookie($Name,"",time() - 3600,"/", $domain);
 			unset($this->_cookie[$Name]);
 		}
+	}
 
+	protected function DetermineCookieDomain()
+	{
+		$returnValue = str_replace("http://", "", Application::BaseURL());
+
+		if (substr_count($returnValue, "/") > 0)
+		{
+			$returnValue = substr($returnValue, 0, strpos($returnValue, "/"));
+		}
+
+		return $returnValue;
 	}
 
 	public function ProcessSetSessionVariable($Name, $Value)

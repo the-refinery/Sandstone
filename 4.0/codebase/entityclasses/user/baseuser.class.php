@@ -215,8 +215,6 @@ class BaseUser extends EntityBase
 		$whereClause .= "AND b.Token = '{$Token}' ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
-//di_echo($query->SQL);
-
 
 		$query->Execute();
 
@@ -497,7 +495,6 @@ class BaseUser extends EntityBase
 
 	public function Logout()
 	{
-
 		//Don't Log Admin logouts
 		if ($this->_userID > 1)
 		{
