@@ -210,6 +210,14 @@ class EntityBaseFunctionality extends Module
 
 				}
 
+				if (is_set($this->_invalidPropertyName))
+				{
+					$returnValue .= "<ul style=\"list-style: none; margin: 4px;\">";
+					$returnValue .= "<li style=\"border: 1px solid #fcc; margin: 2px; padding: 4px; background-color: #f00;\">";
+					$returnValue .= "<b>Invalid Property Name:</b> {$this->_invalidPropertyName}";
+					$returnValue .= "</li></ul>";
+				}
+
 				$returnValue .= "<ul style=\"list-style: none; margin: 4px;\">";
 
 				foreach ($this->_properties as $tempProperty)
@@ -236,6 +244,7 @@ class EntityBaseFunctionality extends Module
 
 				$returnValue .= "</ul>";
 			}
+
 
 			$returnValue .= "<a href=\"javascript:void(0);\" onClick=\"{$summaryJS}\">Close</a>";
 
