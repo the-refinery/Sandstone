@@ -92,13 +92,17 @@ class MerchantAccount extends EntityBase
 		//Preload the parameter names
 		switch ($this->_merchantAccountID)
 		{
-			case 2:
-				$this->PreloadLinkpointParameters();
-				break;
+		case 1:
+			$this->PreLoadPayPalParameters();
+			break;
 
-			case 3:
-				$this->PreloadAuthorizeNetParameters();
-				break;
+		case 2:
+			$this->PreloadLinkpointParameters();
+			break;
+
+		case 3:
+			$this->PreloadAuthorizeNetParameters();
+			break;
 		}
 
 		$query = new Query();
@@ -131,6 +135,13 @@ class MerchantAccount extends EntityBase
 
 		return $returnValue;
 
+	}
+
+	protected function PreLoadPayPalParameters()
+	{
+		$this->_parameters['APIusername'] = null;
+		$this->_parameters['APIpassword'] = null;
+		$this->_parameters['APIsignature'] = null;
 	}
 
 	protected function PreloadLinkpointParameters()
@@ -350,7 +361,10 @@ class MerchantAccount extends EntityBase
 	protected function SetupProcessor()
 	{
 		//Creates an object of the class specified from the database.
-		$returnValue = new $this->_processorClassName ($this->Parameters);
+		if ($this->_processorClassName != "n/a")
+		{
+			$returnValue = new $this->_processorClassName ($this->Parameters);
+		}
 
 		return $returnValue;
 	}

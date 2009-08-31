@@ -18,3 +18,10 @@ CREATE TABLE core_PayPalTransactionMaster (
 	KEY IDX_PayPalTransactionMaster_AccountID (AccountID),
 	CONSTRAINT FK_PayPalTransactionMaster_AccountMaster FOREIGN KEY (AccountID) REFERENCES core_AccountMaster (AccountID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE core_MerchantAccountMaster SET
+	Name = "PayPal Express Checkout",
+	ProcessorClassName = "n/a",
+	IsAvailable = 1
+WHERE MerchantAccountID = 1;
+
