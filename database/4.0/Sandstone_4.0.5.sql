@@ -11,6 +11,9 @@ CREATE TABLE core_PayPalTransactionMaster (
 	ProcessTimestamp datetime NULL,
 	Amount decimal(15,4) NOT NULL,
 	IsSuccessful tinyint(4) NOT NULL default '0',
+	PayerID varchar(75),
+	PayerStatus varchar(75),
+	PayPalTransactionNumber varchar(75),
 	PRIMARY KEY (TransactionID),
 	KEY IDX_PayPalTransactionMaster_AccountID (AccountID),
 	CONSTRAINT FK_PayPalTransactionMaster_AccountMaster FOREIGN KEY (AccountID) REFERENCES core_AccountMaster (AccountID)

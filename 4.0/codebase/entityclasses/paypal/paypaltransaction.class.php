@@ -19,6 +19,9 @@ class PayPalTransaction extends EntityBase
 		$this->AddProperty("ProcessTimestamp","date","ProcessTimestamp",PROPERTY_READ_WRITE);
 		$this->AddProperty("Amount","decimal","Amount",PROPERTY_REQUIRED);
 		$this->AddProperty("IsSuccessful","boolean","IsSuccessful",PROPERTY_REQUIRED);
+		$this->AddProperty("PayerID","string","PayerID",PROPERTY_READ_WRITE);
+		$this->AddProperty("PayerStatus","string","PayerStatus",PROPERTY_READ_WRITE);
+		$this->AddProperty("PayPalTransactionNumber","string","PayPalTransactionNumber",PROPERTY_READ_WRITE);
 
 		parent::SetupProperties();
 	}
@@ -37,7 +40,10 @@ class PayPalTransaction extends EntityBase
 				GetDetailsTimestamp,
 				ProcessTimestamp,
 				Amount,
-				IsSuccessful
+				IsSuccessful,
+				PayerID,
+				PayerStatus,
+				PayPalTransactionNumber
 			)
 			VALUES
 			(
@@ -47,7 +53,10 @@ class PayPalTransaction extends EntityBase
 	{$query->SetNullDateField($this->_getDetailsTimestamp)},
 	{$query->SetNullDateField($this->_processTimestamp)},
 	{$this->_amount},
-	{$query->SetBooleanField($this->_isSuccessful)}
+	{$query->SetBooleanField($this->_isSuccessful)},
+	{$query->SetNullTextField($this->_payerID)},
+	{$query->SetNullTextField($this->_payerStatus)},
+	{$query->SetNullTextField($this->_payPalTransactionNumber)}
 )";
 
 		$query->Execute();
@@ -66,7 +75,10 @@ class PayPalTransaction extends EntityBase
 				GetDetailsTimestamp = {$query->SetNullDateField($this->_getDetailsTimestamp)},
 				ProcessTimestamp = {$query->SetNullDateField($this->_processTimestamp)},
 				Amount = {$this->_amount},
-				IsSuccessful = {$query->SetBooleanField($this->_isSuccessful)}
+				IsSuccessful = {$query->SetBooleanField($this->_isSuccessful)},
+				PayerID = {$query->SetNullTextField($this->_payerID)},
+				PayerStatus = {$query->SetNullTextField($this->_payerStatus)},
+				PayPalTransactionNumber = {$query->SetNullTextField($this->_payPalTransactionNumber)}
 				WHERE TransactionID = {$this->_transactionID}";
 
 		$query->Execute();
@@ -87,7 +99,10 @@ class PayPalTransaction extends EntityBase
 			a.GetDetailsTimestamp,
 			a.ProcessTimestamp,
 			a.Amount,
-			a.IsSuccessful ";
+			a.IsSuccessful,
+			a.PayerID,
+			a.PayerStatus,
+		a.PayPalTransactionNumber	";
 
 		return $returnValue;
 	}
