@@ -527,10 +527,10 @@ class BaseUser extends EntityBase
 			)
 			VALUES
 			(
-	{$this->_userID},
-	{$query->SetTextField($this->_token)},
-	{$this->AccountID}
-)";
+				{$this->_userID},
+				{$query->SetTextField($this->_token)},
+				{$this->AccountID}
+			)";
 
 		$query->Execute();
 	}

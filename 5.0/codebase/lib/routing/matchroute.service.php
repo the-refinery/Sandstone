@@ -2,19 +2,27 @@
 
 class MatchRoute extends BasePrimitive
 {
-	static function CheckMatch($Route, $Path)
+	static public function CheckMatch($Route, $Path)
 	{
-		$matchPattern = self::GenerateMatchPattern($Route);
-		$returnValue = (bool)preg_match($matchPattern, $Path);
+		$returnValue = false;
+
+		$matchPattern = self::util_GenerateMatchPattern($Route);
+		
+		$matches = preg_match($matchPattern, $Path);
+
+		if ($matches >= 1)
+		{
+			$returnValue = true;
+		}
 
 		return $returnValue;
 	}
 
-	public function GenerateMatchPattern($Route)
+	static public function util_GenerateMatchPattern($Route)
 	{
 		foreach ($Route->Parameters as $tempParameter)
 		{
-			$patternParts[] = self::DetermineParameterMatchPattern($tempParameter);
+			$patternParts[] = self::util_DetermineParameterMatchPattern($tempParameter);
 		}
 
 		$pattern = implode("/", $patternParts);
@@ -23,14 +31,14 @@ class MatchRoute extends BasePrimitive
 		return $pattern;
 	}
 
-	protected function IsVariableParameter($Parameter)
+	static public function util_IsVariableParameter($Parameter)
 	{
 		return strpos($Parameter, ":") === 0;
 	}
 
-	protected function DetermineParameterMatchPattern($Parameter)
+	static public function util_DetermineParameterMatchPattern($Parameter)
 	{
-		if (self::IsVariableParameter($Parameter))
+		if (self::util_IsVariableParameter($Parameter))
 		{
 			$Parameter = "[a-zA-Z0-9_-]+";
 		}

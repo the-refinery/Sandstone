@@ -167,56 +167,50 @@ class MerchantAccount extends EntityBase
 
 		$returnValue = false;
 
-		//Only save an update if this is the active record
-		if ($this->_isActive)
+		$query = new Query();
+
+		//Update the Transaction Fee & Discount Percent
+		$query->SQL = "	UPDATE 	core_ActiveMerchantAccount SET
+							TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
+							DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)}
+						WHERE 	MerchantAccountID = {$this->_merchantAccountID}
+						AND		AccountID = {$this->AccountID}";
+
+		$query->Execute();
+
+		//Clear any existing parameters from the database.
+		$this->ClearParameters();
+
+		//Loop the parameters and save anything that has a value
+		foreach ($this->_parameters as $key=>$value)
 		{
-
-			$query = new Query();
-
-			//Update the Transaction Fee & Discount Percent
-			$query->SQL = "	UPDATE 	core_ActiveMerchantAccount SET
-								TransactionFee = {$query->SetNullNumericField($this->_transactionFee)},
-								DiscountPercent = {$query->SetNullNumericField($this->_discountPercent)}
-							WHERE 	MerchantAccountID = {$this->_merchantAccountID}
-							AND		AccountID = {$this->AccountID}";
-
-			$query->Execute();
-
-			//Clear any existing parameters from the database.
-			$this->ClearParameters();
-
-			//Loop the parameters and save anything that has a value
-			foreach ($this->_parameters as $key=>$value)
+			if (is_set($value))
 			{
-				if (is_set($value))
-				{
-					$query->SQL = "	INSERT INTO core_MerchantAccountParameters
-									(
-										AccountID,
-										MerchantAccountID,
-										ParameterName,
-										ParameterValue
-									)
-									VALUES
-									(
-										{$this->AccountID},
-										{$this->_merchantAccountID},
-										{$query->SetTextField($key)},
-										{$query->SetTextField($value)}
-									)";
+				$query->SQL = "	INSERT INTO core_MerchantAccountParameters
+								(
+									AccountID,
+									MerchantAccountID,
+									ParameterName,
+									ParameterValue
+								)
+								VALUES
+								(
+									{$this->AccountID},
+									{$this->_merchantAccountID},
+									{$query->SetTextField($key)},
+									{$query->SetTextField($value)}
+								)";
 
-					$query->Execute();
-				}
+				$query->Execute();
 			}
-
-			$returnValue = true;
 		}
+
+		$returnValue = true;
 
 		return $returnValue;
 	}
 
-	protected function ClearParameters()
-	{
+	protected function ClearParameters() {
 		$query = new Query();
 
 		$query->SQL = "	DELETE
