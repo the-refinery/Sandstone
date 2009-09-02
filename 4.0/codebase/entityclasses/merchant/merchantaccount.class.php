@@ -273,6 +273,13 @@ class MerchantAccount extends EntityBase
 						WHERE	AccountID = {$this->AccountID}";
 
 		$query->Execute();
+
+		//Delete any existing merchant parameters
+		$query->SQL = "	DELETE
+	                    FROM	core_MerchantAccountParameters
+						WHERE	AccountID = {$this->AccountID} ";
+
+		$query->Execute();
 	}
 
 	public function Deactivate()
@@ -281,9 +288,6 @@ class MerchantAccount extends EntityBase
 
 		if ($this->_isActive)
 		{
-			//Clear any parameters
-			$this->ClearParameters();
-
 			//Remove the active account
 			$this->ClearActiveMerchantAccount();
 
