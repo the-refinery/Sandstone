@@ -515,7 +515,6 @@ class Application extends Module
 					if (is_set($returnValue) == false)
 					{
 						//No account ID set, redirect to the login page.
-						$this->ProcessClearCookie('DItoken');
 						$returnValue = $this->HandleLoginOr403($EventParameters);
 					}
 				}
@@ -667,11 +666,21 @@ class Application extends Module
 
 		if (is_set($this->Cookie['DItoken']))
 		{
-			$this->_currentUser = new User($this->Cookie['DItoken']);
-
-			if ($this->_currentUser->IsLoaded == false)
+			if (is_set($this->_license)
 			{
-				$this->_currentUser = null;
+				$this->_currentUser = new User($this->Cookie['DItoken']);
+
+				if ($this->_currentUser->IsLoaded == false)
+				{
+					$this->_currentUser = null;
+				}
+			}
+			else
+			{
+				//Somehow we have a cookie, but it didn't reslove to give us an account.  
+				//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
+				$this->ProcessClearCookie('DItoken');
+				$this->ProcessClearSessionVariable('DItoken');
 			}
 		}
 
