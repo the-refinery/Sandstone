@@ -515,6 +515,7 @@ class Application extends Module
 					if (is_set($returnValue) == false)
 					{
 						//No account ID set, redirect to the login page.
+						$this->ProcessClearCookie('DItoken');
 						$returnValue = $this->HandleLoginOr403($EventParameters);
 					}
 				}
