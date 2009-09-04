@@ -1,6 +1,6 @@
 <?php
 /*
-PayPal Processor Class
+PayPal Express Checkout Processor Class
 
 @package Sandstone
 @subpackage Merchant
@@ -9,8 +9,192 @@ PayPal Processor Class
 NameSpace::Using("Sandstone.Address");
 NameSpace::Using("Sandstone.CreditCard");
 
-class PayPalProcessor extends MerchantAccountProcessor
+class PayPalExpressCheckoutProcessor extends Module
 {
+
+	protected $_parameters;
+
+	public function __construct()
+	{
+		$this->_parameters = Application::License()->ActiveMerchantAccount->Parameters;
+	}
+
+	public function getIsTestMode()
+	{
+		$returnValue = false;
+
+		if ($this->_parameters['testmode'] == 1)
+		{
+			$returnValue = true;
+		}
+
+		return $returnValue;
+
+	}
+
+	public function SetupTransaction($Amount, $Description, $ReturnURL, $CancelURL)
+	{
+		$returnValue = false;
+
+		$postParameters = $this->BuildBaseAPIparameters();
+
+		$postParameters["METHOD"] = "SetExpressCheckout";
+		$postParameters["PAYMENTACTION"] = "Sale";
+		$postParameters["CURRENCYCODE"] = "USD";
+
+		$postParameters["AMT"] = $Amount;
+		$postParameters["DESC"] = urlencode($Description);
+
+		$postParameters["RETURNURL"] = urlencode($ReturnURL);
+		$postParameters["CANCELURL"] = urlencode($CancelURL);
+
+		$apiResult = $this->SendAPIrequest($postParameters);
+
+		if ($apiResult['ACK'] == "Success")
+		{
+			$this->RedirectUserToPayPal($apiResult['TOKEN']);
+		}
+		
+		return $returnValue;
+
+	}
+
+	protected function RedirectUserToPayPal($Token)
+	{
+		if ($this->IsTestMode)
+		{
+			$target = 'https://www.sandbox.paypal.com/cgi-bin/webscr?';
+		}
+		else
+		{
+			$target = 'https://www.paypal.com/cgi-bin/webscr?';
+		}
+		
+		$parameters = "cmd=_express-checkout&useraction=commit&token={$Token}";
+
+		$url = $target . $parameters;
+
+		header("Location: {$url}");
+
+	}
+
+	protected function BuildBaseAPIparameters()
+	{
+
+		if ($this->IsTestMode)
+		{
+			$returnValue['USER'] = "sdk-three_api1.sdk.com";
+			$returnValue['PWD'] = "QFZCWN5HZM8VBG7Q";
+			$returnValue['SIGNATURE'] = "A-IzJhZZjhg29XQ2qnhapuwxIDzyAZQ92FRP5dqBzVesOkzbdUONzmOU";
+		}
+		else
+		{
+			$returnValue['USER'] = urlencode($this->_parameters['APIusername']);
+			$returnValue['PWD'] = urlencode($this->_parameters['APIpassword']);
+			$returnValue['SIGNATURE'] = urlencode($this->_parameters['APIsignature']);
+
+		}
+
+		$returnValue['VERSION'] = '52.0';
+
+		return $returnValue;
+	}
+
+	protected function SendAPIrequest($PostParameters)
+	{
+
+		$postParametersString = $this->BuildPostParametersString($PostParameters);
+
+		$cURL = $this->SetupCurl($postParametersString);
+
+		//execute the API call
+		$apiResponseString = curl_exec($cURL);
+
+		if (strlen($apiResponseString) > 0)
+		{
+			//Process the API results & build the transaction object
+			$returnValue = $this->ParseAPIresponseString($apiResponseString);
+		}
+		else
+		{
+			$returnValue = null;
+		}
+
+		return $returnValue;
+	}
+
+	protected function BuildPostParametersString($PostParameters)
+	{
+		foreach ($PostParameters as $name=>$value)
+		{
+			$nvps[] = "{$name}={$value}";
+		}
+
+		$returnValue = implode("&",$nvps);
+
+		return $returnValue;
+	}
+
+	protected function SetupCurl($PostParameters)
+	{
+
+		//Build a cURL object
+		$returnValue = curl_init();
+
+		if ($this->IsTestMode)
+		{
+			curl_setopt($returnValue, CURLOPT_URL, "https://api-3t.sandbox.paypal.com/nvp" );
+		}
+		else
+		{
+			curl_setopt($returnValue, CURLOPT_URL, "https://api-3t.paypal.com/nvp" );
+		}
+
+
+		//setting the curl parameters.
+		curl_setopt($returnValue, CURLOPT_VERBOSE, 1);
+
+		//turning off the server and peer verification(TrustManager Concept).
+		curl_setopt($returnValue, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($returnValue, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+		curl_setopt($returnValue, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($returnValue, CURLOPT_POST, 1);
+
+		curl_setopt($returnValue, CURLOPT_POSTFIELDS,$PostParameters);
+
+		return $returnValue;
+	}
+
+	protected function ParseAPIresponseString($ResponseString)
+	{
+		$nvps = explode("&", $ResponseString);
+
+		foreach($nvps as $tempNVP)
+		{
+			$parts = explode("=", $tempNVP);
+	
+			$returnValue[urldecode($parts[0])] = urldecode($parts[1]);
+
+		}
+
+		return $returnValue;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public function ProcessCharge($Amount, $AuthTransaction = null)
 	{
@@ -60,27 +244,6 @@ class PayPalProcessor extends MerchantAccountProcessor
 		return $returnValue;
 	}
 
-	protected function SetupCurl($QueryParameters)
-	{
-
-		//Build a cURL object
-		$returnValue = curl_init();
-
-		//setting the curl parameters.
-		curl_setopt($returnValue, CURLOPT_URL, $this->_parameters['APIendpoint'] );
-		curl_setopt($returnValue, CURLOPT_VERBOSE, 1);
-
-		//turning off the server and peer verification(TrustManager Concept).
-		curl_setopt($returnValue, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($returnValue, CURLOPT_SSL_VERIFYHOST, FALSE);
-
-		curl_setopt($returnValue, CURLOPT_RETURNTRANSFER,1);
-		curl_setopt($returnValue, CURLOPT_POST, 1);
-
-		curl_setopt($returnValue, CURLOPT_POSTFIELDS,$QueryParameters);
-
-		return $returnValue;
-	}
 
 	protected function ProcessResults($ResponseQueryString)
 	{
