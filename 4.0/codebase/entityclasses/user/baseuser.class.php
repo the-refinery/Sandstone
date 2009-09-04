@@ -207,8 +207,8 @@ class BaseUser extends EntityBase
 	{
 		$returnValue = false;
 
-		//if (is_set(Application::License()))
-		//{
+		if (is_set(Application::License()))
+		{
 			$query = new Query();
 
 			$selectClause = self::GenerateBaseSelectClause();
@@ -223,7 +223,7 @@ class BaseUser extends EntityBase
 			$query->Execute();
 
 			$returnValue = $query->LoadEntity($this);
-		//}
+		}
 
 		return $returnValue;
 	}
