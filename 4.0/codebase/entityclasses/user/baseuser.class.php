@@ -205,20 +205,25 @@ class BaseUser extends EntityBase
 
 	public function LoadByToken($Token)
 	{
-		$query = new Query();
+		$returnValue = false;
 
-		$selectClause = self::GenerateBaseSelectClause();
-		$fromClause = self::GenerateBaseFromClause();
-		$fromClause .= "INNER JOIN core_UserToken b ON  b.UserID = a.UserID ";
+		if (is_set(Application::License()))
+		{
+			$query = new Query();
 
-		$whereClause = "WHERE (a.AccountID = {$this->AccountID} OR a.AccountID = 1)
-										AND b.Token = '{$Token}' ";
+			$selectClause = self::GenerateBaseSelectClause();
+			$fromClause = self::GenerateBaseFromClause();
+			$fromClause .= "INNER JOIN core_UserToken b ON  b.UserID = a.UserID ";
 
-		$query->SQL = $selectClause . $fromClause . $whereClause;
+			$whereClause = "WHERE (a.AccountID = {$this->AccountID} OR a.AccountID = 1)
+				AND b.Token = '{$Token}' ";
 
-		$query->Execute();
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
-		$returnValue = $query->LoadEntity($this);
+			$query->Execute();
+
+			$returnValue = $query->LoadEntity($this);
+		}
 
 		return $returnValue;
 	}
