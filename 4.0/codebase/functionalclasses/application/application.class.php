@@ -666,7 +666,7 @@ class Application extends Module
 
 		if (is_set($this->Cookie['DItoken']))
 		{
-			if (is_set($this->_license)
+			if (is_set($this->_license))
 			{
 				$this->_currentUser = new User($this->Cookie['DItoken']);
 
