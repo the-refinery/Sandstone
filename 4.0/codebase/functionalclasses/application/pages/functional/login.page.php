@@ -56,10 +56,10 @@ class LoginPage extends BasePage
 
 	public function HTM_Processor($EventParameters)
 	{
-		if (Application::CurrentUser() &&
-			(Application::CurrentUser()->IsInRole(new Role(2)) || Application::CurrentUser()->IsInRole(new Role(3))) &&
-			Application::License()->IsValid
-			)
+
+		$currentUser = Application::CurrentUser();
+
+		if (is_set($currentUser) && ($currentUser->IsInRole(new Role(2)) || $currentUser->IsInRole(new Role(3))) && Application::License()->IsValid)
 		{
 			Application::Redirect(Routing::BuildURLbyRule('default'));
 		}

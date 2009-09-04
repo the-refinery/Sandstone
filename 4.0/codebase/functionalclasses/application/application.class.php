@@ -479,9 +479,8 @@ class Application extends Module
 			//Only do an account check if we are not headed for a login page
 			if (Routing::GetIsUtilityFileRule() == false)
 			{
-				unset($this->Session['AccountID']);
-				//if (is_set($_SESSION['AccountID']) == false)
-				//{
+				if (is_set($_SESSION['AccountID']) == false)
+				{
 					if (is_set($this->Cookie['DItoken']))
 					{
 						$currentAccountID = $this->LoadAccountIDfromToken($this->Cookie['DItoken']);
@@ -500,7 +499,7 @@ class Application extends Module
 							$returnValue = $this->Fire404response();
 						}
 					}
-				//}
+				}
 
 				if (is_set($this->Session['AccountID']))
 				{
