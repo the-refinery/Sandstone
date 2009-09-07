@@ -26,6 +26,25 @@ class PayPalTransaction extends EntityBase
 		parent::SetupProperties();
 	}
 
+	public function LoadByToken($Token)
+	{
+		$query = new Query();
+
+		$selectClause = self::GenerateBaseSelectClause();
+		$fromClause = self::GenerateBaseFromClause();
+		
+		$whereClause = self::GenerateBaseWhereClause();
+		$whereClause .= "AND Token = {$query->SetTextField($Token)} ";
+
+		$query->SQL = $selectClause . $fromClause . $whereClause;
+
+		$query->Execute();
+
+		$returnValue = $query->LoadEntity($this);
+
+		return $returnValue;
+	}
+
 	protected function SaveNewRecord()
 	{
 		$query = new Query();

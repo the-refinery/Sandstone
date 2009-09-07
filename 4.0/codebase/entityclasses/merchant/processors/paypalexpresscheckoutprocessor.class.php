@@ -36,14 +36,15 @@ class PayPalExpressCheckoutProcessor extends Module
 	{
 		$returnValue = false;
 
-		$postParameters = $this->BuildBaseAPIparameters();
 
+		$postParameters = $this->BuildBaseAPIparameters($postParameters);
+		
 		$postParameters["METHOD"] = "SetExpressCheckout";
 		$postParameters["PAYMENTACTION"] = "Sale";
-		$postParameters["CURRENCYCODE"] = "USD";
+		$postParameters["CurrencyCode"] = "USD";
 
 		$postParameters["AMT"] = $Amount;
-		$postParameters["DESC"] = urlencode($Description);
+		$postParameters["Desc"] = urlencode($Description);
 
 		$postParameters["RETURNURL"] = urlencode($ReturnURL);
 		$postParameters["CANCELURL"] = urlencode($CancelURL);
@@ -52,6 +53,11 @@ class PayPalExpressCheckoutProcessor extends Module
 
 		if ($apiResult['ACK'] == "Success")
 		{
+			$transaction = new PayPalTransaction();
+			$transaction->Token = $apiResult['TOKEN'];
+			$transaction->Amount = $Amount;
+			$transaction->Save();
+
 			$this->RedirectUserToPayPal($apiResult['TOKEN']);
 		}
 		
@@ -78,14 +84,73 @@ class PayPalExpressCheckoutProcessor extends Module
 
 	}
 
+	public function CompleteTransaction($Token)
+	{
+		$returnValue = new PayPalTransaction();
+		$returnValue->LoadByToken($Token);
+
+		if ($returnValue->IsLoaded)
+		{
+
+			$apiResult = $this->GetCheckoutDetails($Token);
+
+			$returnValue->GetDetailsTimestamp = new Date();
+			$returnValue->PayPalTransactionNumber = $apiResult['CORRELATIONID'];
+			$returnValue->PayerID = $apiResult['PAYERID'];
+			$returnValue->PayerStatus = $apiResult['PAYERSTATUS'];
+			$returnValue->Save();
+
+			if ($apiResult['ACK'] == "Success")
+			{
+				$returnValue = $this->DoCheckout($returnValue);
+			}
+		}
+
+		di_echo($returnValue);
+
+		return $returnValue;
+	}
+
+	protected function GetCheckoutDetails($Token)
+	{
+		$postParameters = $this->BuildBaseAPIparameters();
+
+		$postParameters["METHOD"] = "GetExpressCheckoutDetails";
+		$postParameters["TOKEN"]= $Token;
+
+		$returnValue = $this->SendAPIrequest($postParameters);
+
+		return $returnValue;
+	}
+
+	protected function DoCheckout($PayPalTransaction)
+	{
+		$returnValue = $PayPalTransaction;
+
+		$postParameters = $this->BuildBaseAPIparameters();
+
+		$postParameters["METHOD"] = "DoExpressCheckoutPayment";
+		$postParameters["TOKEN"]= $PayPalTransaction->Token;
+		$postParameters["PAYERID"] = $PayPalTransaction->PayerID;
+
+		$postParameters["PAYMENTACTION"] = "Sale";
+		$postParameters["AMT"] = StringFunc::FormatNumber($PayPalTransaction->Amount, 2);
+
+		$apiResult = $this->SendAPIrequest($postParameters);
+
+		di_var_dump($apiResult, true);
+
+		return $returnValue;
+	}
+
 	protected function BuildBaseAPIparameters()
 	{
 
 		if ($this->IsTestMode)
 		{
-			$returnValue['USER'] = "sdk-three_api1.sdk.com";
-			$returnValue['PWD'] = "QFZCWN5HZM8VBG7Q";
-			$returnValue['SIGNATURE'] = "A-IzJhZZjhg29XQ2qnhapuwxIDzyAZQ92FRP5dqBzVesOkzbdUONzmOU";
+			$returnValue['USER'] = "admin_1252359450_biz_api1.university-hq.com";
+			$returnValue['PWD'] = "1252359461";
+			$returnValue['SIGNATURE'] = "AFcWxV21C7fd0v3bYYYRCpSSRl31AiCHmR16bUaqBkJZWnwwG2bwuA0c";
 		}
 		else
 		{
@@ -95,7 +160,7 @@ class PayPalExpressCheckoutProcessor extends Module
 
 		}
 
-		$returnValue['VERSION'] = '52.0';
+		$returnValue['VERSION'] = '51.0';
 
 		return $returnValue;
 	}
@@ -104,6 +169,8 @@ class PayPalExpressCheckoutProcessor extends Module
 	{
 
 		$postParametersString = $this->BuildPostParametersString($PostParameters);
+
+		//di_echo($postParametersString);
 
 		$cURL = $this->SetupCurl($postParametersString);
 
