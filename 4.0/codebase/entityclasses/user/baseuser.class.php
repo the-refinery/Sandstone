@@ -553,6 +553,17 @@ class BaseUser extends EntityBase
 
 	}
 
+	public function UniqueUsernameValidator($Control)
+	{
+		if ($this->ValidateUniqueUsername($Control->Value) == false)
+		{
+			$returnValue = "This username has already been taken";
+		}
+
+		return $returnValue;
+	}
+
+
 	public function ValidateUniqueUsername($NewUserName)
 	{
 		$query = new Query();
