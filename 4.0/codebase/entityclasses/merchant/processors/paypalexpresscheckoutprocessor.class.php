@@ -8,6 +8,7 @@ PayPal Express Checkout Processor Class
 
 NameSpace::Using("Sandstone.Address");
 NameSpace::Using("Sandstone.CreditCard");
+NameSpace::Using("Sandstone.Utilities.String");
 
 class PayPalExpressCheckoutProcessor extends Module
 {
@@ -36,14 +37,13 @@ class PayPalExpressCheckoutProcessor extends Module
 	{
 		$returnValue = false;
 
-
 		$postParameters = $this->BuildBaseAPIparameters($postParameters);
 		
 		$postParameters["METHOD"] = "SetExpressCheckout";
 		$postParameters["PAYMENTACTION"] = "Sale";
 		$postParameters["CurrencyCode"] = "USD";
 
-		$postParameters["AMT"] = $Amount;
+		$postParameters["AMT"] = StringFunc::FormatNumber($Amount,2);
 		$postParameters["Desc"] = urlencode($Description);
 
 		$postParameters["RETURNURL"] = urlencode($ReturnURL);
