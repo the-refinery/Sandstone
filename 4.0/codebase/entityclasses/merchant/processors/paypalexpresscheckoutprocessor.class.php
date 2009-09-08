@@ -152,7 +152,7 @@ class PayPalExpressCheckoutProcessor extends Module
 
 		if ($apiResult['ACK'] == "Success")
 		{
-			$returnValue->PayPalTransactionNumber = $apiResult['TransactionID'];
+			$returnValue->PayPalTransactionNumber = $apiResult['TRANSACTIONID'];
 			$returnValue->FeeAmount = $apiResult['FEEAMT'];
 			$returnValue->PaymentStatus = $apiResult['PAYMENTSTATUS'];
 			$returnValue->PendingReason = $apiResult['PENDINGREASON'];
