@@ -84,6 +84,20 @@ class PayPalExpressCheckoutProcessor extends Module
 
 	}
 
+	public function CancelTransaction($Token)
+	{
+		$returnValue = new PayPalTransaction();
+		$returnValue->LoadByToken($Token);
+
+		if ($returnValue->IsLoaded)
+		{
+			$returnValue->IsCancelled = true;
+			$returnValue->Save();
+		}
+
+		return $returnValue;
+	}
+
 	public function CompleteTransaction($Token)
 	{
 		$returnValue = new PayPalTransaction();
@@ -95,7 +109,7 @@ class PayPalExpressCheckoutProcessor extends Module
 			$apiResult = $this->GetCheckoutDetails($Token);
 
 			$returnValue->GetDetailsTimestamp = new Date();
-			$returnValue->PayPalTransactionNumber = $apiResult['CORRELATIONID'];
+			$returnValue->CorrelationID = $apiResult['CORRELATIONID'];
 			$returnValue->PayerID = $apiResult['PAYERID'];
 			$returnValue->PayerStatus = $apiResult['PAYERSTATUS'];
 			$returnValue->Save();
@@ -105,8 +119,6 @@ class PayPalExpressCheckoutProcessor extends Module
 				$returnValue = $this->DoCheckout($returnValue);
 			}
 		}
-
-		di_echo($returnValue);
 
 		return $returnValue;
 	}
@@ -138,7 +150,22 @@ class PayPalExpressCheckoutProcessor extends Module
 
 		$apiResult = $this->SendAPIrequest($postParameters);
 
-		di_var_dump($apiResult, true);
+		if ($apiResult['ACK'] == "Success")
+		{
+			$returnValue->PayPalTransactionNumber = $apiResult['TransactionID'];
+			$returnValue->FeeAmount = $apiResult['FEEAMT'];
+			$returnValue->PaymentStatus = $apiResult['PAYMENTSTATUS'];
+			$returnValue->PendingReason = $apiResult['PENDINGREASON'];
+			$returnValue->ReasonCode = $apiResult['REASONCODE'];
+			$returnValue->ProcessTimestamp = new Date();
+
+			if ($apiResult['PAYMENTSTATUS'] == "Completed")
+			{
+				$returnValue->IsSuccessful = true;
+			}
+
+			$returnValue->Save();
+		}
 
 		return $returnValue;
 	}
@@ -169,8 +196,6 @@ class PayPalExpressCheckoutProcessor extends Module
 	{
 
 		$postParametersString = $this->BuildPostParametersString($PostParameters);
-
-		//di_echo($postParametersString);
 
 		$cURL = $this->SetupCurl($postParametersString);
 
