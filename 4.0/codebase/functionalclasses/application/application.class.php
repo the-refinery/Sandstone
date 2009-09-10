@@ -307,13 +307,13 @@ class Application extends Module
 		}
 		else
 		{
-			$returnValue = $this->GenerateBaseNonSecureURL();
+			$returnValue = $this->BaseNonSecureURL();
 		}
 
 		return $returnValue;
 	}
 
-	protected function GenerateBaseNonSecureURL()
+	public function getBaseNonSecureURL()
 	{
 		$returnValue = Application::Registry()->BaseURL;
 
@@ -334,7 +334,7 @@ class Application extends Module
 		}
 		else
 		{
-			$baseURL = $this->GenerateBaseNonSecureURL();
+			$baseURL = $this->BaseNonSecureURL();
 			$returnValue = substr_replace($baseURL, 'https', 0, 4);
 		}
 
