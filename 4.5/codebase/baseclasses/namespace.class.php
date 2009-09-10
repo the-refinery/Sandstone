@@ -410,6 +410,40 @@ class NameSpace extends Module
 				//Add it to our class names array
 				$this->_classNames[] = $className;
 			}
+			elseif (substr($tempFile, -13) == "primitive.php")
+			{
+				//Class files are loaded on demand, so add the file to the
+				//array keyed by the class name.
+
+				//Pick the actual class name out of the file name
+				$classNameStart = strrpos($tempFile, "/") + 1;
+				$classNameEnd = strlen($tempFile) - 14;
+				$classNameLength = $classNameEnd - $classNameStart;
+				$className = strtolower(substr($tempFile, $classNameStart, $classNameLength));
+
+				//Just add it to the array, we'll include it when we need it.
+				$this->_includedFiles[$className] = $tempFile;
+
+				//Add it to our class names array
+				$this->_classNames[] = $className;
+			}
+			elseif (substr($tempFile, -11) == "service.php")
+			{
+				//Class files are loaded on demand, so add the file to the
+				//array keyed by the class name.
+
+				//Pick the actual class name out of the file name
+				$classNameStart = strrpos($tempFile, "/") + 1;
+				$classNameEnd = strlen($tempFile) - 12;
+				$classNameLength = $classNameEnd - $classNameStart;
+				$className = strtolower(substr($tempFile, $classNameStart, $classNameLength));
+
+				//Just add it to the array, we'll include it when we need it.
+				$this->_includedFiles[$className] = $tempFile;
+
+				//Add it to our class names array
+				$this->_classNames[] = $className;
+			}
 			else if(substr($tempFile, -8) == "page.php")
 			{
 				//Page files are loaded on demand, so just add the file
