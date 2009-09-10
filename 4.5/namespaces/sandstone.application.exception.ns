@@ -1,0 +1,12 @@
+codebase/functionalclasses/exception/diexception.class.php
+codebase/functionalclasses/exception/filenotfoundexception.class.php
+codebase/functionalclasses/exception/invalidlicenseexception.class.php
+codebase/functionalclasses/exception/invalidpropertyexception.class.php
+codebase/functionalclasses/exception/invalidmethodexception.class.php
+codebase/functionalclasses/exception/invaliduploadexception.class.php
+codebase/functionalclasses/exception/invalidsystemexception.class.php
+codebase/functionalclasses/exception/page403exception.class.php
+codebase/functionalclasses/exception/page404exception.class.php
+codebase/functionalclasses/exception/unhandledeventexception.class.php
+codebase/functionalclasses/exception/unknownfileenvironmentexception.class.php
+codebase/functionalclasses/exception/showstacktraceexception.class.php

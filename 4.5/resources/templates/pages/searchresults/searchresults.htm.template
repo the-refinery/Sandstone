@@ -1,0 +1,10 @@
+<h1>Search Results for "{$SearchTerm}"</h1>
+
+<a class="JSAction" id="RefineSearch">Refine your search</a>
+
+<div id="SearchAgain">
+	{+Search}
+</div>
+
+{+Results}
+

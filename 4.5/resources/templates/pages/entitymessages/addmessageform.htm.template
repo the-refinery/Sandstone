@@ -1,0 +1,15 @@
+<div class="FormBlock">
+	{+Subject}
+</div>
+
+<div class="FormBlock">
+	{+Content}
+</div>
+
+<div class="FormBlock">
+	{+SubscribeCheckBox}
+</div>
+
+<div class="FormBlock">
+	{+Submit}
+</div>

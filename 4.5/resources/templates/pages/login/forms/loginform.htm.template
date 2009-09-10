@@ -1,0 +1,22 @@
+{+AccountName}
+
+<div class="FormBlock">
+	{+Username}
+</div>
+
+<div class="FormBlock" id="EnterPassword">
+	{+Password}
+</div>
+
+<div class="FormBlock">Uh, oh.  <a class="JSAction" id="ResetPrompt">I forgot my password</a></div>
+
+<div id="ResetPassword" style="display:none;">
+	<p>To reset your password, enter your username and click the button below. A new password will be emailed to you.</p>
+
+	{+ForgotPassword}
+</div>
+
+<div class="FormBlock">
+	{+Submit} <span style="display:none;">or <a class="JSAction" id="CancelReset">cancel</a></span>
+</div>
+

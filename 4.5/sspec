@@ -1,0 +1,18 @@
+#!/bin/bash 
+
+if [[ "$1" == "sandstone" ]]; then
+    # RUN ALL OF SANDSTONE
+    # sspec sandstone
+    nosy sand http://www.phpdocumentor.local/spec/sandstone.term
+elif [[ "$1" != "" && "$2" == "all" ]]; then
+    # RUN THE WHOLE APPLICATION SUITE
+    nosy sspec universityadmin
+elif [[ "$1" != "" && "$2" != "" ]]; then
+    # RUN A SPECIFIC APPLICATION
+    # sspec universityadmin course
+    nosy sand http://www.$1.local/spec/$2.term
+elif [[ "$1" != "" && "$2" == "" ]]; then
+    # RUN A SPECIFIC SANDSTONE
+    # sspec utilities
+    nosy sand http://www.phpdocumentor.local/spec/$1.term
+fi

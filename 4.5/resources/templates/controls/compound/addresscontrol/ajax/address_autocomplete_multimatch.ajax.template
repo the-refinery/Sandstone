@@ -1,0 +1,17 @@
+var IsReplacement;
+
+if ($('#{$ControlName}_PickList').length)
+{
+	$('.address_picklist').remove();
+	IsReplacement = true;
+}
+
+SetControlMessage('{$ControlName}', "");
+$('#{$ControlName}').append('{$PickListHTML}');
+
+{$PickListObservers}
+
+if (IsReplacement)
+{
+	$('#{$ControlName}_PickList').effect("highlight", {}, 1500);
+}

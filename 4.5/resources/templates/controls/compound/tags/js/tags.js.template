@@ -1,0 +1,20 @@
+{+TagList}
+{+NewTagText}
+{+NewTagSubmit}
+
+function {$ControlName}_AddTag_OnClick()
+{
+	$('#{$ControlName}_AddTag_Paragraph').hide('blind');
+	$('#{$ControlName}_NewTag').show('blind');
+}
+
+function {$ControlName}_NewTagSubmit_OnClick()
+{
+    RaiseAJAXevent("{$ControlName}", "AddTag", { '{$ControlName}_NewTagText': $('#{$ControlName}_NewTagText').val() });
+}
+
+function {$ControlName}_CancelAddTag_OnClick()
+{
+	$('#{$ControlName}_NewTag').hide('blind');
+	$('#{$ControlName}_AddTag_Paragraph').show('blind');
+}

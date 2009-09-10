@@ -1,0 +1,4 @@
+<li>
+	<p><strong>{$TestName}</strong></p>
+	<p>{$Message}</p>
+</li>

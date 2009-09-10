@@ -1,0 +1,3 @@
+<div class="message_delete">
+	Delete Message: <img id="MessageDelete" src="images/sandstone/trash.gif" alt="Delete Message" />
+</div>

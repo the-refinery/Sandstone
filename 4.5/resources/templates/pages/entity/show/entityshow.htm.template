@@ -1,0 +1,6 @@
+<h1>show</h1>
+
+<ul>
+	<li><a href="[=>$Entity,index]">index</a></li>
+	<li><a href="[=>$Entity,edit]">edit</a></li>
+</ul>

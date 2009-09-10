@@ -1,0 +1,11 @@
+codebase/functionalclasses/chart/chartbase.class.php
+codebase/functionalclasses/chart/piechart.class.php
+codebase/functionalclasses/chart/axischartbase.class.php
+codebase/functionalclasses/chart/linechart.class.php
+codebase/functionalclasses/chart/barchart.class.php
+codebase/functionalclasses/chart/sparklinechart.class.php
+codebase/functionalclasses/chart/ganttchart.class.php
+codebase/functionalclasses/chart/utility/chartdataseries.class.php
+codebase/functionalclasses/chart/utility/gantttask.class.php
+codebase/functionalclasses/chart/utility/chartaxis.class.php
+codebase/functionalclasses/chart/utility/axisrangemarker.class.php

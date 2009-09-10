@@ -1,0 +1,8 @@
+if ($('#AJAXerror').length == 0)
+{
+	$(document.body).prepend('<div id="AJAXerror" style="border: 5px solid red; padding: 10px;"></div>');
+}
+
+$('#AJAXerror').html('<h1>AJAX Error</h1>{$ErrorMessage}');
+
+$('#AJAXerror').effect("highlight");

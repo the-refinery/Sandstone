@@ -1,0 +1,21 @@
+div.actionview_general ul
+{
+	list-style-type:none;
+}
+
+div.actionview_general ul li
+{
+	padding:5px;
+	border-bottom:1px dashed #999;
+}
+
+div.actionview_general a
+{
+	color:#333;
+	text-decoration:none;
+}
+
+div.actionview_general a:hover
+{
+	text-decoration:underline;
+}

@@ -1,0 +1,2 @@
+{!label.htm.template}
+<textarea id="{$ControlName}"  {$Rows} {$Cols} name="{$ControlName}" {$BodyStyle->Classes} {$BodyStyle->Style}>{$Value}</textarea>

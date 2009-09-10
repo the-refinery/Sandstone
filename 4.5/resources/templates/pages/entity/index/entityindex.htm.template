@@ -1,0 +1,8 @@
+<h1>Index</h1>
+
+<ul>
+	<li><a href="[=>$Entity,new]">new</a></li>
+</ul>
+
+{+EntityList}
+{+Paginate}

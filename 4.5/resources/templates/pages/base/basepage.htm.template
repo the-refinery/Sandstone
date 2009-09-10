@@ -1,0 +1,3 @@
+<h1>Sandstone Default Page Template</h1>
+<h2>Parent Object Type: {$DEBUGparentObjectType}</h2>
+{$DEBUGtvDisplay}

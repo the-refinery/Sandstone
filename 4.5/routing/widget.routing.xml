@@ -1,0 +1,8 @@
+<routing>
+    
+    <Widget>
+        <url>widgets/{widgetname}</url>
+        <page>widgets</page>
+    </Widget>
+    
+</routing>

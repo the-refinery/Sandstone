@@ -1,0 +1,3 @@
+echo "${BOLD}${FORERED}{$TestName}${DEFAULTCOLOR}"
+echo "${FOREWHITE}- {$Message}${DEFAULTCOLOR}"
+echo ""

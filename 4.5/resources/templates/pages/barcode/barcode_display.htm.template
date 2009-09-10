@@ -1,0 +1,8 @@
+<h1>D-I Barcode Generator</h1>
+
+<h2>Value: {$BarcodeValue}</h2>
+
+{$BarcodeDetail}
+
+<h2>Barcode Output</h2>
+<img src="{$ImageSource}" alt="Barcode" />

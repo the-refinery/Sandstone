@@ -1,0 +1,7 @@
+<h1>new</h1>
+
+{+NewEntityForm}
+
+<ul>
+	<li><a href="[=>$Entity,index]">index</a></li>
+</ul>

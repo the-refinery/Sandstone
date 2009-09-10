@@ -1,0 +1,5 @@
+{!label.htm.template}
+{+FileUpload}
+{+FileURL}
+{+Description}
+{+FileID}

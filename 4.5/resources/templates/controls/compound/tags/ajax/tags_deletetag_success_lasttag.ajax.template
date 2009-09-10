@@ -1,0 +1,12 @@
+{!tags_deletetag_success.ajax.template}
+
+if ($('#{$ControlName}_NoData').length)
+{
+	$('#{$ControlName}_NoData').show();
+}
+else
+{
+	$('#{$ControlName}').append('{!taglist_nodata_item.htm.template}');
+}
+
+$('#{$ControlName}_NoData').effect('highlight');

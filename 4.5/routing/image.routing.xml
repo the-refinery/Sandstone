@@ -1,0 +1,37 @@
+<routing>
+
+    <image>
+        <url>images/#imageid#/{filename}</url>
+        <page>image</page>
+        <class>image</class>
+        <action>download</action>
+    </image>
+
+    <imageversion>
+        <url>images/#imageid#/versions/#fileversion#/{filename}</url>
+        <page>image</page>
+        <class>fileversion</class>
+        <action>downloadimage</action>
+    </imageversion>
+
+    <thumbnail>
+        <url>images/#imageid#/thumb/#width#/#height#/{filename}</url>
+        <page>image</page>
+        <class>image</class>
+        <eventparameters>
+            <isthumbnail>true</isthumbnail>
+        </eventparameters>
+        <action>downloadthumbnail</action>
+    </thumbnail>
+
+    <maxsizethumbnail>
+        <url>images/#imageid#/thumb/#maxsize#/{filename}</url>
+        <page>image</page>
+        <class>image</class>
+        <eventparameters>
+            <isthumbnail>true</isthumbnail>
+        </eventparameters>
+        <action>downloadmaxsizethumbnail</action>
+    </maxsizethumbnail>
+
+</routing>

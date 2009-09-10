@@ -1,0 +1,5 @@
+codebase/entityclasses/merchant/merchantaccount.class.php
+codebase/entityclasses/merchant/processors/processorbase.class.php
+codebase/entityclasses/merchant/processors/linkpointprocessor.class.php
+codebase/entityclasses/merchant/processors/paypalexpresscheckoutprocessor.class.php
+codebase/entityclasses/merchant/processors/authorizenetprocessor.class.php

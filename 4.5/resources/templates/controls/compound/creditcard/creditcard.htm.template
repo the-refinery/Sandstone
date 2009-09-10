@@ -1,0 +1,10 @@
+{!label.htm.template}
+
+{+CardType}
+{+NameOnCard}
+{+CardNumber}
+
+<label>Expiration Date:</label>
+{+Month}{+Year}
+
+{+CVV}

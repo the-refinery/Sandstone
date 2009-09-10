@@ -1,0 +1,10 @@
+<routing>
+    
+    <messageview>
+        <url>message/#messageid#</url>
+        <page>message</page>
+        <class>message</class>
+        <action>view</action>
+    </messageview>
+    
+</routing>

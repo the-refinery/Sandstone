@@ -1,0 +1,1 @@
+<img src="{$ImageURL}" width="{$Width}" height="{$Height}" rel="{$RelContent}" alt="{$AlternateText}" id="{$ControlName}" {$BodyStyle->Classes} {$BodyStyle->Style} />

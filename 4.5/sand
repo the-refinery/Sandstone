@@ -1,0 +1,9 @@
+#!/bin/bash 
+
+# To run this from anywhere on your machine, make a link from this script in your /usr/bin
+# sudo ln sand /usr/bin/sand
+
+PageOutput=`curl $1`;
+echo -e $PageOutput > .sandsource;
+
+source .sandsource

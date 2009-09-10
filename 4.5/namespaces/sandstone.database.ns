@@ -1,0 +1,5 @@
+codebase/functionalclasses/database/diconnection.class.php
+codebase/functionalclasses/database/query.class.php
+codebase/functionalclasses/database/querylog.class.php
+codebase/functionalclasses/database/databaseconnectionexception.class.php
+codebase/functionalclasses/database/sqlexception.class.php
