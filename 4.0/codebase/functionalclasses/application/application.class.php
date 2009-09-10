@@ -307,7 +307,7 @@ class Application extends Module
 		}
 		else
 		{
-			$returnValue = $this->BaseNonSecureURL();
+			$returnValue = $this->BaseNonSecureURL;
 		}
 
 		return $returnValue;
@@ -334,7 +334,7 @@ class Application extends Module
 		}
 		else
 		{
-			$baseURL = $this->BaseNonSecureURL();
+			$baseURL = $this->BaseNonSecureURL;
 			$returnValue = substr_replace($baseURL, 'https', 0, 4);
 		}
 
