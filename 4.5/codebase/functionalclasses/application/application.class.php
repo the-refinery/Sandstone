@@ -207,7 +207,6 @@ class Application extends Module
 
 	static public function SelectAccount($AccountName)
 	{
-
 		$App = Application::Instance();
 
 		$returnValue = $App->ProcessSelectAccount($AccountName);

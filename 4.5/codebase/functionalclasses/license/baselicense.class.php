@@ -38,6 +38,9 @@ class BaseLicense extends EntityBase
 		$this->AddProperty("Name","string","Name",false,true,false,false,false,null);
 		$this->AddProperty("IsCancelled","boolean","IsCancelled",false,false,false,false,false,null);
 
+		$this->AddProperty("AdminUsers","array",null,PROPERTY_READ_ONLY,"LoadAdminUsers");
+		$this->AddProperty("PrimaryAdminUser","user",null,PROPERTY_READ_ONLY,"LoadAdminUsers");
+
 		parent::SetupProperties();
 	}
 
@@ -63,6 +66,48 @@ class BaseLicense extends EntityBase
 		}
 
 		return $returnValue;
+	}
+
+	public function LoadAdminUsers()
+	{
+		$returnValue = false;
+
+		$this->_adminUsers->Clear();
+		$this->_primaryAdminUser = null;
+
+		if ($this->IsLoaded)
+		{
+			$query = new Query();
+
+			$selectClause = User::GenerateBaseSelectClause();
+			$fromClause = User::GenerateBaseFromClause();
+			$fromClause .= "INNER JOIN core_UserRole b ON
+				b.UserID = a.UserID
+				AND	b.RoleID =2 ";
+			$whereClause = "WHERE a.AccountID = {$this->_accountID} ";
+			$orderByClause = "ORDER BY a.UserID ";
+
+			$query->SQL = $selectClause . $fromClause . $whereClause . $orderByClause;
+
+			$query->Execute();
+
+			$query->LoadEntityArray($this->_adminUsers, "User", "UserID", $this, "LoadAdminUsersCallback");
+
+			$returnValue = true;
+
+		}
+
+		return $returnValue;
+
+	}
+
+	public function LoadAdminUsersCallback($User)
+	{
+		if (is_set($this->_primaryAdminUser) == false)
+		{
+			$this->_primaryAdminUser = $User;
+		}
+
 	}
 
 	public function LookupByName($AccountName)
@@ -154,9 +199,34 @@ class BaseLicense extends EntityBase
 		return $returnValue;
 	}
 
+	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email)
+	{
+		$returnValue = new User();
+
+		$returnValue->UserName = $UserName;
+		$returnValue->FirstName = $FirstName;
+		$returnValue->LastName = $LastName;
+		$returnValue->Password = $Password;
+
+		$returnValue->Save();
+
+		//Put in the admin role
+		$returnValue->AddRole(new Role(2));
+
+		//Create the email
+		$email = new Email();
+		$email->Address = $Email;
+		$email->EmailType = new EmailType(2);
+		$email->IsPrimary = true;
+		$email->Save();
+
+		$returnValue->AddEmail($email);
+
+		return $returnValue;
+	}
+
 	static public function ValidateUniqueAccountName($NewAccountName)
 	{
-
 		$query = new Query();
 
 		$selectClause = "	SELECT 	COUNT(AccountID) NumberAccounts ";
