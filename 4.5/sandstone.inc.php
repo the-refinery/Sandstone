@@ -23,6 +23,7 @@ require("codebase/baseclasses/namespace.class.php");
 require("codebase/baseclasses/diarray.class.php");
 require("codebase/baseclasses/service.class.php");
 require("codebase/baseclasses/primitive.class.php");
+require("codebase/baseclasses/primitivetostring.service.php");
 
 //These are also foundational, so we will explicitly require them here too.
 require("codebase/functionalclasses/utilities/file.func.php");

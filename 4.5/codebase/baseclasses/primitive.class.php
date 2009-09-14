@@ -2,6 +2,13 @@
 
 class Primitive
 {
+	public function __toString()
+	{
+		$returnValue = PrimitiveToString::_($this);
+
+		return $returnValue;
+	}
+
 	public function __get($Name)
 	{
 		$getter='get'.$Name;
@@ -103,5 +110,11 @@ class Primitive
 		return $returnValue;
 
 	}
+
+	public function getAllProperties()
+	{
+		return get_object_vars($this);
+	}
+
 
 }
