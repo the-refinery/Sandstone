@@ -70,13 +70,13 @@ class PrimitiveToString extends Service
 
 		if (is_set($Value))
 		{
-			if (is_string($Value))
-			{
-				$returnValue = "\"{$Value}\"";
-			}
-			elseif (is_numeric($Value))
+			if (is_numeric($Value))
 			{
 				$returnValue = "{$Value}";
+			}
+			elseif (is_string($Value))
+			{
+				$returnValue = "\"{$Value}\"";
 			}
 			else
 			{
