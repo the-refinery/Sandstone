@@ -112,14 +112,8 @@ class EntityPage extends ApplicationPage
 		$this->NewEntityForm->Submit->LabelText = "Save";
 	}
 
-	/** GENERIC - Not for overwriting **/
-
 	protected function LoadEntity($EventParameters)
 	{
-		$className = $this->_entityType;
-		$id = $EventParameters[$this->_primaryKeyField];
-
-		$this->_loadedEntity = new $className($id);
 	}
 
 	protected function LoadBlankEntity()
@@ -127,6 +121,8 @@ class EntityPage extends ApplicationPage
 		$class = $this->_entityType;
 		$this->_loadedEntity = new $class();
 	}
+
+	/** GENERIC - Not for overwriting **/
 
 	protected function Throw404IfInvalidEntity($EventParameters)
 	{
