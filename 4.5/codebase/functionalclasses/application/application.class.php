@@ -676,10 +676,13 @@ class Application extends Module
 			}
 			else
 			{
-				//Somehow we have a cookie, but it didn't reslove to give us an account.  
-				//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
-				$this->ProcessClearCookie('DItoken');
-				$this->ProcessClearSessionVariable('DItoken');
+				if (Routing::GetIsUtilityFileRule() == false)
+				{
+					//Somehow we have a cookie, but it didn't reslove to give us an account.  
+					//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
+					$this->ProcessClearCookie('DItoken');
+					$this->ProcessClearSessionVariable('DItoken');
+				}
 			}
 		}
 
@@ -739,7 +742,6 @@ class Application extends Module
 
 	public function ProcessSelectAccount($AccountName)
 	{
-
 		$this->_license = new License();
 
 		$this->_license->LookupByName($AccountName);
