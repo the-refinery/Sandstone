@@ -796,6 +796,7 @@ class Application extends Module
 	protected function DetermineCookieDomain()
 	{
 		$returnValue = str_replace("http://", "", Application::BaseURL());
+		$returnValue = str_replace("https://", "", Application::BaseURL());
 
 		if (substr_count($returnValue, "/") > 0)
 		{
