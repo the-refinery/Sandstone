@@ -484,7 +484,7 @@ class BasePage extends ControlContainer
 				{
 					if (is_set($this->_postedForm->EntityObject))
 					{
-						$success = $this->FormEntitySave_Processor($EventParameters);
+						$success = $this->FormPrimitiveSave_Processor($EventParameters);
 					}
 					else
 					{
@@ -532,9 +532,23 @@ class BasePage extends ControlContainer
 
 	}
 
-	final protected function FormEntitySave_Processor($EventParameters)
+	final protected function FormPrimitiveSave_Processor($EventParameters)
 	{
+		$this->SetupPropertiesForPostedEntityForm();
 
+		$class = get_class($this->_postedForm->EntityObject);
+
+		$saveIt = "\$returnValue = Save{$class}::_(\$this->_loadedEntity);";
+		eval($saveIt);
+
+		$returnValue = $this->_postedForm->EntityObject->Save();
+		$this->SetupFormCompletionAction($returnValue);
+
+		return $returnValue;
+	}
+
+	protected function SetupPropertiesForPostedEntityForm()
+	{
 		foreach ($this->_postedForm->Controls as $controlName=>$control)
 		{
 
@@ -552,10 +566,11 @@ class BasePage extends ControlContainer
 				$this->_postedForm->EntityObject->$propertyName = $control->Value;
 			}
 		}
+	}
 
-		$returnValue = $this->_postedForm->EntityObject->Save();
-
-		if ($returnValue == true)
+	protected function SetupFormCompletionAction($IsPostSuccessful)
+	{
+		if ($IsPostSuccessful == true)
 		{
 			//Set the notification (if any)
 			if (is_set($this->_postedForm->EntitySaveSuccessNotification))
@@ -578,10 +593,7 @@ class BasePage extends ControlContainer
 				Application::SetSessionVariable('notificationmessage', $this->_postedForm->EntitySaveFailureNotification);
 				Application::SetSessionVariable('notificationmessagetype', "error");
 			}
-
 		}
-
-		return $returnValue;
 	}
 
 	final protected function AJAX_Handler($EventParameters)

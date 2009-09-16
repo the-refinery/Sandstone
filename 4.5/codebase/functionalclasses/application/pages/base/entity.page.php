@@ -125,10 +125,6 @@ class EntityPage extends ApplicationPage
 		return $this->NewEntityForm;
 	}
 
-	protected function LoadEntity($EventParameters)
-	{
-	}
-
 	protected function LoadBlankEntity()
 	{
 		$class = $this->_entityType;
@@ -136,6 +132,15 @@ class EntityPage extends ApplicationPage
 	}
 
 	/** GENERIC - Not for overwriting **/
+
+	protected function LoadEntity($EventParameters)
+	{
+		$class = $this->_entityType;
+		$primaryKey = $EventParameters[$this->_primaryKeyField];
+		
+		$loadIt = "\$this->_loadedEntity = Load{$class}::_({$primaryKey});";
+		eval($loadIt);
+	}
 
 	protected function Throw404IfInvalidEntity($EventParameters)
 	{
