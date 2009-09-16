@@ -64,12 +64,19 @@ class EntityPage extends ApplicationPage
 	protected function BuildControlArray($EventParameters)
 	{
 		$restSetupMethod = 'Build' . $this->_action . 'Controls';
-		$this->$restSetupMethod($EventParameters);
+		$preSetupMethod = $restSetupMethod . "_Pre";
+
+		$form = $this->$preSetupMethod($EventParameters);
+
+		if (method_exists($this, $restSetupMethod))
+		{
+			$this->$restSetupMethod($form);
+		}
 
 		parent::BuildControlArray($EventParameters);
 	}
 
-	protected function BuildIndexControls($EventParameters)
+	protected function BuildIndexControls_Pre($EventParameters)
 	{
     $pageNumber = $this->DeterminePageNumber($EventParameters['pagenumber']);
 		$data = Lookup($this->_entityType, $this->_lookupType, $this->_lookupParameters, $this->_resultsPerPage, $pageNumber);
@@ -81,13 +88,15 @@ class EntityPage extends ApplicationPage
 		$this->Paginate = new DataNavigationControl();
 		$this->Paginate->RoutingRuleName = "{$this->_entityType}{$this->_action}";
 		$this->Paginate->Lookup($this->_entityType, $this->_lookupType, $this->_lookupParameters, $this->_resultsPerPage, $pageNumber);
+
+		return $this->EntityList;
   }
 
   public function EntityListCallback($CurrentElement, $Template) {}
 
-	protected function BuildShowControls($EventParameters) {}
+	protected function BuildShowControls_Pre($EventParameters) {}
 	
-	protected function BuildEditControls($EventParameters) 
+	protected function BuildEditControls_Pre($EventParameters) 
 	{
 		$this->EditEntityForm = new PageForm($EventParameters);
 
@@ -98,9 +107,11 @@ class EntityPage extends ApplicationPage
 
 		$this->EditEntityForm->Submit = new SubmitButtonControl();
 		$this->EditEntityForm->Submit->LabelText = "Save";
+
+		return $this->EditEntityForm;
 	}
 
-	protected function BuildNewControls($EventParameters) 
+	protected function BuildNewControls_Pre($EventParameters) 
 	{
 		$this->NewEntityForm = new PageForm($EventParameters);
 		$this->NewEntityForm->EntityObject = $this->_loadedEntity;
@@ -110,6 +121,8 @@ class EntityPage extends ApplicationPage
 
 		$this->NewEntityForm->Submit = new SubmitButtonControl();
 		$this->NewEntityForm->Submit->LabelText = "Save";
+
+		return $this->NewEntityForm;
 	}
 
 	protected function LoadEntity($EventParameters)
