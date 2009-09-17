@@ -541,7 +541,6 @@ class BasePage extends ControlContainer
 		$saveIt = "\$returnValue = Save{$class}::_(\$this->_loadedEntity);";
 		eval($saveIt);
 
-		$returnValue = $this->_postedForm->EntityObject->Save();
 		$this->SetupFormCompletionAction($returnValue);
 
 		return $returnValue;
