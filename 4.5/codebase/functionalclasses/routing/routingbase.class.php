@@ -538,14 +538,29 @@ class RoutingBase extends Module
 		$singularClass = $RuleData['class'];
 		$primarykey = $this->DeterminePrimaryKeyField($RuleData['class'], $RuleData['primarykey']);
 
-		$this->BuildRestfulRule($pluralClass, 'index', $RuleData);
-		$this->BuildRestfulRule("{$singularClass}/#{$primarykey}#", 'show', $RuleData);
-		$this->BuildRestfulRule("{$pluralClass}/new", 'new', $RuleData);
-		$this->BuildRestfulRule("{$singularClass}/#{$primarykey}#/edit", 'edit', $RuleData);
+    if ($RuleData['scopes'])
+    {
+      foreach ($RuleData['scopes'] as $scopePrefix)
+      {
+        $this->BuildRestfulRule($pluralClass, 'index', $RuleData, $scopePrefix);
+        $this->BuildRestfulRule("{$singularClass}/#{$primarykey}#", 'show', $RuleData, $scopePrefix);
+        $this->BuildRestfulRule("{$pluralClass}/new", 'new', $RuleData, $scopePrefix);
+        $this->BuildRestfulRule("{$singularClass}/#{$primarykey}#/edit", 'edit', $RuleData, $scopePrefix);
+      }
+    }
+    else
+    {
+      $this->BuildRestfulRule($pluralClass, 'index', $RuleData);
+      $this->BuildRestfulRule("{$singularClass}/#{$primarykey}#", 'show', $RuleData);
+      $this->BuildRestfulRule("{$pluralClass}/new", 'new', $RuleData);
+      $this->BuildRestfulRule("{$singularClass}/#{$primarykey}#/edit", 'edit', $RuleData);
+    }
 	}
 
-	protected function BuildRestfulRule($URL, $Action, $RuleData)
+	protected function BuildRestfulRule($URL, $Action, $RuleData, $Prefix = '')
 	{
+    static $count;
+
 		$page = $RuleData['page'];
 		$class = $RuleData['class'];
 		$Action = strtolower($Action);
@@ -555,9 +570,17 @@ class RoutingBase extends Module
 		$eventParameters['class'] = $class;
 		$eventParameters['restaction'] = $Action;
 
-		$rule = array("url" => $URL, "page" => $page, "class" => $class, "action" => $Action, 'eventparameters' => $eventParameters);
+    if ($Prefix)
+    {
+      $rule = array("url" => "{$Prefix}/{$URL}", "page" => $page, "class" => $class, "action" => $Action, 'eventparameters' => $eventParameters);
+    }
+    else
+    {
+      $rule = array("url" => $URL, "page" => $page, "class" => $class, "action" => $Action, 'eventparameters' => $eventParameters);
+    }
 
-		$this->_routingRules["{$class}{$Action}"] = $rule;
+		$this->_routingRules["{$class}{$Action}{$count}"] = $rule;
+    $count++;
 	}
 
 	protected function DeterminePrimaryKeyField($Class, $AlternatePrimaryKey = null)
