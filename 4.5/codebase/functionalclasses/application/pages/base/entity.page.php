@@ -120,7 +120,7 @@ class EntityPage extends ApplicationPage
 		$this->NewEntityForm->EntitySaveSuccessRoutingAction = 'show';
 
 		$this->NewEntityForm->Submit = new SubmitButtonControl();
-		$this->NewEntityForm->Submit->LabelText = "Save";
+		$this->NewEntityForm->Submit->LabelText = "Create";
 
 		return $this->NewEntityForm;
 	}
