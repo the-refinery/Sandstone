@@ -579,7 +579,7 @@ class BasePage extends ControlContainer
 			}
 
 			//Set the Redirect Target (if an action is specified)
-			if (is_set($this->_postedForm->EntitySaveSuccessRoutingAction))
+			if (is_set($this->_postedForm->EntitySaveSuccessRoutingAction) && $this->_postedForm->RedirectTarget == Routing::GetRequestedURL())
 			{
 				$this->_postedForm->RedirectTarget = Routing::BuildURLbyEntity($this->_postedForm->EntityObject, $this->_postedForm->EntitySaveSuccessRoutingAction);
 			}
