@@ -176,7 +176,7 @@ class LoginPage extends BasePage
 				}
 				else
 				{
-					$this->LoginForm->RedirectTarget = Routing::BuildURLbyRule('default');
+					$this->LoginForm->RedirectTarget = $this->SetLoginSuccessURL();
 				}
 			}
 			else
@@ -185,6 +185,11 @@ class LoginPage extends BasePage
 				Application::SetSessionVariable('notificationmessagetype', "error");
 			}
 	}
+
+  protected function SetLoginSuccessURL()
+  {
+    return Routing::BuildURLByRule('default');
+  }
 
 	/*** CONTROLS ***/
 

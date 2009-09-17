@@ -78,18 +78,18 @@ class EntityPage extends ApplicationPage
 
 	protected function BuildIndexControls_Pre($EventParameters)
 	{
-    $pageNumber = $this->DeterminePageNumber($EventParameters['pagenumber']);
-		$data = Lookup($this->_entityType, $this->_lookupType, $this->_lookupParameters, $this->_resultsPerPage, $pageNumber);
+		$data = $this->LookupIndexData($EventParameters);
 
 		$this->EntityList = new RepeaterControl();
 		$this->EntityList->Data = $data;
 		$this->EntityList->SetCallback($this, "EntityListCallback");
 
-		$this->Paginate = new DataNavigationControl();
-		$this->Paginate->RoutingRuleName = "{$this->_entityType}{$this->_action}";
-		$this->Paginate->Lookup($this->_entityType, $this->_lookupType, $this->_lookupParameters, $this->_resultsPerPage, $pageNumber);
-
 		return $this->EntityList;
+  }
+
+  protected function LookupIndexData($EventParameters)
+  {
+    return array();
   }
 
   public function EntityListCallback($CurrentElement, $Template) {}
