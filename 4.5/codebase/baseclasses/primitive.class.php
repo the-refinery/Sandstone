@@ -75,8 +75,8 @@ class Primitive
 
 		if (count($returnValue) == 0)
 		{
-			$fields = get_class_vars(get_class($this));
-
+			$fields = get_object_vars($this);
+  
 			$fieldNames = array_keys($fields);
 
 			foreach ($fieldNames as $tempFieldName)
