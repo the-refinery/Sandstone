@@ -144,7 +144,7 @@ class EntityPage extends ApplicationPage
 
 	protected function Throw404IfInvalidEntity($EventParameters)
 	{
-		if ($this->_loadedEntity->IsLoaded == false)
+		if (is_null($this->_loadedEntity))
 		{
 			$this->_isOKtoLoadControls = false;
 			$this->SetResponseCode(404, $EventParameters);
@@ -157,6 +157,18 @@ class EntityPage extends ApplicationPage
 
 		return $returnValue;
 	}
+
+  protected function SetupNotificationMessage($IsSuccessful)
+  {
+    if ($IsSuccessful)
+    {
+      $this->SetNotificationMessage("Save was successful", "success");
+    }
+    else
+    {
+      $this->SetNotificationMessage("Save was NOT successful", "error");
+    }
+  }
 
   protected function DeterminePageNumber($PageNumber = null)
   {
