@@ -28,7 +28,7 @@ class ChartBase extends Module
 	protected $_extendedCodeTable;
 	protected $_simpleCodeTable;
 
-	protected $_urlQueryParameters;
+	protected $_urlQueryParameters = array();
 
 	public function __construct()
 	{
@@ -331,10 +331,13 @@ class ChartBase extends Module
 		$this->_urlQueryParameters[] = $this->EncodeData();
 	}
 
+  public function AddURLqueryParameter($key, $value)
+  {
+    $this->_urlQueryParameters[] = "{$key}={$value}";
+  }
+
 	public function BuildURL()
 	{
-		$this->_urlQueryParameters = Array();
-
 		$this->SetupURLqueryParameters();
 
 		$returnValue = ChartBase::BASEURL . implode("&", $this->_urlQueryParameters);
