@@ -300,7 +300,7 @@ class Application extends Module
 	*/
 	public function getBaseURL()
 	{
-
+		/*
 		if (strlen($_SERVER['HTTPS']) > 0 && Application::Registry()->DevMode <> 1)
 		{
 			$returnValue = $this->SecureURL;
@@ -311,10 +311,15 @@ class Application extends Module
 		}
 
 		return $returnValue;
+		*/
+
+		return Routing::BaseURL();
+
 	}
 
 	public function getBaseNonSecureURL()
 	{
+		/*
 		$returnValue = Application::Registry()->BaseURL;
 
 		if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
@@ -323,10 +328,14 @@ class Application extends Module
 		}
 
 		return $returnValue;
+		*/
+
+		return Routing::BaseNonSecureURL();
 	}
 
 	public function getSecureURL()
 	{
+		/*
 		if (is_set(Application::Registry()->SecureURL))
 		{
 			// We've overwritten this setting in License.
@@ -338,8 +347,10 @@ class Application extends Module
 			$returnValue = substr_replace($baseURL, 'https', 0, 4);
 		}
 
-
 		return $returnValue;
+		 */
+
+		return Routing::SecureURL();
 	}
 
 	public function getCurrentBaseURL()

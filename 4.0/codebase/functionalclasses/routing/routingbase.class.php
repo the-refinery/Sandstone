@@ -67,6 +67,33 @@ class RoutingBase extends Module
 		return $returnValue;
 	}
 
+	static public function BaseURL()
+	{
+		$routing = Routing::Instance();
+
+		$returnValue = $routing->BaseURL;
+
+		return $returnValue;
+	}
+
+	static public function BaseNonSecureURL()
+	{
+		$routing = Routing::Instance();
+
+		$returnValue = $routing->BaseNonSecureURL;
+
+		return $returnValue;
+	}
+
+	static public function SecureURL()
+	{
+		$routing = Routing::Instance();
+
+		$returnValue = $routing->SecureURL;
+
+		return $returnValue;
+	}
+
 	static public function GetPageBaseURL()
 	{
 		$routing = Routing::Instance();
@@ -106,6 +133,49 @@ class RoutingBase extends Module
 		return $returnValue;
 
 	}
+
+	public function getBaseURL()
+	{
+		if (strlen($_SERVER['HTTPS']) > 0 && Application::Registry()->DevMode <> 1)
+		{
+			$returnValue = $this->SecureURL;
+		}
+		else
+		{
+			$returnValue = $this->BaseNonSecureURL;
+		}
+
+		return $returnValue;
+	}
+
+	public function getBaseNonSecureURL()
+	{
+		$returnValue = Application::Registry()->BaseURL;
+
+		if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
+		{
+			$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
+		}
+
+		return $returnValue;
+	}
+
+	public function getSecureURL()
+	{
+		if (is_set(Application::Registry()->SecureURL))
+		{
+			// We've overwritten this setting in License.
+			$returnValue = Application::Registry()->SecureURL;
+		}
+		else
+		{
+			$baseURL = $this->BaseNonSecureURL;
+			$returnValue = substr_replace($baseURL, 'https', 0, 4);
+		}
+
+		return $returnValue;
+	}
+
 
 	public function ProcessDisplay()
 	{

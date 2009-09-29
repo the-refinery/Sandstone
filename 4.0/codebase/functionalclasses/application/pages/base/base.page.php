@@ -180,6 +180,11 @@ class BasePage extends ControlContainer
 		return Application::CurrentBaseURL();
 	}
 
+	public function getPageBaseURLforTemplate()
+	{
+		return Routing::GetPageBaseURL();
+	}
+
 	public function getOnLoadFunction()
 	{
 		return $this->_onLoadFunction;
@@ -724,7 +729,7 @@ class BasePage extends ControlContainer
 
 	public function Render()
 	{
-		$this->_template->PageBaseURL = Routing::GetPageBaseURL();
+		$this->_template->PageBaseURL = $this->PageBaseURLforTemplate;
 		$this->_template->RequestedURL = Routing::GetRequestedURL();
 		$this->_template->JavascriptFileURL = Routing::GetFileTypeURL("js");
 		$this->_template->CSSFileURL = Routing::GetFileTypeURL("css");
@@ -734,6 +739,7 @@ class BasePage extends ControlContainer
 
 		return $returnValue;
 	}
+
 
 	public function RenderObservers($Javascript)
 	{
