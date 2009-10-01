@@ -94,7 +94,20 @@ class EntityPage extends ApplicationPage
 
   public function EntityListCallback($CurrentElement, $Template) {}
 
-	protected function BuildShowControls_Pre($EventParameters) {}
+	protected function BuildShowControls_Pre($EventParameters) 
+	{
+		$this->ShowEntityForm = new PageForm($EventParameters);
+
+		$this->ShowEntityForm->EntityObject = $this->_loadedEntity;
+		$this->ShowEntityForm->EntitySaveSuccessNotification = "Saved Successfully";
+		$this->ShowEntityForm->EntitySaveFailureNotification = "Was NOT Saved Succesfully";
+		$this->ShowEntityForm->EntitySaveSuccessRoutingAction = 'show';
+
+		$this->ShowEntityForm->Submit = new SubmitButtonControl();
+		$this->ShowEntityForm->Submit->LabelText = "Save";
+
+		return $this->ShowEntityForm;
+	}
 	
 	protected function BuildEditControls_Pre($EventParameters) 
 	{
