@@ -1,10 +1,22 @@
 {!label.htm.template}
 
-{+CardType}
-{+NameOnCard}
-{+CardNumber}
+<div class="FormBlock">
+  {+CardType}
+</div>
 
-<label>Expiration Date:</label>
-{+Month}{+Year}
+<div class="FormBlock">
+  {+NameOnCard}
+</div>
 
-{+CVV}
+<div class="FormBlock">
+  {+CardNumber}
+</div>
+
+<div class="FormBlock">
+  <label>Expires:</label>
+  {+Month}{+Year}
+</div>
+
+<div class="FormBlock">
+  {+CVV}
+</div>
