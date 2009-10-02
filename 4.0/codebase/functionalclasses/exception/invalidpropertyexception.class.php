@@ -8,7 +8,7 @@ Invalid Property Exception Class
 
 class InvalidPropertyException extends DIException 
 {
-	
+/*	
 	protected $_className;
 	protected $_propertyName;
 	
@@ -36,7 +36,7 @@ class InvalidPropertyException extends DIException
 		
 		return $returnValue;
 	}
-	
+*/	
 	
 }
 
