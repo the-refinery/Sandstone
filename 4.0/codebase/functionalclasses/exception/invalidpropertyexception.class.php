@@ -8,20 +8,20 @@ Invalid Property Exception Class
 
 class InvalidPropertyException extends DIException 
 {
-/*	
 	protected $_className;
 	protected $_propertyName;
 	
 	public function __construct($Message, $ClassName, $PropertyName, $Code = 0)
 	{		
 		parent::__construct($Message, $Code);
-		
+	/*	
 		$this->_className = $ClassName;
 		$this->_propertyName = $PropertyName;		
 		
 		//Since we know the top of this call stack will be the component class,
 		//which is meaningless, just remove it.
 		unset($this->_diCallStack[0]);
+   */
 	}
 
 	public function __toString()
@@ -36,7 +36,6 @@ class InvalidPropertyException extends DIException
 		
 		return $returnValue;
 	}
-*/	
 	
 }
 
