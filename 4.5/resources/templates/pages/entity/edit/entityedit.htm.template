@@ -1,8 +1,3 @@
 <h1>edit</h1>
 
 {+EditEntityForm}
-
-<ul>
-	<li><a href="[=>$Entity,index]">index</a></li>
-	<li><a href="[=>$Entity,show]">show</a></li>
-</ul>
