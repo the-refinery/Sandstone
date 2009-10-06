@@ -65,12 +65,18 @@ class EntityPage extends ApplicationPage
 	{
 		$restSetupMethod = 'Build' . $this->_action . 'Controls';
 		$preSetupMethod = $restSetupMethod . "_Pre";
+		$additionalSetupMethod = 'BuildAdditional' . $this->_action . 'Controls';
 
 		$form = $this->$preSetupMethod($EventParameters);
 
 		if (method_exists($this, $restSetupMethod))
 		{
 			$this->$restSetupMethod($form);
+		}
+
+		if (method_exists($this, $additionalSetupMethod))
+		{
+			$this->$additionalSetupMethod($EventParameters);
 		}
 
 		parent::BuildControlArray($EventParameters);

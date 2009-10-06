@@ -161,11 +161,8 @@ class BaseControl extends ControlContainer
 
 	public function setObjectSet($Value)
 	{
-		if ($Value instanceof ObjectSet && $Value->IsLoaded)
-		{
 			$this->_objectSet = $Value;
 			$this->Bind();
-		}
 	}
 
 	/*

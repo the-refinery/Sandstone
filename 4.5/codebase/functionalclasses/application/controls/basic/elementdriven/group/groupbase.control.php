@@ -128,20 +128,33 @@ class GroupBaseControl extends ElementDrivenBaseControl
 
 	public function Bind()
 	{
+		$returnValue = false;
 
 		$this->ClearElements();
 
-		if(is_set($this->_labelFormat) && is_set($this->_valueFormat) && is_set($this->_objectSet) && $this->_objectSet->IsLoaded)
+		if (is_set($this->_labelFormat) && is_set($this->_valueFormat) && is_set($this->_objectSet))
 		{
+			if ($this->_objectSet instanceof ObjectSet)
+			{
+				$returnValue = $this->BindObjectSet();
+			}
+			else
+			{
+				$returnValue = $this->BindArray();
+			}
+		}
 
+		return $returnValue;
+	}
+
+	protected function BindObjectSet()
+	{
+		if ($this->_objectSet->IsLoaded)
+		{
 			while ($tempItem = $this->_objectSet->FetchItem())
 			{
-				$value = $this->FillFormatValues($this->_valueFormat, $this->_valueProperties, $tempItem);
-				$label = $this->FillFormatValues($this->_labelFormat, $this->_labelProperties, $tempItem);
-
-				$this->AddElement($value, $label);
+				$this->AddElementFromBind($tempItem);
 			}
-
 		}
 		else
 		{
@@ -149,6 +162,31 @@ class GroupBaseControl extends ElementDrivenBaseControl
 		}
 
 		return $returnValue;
+	}
+
+	protected function BindArray()
+	{
+		if(count($this->_objectSet) > 0)
+		{
+			foreach ($this->_objectSet as $tempItem)
+			{
+				$this->AddElementFromBind($tempItem);
+			}
+		}
+		else
+		{
+			$returnValue = false;
+		}
+
+		return $returnValue;
+	}
+
+	protected function AddElementFromBind($Item)
+	{
+		$value = $this->FillFormatValues($this->_valueFormat, $this->_valueProperties, $Item);
+		$label = $this->FillFormatValues($this->_labelFormat, $this->_labelProperties, $Item);
+
+		$this->AddElement($value, $label);
 	}
 
     public function Render()
