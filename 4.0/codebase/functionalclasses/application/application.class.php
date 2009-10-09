@@ -426,11 +426,22 @@ class Application extends Module
 				$timestamp = new Date();
 
 				$data[] = $timestamp->MySQLtimestamp;
+
+				$license = Application::License();
+
+				if (is_set($license) && $license->IsLoaded)
+				{
+					$data[] = $license->AccountID;
+				}
+				else
+				{
+					$data[] = "No Account";
+				}
+
 				$data[] = $EventParameters['routingstring'] . "." . $EventParameters['filetype'];
 				$data[] = $EventParameters['event'];
 				$data[] = get_class($e);
 				$data[] = $e->getMessage();
-
 
 				$string = implode(", ", $data) . "\n";
 
