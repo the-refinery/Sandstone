@@ -8,6 +8,7 @@ BilledLicense Class File
 
 Namespace::Using("Sandstone.Address");
 Namespace::Using("Sandstone.Email");
+Namespace::Using("Sandstone.Phone");
 Namespace::Using("Sandstone.Merchant.CIM");
 
 class BilledLicense extends BaseLicense
@@ -233,7 +234,7 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
-	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email)
+	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email, $Phone)
 	{
 		$returnValue = new User();
 
@@ -255,6 +256,13 @@ class BilledLicense extends BaseLicense
 		$email->Save();
 
 		$returnValue->AddEmail($email);
+
+		if ($Phone instanceof Phone)
+		{
+			$Phone->Save();
+			$Phone->PhoneType = new PhoneType(3);
+			$returnValue->AddPhone($Phone);
+		}
 
 		return $returnValue;
 	}
