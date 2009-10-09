@@ -418,6 +418,27 @@ class Application extends Module
 		}
 		catch (Exception $e)
 		{
+			if (Application::Registry()->ExceptionLog == 1)
+			{
+				$fileName = "exceptionlog.txt";
+				$h = fopen($fileName,"a");
+
+				$timestamp = new Date();
+
+				$data[] = $timestamp->MySQLtimestamp;
+				$data[] = $EventParameters['routingstring'] . "." . $EventParameters['filetype'];
+				$data[] = $EventParameters['event'];
+				$data[] = get_class($e);
+				$data[] = $e->getMessage();
+
+
+				$string = implode(", ", $data) . "\n";
+
+				fwrite($h, $string);
+
+				fclose($h);
+			}
+
 			//Redirect to the Error Display Page
 			$fileType = $EventParameters['filetype'];
 
