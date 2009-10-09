@@ -122,7 +122,7 @@ class RepeaterControl extends BaseControl
 		$this->_callbackMethodName = null;
 	}
 
-	public function AddGroup($Name, $Property, $CallbackObject = null, $CallbackMethodName = null)
+	public function AddGroup($Name, $Property, $CallbackObject = null, $CallbackMethodName = null, $GroupItemCallbackMethodName = null)
 	{
 		
 		$returnValue = false;
@@ -131,11 +131,11 @@ class RepeaterControl extends BaseControl
 		{			
 			if (is_set($this->_group))
 			{
-				$this->_group->AddGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName);
+				$this->_group->AddGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName, $GroupItemCallbackMethodName);
 			}
 			else
 			{
-				$this->_group = new RepeaterGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName);	
+				$this->_group = new RepeaterGroup($Name, $Property, $this, $CallbackObject, $CallbackMethodName, $GroupItemCallbackMethodName);	
 			}
 						
 			$returnValue = true;
