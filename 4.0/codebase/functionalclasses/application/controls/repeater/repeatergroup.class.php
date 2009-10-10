@@ -76,7 +76,11 @@ class RepeaterGroup extends ControlContainer
 		{
 			//This is part of the same group
 			$command = $this->SetupGroupItemCallbackCommand();
-			eval($command);
+
+      if (is_null($command) == false)
+      {
+        eval($command);
+      }
 				
 			if (is_set($this->_subGroup))
 			{
