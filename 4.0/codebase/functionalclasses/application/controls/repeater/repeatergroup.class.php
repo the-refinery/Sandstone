@@ -168,7 +168,6 @@ class RepeaterGroup extends ControlContainer
 		{
 			//Setup what we need to do.
 			$returnValue = "\$this->_callbackObject->{$this->_groupItemCallbackMethodName}(\$RepeaterItem->Element, \$this->_template);";
-      echo $returnValue;die();
 		}
 
 		return $returnValue;
