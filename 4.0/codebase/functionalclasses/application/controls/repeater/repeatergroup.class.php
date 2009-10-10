@@ -77,10 +77,7 @@ class RepeaterGroup extends ControlContainer
 			//This is part of the same group
 			$command = $this->SetupGroupItemCallbackCommand();
 
-      if (is_null($command) == false)
-      {
-        eval($command);
-      }
+      eval($command);
 				
 			if (is_set($this->_subGroup))
 			{
@@ -137,10 +134,7 @@ class RepeaterGroup extends ControlContainer
 			$RepeaterItem = $this->_pendingItem;
 			$command = $this->SetupGroupItemCallbackCommand();
       
-      if (is_null($command) == false)
-      {
-        eval($command);
-      }
+      eval($command);
 
 			if (is_set($this->_subGroup))
 			{
@@ -170,10 +164,11 @@ class RepeaterGroup extends ControlContainer
 
 	protected function SetupGroupItemCallbackCommand()
 	{
-		if (is_set($this->_callbackObject) && is_set($this->_callbackMethodName))
+		if (is_set($this->_callbackObject) && is_set($this->_groupItemCallbackMethodName))
 		{
 			//Setup what we need to do.
 			$returnValue = "\$this->_callbackObject->{$this->_groupItemCallbackMethodName}(\$RepeaterItem->Element, \$this->_template);";
+      echo $returnValue;die();
 		}
 
 		return $returnValue;
