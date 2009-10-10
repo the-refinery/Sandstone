@@ -136,7 +136,11 @@ class RepeaterGroup extends ControlContainer
 
 			$RepeaterItem = $this->_pendingItem;
 			$command = $this->SetupGroupItemCallbackCommand();
-			eval($command);
+      
+      if (is_null($command) == false)
+      {
+        eval($command);
+      }
 
 			if (is_set($this->_subGroup))
 			{
