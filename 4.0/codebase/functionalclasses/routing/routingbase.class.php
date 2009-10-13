@@ -367,13 +367,25 @@ class RoutingBase extends Module
 		}
 
 		//Make sure the selected page class exists, if not, 404
-		$pageClassName = $ruleParameters['page'] . "Page";
-
-		if (class_exists($pageClassName, true))
+		if (strlen($ruleParameters['page'] > 0)
 		{
-			$ruleParameters['pageclass'] = $pageClassName;
+			$pageClassName = $ruleParameters['page'] . "Page";
+
+			if (class_exists($pageClassName, true))
+			{
+				$ruleParameters['pageclass'] = $pageClassName;
+			}
+			else
+			{
+				$is404 = true;
+			}
 		}
 		else
+		{
+			$is404 = true;
+		}
+
+		if ($is404)
 		{
 			//Page class not found.. we are 404
 			$page404Parameters = $this->Build404parameters($returnValue['event']);
