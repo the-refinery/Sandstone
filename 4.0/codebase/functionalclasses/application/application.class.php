@@ -438,7 +438,7 @@ class Application extends Module
 					$data[] = "No Account";
 				}
 
-				$data[] = $EventParameters['routingstring'] . "." . $EventParameters['filetype'];
+				$data[] = "{$EventParameters['routingstring']}.{$EventParameters['filetype']} ({$EventParameters['matchedrule']} => {$EventParameters['page']})";
 				$data[] = $EventParameters['event'];
 				$data[] = get_class($e);
 				$data[] = $e->getMessage();
