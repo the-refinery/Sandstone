@@ -367,7 +367,7 @@ class RoutingBase extends Module
 		}
 
 		//Make sure the selected page class exists, if not, 404
-		if (strlen($ruleParameters['page'] > 0)
+		if (strlen($ruleParameters['page']) > 0)
 		{
 			$pageClassName = $ruleParameters['page'] . "Page";
 
