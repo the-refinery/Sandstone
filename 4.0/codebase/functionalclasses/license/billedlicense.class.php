@@ -213,6 +213,9 @@ class BilledLicense extends BaseLicense
 
 		if ($CreditCard instanceof CreditCard && $CreditCard->IsLoaded && $CreditCard->IsValid)
 		{
+			$CreditCard->BillingAddress->Save();
+			$this->Address = $CreditCard->BillingAddress;
+
 			if (is_set($this->_cimCustomerProfile) == false)
 			{
 				$newCustomerProfile = new CIMcustomerProfile();
