@@ -237,7 +237,7 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
-	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email, $Phone)
+	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email, $PhoneNumber)
 	{
 		$returnValue = new User();
 
@@ -260,11 +260,14 @@ class BilledLicense extends BaseLicense
 
 		$returnValue->AddEmail($email);
 
-		if ($Phone instanceof Phone)
+		if (strlen($PhoneNumber) > 0)
 		{
-			$Phone->Save();
-			$Phone->PhoneType = new PhoneType(3);
-			$returnValue->AddPhone($Phone);
+			$tempPhone = new Phone();
+			$tempPhone->Number = $PhoneNumber;
+			$tempPhone->Save();
+
+			$tempPhone->PhoneType = new PhoneType(3);
+			$returnValue->AddPhone($tempPhone);
 		}
 
 		return $returnValue;
