@@ -179,7 +179,7 @@ class CreditCard extends Module
 
 	public function setBillingAddress($Value)
 	{
-		if ($Value instanceof Address && $Value->IsLoaded)
+		if ($Value instanceof Address)
 		{
 			$this->_billingAddress = $Value;
 		}
