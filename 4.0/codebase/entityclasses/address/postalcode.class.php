@@ -8,40 +8,40 @@ PostalCode Class File
 
 class PostalCode extends CodeTableEntityBase
 {
-    protected function SetupProperties()
-    {
+	protected function SetupProperties()
+	{
 
-        //AddProperty Parameters:
-        // 1) Name
-        // 2) DataType
-        // 3) DBfieldName
-        // 4) IsReadOnly
-        // 5) IsRequired
-        // 6) IsPrimaryID
-        // 7) IsLoadedRequired
-        // 8) IsLoadOnDemand
-        // 9) LoadOnDemandFunctionName
+		//AddProperty Parameters:
+		// 1) Name
+		// 2) DataType
+		// 3) DBfieldName
+		// 4) IsReadOnly
+		// 5) IsRequired
+		// 6) IsPrimaryID
+		// 7) IsLoadedRequired
+		// 8) IsLoadOnDemand
+		// 9) LoadOnDemandFunctionName
 
-        $this->AddProperty("PostalCode","string","PostalCode",false,false,false,false,false,null);
-        $this->AddProperty("PostalCodeTypeCode","string","PostalCodeTypeCode",false,false,false,false,false,null);
-        $this->AddProperty("CityName","string",null,true,false,false,false,false,null);
-        $this->AddProperty("County","County",null,true,false,false,false,false,null);
-        $this->AddProperty("Province","Province","ProvinceID",false,false,false,false,false,null);
-        $this->AddProperty("TimeZone","string","TimeZone",false,false,false,false,false,null);
-        $this->AddProperty("UTC","decimal","UTC",false,false,false,false,false,null);
-        $this->AddProperty("IsDST","boolean","IsDST",false,false,false,false,false,null);
-        $this->AddProperty("Latitude","decimal","Latitude",false,false,false,false,false,null);
-        $this->AddProperty("Longitude","decimal","Longitude",false,false,false,false,false,null);
-        $this->AddProperty("Cities","array",null,true,false,false,false,false,null);
-        $this->AddProperty("IsInvalidFormat","boolean",null,true,false,false,false,false,null);
+		$this->AddProperty("PostalCode","string","PostalCode",false,false,false,false,false,null);
+		$this->AddProperty("PostalCodeTypeCode","string","PostalCodeTypeCode",false,false,false,false,false,null);
+		$this->AddProperty("CityName","string",null,true,false,false,false,false,null);
+		$this->AddProperty("County","County",null,true,false,false,false,false,null);
+		$this->AddProperty("Province","Province","ProvinceID",false,false,false,false,false,null);
+		$this->AddProperty("TimeZone","string","TimeZone",false,false,false,false,false,null);
+		$this->AddProperty("UTC","decimal","UTC",false,false,false,false,false,null);
+		$this->AddProperty("IsDST","boolean","IsDST",false,false,false,false,false,null);
+		$this->AddProperty("Latitude","decimal","Latitude",false,false,false,false,false,null);
+		$this->AddProperty("Longitude","decimal","Longitude",false,false,false,false,false,null);
+		$this->AddProperty("Cities","array",null,true,false,false,false,false,null);
+		$this->AddProperty("IsInvalidFormat","boolean",null,true,false,false,false,false,null);
 
-        parent::SetupProperties();
-    }
+		parent::SetupProperties();
+	}
 
-    public function LoadByID($ID)
-    {
+	public function LoadByID($ID)
+	{
 
-    	$returnValue = false;
+		$returnValue = false;
 		$this->_cities->Clear();
 
 		$postalCode = $this->ValidateCodeFormat($ID);
@@ -50,35 +50,35 @@ class PostalCode extends CodeTableEntityBase
 		{
 			$query = $this->SetupQuery();
 
-	        $selectClause = PostalCode::GenerateBaseSelectClause();
+			$selectClause = PostalCode::GenerateBaseSelectClause();
 
-	        $group = substr($ID, 0, 2);
-	        $fromClause = PostalCode::GenerateBaseFromClause();
-	        $fromClause = str_replace("XX", $group, $fromClause);
+			$group = strtoupper(substr($ID, 0, 2));
+			$fromClause = PostalCode::GenerateBaseFromClause();
+			$fromClause = str_replace("XX", $group, $fromClause);
 
 			$whereClause = "WHERE UPPER(PostalCode) = '{$postalCode}' ";
 
-	        $query->SQL = $selectClause . $fromClause . $whereClause;
+			$query->SQL = $selectClause . $fromClause . $whereClause;
 
 			$query->Execute();
 
-	        if ($query->SelectedRows > 0)
-	        {
-	        	foreach ($query->Results as $dr)
-	        	{
+			if ($query->SelectedRows > 0)
+			{
+				foreach ($query->Results as $dr)
+				{
 					if ($this->IsLoaded == false)
 					{
 						$returnValue = $this->Load($dr);
 					}
 
 					$this->LoadCity($dr);
-	        	}
-	        }
+				}
+			}
 		}
 
-        return $returnValue;
+		return $returnValue;
 
-    }
+	}
 
 	protected function ValidateCodeFormat($PostalCode)
 	{
@@ -111,7 +111,7 @@ class PostalCode extends CodeTableEntityBase
 		if (is_set($returnValue))
 		{
 			//Make sure a lookup table for it exists
-			$targetTableName = "location_PostalCodeMaster_" . substr($returnValue, 0, 2);
+			$targetTableName = "location_PostalCodeMaster_" . strtoupper(substr($returnValue, 0, 2));
 
 			$query = $this->SetupQuery();
 			$query->SQL = "show tables";
@@ -160,38 +160,38 @@ class PostalCode extends CodeTableEntityBase
 
 	}
 
-    /*
-    Static Query Functions
-     */
-    static public function GenerateBaseSelectClause()
-    {
-        $returnValue = "    SELECT    a.PostalCode,
-                                        a.PostalCodeTypeCode,
-                                        a.CityName,
-                                        a.CityTypeCode,
-                                        a.CountyID,
-                                        a.ProvinceID,
-                                        a.TimeZone,
-                                        a.UTC,
-                                        a.IsDST,
-                                        a.Latitude,
-                                        a.Longitude ";
+		/*
+		Static Query Functions
+		 */
+	static public function GenerateBaseSelectClause()
+	{
+		$returnValue = "    SELECT    a.PostalCode,
+			a.PostalCodeTypeCode,
+			a.CityName,
+			a.CityTypeCode,
+			a.CountyID,
+			a.ProvinceID,
+			a.TimeZone,
+			a.UTC,
+			a.IsDST,
+			a.Latitude,
+			a.Longitude ";
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    static public function GenerateBaseFromClause()
-    {
-        $returnValue = "    FROM    location_PostalCodeMaster_XX a ";
+	static public function GenerateBaseFromClause()
+	{
+		$returnValue = "    FROM    location_PostalCodeMaster_XX a ";
 
-        return $returnValue;
-    }
+		return $returnValue;
+	}
 
-    static public function GenerateBaseWhereClause()
-    {
-        return null;
+	static public function GenerateBaseWhereClause()
+	{
+		return null;
 
-    }
+	}
 
 }
 ?>
