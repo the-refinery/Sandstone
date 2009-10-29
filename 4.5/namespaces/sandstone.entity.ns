@@ -8,4 +8,5 @@ codebase/entityclasses/base/sortableentitybase.class.php
 codebase/baseclasses/primitive.class.php
 codebase/baseclasses/service.class.php
 codebase/functionalclasses/utilities/services/primitivetostring.service.php
+codebase/functionalclasses/utilities/services/primitivetojson.service.php
 codebase/functionalclasses/utilities/services/getlastinsertid.service.php

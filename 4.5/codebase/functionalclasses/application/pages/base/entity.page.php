@@ -26,6 +26,19 @@ class EntityPage extends ApplicationPage
 		parent::Generic_PreProcessor($EventParameters);
 	}
 
+	public function JSON_Processor($EventParameters)
+	{
+		switch($this->_action)
+		{
+			case 'show':
+				$json = PrimitiveToJSON::_($this->_loadedEntity);
+
+				$this->_template->filename = 'entityshow';
+				$this->_template->JSON = $json;
+				break;
+		}
+	}
+
 	protected function SetupIndex($EventParameters)
 	{
 		$this->_lookupType = 'All';
