@@ -36,6 +36,10 @@ class EntityPage extends ApplicationPage
 				$this->_template->filename = 'entityshow';
 				$this->_template->JSON = $json;
 				break;
+
+			case 'index':
+				$this->_template->filename = 'entityindex';
+				break;
 		}
 	}
 
