@@ -26,6 +26,8 @@ class CreditCard extends Module
 
 	protected $_acceptedCardTypes;
 
+	protected $_invalidProperty;
+
 	public function __construct()
 	{
 
@@ -241,6 +243,8 @@ class CreditCard extends Module
 	{
 		$returnValue = is_set($this->_billingAddress);
 
+		$this->_invalidProperty = "Billing Address";
+
 		if ($returnValue == true)
 		{
 			$returnValue = $this->ValidateCardNumber();
@@ -262,6 +266,11 @@ class CreditCard extends Module
 		}
 
 		return $returnValue;
+	}
+
+	public function getInValidProperty()
+	{
+		return $this->_invalidProperty;
 	}
 
 	public function getIsLoaded()
@@ -381,6 +390,11 @@ class CreditCard extends Module
 
 		}
 
+		if ($returnValue == false)
+		{
+			$this->_invalidProperty = "Card Number";
+		}
+
 		return $returnValue;
 	}
 
@@ -393,6 +407,7 @@ class CreditCard extends Module
 		else
 		{
 			$returnValue = false;
+			$this->_invalidProperty = "CVV";
 		}
 
 		return $returnValue;
@@ -419,6 +434,11 @@ class CreditCard extends Module
 			$returnValue = false;
 		}
 
+		if ($returnValue == false)
+		{
+			$this->_invalidProperty = "Expiration Date";
+		}
+
 		return $returnValue;
 
 	}
@@ -433,6 +453,7 @@ class CreditCard extends Module
 		else
 		{
 			$returnValue = false;
+			$this->_invalidProperty = "Name On Card";
 		}
 
 		return $returnValue;

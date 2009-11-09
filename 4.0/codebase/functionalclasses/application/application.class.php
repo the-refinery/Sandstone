@@ -541,28 +541,6 @@ class Application extends Module
 					}
 				}
 
-				//if (is_set($_SESSION['AccountID']) == false)
-				//{
-				//	if (is_set($this->Cookie['DItoken']))
-				//	{
-				//		$currentAccountID = $this->LoadAccountIDfromToken($this->Cookie['DItoken']);
-
-				//		if (is_set($currentAccountID))
-				//		{
-				//			$this->SetSessionVariable("AccountID", $currentAccountID);
-				//		}
-				//	}
-				//	elseif (is_set($EventParameters['subdomain']))
-				//	{
-				//		$success = Application::SelectAccount($EventParameters['subdomain']);
-
-				//		if ($success == false)
-				//		{
-				//			$returnValue = $this->Fire404response();
-				//		}
-				//	}
-				//}
-
 				if (is_set($this->Session['AccountID']))
 				{
 					$this->_license = new License($_SESSION['AccountID']);
