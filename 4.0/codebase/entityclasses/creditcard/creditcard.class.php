@@ -119,7 +119,7 @@ class CreditCard extends Module
 
 	public function setCVV($Value)
 	{
-		if (is_set($Value) && is_numeric($Value) && strlen($Value) == 3)
+		if (is_set($Value) && is_numeric($Value))
 		{
 			$this->_cvv = $Value;
 		}
@@ -400,13 +400,29 @@ class CreditCard extends Module
 
 	protected function ValidateCVV()
 	{
+		$returnValue = false;
+
 		if (is_set($this->_cvv))
 		{
-			$returnValue = true;
+			if ($this->_cardType->CardTypeID == 2)
+			{
+				if (strlen($this->_cvv) == 4)
+				{
+					$returnValue = true;
+				}
+			}
+			else
+			{
+				if (strlen($this->_cvv) == 3)
+				{
+					$returnValue = true;
+				}
+			}
 		}
-		else
+
+
+		if ($returnValue == false)
 		{
-			$returnValue = false;
 			$this->_invalidProperty = "CVV";
 		}
 
