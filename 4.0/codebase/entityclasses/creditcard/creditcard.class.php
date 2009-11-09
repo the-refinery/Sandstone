@@ -243,7 +243,10 @@ class CreditCard extends Module
 	{
 		$returnValue = is_set($this->_billingAddress);
 
-		$this->_invalidProperty = "Billing Address";
+    if ($returnValue == false)
+    {
+      $this->_invalidProperty = "Billing Address";
+    }
 
 		if ($returnValue == true)
 		{

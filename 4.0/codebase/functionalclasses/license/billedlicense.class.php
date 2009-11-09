@@ -192,7 +192,6 @@ class BilledLicense extends BaseLicense
 		{
 			$this->_primaryAdminUser = $User;
 		}
-
 	}
 
 	public function Save()
