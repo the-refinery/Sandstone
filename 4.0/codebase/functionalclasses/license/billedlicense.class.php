@@ -110,6 +110,18 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
+	public function getIsCardOnFile()
+	{
+		$returnValue = false;
+
+		if (is_set($this->_cimProfileID))
+		{
+			$returnValue = true;
+		}
+
+		return $returnValue;
+	}
+
 	public function Load($dr)
 	{
 
