@@ -216,7 +216,7 @@ class BaseUser extends EntityBase
 			$fromClause .= "INNER JOIN core_UserToken b ON  b.UserID = a.UserID ";
 
 			$whereClause = "WHERE (a.AccountID = {$this->AccountID} OR a.AccountID = 1)
-				AND b.Token = '{$Token}' ";
+				AND b.Token = {$query->SetTextField($Token)} ";
 
 			$query->SQL = $selectClause . $fromClause . $whereClause;
 
@@ -237,7 +237,7 @@ class BaseUser extends EntityBase
 		$fromClause = self::GenerateBaseFromClause();
 
 		$whereClause = self::GenerateBaseWhereClause();
-		$whereClause .= "	AND		Username LIKE '{$UserName}'
+		$whereClause .= "	AND		Username LIKE {$query->SetTextField($UserName)}
 			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -404,7 +404,7 @@ class BaseUser extends EntityBase
 		$fromClause = self::GenerateBaseFromClause();
 
 		$whereClause = self::GenerateBaseWhereClause();
-		$whereClause .= "	AND		Username LIKE '{$UserName}'
+		$whereClause .= "	AND		Username LIKE {$query->SetTextField($UserName)}
 			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
@@ -450,7 +450,7 @@ class BaseUser extends EntityBase
 		$selectClause = self::GenerateBaseSelectClause();
 		$fromClause = self::GenerateBaseFromClause();
 
-		$whereClause .= "	WHERE 	Username LIKE '{$UserName}'
+		$whereClause .= "	WHERE 	Username LIKE {$query->SetTextField($UserName)}
 			AND		IsDisabled = 0 ";
 
 		$query->SQL = $selectClause . $fromClause . $whereClause;
