@@ -227,7 +227,7 @@ class BilledLicense extends BaseLicense
 			$CreditCard->BillingAddress->Save();
 			$this->Address = $CreditCard->BillingAddress;
 
-			if (is_set($this->_cimCustomerProfile) == false)
+			if (is_set($this->CIMcustomerProfile) == false)
 			{
 				$newCustomerProfile = new CIMcustomerProfile();
 				$newCustomerProfile->CustomerID = $this->_accountID;
