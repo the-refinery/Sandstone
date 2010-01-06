@@ -4,7 +4,7 @@ Page Class File
 
 @package Sandstone
 @subpackage Application
-*/
+ */
 
 NameSpace::Using("Sandstone.SEO");
 NameSpace::Using("Sandstone.Smarty");
@@ -23,7 +23,7 @@ class BasePage extends ControlContainer
 
 	protected $_activePageName;
 
-    protected $_templateSearchPath;
+	protected $_templateSearchPath;
 
 	protected $_isOKtoLoadControls = true;
 
@@ -65,7 +65,7 @@ class BasePage extends ControlContainer
 			//This is a form, we should add it to our forms array
 			$Value->Name = $Name;
 			$Value->ParentContainer = $this;
-            $Value->Template->RequestFileType = $this->_template->RequestFileType;
+			$Value->Template->RequestFileType = $this->_template->RequestFileType;
 			$this->_forms[strtolower($Name)] = $Value;
 
 		}
@@ -75,11 +75,16 @@ class BasePage extends ControlContainer
 		}
 	}
 
+	public function getAPI()
+	{
+		return Application::API();
+	}
+
 	public function __toString()
 	{
 
 		//If there are any controls, render them
-     	if (count($this->_controlOrder) > 0)
+		if (count($this->_controlOrder) > 0)
 		{
 			$returnValue .= $this->RenderControls();
 		}
@@ -91,7 +96,7 @@ class BasePage extends ControlContainer
 	IsLoginRequired property
 
 	@return boolean
-	*/
+	 */
 	public function getIsLoginRequired()
 	{
 		return $this->_isLoginRequired;
@@ -101,7 +106,7 @@ class BasePage extends ControlContainer
 	AllowedroleIDs property
 
 	@return array
-	*/
+	 */
 	public function getAllowedRoleIDs()
 	{
 		return $this->_allowedRoleIDs;
@@ -116,7 +121,7 @@ class BasePage extends ControlContainer
 	Forms property
 
 	@return Array
-	*/
+	 */
 	public function getForms()
 	{
 		return $this->_forms;
@@ -126,30 +131,30 @@ class BasePage extends ControlContainer
 	ActivePageName property
 
 	@return string
-	*/
+	 */
 	final public function getActivePageName()
 	{
 		return $this->_activePageName;
 	}
 
-    /*
-    TemplateSearchPath property
+		/*
+		TemplateSearchPath property
 
-    @return string
-    */
-    final public function getTemplateSearchPath()
-    {
-        if (is_set($this->_templateSearchPath) == false)
-        {
-            $target = NameSpace::NamespaceEnviromentBase("application") . Namespace::PageSpace(get_class($this)) . "templates/";
+		@return string
+		 */
+	final public function getTemplateSearchPath()
+	{
+		if (is_set($this->_templateSearchPath) == false)
+		{
+			$target = NameSpace::NamespaceEnviromentBase("application") . Namespace::PageSpace(get_class($this)) . "templates/";
 
-            $templateDirs = Template::FindDirectoriesWithTemplates($target);
+			$templateDirs = Template::FindDirectoriesWithTemplates($target);
 
-            $this->_templateSearchPath = implode(PATH_SEPARATOR, $templateDirs);
-        }
+			$this->_templateSearchPath = implode(PATH_SEPARATOR, $templateDirs);
+		}
 
-        return $this->_templateSearchPath;
-    }
+		return $this->_templateSearchPath;
+	}
 
 	final public function setRequestedURL($Value)
 	{
@@ -192,7 +197,7 @@ class BasePage extends ControlContainer
 
 	/*
 	Redirects to the SSL version of this page, losing any post parameters
-	*/
+	 */
 	protected function ForceSSL()
 	{
 		$redirectURL = Application::SecureURL() . Application::RoutingPath();
@@ -344,56 +349,56 @@ class BasePage extends ControlContainer
 		//Set the Header Content Type
 		switch ($EventParameters['filetype'])
 		{
-			case "htm":
-				header('Content-Type: text/html; charset=utf-8');
-				break;
+		case "htm":
+			header('Content-Type: text/html; charset=utf-8');
+			break;
 
-			case "txt":
+		case "txt":
 			case "csv":
-			case "term":
-				header('Content-Type: text/plain');
-				break;
+				case "term":
+					header('Content-Type: text/plain');
+					break;
 
-			case "xml":
-			case "rss":
-				header('Content-Type: text/xml');
-				break;
+				case "xml":
+					case "rss":
+						header('Content-Type: text/xml');
+						break;
 
-			case "css":
-				header('Content-Type: text/css');
-				break;
+					case "css":
+						header('Content-Type: text/css');
+						break;
 
-			case "js":
-				header('Content-Type: text/javascript');
-				break;
+					case "js":
+						header('Content-Type: text/javascript');
+						break;
 
-			case "htm403":
-			case "txt403":
-				header('HTTP/1.1 403 Forbidden');
-				break;
+					case "htm403":
+						case "txt403":
+							header('HTTP/1.1 403 Forbidden');
+							break;
 
-			case "htm404":
-			case "txt404":
-				header('HTTP/1.1 404 Not Found');
-				break;
-				
-			case "cron":
-				//For cron processes - make sure they come in via the
-				//cron.php entry point.  Otherwise just die
-				if (array_key_exists("IsCronEntryPoint", $session) == false)
-				{
-					die();
-				}
-				break;
+						case "htm404":
+							case "txt404":
+								header('HTTP/1.1 404 Not Found');
+								break;
 
-			default:
-				break;
+							case "cron":
+								//For cron processes - make sure they come in via the
+								//cron.php entry point.  Otherwise just die
+								if (array_key_exists("IsCronEntryPoint", $session) == false)
+								{
+									die();
+								}
+								break;
+
+							default:
+								break;
 		}
 
 		//Get any Notification Message that's been set, and push it into a template variable
 		$this->_template->NotificationMessage = $session['notificationmessage'];
 		$this->_template->NotificationMessageType = $session['notificationmessagetype'];
-		
+
 		//Do we have a specific file type processor?
 		$processorName = $EventParameters['filetype'] . "_Processor";
 
@@ -420,32 +425,32 @@ class BasePage extends ControlContainer
 
 	}
 
-    protected function HTM_Processor($EventParameters)
-    {
-        $html = $this->Render();
-
-        echo $this->CompressHTML($html);
-    }
-
-    protected function JS_Processor($EventParameters)
+	protected function HTM_Processor($EventParameters)
 	{
-        $javascript = $this->Render();
+		$html = $this->Render();
 
-        echo $this->CompressJavascript($finalOutput);
+		echo $this->CompressHTML($html);
+	}
+
+	protected function JS_Processor($EventParameters)
+	{
+		$javascript = $this->Render();
+
+		echo $this->CompressJavascript($finalOutput);
 
 	}
 
-    protected function CSS_Processor($EventParameters)
-    {
-        $css = $this->Render();
+	protected function CSS_Processor($EventParameters)
+	{
+		$css = $this->Render();
 
-        echo $this->CompressCSS($css);
-    }
+		echo $this->CompressCSS($css);
+	}
 
 	protected function TERM_Processor($EventParameters)
 	{
-        $term = $this->Render();
-		
+		$term = $this->Render();
+
 		echo $this->Terminalize($term);
 	}
 
@@ -609,7 +614,7 @@ class BasePage extends ControlContainer
 			//We have a control name, find the control by that name
 			$targetName = str_replace("_", "->", $EventParameters['target']);
 
-            $cmd = "\$target = \$this->{$targetName};";
+			$cmd = "\$target = \$this->{$targetName};";
 			eval($cmd);
 
 			//Do we use the target's normal type, or reference its parent's type for the template?
@@ -631,10 +636,10 @@ class BasePage extends ControlContainer
 		//Call the method and echo the results
 		header('Content-Type: text/javascript');
 
-        $results = $processor->Render();
+		$results = $processor->Render();
 		echo $this->CompressJavascript($results, false);
 
-        $returnValue->Value = true;
+		$returnValue->Value = true;
 		$returnValue->Complete();
 
 		return $returnValue;
@@ -644,7 +649,7 @@ class BasePage extends ControlContainer
 	{
 		$returnValue = new EventResults();
 
-        $returnValue->Value = true;
+		$returnValue->Value = true;
 		$returnValue->Complete();
 
 		return $returnValue;
@@ -694,8 +699,8 @@ class BasePage extends ControlContainer
 		if (is_numeric($ResponseCode))
 		{
 
-        	$EventParameters['filetype'] .= $ResponseCode;
-        	$this->_template->RequestFileType = $EventParameters['filetype'];
+			$EventParameters['filetype'] .= $ResponseCode;
+			$this->_template->RequestFileType = $EventParameters['filetype'];
 
 			$returnValue = true;
 		}

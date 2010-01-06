@@ -27,6 +27,8 @@ class Application extends Module
 
 	protected $_isLicenseCheckComplete;
 
+	protected $_api;
+
 	protected function __construct()
 	{
 
@@ -234,6 +236,13 @@ class Application extends Module
 		return $returnValue;
 	}
 
+	static public function API()
+	{
+		$App = Application::Instance();
+
+		return $App->API;
+	}
+
 	/*
 	License property
 	*/
@@ -419,6 +428,16 @@ class Application extends Module
 			$eventResults->Flush();
 		}
 
+	}
+
+	public function getAPI()
+	{
+		if (is_set($this->_api) == false)
+		{
+			$this->_api = new API();
+		}
+
+		return $this->_api;
 	}
 
 	protected function GeneralSystemCheck()
