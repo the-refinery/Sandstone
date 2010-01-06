@@ -7,7 +7,15 @@ class API
 		if (class_exists($Method, true))
 		{
 			$class = new $Method ();
-			$returnValue = call_user_func_array(array($class, "Main"), $Parameters);
+
+			if ($class instanceof APIbase)
+			{
+				$returnValue = call_user_func_array(array($class, "Main"), $Parameters);
+			}
+			else
+			{
+				$returnValue = call_user_func_array(array($class, "_"), $Parameters);
+			}
 		}
 		else
 		{
