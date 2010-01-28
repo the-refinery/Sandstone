@@ -102,6 +102,7 @@ class Address extends EntityBase
 			{
 				if (strtolower($TargetAddress->Street) != strtolower($this->_street))
 				{
+					di_echo($TargetAddress->Street);
 					$returnValue = false;
 				}
 

@@ -1,7 +1,15 @@
-<div id="{$ControlName}">
-	{+Street}
+<div class="FormBlock">
+  {+Street}
+</div>
 
-	<div id="{$ControlName}_Locale" class="address_locale">
-		{+CityStateZip}{+CountryCode}
-	</div>
+<div class="FormBlock">
+  {+City}
+</div>
+
+<div class="FormBlock">
+  {+State}
+</div>
+
+<div class="FormBlock">
+  {+Zip}
 </div>
