@@ -11,6 +11,11 @@ Namespace::Using("Sandstone.Address");
 
 class AddressControl extends BaseControl
 {
+	const US_ONLY = 1;
+	const US_CANADA = 2;
+
+	protected $_countryMode;
+
 	protected $_defaultValue;
 
 	public function __construct()
@@ -20,12 +25,32 @@ class AddressControl extends BaseControl
 		$this->_isTopLevelControl = true;
 		$this->_isRawValuePosted = false;
 
+		$this->_countryMode = self::US_ONLY;	
+
+	}
+
+	public function getCountryMode()
+	{
+		return $this->_countryMode;
+	}
+
+	public function setCountryMode($Value)
+	{
+		if ($Value > 0 && $Value < 3)
+		{
+			$this->_countryMode = $Value;
+		}
+		else
+		{
+			$this->_countryMode = self::US_ONLY;	
+		}
 	}
 
 	public function getDefaultValue()
 	{
 		return $this->_defaultValue;
 	}
+
 
 	public function setDefaultValue($Value)
 	{
@@ -37,6 +62,7 @@ class AddressControl extends BaseControl
 			$this->City->DefaultValue = $Value->City;
 			$this->State->DefaultValue = $Value->ProvinceCode;
 			$this->Zip->DefaultValue = $Value->PostalCode;
+			$this->Country->SelectElement($Value->CountryCode);
 
 			//if we have a value built already, check to see if it's the same as
 			$isSameAddress = $Value->IsSameAddress($this->_value);
@@ -70,7 +96,15 @@ class AddressControl extends BaseControl
 			$this->_value->City = $this->City->Value;
 			$this->_value->ProvinceCode = $this->State->Value;
 			$this->_value->PostalCode = $this->Zip->Value;
-			$this->_value->CountryCode = "US";
+
+			if (is_set($this->Country->Value))
+			{
+				$this->_value->CountryCode = $this->Country->Value;
+			}
+			else
+			{
+				$this->_value->CountryCode = "US";
+			}
 		}
 		else
 		{
@@ -121,6 +155,24 @@ class AddressControl extends BaseControl
 
 		$this->Zip = new TextBoxControl();
 		$this->Zip->LabelText = "Zip Code / Postal Code:";	
+
+		$this->Country = new DropDownControl();
+		$this->Country->LabelText = "Country";
+		$this->Country->AddElement("US","United States", true);
+		$this->Country->AddElement("CA","Canada");
+
+	}
+
+	public function Render()
+	{
+		if ($this->_countryMode == self::US_CANADA)
+		{
+			$this->Template->IsMultiCountry = true;
+		}
+
+		$returnValue = parent::Render();
+		
+		return $returnValue;
 	}
 
 }
