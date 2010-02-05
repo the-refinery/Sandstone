@@ -10,6 +10,7 @@ Namespace::Using("Sandstone.Database");
 Namespace::Using("Sandstone.Routing");
 NameSpace::Using("Sandstone.SEO");
 NameSpace::Using("Sandstone.User");
+NameSpace::Using("Sandstone.Benchmark");
 
 class Application extends Module
 {
@@ -29,7 +30,6 @@ class Application extends Module
 
 	protected function __construct()
 	{
-
 	}
 
 	static public function Instance()
@@ -46,10 +46,13 @@ class Application extends Module
 
 	static public function Run()
 	{
+    Benchmark::Start();
+
 		$App = Application::Instance();
 
 		$returnValue = $App->ProcessRun();
 
+    Benchmark::Stop();
 		return $returnValue;
 	}
 
