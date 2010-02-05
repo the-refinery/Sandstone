@@ -146,21 +146,25 @@ class AddressControl extends BaseControl
 
 		$this->Street = new TextBoxControl();
 		$this->Street->LabelText = "Street:";	
+    $this->Street->BodyStyle->AddClass("address_street");
 
-		$this->City = new TextBoxControl();
-		$this->City->LabelText = "City:";	
+		$this->City = new TitleTextBoxControl();
+		$this->City->LabelText = "City";	
+    $this->City->BodyStyle->AddClass("address_city");
 
-		$this->State = new TextBoxControl();
-		$this->State->LabelText = "State / Province:";	
+		$this->State = new TitleTextBoxControl();
+		$this->State->LabelText = "State / Province";	
+    $this->State->BodyStyle->AddClass("address_state");
 
-		$this->Zip = new TextBoxControl();
-		$this->Zip->LabelText = "Zip Code / Postal Code:";	
+		$this->Zip = new TitleTextBoxControl();
+		$this->Zip->LabelText = "Postal Code";	
+    $this->Zip->BodyStyle->AddClass("address_zip");
 
 		$this->Country = new DropDownControl();
-		$this->Country->LabelText = "Country";
+		$this->Country->LabelText = "Country:";
 		$this->Country->AddElement("US","United States", true);
 		$this->Country->AddElement("CA","Canada");
-
+    $this->Country->BodyStyle->AddClass("address_country");
 	}
 
 	public function Render()

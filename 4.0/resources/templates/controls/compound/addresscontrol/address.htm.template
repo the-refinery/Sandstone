@@ -3,15 +3,8 @@
 </div>
 
 <div class="FormBlock">
-  {+City}
+  {+City} {+State} {+Zip}
 </div>
 
-<div class="FormBlock">
-  {+State}
-</div>
-
-<div class="FormBlock">
-  {+Zip}
-</div>
 
 {!?IsMultiCountry,address_country.htm.template}
