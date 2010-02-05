@@ -1,2 +1,0 @@
-SetControlMessage('{$ControlName}',  "Please use either 'City, State Zip' format or just the Zip");
-$('.address_picklist').remove();

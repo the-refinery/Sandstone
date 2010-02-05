@@ -1,1 +1,0 @@
-<li id="{$ControlName}" countrycode="{$Element->PostalCode->Province->Country->CountryCode}" class="address_picklist_item">{$Element->CityName}, {$Element->PostalCode->Province->ProvinceCode} {$Element->PostalCode->PostalCode}</li>

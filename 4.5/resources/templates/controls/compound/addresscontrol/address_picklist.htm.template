@@ -1,4 +1,0 @@
-<ul id="{$ControlName}" class="address_picklist">
-	{!?IsMineIncluded,address_picklist_mine.htm.template}
-	{Content}
-</ul>

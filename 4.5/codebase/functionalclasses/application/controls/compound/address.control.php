@@ -11,42 +11,58 @@ Namespace::Using("Sandstone.Address");
 
 class AddressControl extends BaseControl
 {
+	const US_ONLY = 1;
+	const US_CANADA = 2;
+
+	protected $_countryMode;
 
 	protected $_defaultValue;
 
-    public function __construct()
+	public function __construct()
 	{
 		parent::__construct();
-
-        //Setup the default style classes
-		$this->_bodyStyle->AddClass('address_body');
 
 		$this->_isTopLevelControl = true;
 		$this->_isRawValuePosted = false;
 
-        $this->_template->FileName = "address";
+		$this->_countryMode = self::US_ONLY;	
 
-    }
+	}
 
-	/*
-	DefaultValue property
+	public function getCountryMode()
+	{
+		return $this->_countryMode;
+	}
 
-	@return address
-	@param address $Value
-	*/
+	public function setCountryMode($Value)
+	{
+		if ($Value > 0 && $Value < 3)
+		{
+			$this->_countryMode = $Value;
+		}
+		else
+		{
+			$this->_countryMode = self::US_ONLY;	
+		}
+	}
+
 	public function getDefaultValue()
 	{
 		return $this->_defaultValue;
 	}
+
 
 	public function setDefaultValue($Value)
 	{
 		if ($Value instanceof Address && $Value->IsLoaded)
 		{
 			$this->_defaultValue = $Value;
+
 			$this->Street->DefaultValue = $Value->Street;
-			$this->CityStateZip->DefaultValue = "{$Value->City}, {$Value->ProvinceCode} {$Value->PostalCode}";
-			$this->CountryCode->DefaultValue = $Value->CountryCode;
+			$this->City->DefaultValue = $Value->City;
+			$this->State->DefaultValue = $Value->ProvinceCode;
+			$this->Zip->DefaultValue = $Value->PostalCode;
+			$this->Country->SelectElement($Value->CountryCode);
 
 			//if we have a value built already, check to see if it's the same as
 			$isSameAddress = $Value->IsSameAddress($this->_value);
@@ -60,45 +76,32 @@ class AddressControl extends BaseControl
 		else
 		{
 			$this->_defaultValue = null;
+
 			$this->Street->DefaultValue = null;
-			$this->CityStateZip->DefaultValue = null;
-			$this->CountryCode->DefaultValue = null;
+			$this->City->DefaultValue = null;
+			$this->State->DefaultValue = null;
+			$this->Zip->DefaultValue = null;
 		}
 	}
 
 	protected function ParseEventParameters()
 	{
 
-		if (is_set($this->Street->Value) && is_set($this->CityStateZip->Value))
+		$isValid = $this->ValidateParts();
+
+		if ($isValid)
 		{
 			$this->_value = new Address();
 			$this->_value->Street = $this->Street->Value;
+			$this->_value->City = $this->City->Value;
+			$this->_value->ProvinceCode = $this->State->Value;
+			$this->_value->PostalCode = $this->Zip->Value;
 
-			$cityStateZip = $this->ParseCityStateZip($this->CityStateZip->Value);
-
-			if (count($cityStateZip) == 3)
+			if (is_set($this->Country->Value))
 			{
-				$this->_value->City = $cityStateZip['city'];
-				$this->_value->ProvinceCode = $cityStateZip['state'];
-				$this->_value->CountryCode = $this->CountryCode->Value;
+				$this->_value->CountryCode = $this->Country->Value;
 			}
 			else
-			{
-				//We need to lookup the zip and take the default values
-				$postalCode = new PostalCode($cityStateZip['zip']);
-
-				if ($postalCode->IsLoaded)
-				{
-					$this->_value->City = $postalCode->CityName;
-					$this->_value->ProvinceCode = $postalCode->Province->ProvinceCode;
-					$this->_value->CountryCode = $postalCode->Province->Country->CountryCode;
-				}
-			}
-
-			$this->_value->PostalCode = $cityStateZip['zip'];
-
-			//Default to a US address if nothing entered
-			if (is_set($this->_value->CountryCode) == false)
 			{
 				$this->_value->CountryCode = "US";
 			}
@@ -109,221 +112,72 @@ class AddressControl extends BaseControl
 		}
 	}
 
-	protected function ParseCityStateZip($InputString)
+	protected function ValidateParts()
 	{
-		$returnValue = new DIarray();
+		$returnValue = true;
 
-		if (strpos($InputString, ",") === false)
+		if (is_set($this->Street->Value) == false)
 		{
-			//No comma, so treat it as a postal code only
-			$returnValue['zip'] = trim($InputString);
+			$returnValue = false;
 		}
-		else
+
+		if (is_set($this->City->Value) == false)
 		{
-			$commaPosition = strpos($InputString, ",");
-			$lastSpacePosition = strrpos($InputString, " ");
+			$returnValue = false;
+		}
 
-			//Check for Canadian postal codes
-			if ($lastSpacePosition == strlen($InputString) - 4)
-			{
-				$lastSpacePosition = strrpos($InputString, " ", -5);
-			}
+		if (is_set($this->State->Value) == false)
+		{
+			$returnValue = false;
+		}
 
-			$returnValue['city'] = trim(substr($InputString, 0, $commaPosition));
-			$returnValue['zip'] = trim(substr($InputString, $lastSpacePosition));
-
-			$state = trim($InputString);
-			$state = str_replace($returnValue['city'], "", $state);
-			$state = str_replace($returnValue['zip'], "", $state);
-			$returnValue['state'] = trim(StringFunc::RemovePunctuation($state));
+		if (is_set($this->Zip->Value) == false)
+		{
+			$returnValue = false;
 		}
 
 		return $returnValue;
 	}
 
-    protected function SetupControls()
+	protected function SetupControls()
 	{
 
 		parent::SetupControls();
 
-		$this->Street = new TextAreaControl();
-		$this->Street->ControlStyle->AddClass("address_streetitem");
-		$this->Street->Rows = 1;
-		$this->Street->Columns = 30;
-		$this->Street->LabelText = "Street:";		
+		$this->Street = new TextBoxControl();
+		$this->Street->LabelText = "Street:";	
+    $this->Street->BodyStyle->AddClass("address_street");
 
-		$this->CityStateZip= new TitleTextBoxControl();
-		$this->CityStateZip->BodyStyle->AddClass("address_citystatezipitem");
-		$this->CityStateZip->Template->FileName = "addresscitystatezip";
-		$this->CityStateZip->LabelText = "City, State  Zip (or Zip Only)";
+		$this->City = new TitleTextBoxControl();
+		$this->City->LabelText = "City";	
+    $this->City->BodyStyle->AddClass("address_city");
 
-		$this->PickList = new RepeaterControl();
-		$this->PickList->SetCallback($this, "PickListCallBack");
-		$this->PickList->Template->FileName = "address_picklist";
+		$this->State = new TitleTextBoxControl();
+		$this->State->LabelText = "State / Province";	
+    $this->State->BodyStyle->AddClass("address_state");
 
-		$this->CountryCode = new HiddenControl();
-		$this->CountryCode->BodyStyle->AddClass("address_countrycode");
+		$this->Zip = new TitleTextBoxControl();
+		$this->Zip->LabelText = "Postal Code";	
+    $this->Zip->BodyStyle->AddClass("address_zip");
 
-	}
-
-	public function AJAX_Autocomplete($Processor)
-	{
-
-		$Processor->Template->ControlName = $this->Name;
-
-		$cityStateZip = $this->ParseCityStateZip($Processor->EventParameters['zipcode']);
-
-		if (count($cityStateZip) == 3)
-		{
-			//All 3 passed
-			$this->CityMatchAutocomplete($Processor, $cityStateZip);
-		}
-		else
-		{
-			$this->ZipCodeAutocomplete($Processor, $cityStateZip['zip']);
-		}
-	}
-
-	protected function CityMatchAutocomplete($Processor, $CityStateZip)
-	{
-		//Does the City and State match anything in the zip?
-		$postalCode = new PostalCode($CityStateZip['zip']);
-
-		if ($postalCode->IsLoaded)
-		{
-			//Loop the cities and see if we get a match
-			$isFound = false;
-
-			foreach ($postalCode->Cities as $tempCity)
-			{
-				if (strtolower($CityStateZip['city']) == strtolower($tempCity->CityName))
-				{
-					//City matches, how about the state?
-					if (strtoupper($CityStateZip['state']) == $postalCode->Province->ProvinceCode)
-					{
-						$isFound = true;
-						$matchCityName = $tempCity->CityName;
-					}
-				}
-			}
-
-			//Did we find a match?
-			if ($isFound)
-			{
-				//Update the textbox to whatever is in the DB
-				$Processor->Template->FileName = "address_autocomplete_city_match";
-				$Processor->Template->CityStateZip = "{$matchCityName}, {$postalCode->Province->ProvinceCode} {$postalCode->PostalCode}";
-				$Processor->Template->CountryCode = $postalCode->Province->Country->CountryCode;
-			}
-			else
-			{
-				//Show the pick list
-				$this->MultiMatchAutocompleteResults($Processor, $postalCode, true);
-			}
-		}
-		else
-		{
-			if ($postalCode->IsInvalidFormat)
-			{
-				//Zip Code Not Found
-				$Processor->Template->FileName = "address_autocomplete_zip_invalidformat";
-			}
-			else
-			{
-				//Unknown postal code, so just accept what is there
-				$Processor->Template->FileName = "address_autocomplete_city_ok";
-			}
-		}
-
-
-	}
-
-	protected function ZipCodeAutocomplete($Processor, $ZipCode)
-	{
-		//Check just the zip
-		$postalCode = new PostalCode($ZipCode);
-
-		if ($postalCode->IsLoaded)
-		{
-			//Is there more than one city?
-			if (count($postalCode->Cities) > 1)
-			{
-				//Some to pick from
-				$this->MultiMatchAutocompleteResults($Processor, $postalCode);
-			}
-			else
-			{
-				//Just one
-				$Processor->Template->FileName = "address_autocomplete_zip_onematch";
-				$Processor->Template->CityStateZip = "{$postalCode->CityName}, {$postalCode->Province->ProvinceCode} {$postalCode->PostalCode}";
-				$Processor->Template->CountryCode = $postalCode->Province->Country->CountryCode;
-			}
-		}
-		else
-		{
-			if ($postalCode->IsInvalidFormat)
-			{
-				//Zip Code Not Found
-				$Processor->Template->FileName = "address_autocomplete_zip_invalidformat";
-			}
-			else
-			{
-				//Zip Code Not Found
-				$Processor->Template->FileName = "address_autocomplete_zip_nomatch";
-			}
-		}
-
-	}
-
-	protected function MultiMatchAutocompleteResults($Processor, $PostalCode, $IsMineIncluded = false)
-	{
-		$Processor->Template->FileName = "address_autocomplete_multimatch";
-		$Processor->Template->PickListHTML = $this->BuildPickListHTML($PostalCode, $IsMineIncluded);
-		$Processor->Template->PickListObservers = $this->BuildPickListObservers($PostalCode, $IsMineIncluded);
-	}
-
-	protected function BuildPickListHTML($PostalCode, $IsMineIncluded = false)
-	{
-
-		$this->PickList->Template->RequestFileType = "htm";
-		$this->PickList->Template->IsMineIncluded = $IsMineIncluded;
-		$this->PickList->Data = $PostalCode->Cities;
-
-		$returnValue = $this->PickList->Render();
-
-		//Compress the output so we can use it via AJAX
-		$returnValue = $this->CompressHTMLoutput($returnValue);
-
-		return $returnValue;
-	}
-
-	protected function BuildPickListObservers($PostalCode, $IsMineIncluded = false)
-	{
-
-		if ($IsMineIncluded)
-		{
-			$returnValue = "\$('#{$this->PickList->Name}_KeepMine').bind('click', function(event){\$(.address_picklist).remove();});\n";
-		}
-
-		return $returnValue;
-	}
-
-	public function PickListCallBack($CurrentElement, $Template)
-	{
-		//Set its template
-		$Template->FileName = "address_picklist_item";
+		$this->Country = new DropDownControl();
+		$this->Country->LabelText = "Country:";
+		$this->Country->AddElement("US","United States", true);
+		$this->Country->AddElement("CA","Canada");
+    $this->Country->BodyStyle->AddClass("address_country");
 	}
 
 	public function Render()
 	{
-		$this->CityStateZip->Template->ParentControlName = $this->Name;
-		$this->PickList->Template->ParentControlName = $this->Name;
+		if ($this->_countryMode == self::US_CANADA)
+		{
+			$this->Template->IsMultiCountry = true;
+		}
 
 		$returnValue = parent::Render();
-
+		
 		return $returnValue;
-
 	}
 
 }
-?>
+

@@ -1,7 +1,10 @@
-<div id="{$ControlName}">
-	{+Street}
-
-	<div id="{$ControlName}_Locale" class="address_locale">
-		{+CityStateZip}{+CountryCode}
-	</div>
+<div class="FormBlock">
+  {+Street}
 </div>
+
+<div class="FormBlock">
+  {+City} {+State} {+Zip}
+</div>
+
+
+{!?IsMultiCountry,address_country.htm.template}
