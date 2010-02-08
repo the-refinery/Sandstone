@@ -342,6 +342,7 @@ class Template extends Module
 
 		if ($this->_isRendered)
 		{
+    Benchmark::Log("Template","Render - ({$this->_requestFileType}) {$this->_fileName}");
 
 			$this->_templateVariables["debugtvdisplay"] = $this->BuildTemplateVariableDisplayOutput();
 
