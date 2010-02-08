@@ -421,6 +421,8 @@ class Application extends Module
 		}
 		catch (Exception $e)
 		{
+      Benchmark::Log("Exception",$e->getMessage());
+
 			if (Application::Registry()->ExceptionLog == 1)
 			{
 				$fileName = "exceptionlog.txt";
