@@ -3,6 +3,15 @@
 class Benchmark extends Module
 {
   protected $_benchmarks = array();
+  protected $_types = array();
+
+  protected $_starttime;
+  protected $_endtime;
+
+  public function __construct()
+  {
+    $this->_starttime = microtime(true);
+  }
 
 	static public function Instance()
 	{
@@ -16,11 +25,11 @@ class Benchmark extends Module
 		return $benchmark;
 	}
 
-  static public function Log($Title, $Entry = null)
+  static public function Log($Title, $Entry = null, $IsSummarized = true)
   {
     $benchmark = Benchmark::Instance();
 
-    $returnValue = $benchmark->ProcessLog($Title, $Entry);
+    $returnValue = $benchmark->ProcessLog($Title, $Entry, $IsSummarized);
 
     return $returnValue;
   }
@@ -28,12 +37,12 @@ class Benchmark extends Module
   static public function Start()
   {
     Benchmark::WriteLine("\n\n");
-    Benchmark::Log("=== APPLICATION STARTED ===");
+    Benchmark::Log("=== APPLICATION STARTED ===", null, false);
   }
 
   static public function Stop()
   {
-    Benchmark::Log("=== APPLICATION STOPPED ===");
+    Benchmark::Log("=== APPLICATION STOPPED ===", null, false);
 
     Benchmark::Summarize();
   }
@@ -60,30 +69,41 @@ class Benchmark extends Module
   {
     $totalBenchmarks = count($this->_benchmarks);
 
-    reset($this->_benchmarks);
-    $startTime = key($this->_benchmarks);
-    end($this->_benchmarks);
-    $endTime = key($this->_benchmarks);
-    $totalElapsed = $endTime - $startTime;
+    $elapsed = $this->_endtime - $this->_starttime;
+    $elapsed = number_format($elapsed, 3);
 
     $this->WriteLineToFile("===================================");
     $this->WriteLineToFile("=== TOTAL BENCHMARKS: {$totalBenchmarks}");
-    $this->WriteLineToFile("=== TOTAL ELAPSED: {$totalElapsed}");
+
+    foreach ($this->_types as $type => $count)
+    {
+      $this->WriteLineToFile("=== {$type}: {$count}");
+    }
+
+    $this->WriteLineToFile("=== TOTAL ELAPSED: {$elapsed} sec");
     $this->WriteLineToFile("===================================");
   }
 
-  public function ProcessLog($Title, $Entry = null)
+  public function ProcessLog($Title, $Entry = null, $IsSummarized = true)
   {
     $time = microtime(true);
+
+    $Title = strtoupper($Title);
 
     $Entry = str_replace("\n","", $Entry);
     $Entry = preg_replace('/\s+/', ' ', $Entry);
 
-    $logEntry = strtoupper($Title);
+    $logEntry = $Title;
     $logEntry .= " ({$time}) ";
     $logEntry .= $Entry;
 
-    $this->_benchmarks["{$time}"] = $logEntry;
+    if ($IsSummarized)
+    {
+      $this->_benchmarks[] = $logEntry;
+      $this->_types[$Title]++;
+    }
+
+    $this->_endtime = $time;
     $this->WriteLineToFile($logEntry);
   }
 
