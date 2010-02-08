@@ -76,6 +76,9 @@ class Benchmark extends Module
   {
     $time = microtime(true);
 
+    $Entry = str_replace("\n","", $Entry);
+    $Entry = preg_replace('/\s+/', ' ', $Entry);
+
     $logEntry = strtoupper($Title);
     $logEntry .= " ({$time}) ";
     $logEntry .= $Entry;
