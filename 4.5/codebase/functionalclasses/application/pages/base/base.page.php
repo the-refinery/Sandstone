@@ -207,6 +207,7 @@ class BasePage extends ControlContainer
 
 	final public function RaiseEvent($EventParameters)
 	{
+    Benchmark::Log("Page","({$EventParameters['event']}) {$EventParameters['page']}");
 
 		//Set the file type for the template
 		$this->_template->RequestFileType = $EventParameters['filetype'];

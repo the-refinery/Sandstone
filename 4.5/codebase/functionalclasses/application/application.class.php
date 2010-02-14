@@ -10,6 +10,7 @@ Namespace::Using("Sandstone.Database");
 Namespace::Using("Sandstone.Routing");
 NameSpace::Using("Sandstone.SEO");
 NameSpace::Using("Sandstone.User");
+NameSpace::Using("Sandstone.Benchmark");
 
 class Application extends Module
 {
@@ -48,10 +49,12 @@ class Application extends Module
 
 	static public function Run()
 	{
+    Benchmark::Start();
 		$App = Application::Instance();
 
 		$returnValue = $App->ProcessRun();
 
+    Benchmark::Stop();
 		return $returnValue;
 	}
 
@@ -415,6 +418,8 @@ class Application extends Module
 		}
 		catch (Exception $e)
 		{
+      Benchmark::Log("Exception",$e->getMessage());
+
 			//Redirect to the Error Display Page
 			$fileType = $EventParameters['filetype'];
 

@@ -211,6 +211,7 @@ class DIConnection extends mysqli
 
 	protected function LogQuery($Query, $RecordCount)
 	{
+    Benchmark::Log("Database","{$Query}");
 
 		if ($this->_isLoggingEnabled)
 		{
