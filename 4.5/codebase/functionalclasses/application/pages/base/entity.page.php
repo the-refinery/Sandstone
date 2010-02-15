@@ -31,7 +31,7 @@ class EntityPage extends ApplicationPage
 		switch($this->_action)
 		{
 			case 'show':
-				$json = PrimitiveToJSON::_($this->_loadedEntity);
+				$json = $this->API->PrimitiveToJSON($this->_loadedEntity);
 
 				$this->_template->filename = 'entityshow';
 				$this->_template->JSON = $json;
@@ -174,7 +174,7 @@ class EntityPage extends ApplicationPage
 		$class = $this->_entityType;
 		$primaryKey = $EventParameters[$this->_primaryKeyField];
 		
-		$loadIt = "\$this->_loadedEntity = Load{$class}::_({$primaryKey});";
+		$loadIt = "\$this->_loadedEntity = \$this->API->Load{$class}({$primaryKey});";
 		eval($loadIt);
 	}
 
