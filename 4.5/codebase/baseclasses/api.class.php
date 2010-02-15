@@ -4,6 +4,8 @@ class API
 {
 	public function __call($Method, $Parameters)
 	{
+    Benchmark::Log('API',$Method);
+
 		if (class_exists($Method, true))
 		{
 			$class = new $Method ();
