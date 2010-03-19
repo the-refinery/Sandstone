@@ -1,0 +1,5 @@
+{!label.htm.template}
+<div class="timepicker_body">
+	{+Hour}:{+Minute}{+AMPM}
+</div>
+
