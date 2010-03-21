@@ -55,7 +55,7 @@ class EntityPage extends ApplicationPage
 
 	/** For Overwriting in Specific Page **/
 
-	protected function SetupShow($EventParameters) 
+	protected function SetupShow(&$EventParameters) 
 	{
 		$this->LoadEntity($EventParameters);
 		$this->Throw404IfInvalidEntity($EventParameters);
@@ -70,7 +70,7 @@ class EntityPage extends ApplicationPage
 		$this->_template->Entity = $this->_loadedEntity;
 	}
 
-	protected function SetupEdit($EventParameters) 
+	protected function SetupEdit(&$EventParameters) 
 	{
 		$this->LoadEntity($EventParameters);
 		$this->Throw404IfInvalidEntity($EventParameters);
@@ -178,7 +178,7 @@ class EntityPage extends ApplicationPage
 		eval($loadIt);
 	}
 
-	protected function Throw404IfInvalidEntity($EventParameters)
+	protected function Throw404IfInvalidEntity(&$EventParameters)
 	{
 		if (is_null($this->_loadedEntity))
 		{
