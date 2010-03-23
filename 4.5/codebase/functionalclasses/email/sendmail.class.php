@@ -17,6 +17,11 @@ class SendMail extends Mailer
 			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 		}
 
+		if (is_set($this->_bccEmail))
+		{
+			$headers .= "Bcc: {$this->_bccEmail}\r\n";
+		}
+
 		mail("{$this->_toName} <{$this->_toEmail}>", $this->_subject, $this->Render(), $headers . "From: {$this->_senderName} <{$this->_senderEmail}>\r\n");
 
 		//Comment out the one above and use this one for debugging with Mercury Mail Server
