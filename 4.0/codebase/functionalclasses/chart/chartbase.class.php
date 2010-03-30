@@ -324,7 +324,11 @@ class ChartBase extends Module
 
 	protected function SetupURLqueryParameters()
 	{
-		$this->_urlQueryParameters[] = "chtt=" . urlencode($this->_title);
+    if (strlen($this->_title) > 0)
+    {
+      $this->_urlQueryParameters[] = "chtt=" . urlencode($this->_title);
+    }
+
 		$this->_urlQueryParameters[] = "chs={$this->_width}x{$this->_height}";
 		$this->_urlQueryParameters[] = "chma={$this->_leftMargin},{$this->_rightMargin},{$this->_topMargin},{$this->_bottomMargin}";
 
