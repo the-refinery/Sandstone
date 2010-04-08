@@ -112,7 +112,16 @@ class HistoricDatePickerControl extends BaseControl
 
 		for ($i=1; $i<=31; $i++)
 		{
-			$this->Day->AddElement($i,$i);
+			if ($i < 10)
+			{
+				$label = "0{$i}";
+			}
+			else
+			{
+				$label = $i;
+			}
+
+			$this->Day->AddElement($label, $label);
 		}
 	}
 
