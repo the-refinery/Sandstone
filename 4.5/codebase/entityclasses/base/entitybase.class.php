@@ -234,11 +234,6 @@ class EntityBase extends EntityBaseFunctionality
 		return "{$this->_primaryIDproperty->Name}: {$this->_primaryIDproperty->Value}";
 	}
 
-	public function getProperties()
-	{
-		return $this->_properties;
-	}
-
 	/*
 	InvalidPropertyName property
 
@@ -472,32 +467,117 @@ class EntityBase extends EntityBaseFunctionality
 	public function SortChildren($Children, $OrderArray, $LoadFunction)
 	{
 		$returnValue = false;
-		if ($Children instanceof DIarray && ($OrderArray instanceof DIarray || is_array($OrderArray)))
+
+		if ($OrderArray instanceof DIarray || is_array($OrderArray))
 		{
-			//Make sure all the children are Sortable
-			$allOK = true;
+			$allSortable = $this->ValidateAllSortableChildren($Children);
+
+			if ($allSortable)
+			{
+				$this->SortChildrenProcessing($Children, $OrderArray, $LoadFunction);
+				$returnValue = $this->$LoadFunction ();
+			}
+		}
+
+		return $returnValue;
+	}
+
+	protected function ValidateAllSortableChildren($Children)
+	{
+		$returnValue = false;
+
+		if ($Children instanceof DIarray)
+		{
+			$returnValue = true;
 
 			foreach ($Children as $tempChild)
 			{
 				if (($tempChild instanceof SortableEntityBase) == false)
 				{
-					$allOK = false;
+					$returnValue = false;
 				}
 			}
+		}
 
-			if ($allOK)
+		return $returnValue;
+	}
+
+	protected function SortChildrenProcessing($Children, $OrderArray, $LoadFunction)
+	{
+		$validIDs = $Children->Keys();
+
+		$i = 0;
+
+		foreach ($OrderArray as $childID)
+		{
+			if (in_array($childID, $validIDs))
 			{
-				//Sort them.
-				foreach($OrderArray as $index=>$childID)
-				{
-					$targetChild = $Children[$childID];
-					$targetChild->SortOrder = $index;
-					$targetChild->Save();
-				}
-
-				$returnValue = $this->$LoadFunction ();
+				$finalOrders[$i] = $childID;
+				$i++;
 			}
+		}
 
+		foreach ($validIDs as $childID)
+		{
+			if (in_array($childID, $finalOrders) == false)
+			{
+				$finalOrders[$i] = $childID;
+				$i++;
+			}
+		}
+
+		foreach ($finalOrders as $index=>$childID)
+		{
+			$targetChild = $Children[$childID];
+			$targetChild->SortOrder = $index;
+			$targetChild->Save();
+		}
+	}
+
+	public function ResetChildSortOrders($Children, $LoadFunction)
+	{
+		$returnValue = false;
+
+		$allSortable = $this->ValidateAllSortableChildren($Children);
+
+		if ($allSortable)
+		{
+			$orderArray = $this->GenerateCurrentOrderIndexArray($Children);
+
+			$returnValue = $this->SortChildren($Children, $orderArray, $LoadFunction);
+		}
+
+		return $returnValue;
+
+	}
+
+	protected function GenerateCurrentOrderIndexArray($Children)
+	{
+		$returnValue = Array();
+
+		$currentSortOrders = Array();
+		$dupes = Array();
+
+		foreach ($Children as $id=>$tempChild)
+		{
+			if (array_key_exists($tempChild->SortOrder, $currentSortOrders))
+			{
+				$dupes[] = $id;
+			}
+			else
+			{
+				$currentSortOrders[$tempChild->SortOrder] = $id;
+			}
+		}
+
+		foreach ($currentSortOrders as $tempID)
+		{
+			$returnValue[] = $tempID;
+		}
+
+		foreach ($dupes as $tempID)
+		{
+			$returnValue[] = $tempID;
 		}
 
 		return $returnValue;
@@ -722,7 +802,17 @@ class EntityBase extends EntityBaseFunctionality
 		$session = Application::Session();
 		$accountID = Application::License()->AccountID;
 
-		if ((array_key_exists("IsAccountLimitOverride", $session) && $session['IsAccountLimitOverride'] == true) || $accountID == 1)
+		if (array_key_exists("IsAccountLimitOverride", $session) && $session['IsAccountLimitOverride'] == true)
+		{
+			$isAccountLimitOverride = true;
+		}
+
+		if ($accountID == 1 && array_key_exists("Account1OnlyMode", $session) == false)
+		{
+			$isAccountLimitOverride = true;
+		}
+
+		if ($isAccountLimitOverride)
 		{
 			$returnValue = "	WHERE	a.AccountID = a.AccountID ";
 		}

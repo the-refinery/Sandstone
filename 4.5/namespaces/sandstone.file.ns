@@ -1,3 +1,5 @@
+codebase/entityclasses/file/basefile.class.php
+codebase/entityclasses/file/basefiles.class.php
 codebase/entityclasses/file/file.class.php
 codebase/entityclasses/file/fileversion.class.php
 codebase/entityclasses/file/files.class.php
