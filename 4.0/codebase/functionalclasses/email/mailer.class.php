@@ -13,6 +13,7 @@ class Mailer extends Renderable
 	protected $_senderName;
 	protected $_senderEmail;
 	protected $_subject;
+	protected $_bccEmail;
 	
 	protected $_sendAsHTML = false;
 	
@@ -82,7 +83,17 @@ class Mailer extends Renderable
 	{
 		$this->_sendAsHTML = $Value;
 	}
-	
+
+	public function getBCCemail()
+	{
+		return $this->_bccEmail;
+	}
+
+	public function setBCCemail($Value)
+	{
+		$this->_bccEmail = $Value;
+	}
+
 	// Overwritten in sub classes
 	public function Send()
 	{

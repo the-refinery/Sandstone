@@ -46,3 +46,5 @@ codebase/functionalclasses/application/controls/basic/image.control.php
 codebase/functionalclasses/application/controls/compound/creditcard.control.php
 codebase/functionalclasses/application/controls/datanavigation/datanavigation.control.php
 codebase/functionalclasses/application/controls/widget/widget.control.php
+codebase/functionalclasses/application/controls/compound/timepicker.control.php
+codebase/functionalclasses/application/controls/compound/historicdatepicker.control.php
