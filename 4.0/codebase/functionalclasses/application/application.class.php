@@ -4,7 +4,7 @@ Application Class File
 
 @package Sandstone
 @subpackage Application
-*/
+ */
 
 Namespace::Using("Sandstone.Database");
 Namespace::Using("Sandstone.Routing");
@@ -46,13 +46,13 @@ class Application extends Module
 
 	static public function Run()
 	{
-    Benchmark::Start();
+		Benchmark::Start();
 
 		$App = Application::Instance();
 
 		$returnValue = $App->ProcessRun();
 
-    Benchmark::Stop();
+		Benchmark::Stop();
 		return $returnValue;
 	}
 
@@ -150,7 +150,7 @@ class Application extends Module
 
 		return $App->Registry;
 	}
-	
+
 	static public function DatabaseConnection($ConfigArray = null)
 	{
 		$App = Application::Instance();
@@ -202,10 +202,10 @@ class Application extends Module
 
 		die();
 	}
-	
+
 	static public function CacheOutput($Seconds)
 	{
-		
+
 	}
 
 	static public function SelectAccount($AccountName)
@@ -240,7 +240,7 @@ class Application extends Module
 
 	/*
 	License property
-	*/
+	 */
 	public function getLicense()
 	{
 		if (is_set($this->_license) == false || $this->_license->IsLoaded == false)
@@ -253,7 +253,7 @@ class Application extends Module
 
 	/*
 	CurrentUser property
-	*/
+	 */
 	public function getCurrentUser()
 	{
 		return $this->_currentUser;
@@ -261,7 +261,7 @@ class Application extends Module
 
 	/*
 	Cookie property
-	*/
+	 */
 	public function getCookie()
 	{
 		return $this->_cookie;
@@ -269,7 +269,7 @@ class Application extends Module
 
 	/*
 	Session property
-	*/
+	 */
 	public function getSession()
 	{
 		return $this->_session;
@@ -287,7 +287,7 @@ class Application extends Module
 
 	/*
 	Registry property
-	*/
+	 */
 	public function getRegistry()
 	{
 		if (is_set($this->_registry) == false)
@@ -300,59 +300,19 @@ class Application extends Module
 
 	/*
 	BaseURL property
-	*/
+	 */
 	public function getBaseURL()
 	{
-		/*
-		if (strlen($_SERVER['HTTPS']) > 0 && Application::Registry()->DevMode <> 1)
-		{
-			$returnValue = $this->SecureURL;
-		}
-		else
-		{
-			$returnValue = $this->BaseNonSecureURL;
-		}
-
-		return $returnValue;
-		*/
-
 		return Routing::BaseURL();
-
 	}
 
 	public function getBaseNonSecureURL()
 	{
-		/*
-		$returnValue = Application::Registry()->BaseURL;
-
-		if (is_set($_REQUEST['subdomain']) && strlen($_REQUEST['subdomain']) > 0)
-		{
-			$returnValue = str_replace("www", $_REQUEST['subdomain'], $returnValue);
-		}
-
-		return $returnValue;
-		*/
-
 		return Routing::BaseNonSecureURL();
 	}
 
 	public function getSecureURL()
 	{
-		/*
-		if (is_set(Application::Registry()->SecureURL))
-		{
-			// We've overwritten this setting in License.
-			$returnValue = Application::Registry()->SecureURL;
-		}
-		else
-		{
-			$baseURL = $this->BaseNonSecureURL;
-			$returnValue = substr_replace($baseURL, 'https', 0, 4);
-		}
-
-		return $returnValue;
-		 */
-
 		return Routing::SecureURL();
 	}
 
@@ -374,7 +334,7 @@ class Application extends Module
 	RoutingPath property
 
 	The value after Base or Secure URL
-	*/
+	 */
 	public function getRoutingPath()
 	{
 		return $this->_routing->RoutingURL;
@@ -421,7 +381,7 @@ class Application extends Module
 		}
 		catch (Exception $e)
 		{
-      Benchmark::Log("Exception",$e->getMessage());
+			Benchmark::Log("Exception",$e->getMessage());
 
 			if (Application::Registry()->ExceptionLog == 1)
 			{
@@ -519,71 +479,13 @@ class Application extends Module
 
 	protected function LicenseCheck($EventParameters = Array())
 	{
-		//Single or multi account?
 		if ($this->Registry->IsMultiAccount == 1)
 		{
-			//Multi-account system
-
-			//Only do an account check if we are not headed for a login page
-			if (Routing::GetIsUtilityFileRule() == false)
-			{
-				if (is_set($EventParameters['subdomain']))
-				{
-					$success = Application::SelectAccount($EventParameters['subdomain']);
-
-					if ($success == false)
-					{
-						$returnValue = $this->Fire404response();
-					}
-				}
-				elseif (is_set($_SESSION['AccountID']) == false && is_set($this->Cookie['DItoken']))
-				{
-					$currentAccountID = $this->LoadAccountIDfromToken($this->Cookie['DItoken']);
-
-					if (is_set($currentAccountID))
-					{
-						$this->SetSessionVariable("AccountID", $currentAccountID);
-					}
-				}
-
-				if (is_set($this->Session['AccountID']))
-				{
-					$this->_license = new License($_SESSION['AccountID']);
-
-					if ($this->_license->IsValid == false)
-					{
-						throw new InvalidLicenseException("Account ID: {$_SESSION['AccountID']} does not have a valid license.");
-					}
-				}
-				else
-				{
-					if (is_set($returnValue) == false)
-					{
-						//No account ID set, redirect to the login page.
-						$returnValue = $this->HandleLoginOr403($EventParameters);
-					}
-				}
-			}
+			$returnValue = $this->MultiAccountSystemLicenseCheck($EventParameters);
 		}
 		else
 		{
-			//Single Account System
-
-			//Do we have a specified account ID to use?
-			if (is_set($this->Registry->AccountID))
-			{
-				$this->_license = new License($this->Registry->AccountID);
-			}
-			else
-			{
-				//We default to AccountID 1
-				$this->_license = new License(1);
-			}
-
-			if ($this->_license->IsValid == false)
-			{
-				throw new InvalidLicenseException("Account ID: {$_SESSION['AccountID']} does not have a valid license.");
-			}
+			$returnValue = $this->SingleAccountSystemLicenseCheck($EventParameters);
 		}
 
 		$this->_isLicenseCheckComplete = true;
@@ -592,38 +494,149 @@ class Application extends Module
 
 	}
 
+	protected function MultiAccountSystemLicenseCheck($EventParameters)
+	{
+		if (Routing::GetIsUtilityFileRule() == false)
+		{
+			$this->AttemptToDetermineAccountFromSubdomain($EventParameters);
+			$this->AttemptToDetermineAccountFromSession($EventParameters);
+			$this->AttemptToDetermineAccountFromCookie($EventParameters);
+
+			if (is_set($this->_license) == false || $this->_license->IsValid == false)
+			{
+				$returnValue = $this->HandleInvalidAccount($EventParameters);
+			}
+		}
+
+		return $returnValue;
+	}
+
+	protected function AttemptToDetermineAccountFromSubdomain($EventParameters)
+	{
+		if (is_set($this->_license) == false)
+		{
+			if (is_set($EventParameters['subdomain']))
+			{
+				$success = Application::SelectAccount($EventParameters['subdomain']);
+
+				if ($success == false)
+				{
+					$this->_license = null;
+				}
+			}
+		}
+	}
+
+	protected function AttemptToDetermineAccountFromSession($EventParameters)
+	{
+		if (is_set($this->_license) == false)
+		{
+			if (is_set($this->Session['AccountID']))
+			{
+				$this->_license = new License($_SESSION['AccountID']);
+			}
+		}
+	}
+
+	protected function AttemptToDetermineAccountFromCookie($EventParameters)
+	{
+		if (is_set($this->_license) == false)
+		{
+			$currentAccountID = $this->LoadAccountIDfromToken($this->Cookie['DItoken']);
+
+			if (is_set($currentAccountID))
+			{
+				$this->_license = new License($currentAccountID);
+			}
+		}
+	}
+
+	protected function LoadAccountIDfromToken($Token)
+	{
+
+		$query = new Query();
+
+		$query->SQL = "	SELECT	AccountID
+			FROM	core_UserToken
+			WHERE	Token = {$query->SetTextField($Token)}";
+
+		$query->Execute();
+
+		if ($query->SelectedRows > 0)
+		{
+			$returnValue = $query->SingleRowResult['AccountID'];
+		}
+
+		return $returnValue;
+	}
+
+
+	protected function HandleInvalidAccount($EventParameters)
+	{
+		if (is_set($EventParameters['subdomain']))
+		{
+			$returnValue = $this->Fire404response();
+		}
+		else
+		{
+			$returnValue = $this->HandleLoginOr403($EventParameters);
+		}
+
+		return $returnValue;
+
+	}
+
+	protected function SingleAccountSystemLicenseCheck($EventParameters)
+	{
+		//Do we have a specified account ID to use?
+		if (is_set($this->Registry->AccountID))
+		{
+			$this->_license = new License($this->Registry->AccountID);
+		}
+		else
+		{
+			//We default to AccountID 1
+			$this->_license = new License(1);
+		}
+
+		if ($this->_license->IsValid == false)
+		{
+			throw new InvalidLicenseException("Account ID: {$_SESSION['AccountID']} does not have a valid license.");
+		}
+	}
+
 	protected function HandleLoginOr403($EventParameters)
 	{
 
 		switch ($EventParameters['filetype'])
 		{
-			case "htm":
-				$this->LoginRedirect($EventParameters);
-				break;
+		case "htm":
+			$this->LoginRedirect($EventParameters);
+			break;
 
-			case "rss":
+		case "rss":
 			case "xml":
-			case "csv":
-			case "txt":
+				case "csv":
+					case "txt":
 
-				if (is_set($this->_license))
-				{
-					$EventParameters['filetype'] = "AUTH301";
-					$this->LoginRedirect($EventParameters);
-				}
-				else
-				{
-					$returnValue = $this->Fire403response();
-				}
-				break;
-				
-			case "term":
-				// Don't fire 403, instead just select account 1
-				$this->_license = new License(1);
-				break;
+						if (is_set($this->_license))
+						{
+							$EventParameters['filetype'] = "AUTH301";
+							$this->LoginRedirect($EventParameters);
+						}
+						else
+						{
+							$returnValue = $this->Fire403response();
+						}
+						break;
 
-			default:
-				$returnValue = $this->Fire403response();
+					case "term":
+						// Don't fire 403, instead just select account 1
+						$this->_license = new License(1);
+						break;
+
+					default:
+						$returnValue = $this->Fire403response();
 		}
 
 		return $returnValue;
@@ -661,25 +674,6 @@ class Application extends Module
 		$targetPage = new $eventParameters['pageclass'] ();
 
 		$returnValue = $targetPage->RaiseEvent($eventParameters);
-
-		return $returnValue;
-	}
-
-	protected function LoadAccountIDfromToken($Token)
-	{
-
-		$query = new Query();
-
-		$query->SQL = "	SELECT	AccountID
-						FROM	core_UserToken
-						WHERE	Token = {$query->SetTextField($Token)}";
-
-		$query->Execute();
-
-		if ($query->SelectedRows > 0)
-		{
-			$returnValue = $query->SingleRowResult['AccountID'];
-		}
 
 		return $returnValue;
 	}
@@ -818,7 +812,7 @@ class Application extends Module
 				//Default to 30 days
 				$expires = time()+60*60*24*30;
 			}
-			
+
 			$domain = $this->DetermineCookieDomain();
 
 			setcookie($Name, $Value, $expires, "/", $domain);
@@ -843,7 +837,7 @@ class Application extends Module
 
 	protected function DetermineCookieDomain()
 	{
-    $replacements = array("http://", "https://");
+		$replacements = array("http://", "https://");
 		$returnValue = str_replace($replacements, "", Application::BaseURL());
 
 		if (substr_count($returnValue, "/") > 0)
