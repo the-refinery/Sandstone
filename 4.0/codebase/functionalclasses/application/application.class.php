@@ -498,6 +498,7 @@ class Application extends Module
 	{
 		if (Routing::GetIsUtilityFileRule() == false)
 		{
+			$this->AttemptToDetermineAccountFromAPIkey($EventParameters);
 			$this->AttemptToDetermineAccountFromSubdomain($EventParameters);
 			$this->AttemptToDetermineAccountFromSession($EventParameters);
 			$this->AttemptToDetermineAccountFromCookie($EventParameters);
@@ -506,6 +507,40 @@ class Application extends Module
 			{
 				$returnValue = $this->HandleInvalidAccount($EventParameters);
 			}
+		}
+
+		return $returnValue;
+	}
+	
+	protected function AttemptToDetermineAccountFromAPIkey($EventParameters)
+	{
+		if (is_set($this->_license) == false)
+		{
+			if (is_set($EventParameters['apikey']))
+			{
+				$accountID = $this->LoadAccountIDfromAPIkey($EventParameters['apikey']);
+
+				if (is_set($accountID))
+				{
+					$this->_license = new License($accountID);
+				}
+			}
+		}
+	}
+
+	protected function LoadAccountIDfromAPIkey($APIkey)
+	{
+		$query = new Query();
+
+		$query->SQL = "	SELECT	AccountID
+			FROM	core_AccountAPIkey
+			WHERE	APIkey = {$query->SetTextField($APIkey)}";
+
+		$query->Execute();
+
+		if ($query->SelectedRows > 0)
+		{
+			$returnValue = $query->SingleRowResult['AccountID'];
 		}
 
 		return $returnValue;
