@@ -27,6 +27,7 @@ class Application extends Module
 	protected $_dbConnections = Array();
 
 	protected $_isLicenseCheckComplete;
+	protected $_isAPImode;
 
 	protected function __construct()
 	{
@@ -225,6 +226,13 @@ class Application extends Module
 		return $App->IsLicenseCheckComplete;
 	}
 
+	static public function IsAPImode()
+	{
+		$App = Application::Instance();
+
+		return $App->IsAPImode;
+	}
+
 	static public function CurrentSystemMessage()
 	{
 		$returnValue = new SystemMessage();
@@ -350,6 +358,11 @@ class Application extends Module
 		return $this->_isLicenseCheckComplete;
 	}
 
+	public function getIsAPImode()
+	{
+		return $this->_isAPImode;
+	}
+
 	public function ProcessRun()
 	{
 		$this->SetupErrorHandling();
@@ -449,14 +462,11 @@ class Application extends Module
 
 	protected function ApplicationSystemCheck()
 	{
-
-		//Is an application specific system check defined?
 		if (class_exists("SystemTest", true))
 		{
 			$sysTest = new SystemTest();
 			$sysTest->PerformTest();
 		}
-
 	}
 
 	protected function BuildCookieAndSessionArrays()
@@ -523,6 +533,7 @@ class Application extends Module
 				if (is_set($accountID))
 				{
 					$this->_license = new License($accountID);
+					$this->_isAPImode = true;
 				}
 			}
 		}
@@ -738,9 +749,29 @@ class Application extends Module
 	protected function LoadCurrentUser()
 	{
 
-		if (is_set($this->Cookie['DItoken']))
+		$this->CheckForCookieWithoutLicense();
+
+		$this->AttemptLoadUserFromCookie();
+		$this->AttemptLoadUserFromSession();
+
+	}
+
+	protected function CheckForCookieWithoutLicense()
+	{
+		if (is_set($this->Cookie['DItoken']) && is_set($this->_license) == false && Routing::GetIsUtilityFileRule() == false)
 		{
-			if (is_set($this->_license))
+			//Somehow we have a cookie, but it didn't reslove to give us an account.  
+			//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
+			$this->ProcessClearCookie('DItoken');
+			$this->ProcessClearSessionVariable('DItoken');
+		}
+	}
+
+	protected function AttemptLoadUserFromCookie()
+	{
+		if (is_set($this->_currentUser) == false)
+		{
+			if (is_set($this->Cookie['DItoken']))
 			{
 				$this->_currentUser = new User($this->Cookie['DItoken']);
 
@@ -749,28 +780,23 @@ class Application extends Module
 					$this->_currentUser = null;
 				}
 			}
-			else
+		}
+	}
+
+	protected function AttemptLoadUserFromSession()
+	{		
+		if (is_set($this->_currentUser) == false)
+		{
+			if (is_set($this->Session['DItoken']))
 			{
-				if (Routing::GetIsUtilityFileRule() == false)
+				$this->_currentUser = new User($this->Session['DItoken']);
+
+				if ($this->_currentUser->IsLoaded == false)
 				{
-					//Somehow we have a cookie, but it didn't reslove to give us an account.  
-					//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
-					$this->ProcessClearCookie('DItoken');
-					$this->ProcessClearSessionVariable('DItoken');
+					$this->_currentUser = null;
 				}
 			}
 		}
-
-		if (is_set($this->_currentUser) == false && is_set($this->Session['DItoken']))
-		{
-			$this->_currentUser = new User($this->Session['DItoken']);
-
-			if ($this->_currentUser->IsLoaded == false)
-			{
-				$this->_currentUser = null;
-			}
-		}
-
 	}
 
 	protected function AuthenticateUser($TargetPage, $EventParameters)
