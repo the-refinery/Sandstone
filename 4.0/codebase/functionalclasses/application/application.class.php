@@ -751,6 +751,7 @@ class Application extends Module
 
 		$this->CheckForCookieWithoutLicense();
 
+		$this->AttemptLoadUserForAPImode();
 		$this->AttemptLoadUserFromCookie();
 		$this->AttemptLoadUserFromSession();
 
@@ -764,6 +765,27 @@ class Application extends Module
 			//We can't load a user, so clear the cookie, yank it from the session, and don't load a user.
 			$this->ProcessClearCookie('DItoken');
 			$this->ProcessClearSessionVariable('DItoken');
+		}
+	}
+
+	protected function AttemptLoadUserForAPImode()
+	{
+		if (is_set($this->_currentUser) == false)
+		{
+			if ($this->_isAPImode)
+			{
+				$apiUserID = Application::Registry()->APIuserID;
+
+				if (is_set($apiUserID))
+				{
+					Application::SetSessionVariable("IsAccountLimitOverride", true);
+
+					$this->_currentUser = new User($apiUserID);
+
+					Application::ClearSessionVariable("IsAccountLimitOverride");
+				}
+
+			}
 		}
 	}
 
@@ -804,6 +826,7 @@ class Application extends Module
 		//First, does this page require a logged in user?
 		if ($TargetPage->IsLoginRequired)
 		{
+			di_break(true);
 			//Do we have a logged in user?
 			if (is_set($this->_currentUser))
 			{
