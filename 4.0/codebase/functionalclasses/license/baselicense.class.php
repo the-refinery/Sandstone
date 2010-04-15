@@ -12,31 +12,22 @@ Namespace::Using("Sandstone.Utilities.String");
 class BaseLicense extends EntityBase
 {
 
-    public function __construct($ID = null)
-    {
-        $this->_isTagsDisabled = true;
-        $this->_isMessagesDisabled = true;
+	public function __construct($ID = null)
+	{
+		$this->_isTagsDisabled = true;
+		$this->_isMessagesDisabled = true;
 
-        parent::__construct($ID);
-    }
+		parent::__construct($ID);
+	}
 
 	protected function SetupProperties()
 	{
 
-		//AddProperty Parameters:
-		// 1) Name
-		// 2) DataType
-		// 3) DBfieldName
-		// 4) IsReadOnly
-		// 5) IsRequired
-		// 6) IsPrimaryID
-		// 7) IsLoadedRequired
-		// 8) IsLoadOnDemand
-		// 9) LoadOnDemandFunctionName
+		$this->AddProperty("AccountID","integer","AccountID",PROPERTY_PRIMARY_ID);
+		$this->AddProperty("Name","string","Name",PROPERTY_REQUIRED);
+		$this->AddProperty("IsCancelled","boolean","IsCancelled",PROPERTY_READ_WRITE);
 
-		$this->AddProperty("AccountID","integer","AccountID",true,false,true,false,false,null);
-		$this->AddProperty("Name","string","Name",false,true,false,false,false,null);
-		$this->AddProperty("IsCancelled","boolean","IsCancelled",false,false,false,false,false,null);
+		$this->AddProperty("APIkey","string",null,PROPERTY_READ_ONLY,"LoadAPIkey");
 
 		parent::SetupProperties();
 	}
@@ -63,6 +54,23 @@ class BaseLicense extends EntityBase
 		}
 
 		return $returnValue;
+	}
+
+	public function LoadAPIkey()
+	{
+		$query = new Query();
+
+		$query->SQL = "SELECT APIkey
+			FROM core_AccountAPIkey
+			WHERE AccountID = {$this->_accountID} ";
+
+		$query->Execute();
+
+		if ($query->SelectedRows > 0)
+		{
+			$this->_apiKey = $query->SingleRowResult['APIkey'];
+		}
+
 	}
 
 	public function LookupByName($AccountName)
@@ -92,13 +100,13 @@ class BaseLicense extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	INSERT INTO core_AccountMaster
-						(
-							Name
-						)
-						VALUES
-						(
-							{$query->SetTextField($this->_name)}
-						)";
+			(
+				Name
+			)
+			VALUES
+			(
+	{$query->SetTextField($this->_name)}
+)";
 
 		$query->Execute();
 
@@ -112,12 +120,50 @@ class BaseLicense extends EntityBase
 		$query = new Query();
 
 		$query->SQL = "	UPDATE core_AccountMaster SET
-							Name = {$query->SetTextField($this->_name)}
-						WHERE AccountID = {$this->_accountID}";
+			Name = {$query->SetTextField($this->_name)}
+			WHERE AccountID = {$this->_accountID}";
 
 		$query->Execute();
 
 		return true;
+	}
+
+	public function GenerateAPIkey()
+	{
+		$now = new Date();
+
+		$keyData = "{$this->_name}-{$now->Datestamp}";
+
+		$apiKey = md5($keyData);
+
+		$this->_apiKey = $apiKey;
+
+		$this->SaveAPIkey();
+	}
+
+	protected function SaveAPIkey()
+	{
+		$query = new Query();
+
+		$query->SQL = "DELETE 
+			FROM core_AccountAPIkey
+			WHERE AccountID = {$this->_accountID} ";
+
+		$query->Execute();
+
+		$query->SQL = "INSERT INTO core_AccountAPIkey
+			(
+				AccountID,
+				APIkey
+			)
+			VALUES
+			(
+	{$this->_accountID},
+	{$query->SetTextField($this->_apiKey)}
+) ";
+
+		$query->Execute();
+
 	}
 
 	static public function FormatValidAccountName($AccountName)
@@ -187,7 +233,7 @@ class BaseLicense extends EntityBase
 	static public function GenerateBaseSelectClause()
 	{
 		$returnValue = "	SELECT	a.AccountID,
-										a.Name ";
+			a.Name ";
 
 		return $returnValue;
 	}

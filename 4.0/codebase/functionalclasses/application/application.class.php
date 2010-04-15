@@ -784,7 +784,6 @@ class Application extends Module
 
 					Application::ClearSessionVariable("IsAccountLimitOverride");
 				}
-
 			}
 		}
 	}
@@ -826,7 +825,6 @@ class Application extends Module
 		//First, does this page require a logged in user?
 		if ($TargetPage->IsLoginRequired)
 		{
-			di_break(true);
 			//Do we have a logged in user?
 			if (is_set($this->_currentUser))
 			{
