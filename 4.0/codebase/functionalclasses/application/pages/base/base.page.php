@@ -4,7 +4,7 @@ Page Class File
 
 @package Sandstone
 @subpackage Application
-*/
+ */
 
 NameSpace::Using("Sandstone.SEO");
 NameSpace::Using("Sandstone.Smarty");
@@ -20,10 +20,11 @@ class BasePage extends ControlContainer
 
 	protected $_forms;
 	protected $_postedForm;
+	protected $_apiForm;
 
 	protected $_activePageName;
 
-    protected $_templateSearchPath;
+	protected $_templateSearchPath;
 
 	protected $_isOKtoLoadControls = true;
 
@@ -65,8 +66,13 @@ class BasePage extends ControlContainer
 			//This is a form, we should add it to our forms array
 			$Value->Name = $Name;
 			$Value->ParentContainer = $this;
-            $Value->Template->RequestFileType = $this->_template->RequestFileType;
+			$Value->Template->RequestFileType = $this->_template->RequestFileType;
 			$this->_forms[strtolower($Name)] = $Value;
+
+			if (is_set($this->_apiForm) == false)
+			{
+				$this->_apiForm = $Value;
+			}
 
 		}
 		else
@@ -79,7 +85,7 @@ class BasePage extends ControlContainer
 	{
 
 		//If there are any controls, render them
-     	if (count($this->_controlOrder) > 0)
+		if (count($this->_controlOrder) > 0)
 		{
 			$returnValue .= $this->RenderControls();
 		}
@@ -91,7 +97,7 @@ class BasePage extends ControlContainer
 	IsLoginRequired property
 
 	@return boolean
-	*/
+	 */
 	public function getIsLoginRequired()
 	{
 		return $this->_isLoginRequired;
@@ -101,7 +107,7 @@ class BasePage extends ControlContainer
 	AllowedroleIDs property
 
 	@return array
-	*/
+	 */
 	public function getAllowedRoleIDs()
 	{
 		return $this->_allowedRoleIDs;
@@ -116,7 +122,7 @@ class BasePage extends ControlContainer
 	Forms property
 
 	@return Array
-	*/
+	 */
 	public function getForms()
 	{
 		return $this->_forms;
@@ -126,30 +132,30 @@ class BasePage extends ControlContainer
 	ActivePageName property
 
 	@return string
-	*/
+	 */
 	final public function getActivePageName()
 	{
 		return $this->_activePageName;
 	}
 
-    /*
-    TemplateSearchPath property
+		/*
+		TemplateSearchPath property
 
-    @return string
-    */
-    final public function getTemplateSearchPath()
-    {
-        if (is_set($this->_templateSearchPath) == false)
-        {
-            $target = NameSpace::NamespaceEnviromentBase("application") . Namespace::PageSpace(get_class($this)) . "templates/";
+		@return string
+		 */
+	final public function getTemplateSearchPath()
+	{
+		if (is_set($this->_templateSearchPath) == false)
+		{
+			$target = NameSpace::NamespaceEnviromentBase("application") . Namespace::PageSpace(get_class($this)) . "templates/";
 
-            $templateDirs = Template::FindDirectoriesWithTemplates($target);
+			$templateDirs = Template::FindDirectoriesWithTemplates($target);
 
-            $this->_templateSearchPath = implode(PATH_SEPARATOR, $templateDirs);
-        }
+			$this->_templateSearchPath = implode(PATH_SEPARATOR, $templateDirs);
+		}
 
-        return $this->_templateSearchPath;
-    }
+		return $this->_templateSearchPath;
+	}
 
 	final public function setRequestedURL($Value)
 	{
@@ -197,7 +203,7 @@ class BasePage extends ControlContainer
 
 	/*
 	Redirects to the SSL version of this page, losing any post parameters
-	*/
+	 */
 	protected function ForceSSL()
 	{
 		$redirectURL = Application::SecureURL() . Application::RoutingPath();
@@ -207,7 +213,7 @@ class BasePage extends ControlContainer
 
 	final public function RaiseEvent($EventParameters)
 	{
-    Benchmark::Log("Page","({$EventParameters['event']}) {$EventParameters['page']}");
+		Benchmark::Log("Page","({$EventParameters['event']}) {$EventParameters['page']}");
 
 		//Set the file type for the template
 		$this->_template->RequestFileType = $EventParameters['filetype'];
@@ -221,60 +227,109 @@ class BasePage extends ControlContainer
 		//Save our active page name from the event parameters' page element
 		$this->_activePageName = $EventParameters['page'];
 
-		//Build the names of the PreProcessor, Handler and PostProcessor functions
-		$preProcessorFunctionName = $EventParameters['event'] . "_PreProcessor";
 		$handlerFunctionName = $EventParameters['event'] . "_Handler";
-		$postProcessorFunctionName = $EventParameters['event'] . "_PostProcessor";
 
 		//Do we have a handler for this event?
 		if (method_exists($this, $handlerFunctionName))
 		{
-			$this->Generic_PreProcessor($EventParameters);
-
-			$this->BuildControlArray($EventParameters);
-
-			if ($this->_isOKtoLoadControls)
-			{
-				if (method_exists($this, "LoadControlData"))
-				{
-					$this->LoadControlData($EventParameters);
-				}
-			}
-			else
-			{
-				if (method_exists($this, "SetupControlsNoData"))
-				{
-					$this->SetupControlsNoData($EventParameters);
-				}
-			}
-
-			//Do we have a PreProcessor for this event?
-			if (method_exists($this, $preProcessorFunctionName))
-			{
-				$this->$preProcessorFunctionName($EventParameters);
-			}
-
-			//Handle the Event
-			$returnValue = $this->$handlerFunctionName($EventParameters);
-
-			//If the event results returned are marked as processing complete,
-			//we skip any post handlers
-			if ($returnValue->IsProcessingComplete == false)
-			{
-				//Do we have a PostProcessor for this event?
-				if (method_exists($this, $postProcessorFunctionName))
-				{
-					$returnValue = $this->$postProcessorFunctionName($returnValue);
-				}
-
-				$returnValue = $this->Generic_PostProcessor($returnValue);
-			}
-
+			$returnValue = $this->ProcessRaisedEvent($EventParameters, $handlerFunctionName);
 		}
 		else
 		{
 			//We don't have a handler for this event
 			$returnValue = $this->UnhandledEvent_Handler($EventParameters);
+		}
+
+		return $returnValue;
+	}
+
+	protected function ProcessRaisedEvent($EventParameters, $HandlerFunctionName)
+	{
+		$this->Generic_PreProcessor($EventParameters);
+
+		$EventParameters = $this->SetupPageControls($EventParameters);
+
+		$this->AttemptEventPreProcessor($EventParameters);
+
+		$returnValue = $this->$HandlerFunctionName($EventParameters);
+
+		$returnValue = $this->AttemptPostProcessors($EventParameters, $returnValue);
+
+		return $returnValue;
+	}
+
+	protected function SetupPageControls($EventParameters)
+	{
+		$this->BuildControlArray($EventParameters);
+
+		if ($this->_isOKtoLoadControls)
+		{
+			if (method_exists($this, "LoadControlData"))
+			{
+				$this->LoadControlData($EventParameters);
+			}
+
+			$EventParameters = $this->SetupAPIformControlValues($EventParameters);
+		}
+		else
+		{
+			if (method_exists($this, "SetupControlsNoData"))
+			{
+				$this->SetupControlsNoData($EventParameters);
+			}
+		}
+
+		return $EventParameters;
+	}
+
+	protected function SetupAPIformControlValues($EventParameters)
+	{
+		if (Application::IsAPImode() && is_set($this->_apiForm))
+		{
+			$EventParameters['formname'] = $this->_apiForm->Name;
+			$this->_postedForm = $this->_apiForm;
+
+			foreach ($this->_apiForm->Controls as $tempControl)
+			{
+				$localName = strtolower($tempControl->LocalName);
+				$fullName = strtolower($tempControl->Name);
+
+				if (is_set($EventParameters[$localName]))
+				{
+					$EventParameters[$fullName] = $EventParameters[$localName];
+				}
+			}
+
+			$this->_apiForm->EventParameters = $EventParameters;
+		}
+
+		return $EventParameters;
+	}
+
+	protected function AttemptEventPreProcessor($EventParameters)
+	{
+		$preProcessorFunctionName = $EventParameters['event'] . "_PreProcessor";
+
+		if (method_exists($this, $preProcessorFunctionName))
+		{
+			$this->$preProcessorFunctionName($EventParameters);
+		}
+	}
+
+	protected function AttemptPostProcessors($EventParameters, $EventResults)
+	{
+		$returnValue = $EventResults;
+
+		if ($returnValue->IsProcessingComplete == false)
+		{
+			$postProcessorFunctionName = $EventParameters['event'] . "_PostProcessor";
+
+			if (method_exists($this, $postProcessorFunctionName))
+			{
+				$returnValue = $this->$postProcessorFunctionName($returnValue);
+			}
+
+			$returnValue = $this->Generic_PostProcessor($returnValue);
 		}
 
 		return $returnValue;
@@ -350,56 +405,56 @@ class BasePage extends ControlContainer
 		//Set the Header Content Type
 		switch ($EventParameters['filetype'])
 		{
-			case "htm":
-				header('Content-Type: text/html; charset=utf-8');
-				break;
+		case "htm":
+			header('Content-Type: text/html; charset=utf-8');
+			break;
 
-			case "txt":
+		case "txt":
 			case "csv":
-			case "term":
-				header('Content-Type: text/plain');
-				break;
+				case "term":
+					header('Content-Type: text/plain');
+					break;
 
-			case "xml":
-			case "rss":
-				header('Content-Type: text/xml');
-				break;
+				case "xml":
+					case "rss":
+						header('Content-Type: text/xml');
+						break;
 
-			case "css":
-				header('Content-Type: text/css');
-				break;
+					case "css":
+						header('Content-Type: text/css');
+						break;
 
-			case "js":
-				header('Content-Type: text/javascript');
-				break;
+					case "js":
+						header('Content-Type: text/javascript');
+						break;
 
-			case "htm403":
-			case "txt403":
-				header('HTTP/1.1 403 Forbidden');
-				break;
+					case "htm403":
+						case "txt403":
+							header('HTTP/1.1 403 Forbidden');
+							break;
 
-			case "htm404":
-			case "txt404":
-				header('HTTP/1.1 404 Not Found');
-				break;
-				
-			case "cron":
-				//For cron processes - make sure they come in via the
-				//cron.php entry point.  Otherwise just die
-				if (array_key_exists("IsCronEntryPoint", $session) == false)
-				{
-					die();
-				}
-				break;
+						case "htm404":
+							case "txt404":
+								header('HTTP/1.1 404 Not Found');
+								break;
 
-			default:
-				break;
+							case "cron":
+								//For cron processes - make sure they come in via the
+								//cron.php entry point.  Otherwise just die
+								if (array_key_exists("IsCronEntryPoint", $session) == false)
+								{
+									die();
+								}
+								break;
+
+							default:
+								break;
 		}
 
 		//Get any Notification Message that's been set, and push it into a template variable
 		$this->_template->NotificationMessage = $session['notificationmessage'];
 		$this->_template->NotificationMessageType = $session['notificationmessagetype'];
-		
+
 		//Do we have a specific file type processor?
 		$processorName = $EventParameters['filetype'] . "_Processor";
 
@@ -426,127 +481,119 @@ class BasePage extends ControlContainer
 
 	}
 
-    protected function HTM_Processor($EventParameters)
-    {
-        $html = $this->Render();
-
-        echo $this->CompressHTML($html);
-    }
-
-    protected function JS_Processor($EventParameters)
+	protected function HTM_Processor($EventParameters)
 	{
-        $pageJavascript = $this->Render();
+		$html = $this->Render();
 
-        $observers = $this->RenderObservers($pageJavascript);
+		echo $this->CompressHTML($html);
+	}
 
-        $finalOutput = $pageJavascript;
+	protected function JS_Processor($EventParameters)
+	{
+		$pageJavascript = $this->Render();
 
-        if (is_set($observers))
-        {
-            //We have observers we need to register.  Build the function to register them
-            $finalOutput .= "\n";
-            $finalOutput .= "$(document).ready(function()\n";
-            $finalOutput .= "{\n";
-            $finalOutput .= $observers;
-            $finalOutput .= "})\n\n";
-        }
+		$observers = $this->RenderObservers($pageJavascript);
 
-        //Echo our final output
-        echo $this->CompressJavascript($finalOutput);
+		$finalOutput = $pageJavascript;
+
+		if (is_set($observers))
+		{
+			//We have observers we need to register.  Build the function to register them
+			$finalOutput .= "\n";
+			$finalOutput .= "$(document).ready(function()\n";
+			$finalOutput .= "{\n";
+			$finalOutput .= $observers;
+			$finalOutput .= "})\n\n";
+		}
+
+		//Echo our final output
+		echo $this->CompressJavascript($finalOutput);
 
 	}
 
-    protected function CSS_Processor($EventParameters)
-    {
-        $css = $this->Render();
+	protected function CSS_Processor($EventParameters)
+	{
+		$css = $this->Render();
 
-        echo $this->CompressCSS($css);
-    }
+		echo $this->CompressCSS($css);
+	}
 
 	protected function TERM_Processor($EventParameters)
 	{
-        $term = $this->Render();
-		
+		$term = $this->Render();
+
 		echo $this->Terminalize($term);
 	}
 
 	final protected function POST_Handler($EventParameters)
 	{
-		$returnValue = new EventResults();
 
-		//First thing we should do is validate the posted form
 		$success = $this->ValidatePostedForm();
 
 		if ($success)
 		{
-			//By standard, we will set the form's redirect target
-			//back to the current URL
-			$this->_postedForm->RedirectTarget = $EventParameters['routing'];
-
-			//We passed validation, call the form processor
-			$preProcessorMethodName = $this->_postedForm->Name . "_PreProcessor";
-			$processorMethodName = $this->_postedForm->Name . "_Processor";
-			$postProcessorMethodName = $this->_postedForm->Name . "_PostProcessor";
-
-			//Fire the pre-processor
-			if (method_exists($this, $preProcessorMethodName))
-			{
-				$success = $this->$preProcessorMethodName($EventParameters);
-			}
-
-			//Fire the form processor or do the Entity Save routine if needed
-			if ($success)
-			{
-				if (method_exists($this, $processorMethodName))
-				{
-					$success = $this->$processorMethodName($EventParameters);
-				}
-				else
-				{
-					if (is_set($this->_postedForm->EntityObject))
-					{
-						$success = $this->FormEntitySave_Processor($EventParameters);
-					}
-					else
-					{
-						$success = false;
-					}
-				}
-
-			}
-
-			//Fire the post-processor
-			if ($success)
-			{
-				if (method_exists($this, $postProcessorMethodName))
-				{
-					$success = $this->$postProcessorMethodName($EventParameters);
-				}
-			}
+			$this->ProcessPostedForm($EventParameters);
 		}
 
-		//All processing complete - based on our success value, what do we do?
 		if ($success)
 		{
-			//We have successfully processed the valid form.  Redirect to
-			//the form's specified target
-			Application::Redirect($this->_postedForm->RedirectTarget);
+			$returnValue = $this->HandleSuccessfulFormProcessing($EventParameters);
 		}
 		else
 		{
-			//Form is not valid.  We need to return the page with the validation messages.
-			if (method_exists($this, "GET_PreProcessor"))
-			{
-				$this->GET_PreProcessor($EventParameters);
-			}
+			$returnValue = $this->HandleUnsuccessfulFormProcessing($EventParameters);
+		}
 
-			$returnValue = $this->GET_Handler($EventParameters);
+		return $returnValue;
+	}
 
-			if (method_exists($this, "GET_PostProcessor"))
-			{
-				$returnValue = $this->GET_PostProcessor($returnValue);
-			}
+	final protected function ProcessPostedForm($EventParameters)
+	{
+		$this->_postedForm->RedirectTarget = $EventParameters['routing'];
 
+		$returnValue = $this->AttemptFormPreProcessor($EventParameters);
+
+		if ($returnValue == true)
+		{
+			$returnValue = $this->AttemptFormProcessor($EventParameters);
+		}
+
+		if ($returnValue == true)
+		{
+			$returnValue = $this->AttemptFormPostProcessor($EventParameters);
+		}
+
+		return $returnValue;
+
+	}
+
+	final protected function AttemptFormPreProcessor($EventParameters)
+	{
+		$returnValue = true;
+
+		$preProcessorMethodName = $this->_postedForm->Name . "_PreProcessor";
+
+		if (method_exists($this, $preProcessorMethodName))
+		{
+			$returnValue = $this->$preProcessorMethodName($EventParameters);
+		}
+		
+		return $returnValue;
+	}
+
+	final protected function AttemptFormProcessor($EventParameters)
+	{
+		$returnValue = false;
+
+		$processorMethodName = $this->_postedForm->Name . "_Processor";
+
+		if (method_exists($this, $processorMethodName))
+		{
+			$returnValue = $this->$processorMethodName($EventParameters);
+		}
+		elseif (is_set($this->_postedForm->EntityObject))
+		{
+			$returnValue = $this->FormEntitySave_Processor($EventParameters);
 		}
 
 		return $returnValue;
@@ -605,6 +652,53 @@ class BasePage extends ControlContainer
 		return $returnValue;
 	}
 
+	final protected function AttemptFormPostProcessor($EventParameters)
+	{
+		$returnValue = true;
+
+		$postProcessorMethodName = $this->_postedForm->Name . "_PostProcessor";
+
+		if (method_exists($this, $postProcessorMethodName))
+		{
+			$returnValue = $this->$postProcessorMethodName($EventParameters);
+		}
+
+		return $returnValue;
+	}
+
+	final protected function HandleSuccessfulFormProcessing($EventParameters)
+	{
+		$returnValue = new EventResults();
+
+		if (Application::IsAPImode())
+		{
+			$returnValue = $this->HandleUnsuccessfulFormProcessing($EventParameters);
+		}
+		else
+		{
+			Application::Redirect($this->_postedForm->RedirectTarget);
+		}
+
+		return $returnValue;
+	}
+
+	final protected function HandleUnsuccessfulFormProcessing($EventParameters)
+	{
+		if (method_exists($this, "GET_PreProcessor"))
+		{
+			$this->GET_PreProcessor($EventParameters);
+		}
+
+		$returnValue = $this->GET_Handler($EventParameters);
+
+		if (method_exists($this, "GET_PostProcessor"))
+		{
+			$returnValue = $this->GET_PostProcessor($returnValue);
+		}
+
+		return $returnValue;
+	}
+
 	final protected function AJAX_Handler($EventParameters)
 	{
 		$returnValue = new EventResults();
@@ -619,7 +713,7 @@ class BasePage extends ControlContainer
 			//We have a control name, find the control by that name
 			$targetName = str_replace("_", "->", $EventParameters['target']);
 
-            $cmd = "\$target = \$this->{$targetName};";
+			$cmd = "\$target = \$this->{$targetName};";
 			eval($cmd);
 
 			//Do we use the target's normal type, or reference its parent's type for the template?
@@ -641,10 +735,10 @@ class BasePage extends ControlContainer
 		//Call the method and echo the results
 		header('Content-Type: text/javascript');
 
-        $results = $processor->Render();
+		$results = $processor->Render();
 		echo $this->CompressJavascript($results, false);
 
-        $returnValue->Value = true;
+		$returnValue->Value = true;
 		$returnValue->Complete();
 
 		return $returnValue;
@@ -654,7 +748,7 @@ class BasePage extends ControlContainer
 	{
 		$returnValue = new EventResults();
 
-        $returnValue->Value = true;
+		$returnValue->Value = true;
 		$returnValue->Complete();
 
 		return $returnValue;
@@ -704,8 +798,8 @@ class BasePage extends ControlContainer
 		if (is_numeric($ResponseCode))
 		{
 
-        	$EventParameters['filetype'] .= $ResponseCode;
-        	$this->_template->RequestFileType = $EventParameters['filetype'];
+			$EventParameters['filetype'] .= $ResponseCode;
+			$this->_template->RequestFileType = $EventParameters['filetype'];
 
 			$returnValue = true;
 		}
