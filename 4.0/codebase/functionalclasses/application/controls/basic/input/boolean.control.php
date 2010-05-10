@@ -45,7 +45,7 @@ class BooleanControl extends BaseControl
 			{
 				$inboundValue = DIunescape($this->_eventParameters[strtolower($this->Name)]);
 
-				if ($inboundValue == "on")
+				if ($inboundValue == "on" || $inboundValue == 1)
 				{
 					$this->_value = true;
 				}
