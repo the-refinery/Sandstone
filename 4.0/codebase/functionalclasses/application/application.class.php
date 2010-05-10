@@ -533,8 +533,9 @@ class Application extends Module
 				if (is_set($accountID))
 				{
 					$this->_license = new License($accountID);
-					$this->_isAPImode = true;
 				}
+
+				$this->_isAPImode = true;
 			}
 		}
 	}
@@ -700,7 +701,15 @@ class Application extends Module
 	{
 		$eventParameters['page'] = "Error403";
 		$eventParameters['pageclass'] = "Error403Page";
-		$eventParameters['filetype'] = "htm403";
+
+		if ($this->_isAPImode)
+		{
+			$eventParameters['filetype'] = "xml403";
+		}
+		else
+		{
+			$eventParameters['filetype'] = "htm403";
+		}
 		$eventParameters['event'] = "GET";
 
 		$targetPage = new $eventParameters['pageclass'] ();
@@ -714,7 +723,16 @@ class Application extends Module
 	{
 		$eventParameters['page'] = "Error404";
 		$eventParameters['pageclass'] = "Error404Page";
-		$eventParameters['filetype'] = "htm404";
+
+		if ($this->_isAPImode)
+		{
+			$eventParameters['filetype'] = "xml404";
+		}
+		else
+		{
+			$eventParameters['filetype'] = "htm404";
+		}
+
 		$eventParameters['event'] = "GET";
 
 		$targetPage = new $eventParameters['pageclass'] ();

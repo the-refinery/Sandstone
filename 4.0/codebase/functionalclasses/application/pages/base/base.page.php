@@ -430,11 +430,13 @@ class BasePage extends ControlContainer
 
 					case "htm403":
 						case "txt403":
+							case "xml403":
 							header('HTTP/1.1 403 Forbidden');
 							break;
 
 						case "htm404":
 							case "txt404":
+							case "xml404":
 								header('HTTP/1.1 404 Not Found');
 								break;
 
@@ -668,8 +670,6 @@ class BasePage extends ControlContainer
 
 	final protected function HandleSuccessfulFormProcessing($EventParameters)
 	{
-		$returnValue = new EventResults();
-
 		if (Application::IsAPImode())
 		{
 			$returnValue = $this->HandleUnsuccessfulFormProcessing($EventParameters);
@@ -789,6 +789,9 @@ class BasePage extends ControlContainer
 			//Used for Javascript checks of a validation pass/fail
 			$this->_postedForm->Template->Validation = 'false';
 		}
+
+		$this->_postedForm->IsValidated = true;
+		$this->_postedForm->IsValidationPassed = $returnValue;
 
 		return $returnValue;
 	}

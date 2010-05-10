@@ -4,7 +4,7 @@ Page Form Class File
 
 @package Sandstone
 @subpackage Application
-*/
+ */
 
 class PageForm extends ControlContainer
 {
@@ -20,6 +20,9 @@ class PageForm extends ControlContainer
 	protected $_entitySaveFailureNotification;
 	protected $_entitySaveSuccessRoutingAction;
 
+	protected $_isValidated;
+	protected $_isValidationPassed; 
+
 	public function __construct($EventParameters)
 	{
 		parent::__construct();
@@ -31,12 +34,14 @@ class PageForm extends ControlContainer
 
 		$this->_isRawValuePosted = false;
 
-        //Prep our template to use the form layout
-        $this->_template->IsMasterLayoutUsed = true;
-        $this->_template->MasterLayoutFileName = "form";
+		//Prep our template to use the form layout
+		$this->_template->IsMasterLayoutUsed = true;
+		$this->_template->MasterLayoutFileName = "form";
 
-        $this->_isEntitySaveDisabled = false;
+		$this->_isEntitySaveDisabled = false;
 
+		$this->_isValidated = false;
+		$this->_isValidationPassed = false;
 	}
 
 	/*
@@ -44,7 +49,7 @@ class PageForm extends ControlContainer
 
 	@return string
 	@param string $Value
-	*/
+	 */
 	public function getTarget()
 	{
 		return $this->_target;
@@ -53,7 +58,7 @@ class PageForm extends ControlContainer
 	public function setTarget($Value)
 	{
 		$this->_target = $Value;
-    }
+	}
 
 	/*
 	RedirectTarget property
@@ -151,33 +156,53 @@ class PageForm extends ControlContainer
 		$this->_entitySaveSuccessRoutingAction = $Value;
 	}
 
-    public function Render()
-    {
+	public function getIsValidated()
+	{
+		return $this->_isValidated;
+	}
 
-        $this->_template->FormName = $this->_name;
-        $this->_template->RequestedURL = Routing::GetRequestedURL();
+	public function setIsValidated($Value)
+	{
+		$this->_isValidated = $Value;
+	}
 
-        if (is_set($this->_target))
-        {
-            $this->_template->Target = "target=\"{$this->_target}\"";
-        }
+	public function getIsValidationPassed()
+	{
+		return $this->_isValidationPassed;
+	}
 
-        //Loop through the controls and see if we have a file control
-        foreach ($this->AllActiveControls as $tempControl)
-        {
-            if ($tempControl instanceof FileControl)
-            {
-            	//We have a file control, add the ENC type
-                $this->_template->EncType = "enctype=\"multipart/form-data\"";
-            }
-        }
+	public function setIsValidationPassed($Value)
+	{
+		$this->_isValidationPassed = $Value;
+	}
 
-        //Now call our parent's render method to generate the actual output.
-        $returnValue =  parent::Render();
+	public function Render()
+	{
 
-        return $returnValue;
+		$this->_template->FormName = $this->_name;
+		$this->_template->RequestedURL = Routing::GetRequestedURL();
 
-    }
+		if (is_set($this->_target))
+		{
+			$this->_template->Target = "target=\"{$this->_target}\"";
+		}
+
+		//Loop through the controls and see if we have a file control
+		foreach ($this->AllActiveControls as $tempControl)
+		{
+			if ($tempControl instanceof FileControl)
+			{
+				//We have a file control, add the ENC type
+				$this->_template->EncType = "enctype=\"multipart/form-data\"";
+			}
+		}
+
+		//Now call our parent's render method to generate the actual output.
+		$returnValue =  parent::Render();
+
+		return $returnValue;
+
+	}
 
 }
 ?>
