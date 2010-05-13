@@ -424,9 +424,7 @@ class BaseUser extends EntityBase
 				$returnValue = $query->LoadEntity($this);
 
 				//We have a valid user, create a new token for them
-				$this->_token = md5($_SERVER['HTTP_USER_AGENT'] . date('dmys'));
-
-				$this->SaveToken();
+				$this->GenerateNewToken();
 			}
 			else
 			{
@@ -441,6 +439,12 @@ class BaseUser extends EntityBase
 
 		return $returnValue;
 
+	}
+
+	public function GenerateNewToken()
+	{
+		$this->_token = md5($_SERVER['HTTP_USER_AGENT'] . date('dmys'));
+		$this->SaveToken();
 	}
 
 	protected function AttemptAdminLogin($UserName, $Password)
@@ -479,8 +483,7 @@ class BaseUser extends EntityBase
 					if (is_set($this->_token) == false)
 					{
 						//There wasn't a token, so create one
-						$this->_token = md5($_SERVER['HTTP_USER_AGENT'] . date('dmys'));
-						$this->SaveToken();
+						$this->GenerateNewToken();
 					}
 				}
 			}
