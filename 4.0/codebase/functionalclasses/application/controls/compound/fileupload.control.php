@@ -4,7 +4,7 @@ File Upload Control Class File
 
 @package Sandstone
 @subpackage Application
-*/
+ */
 
 NameSpace::Using("Sandstone.Action");
 NameSpace::Using("Sandstone.File");
@@ -57,7 +57,7 @@ class FileUploadControl extends BaseControl
 
 	@return address
 	@param file $Value
-	*/
+	 */
 	public function getDefaultValue()
 	{
 		return $this->_defaultValue;
@@ -84,7 +84,7 @@ class FileUploadControl extends BaseControl
 
 	@return string
 	@param string $Value
-	*/
+	 */
 	public function getFileUploadPath()
 	{
 		return $this->_fileUploadPath;
@@ -99,7 +99,7 @@ class FileUploadControl extends BaseControl
 	ValidFileTypes property
 
 	@return array
-	*/
+	 */
 	public function getValidFileTypes()
 	{
 		return $this->_validFileTypes;
@@ -109,7 +109,7 @@ class FileUploadControl extends BaseControl
 	ValidFileExtensions property
 
 	@return array
-	*/
+	 */
 	public function getValidFileExtensions()
 	{
 		return $this->_validFileExtensions;
@@ -120,7 +120,7 @@ class FileUploadControl extends BaseControl
 
 	@return string
 	@param string $Value
-	*/
+	 */
 	public function getInvalidFileTypeMessage()
 	{
 		return $this->_invalidFileTypeMessage;
@@ -164,7 +164,7 @@ class FileUploadControl extends BaseControl
 		$this->_value = $this->ProcessUpload();
 	}
 
-    protected function SetupControls()
+	protected function SetupControls()
 	{
 		parent::SetupControls();
 
@@ -190,7 +190,7 @@ class FileUploadControl extends BaseControl
 		$returnValue = $this->SetupProcessFileUploadReturnValue();
 
 		//Which mode are we in, File Upload or URL?
-        if (strlen($this->FileUpload->FileName) > 0)
+		if (strlen($this->FileUpload->FileName) > 0)
 		{
 			//File Upload
 			$isValidUpload = $this->ProcessFileUpload($returnValue);
@@ -251,7 +251,7 @@ class FileUploadControl extends BaseControl
 			$originalFileName = $this->FileUpload->FileName;
 			$this->_originalFileName = $originalFileName;
 
-		    // Generate the new physical file name and file spec
+			// Generate the new physical file name and file spec
 			$newFileName = $this->GenerateFilename($originalFileName, $FileObject);
 
 			//Setup the file specs
@@ -272,7 +272,7 @@ class FileUploadControl extends BaseControl
 			if ($returnValue == true && Application::Registry()->AWSisActive)
 			{
 
-            	//Pull the file's contents into memory
+				//Pull the file's contents into memory
 				$fh = fopen($this->_localFileSpec, 'rb' );
 				$this->_fileContents = fread( $fh, $newFileSize);
 				fclose( $fh );
@@ -368,7 +368,7 @@ class FileUploadControl extends BaseControl
 
 		if ($isValid)
 		{
-        	// Generate the new physical file name and file spec
+			// Generate the new physical file name and file spec
 			$newFileName = $this->GenerateFilename($originalFileName, $FileObject);
 
 			//Setup the file specs
@@ -393,7 +393,7 @@ class FileUploadControl extends BaseControl
 			// Create the new file and save the file contents, if this AWS isn't active
 			if (Application::Registry()->AWSisActive)
 			{
-            	//Do the x-fer to AWS
+				//Do the x-fer to AWS
 				$returnValue = $this->ProcessAWSupload($newFileSpec, $newFileType, $originalFileName);
 			}
 
@@ -423,7 +423,7 @@ class FileUploadControl extends BaseControl
 		//filename or filetype
 		if ($FileObject->IsLoaded == false)
 		{
-			$FileObject->FileName = $OriginalFileName;
+			$FileObject->FileName = StringFunc::FormatFilename($OriginalFileName);
 			$FileObject->FileType = $FileType;
 			$FileObject->PhysicalFileName = $PhysicalFileName;
 		}
@@ -556,7 +556,7 @@ class FileUploadControl extends BaseControl
 				$returnValue = "{$fileSpecDecode['FileName']}-{$fileCount}.{$fileSpecDecode['Extension']}";
 			}
 		}
-		
+
 		// Remove spaces from the filename
 		$returnValue = StringFunc::FormatFilename($returnValue);
 
