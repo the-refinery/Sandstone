@@ -534,7 +534,7 @@ class BasePage extends ControlContainer
 
 		if ($success)
 		{
-			$this->ProcessPostedForm($EventParameters);
+			$success = $this->ProcessPostedForm($EventParameters);
 		}
 
 		if ($success)
@@ -756,11 +756,9 @@ class BasePage extends ControlContainer
 
 	final protected function ValidatePostedForm()
 	{
-
 		//Do we have any controls to validate?
 		if (count($this->_postedForm->Controls) > 0)
 		{
-
 			//Begin with a true value, and set it to false if
 			//any validation fails.
 			$returnValue = true;
