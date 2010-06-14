@@ -557,5 +557,29 @@ class CreditCard extends Module
 		return $returnValue;
 	}
 
+	static public function TestCard()
+	{
+		$returnValue = new CreditCard;
+
+		$returnValue->Number = "4719225120691156";
+		$returnValue->CardType = new CreditCardType(5);
+		$returnValue->CVV = "456";
+
+		$now = new Date();
+		$returnValue->ExpirationDate = $now->AddYears(2);
+
+		$returnValue->NameOnCard = "Test User";
+
+		$addr = new Address();
+		$addr->Street = "20545 Center Ridge Road";
+		$addr->City = "Rocky River";
+		$addr->ProvinceCode = "OH";
+		$addr->PostalCode = "44116";
+		$addr->CountryCode = "US";
+
+		$returnValue->BillingAddress = $addr;
+
+		return $returnValue;
+	}
+
 }
-?>
