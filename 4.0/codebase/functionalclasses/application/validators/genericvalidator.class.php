@@ -27,7 +27,7 @@ class GenericValidator extends Module
 
 	public function IsNumeric($Control)
 	{
-		if (! is_numeric($Control->Value))
+		if (is_set($Control->Value) && is_numeric($Control->Value) == false)
 		{
 			$returnValue = $this->GenerateNamedMessage($Control, "is not numeric!");
 		}
