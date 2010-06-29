@@ -153,7 +153,35 @@ class StringFunc
 
 		return $returnValue;
 	}
+
+	static function Ordinalize($Number)
+	{
+		if (in_array(($Number % 100),range(11,13)))
+		{
+			$suffix = 'th';
+		}
+		else
+		{
+			switch (($Number % 10)) 
+			{
+			case 1:
+				$suffix = 'st';
+				break;
+			case 2:
+				$suffix = 'nd';
+				break;
+			case 3:
+				$suffix = 'rd';
+				break;
+			default:
+				$suffix = 'th';
+				break;
+			}
+		}
+
+		$returnValue = $Number . $suffix;
+
+		return $returnValue;
+	}
+	
 }
-
-
-?>

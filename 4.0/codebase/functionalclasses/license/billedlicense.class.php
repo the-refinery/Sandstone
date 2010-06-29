@@ -248,7 +248,7 @@ class BilledLicense extends BaseLicense
 		return $returnValue;
 	}
 
-	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email, $PhoneNumber)
+	public function CreateAdminUser($UserName, $FirstName, $LastName, $Password, $Email, $PhoneNumber="")
 	{
 		$returnValue = new User();
 
