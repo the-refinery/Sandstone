@@ -183,18 +183,23 @@ class BaseLicense extends EntityBase
 
 	public function UniqueAccountName($Control)
 	{
-		if (License::ValidateUniqueAccountName($Control->Value) == false)
-		{
-			if (is_set($Control->LabelText))
-			{
-				$name = $Control->LabelText;
-			}
-			else
-			{
-				$name = $Control->Name;
-			}
+		$newName = License::FormatValidAccountName($Control->Value);
 
-			$returnValue = $name . " has already been taken, please try another name!";
+		if ($Control->DefaultValue != $newName)
+		{
+			if (License::ValidateUniqueAccountName($newName) == false)
+			{
+				if (is_set($Control->LabelText))
+				{
+					$name = $Control->LabelText;
+				}
+				else
+				{
+					$name = $Control->Name;
+				}
+
+				$returnValue = $name . " has already been taken, please try another name!";
+			}
 		}
 
 		return $returnValue;
