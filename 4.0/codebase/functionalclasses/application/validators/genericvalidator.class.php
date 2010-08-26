@@ -34,10 +34,9 @@ class GenericValidator extends Module
 
 		return $returnValue;
 	}
-
+	 
 	protected function GenerateNamedMessage($Control, $MessageBody)
 	{
-
 		if (is_set($Control->LabelText))
 		{
 			$name = $Control->LabelText;

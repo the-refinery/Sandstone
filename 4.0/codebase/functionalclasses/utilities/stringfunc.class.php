@@ -55,11 +55,11 @@ class StringFunc
 		return $returnValue;
 	}
 	
-	static function FormatCurrency($Value)
+	static function FormatCurrency($Value, $DecimalPlaces = 2)
 	{
 		if ($Value > 0)
 		{
-			$returnValue = "\$" . number_format($Value,2);
+			$returnValue = "\$" . number_format($Value, $DecimalPlaces);
 		}
 		elseif (is_null($Value))
 		{
@@ -67,7 +67,7 @@ class StringFunc
 		}
 		else
 		{
-			$returnValue = "\$0.00";
+			$returnValue = "\$" . number_format(0, $DecimalPlaces);
 		}
 
 		return $returnValue;
