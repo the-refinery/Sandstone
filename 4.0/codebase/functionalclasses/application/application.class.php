@@ -519,6 +519,7 @@ class Application extends Module
 			}
 		}
 
+
 		return $returnValue;
 	}
 	
@@ -766,7 +767,6 @@ class Application extends Module
 
 	protected function LoadCurrentUser()
 	{
-
 		$this->CheckForCookieWithoutLicense();
 
 		$this->AttemptLoadUserForAPImode();

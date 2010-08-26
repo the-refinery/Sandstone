@@ -55,11 +55,11 @@ class StringFunc
 		return $returnValue;
 	}
 	
-	static function FormatCurrency($Value)
+	static function FormatCurrency($Value, $DecimalPlaces = 2)
 	{
 		if ($Value > 0)
 		{
-			$returnValue = "\$" . number_format($Value,2);
+			$returnValue = "\$" . number_format($Value, $DecimalPlaces);
 		}
 		elseif (is_null($Value))
 		{
@@ -67,7 +67,7 @@ class StringFunc
 		}
 		else
 		{
-			$returnValue = "\$0.00";
+			$returnValue = "\$" . number_format(0, $DecimalPlaces);
 		}
 
 		return $returnValue;
@@ -153,7 +153,35 @@ class StringFunc
 
 		return $returnValue;
 	}
+
+	static function Ordinalize($Number)
+	{
+		if (in_array(($Number % 100),range(11,13)))
+		{
+			$suffix = 'th';
+		}
+		else
+		{
+			switch (($Number % 10)) 
+			{
+			case 1:
+				$suffix = 'st';
+				break;
+			case 2:
+				$suffix = 'nd';
+				break;
+			case 3:
+				$suffix = 'rd';
+				break;
+			default:
+				$suffix = 'th';
+				break;
+			}
+		}
+
+		$returnValue = $Number . $suffix;
+
+		return $returnValue;
+	}
+
 }
-
-
-?>
