@@ -1,5 +1,0 @@
-{!label.htm.template}
-<div class="historicdatepicker_body">
-	{+Month}/{+Day}/{+Year}
-</div>
-
