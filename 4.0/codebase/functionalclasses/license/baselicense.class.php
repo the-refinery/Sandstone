@@ -38,6 +38,11 @@ class BaseLicense extends EntityBase
 		return $this->_accountID;
 	}
 
+  public function setName($Value)
+  {
+    $this->_name = License::FormatValidAccountName($Value);
+  }
+
 	public function getIsValid()
 	{
 		return $this->IsLoaded;
@@ -181,29 +186,30 @@ class BaseLicense extends EntityBase
 		return $returnValue;
 	}
 
-	public function UniqueAccountName($Control)
-	{
-		$newName = License::FormatValidAccountName($Control->Value);
+  public function UniqueAccountName($Control)
+  {
+    $newName = License::FormatValidAccountName($Control->Value);
+    $defaultName = License::FormatValidAccountName($Control->DefaultValue);
 
-		if ($Control->DefaultValue != $newName)
-		{
-			if (License::ValidateUniqueAccountName($newName) == false)
-			{
-				if (is_set($Control->LabelText))
-				{
-					$name = $Control->LabelText;
-				}
-				else
-				{
-					$name = $Control->Name;
-				}
+    if($newName != $defaultName)
+    {
+      if (License::ValidateUniqueAccountName($newName) == false)
+      {
+        if (is_set($Control->LabelText))
+        {
+          $name = $Control->LabelText;
+        }
+        else
+        {
+          $name = $Control->Name;
+        }
 
-				$returnValue = $name . " has already been taken, please try another name!";
-			}
-		}
+        $returnValue = $name . " has already been taken, please try another name!";
+      }
+    }
 
-		return $returnValue;
-	}
+    return $returnValue;
+  }
 
 	static public function ValidateUniqueAccountName($NewAccountName)
 	{
