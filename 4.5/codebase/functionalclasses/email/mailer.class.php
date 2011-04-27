@@ -14,6 +14,7 @@ class Mailer extends Renderable
 	protected $_senderEmail;
 	protected $_subject;
 	protected $_bccEmail;
+  protected $_replyToEmail;
 	
 	protected $_sendAsHTML = false;
 	
@@ -93,6 +94,16 @@ class Mailer extends Renderable
 	{
 		$this->_bccEmail = $Value;
 	}
+  
+	public function getReplyToEmail()
+	{
+		return $this->_replyToEmail;
+	}
+
+	public function setReplyToEmail($Value)
+	{
+		$this->_replyToEmail = $Value;
+	}
 
 	// Overwritten in sub classes
 	public function Send()
@@ -100,5 +111,3 @@ class Mailer extends Renderable
 	}
 			
 }
-
-?>

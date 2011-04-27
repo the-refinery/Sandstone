@@ -19,15 +19,14 @@ class SendMail extends Mailer
 
 		if (is_set($this->_bccEmail))
 		{
-			$headers .= "Bcc: {$this->_bccEmail}\r\n";
+			$headers .= 'Bcc: '. $this->_bccEmail. "\r\n";
 		}
 
+    if (is_set($this->_replyToEmail))
+    {
+      $headers .= 'Reply-To: ' . $this->_replyToEmail . "\r\n";
+    }
+
 		mail("{$this->_toName} <{$this->_toEmail}>", $this->_subject, $this->Render(), $headers . "From: {$this->_senderName} <{$this->_senderEmail}>\r\n");
-
-		//Comment out the one above and use this one for debugging with Mercury Mail Server
-//		mail("{$this->_toEmail}", $this->_subject, $this->Render(), $headers . "From: {$this->_senderEmail}\r\n");
 	}
-
 }
-
-?>
