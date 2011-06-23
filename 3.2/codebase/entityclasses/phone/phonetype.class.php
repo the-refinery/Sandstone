@@ -6,7 +6,7 @@ PhoneType Class File
 @subpackage Phone
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class PhoneType extends EntityBase
 {

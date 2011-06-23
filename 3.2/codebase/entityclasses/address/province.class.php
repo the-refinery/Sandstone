@@ -6,7 +6,7 @@ Province Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Province extends CodeTableEntityBase
 {

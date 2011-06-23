@@ -598,7 +598,7 @@ class Template extends Module
         }
 
         //Now add the path for the application, sandstone and any used top level namespaces
-        $templateIncludePath .= Namespace::TemplateSearchPath();
+        $templateIncludePath .= SandstoneNamespace::TemplateSearchPath();
 
         //Set the actual PHP include path
         set_include_path($templateIncludePath);

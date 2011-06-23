@@ -6,9 +6,9 @@ Messages Control Class File
 @subpackage Application
 */
 
-NameSpace::Using("Sandstone.Action");
-NameSpace::Using("Sandstone.Message");
-NameSpace::Using("Sandstone.Markdown");
+SandstoneNamespace::Using("Sandstone.Action");
+SandstoneNamespace::Using("Sandstone.Message");
+SandstoneNamespace::Using("Sandstone.Markdown");
 
 class MessagesControl extends BaseControl
 {

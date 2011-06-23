@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Utilities.Color");
+SandstoneNamespace::Using("Sandstone.Utilities.Color");
 
 class GoogleChart extends Module
 {

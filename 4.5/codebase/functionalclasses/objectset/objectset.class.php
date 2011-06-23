@@ -6,7 +6,7 @@ ObjectSet Class File
 @subpackage ObjectSet
 */
 
-Namespace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Date");
 
 class ObjectSet extends Module
 {

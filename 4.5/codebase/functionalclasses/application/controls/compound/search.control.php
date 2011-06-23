@@ -6,7 +6,7 @@ Search Control Class File
 @subpackage Application
 */
 
-Namespace::Using("Sandstone.Search");
+SandstoneNamespace::Using("Sandstone.Search");
 
 class SearchControl extends BaseControl
 {

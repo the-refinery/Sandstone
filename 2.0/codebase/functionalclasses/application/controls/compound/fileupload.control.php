@@ -12,8 +12,8 @@
  *
  */
 
-NameSpace::Using("Sandstone.Action");
-NameSpace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.Action");
+SandstoneNamespace::Using("Sandstone.File");
 
 class FileUploadControl extends BaseControl
 {

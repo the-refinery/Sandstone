@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Barcode");
+SandstoneNamespace::Using("Sandstone.Barcode");
 
 class BarcodePage extends BasePage
 {

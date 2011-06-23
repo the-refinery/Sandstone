@@ -15,8 +15,8 @@
  * 
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-Namespace::Using("Sandstone.Application.Dispatcher");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.Application.Dispatcher");
 
 class GetZipCodeDetails_Handler extends EventHandler 
 {

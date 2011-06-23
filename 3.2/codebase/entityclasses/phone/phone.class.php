@@ -6,8 +6,8 @@ Phone Class File
 @subpackage Phone
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.Utilities.String");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.Utilities.String");
 
 class Phone extends EntityBase
 {

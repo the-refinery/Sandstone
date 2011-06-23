@@ -6,7 +6,7 @@ Tag Class File
 @subpackage Tag
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Tag extends EntityBase
 {

@@ -6,7 +6,7 @@ KnowledgebaseArticle Class File
 @subpackage Knowledgebase
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class KnowledgebaseArticle extends EntityBase
 {

@@ -1,7 +1,7 @@
 <?php
 
-Namespace::Using('Sandstone.Curl');
-Namespace::Using('Sandstone.ScreenScrape');
+SandstoneNamespace::Using('Sandstone.Curl');
+SandstoneNamespace::Using('Sandstone.ScreenScrape');
 
 class ScreenScrapeSpec extends SpecBase
 {

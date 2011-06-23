@@ -6,7 +6,7 @@ Phones Collective Class
 @subpackage Phones
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Phones extends CollectiveBase
 {

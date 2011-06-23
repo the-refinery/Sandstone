@@ -6,7 +6,7 @@ Routing Base Class File
 @subpackage Routing
 */
 
-Namespace::Using("Sandstone.Utilities.XML");
+SandstoneNamespace::Using("Sandstone.Utilities.XML");
 
 class RoutingBase extends Module
 {

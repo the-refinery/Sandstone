@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Date");
 
 class QueryLog extends Module
 {

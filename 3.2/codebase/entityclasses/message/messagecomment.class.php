@@ -6,7 +6,7 @@ Message Comment Class
 @subpackage Message
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class MessageComment extends Module
 {

@@ -6,11 +6,11 @@ Base User Class File
 @subpackage User
  */
 
-NameSpace::Using("Sandstone.Action");
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.Date");
-NameSpace::Using("Sandstone.Email");
-NameSpace::Using("Sandstone.Phone");
+SandstoneNamespace::Using("Sandstone.Action");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Email");
+SandstoneNamespace::Using("Sandstone.Phone");
 
 class BaseUser extends EntityBase
 {

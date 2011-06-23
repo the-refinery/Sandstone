@@ -13,8 +13,8 @@
  * 
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.CreditCard");
 
 class MerchantAccount extends Module
 {

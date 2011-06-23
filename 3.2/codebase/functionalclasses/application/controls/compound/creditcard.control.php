@@ -6,7 +6,7 @@ Credit Card Control Class File
 @subpackage Application
 */
 
-NameSpace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.CreditCard");
 
 class CreditCardControl extends BaseControl
 {

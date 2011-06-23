@@ -12,9 +12,9 @@
  * 
  */
 
-NameSpace::Using("Sandstone.Application.Pages");
-NameSpace::Using("Sandstone.Application.Controls");
-NameSpace::Using("Sandstone.Markdown");
+SandstoneNamespace::Using("Sandstone.Application.Pages");
+SandstoneNamespace::Using("Sandstone.Application.Controls");
+SandstoneNamespace::Using("Sandstone.Markdown");
 
 class DISmarty extends Smarty
 {

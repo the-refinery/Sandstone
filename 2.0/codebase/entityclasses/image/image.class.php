@@ -12,8 +12,8 @@
  *
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.File");
 
 class Image extends EntityBase
 {

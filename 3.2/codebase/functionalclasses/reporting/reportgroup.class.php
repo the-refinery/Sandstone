@@ -6,7 +6,7 @@ Report Group Class File
 @subpackage Reporting
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class ReportGroup extends Module
 {

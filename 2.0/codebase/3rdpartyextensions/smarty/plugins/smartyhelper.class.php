@@ -11,9 +11,9 @@
  * 
  * 
  */
-NameSpace::Using("Sandstone.GUI");
-NameSpace::Using("Sandstone.Utilities.Javascript");
-NameSpace::Using("Sandstone.Markdown");
+SandstoneNamespace::Using("Sandstone.GUI");
+SandstoneNamespace::Using("Sandstone.Utilities.Javascript");
+SandstoneNamespace::Using("Sandstone.Markdown");
 
 
 class SmartyHelper extends Module

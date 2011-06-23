@@ -1,7 +1,7 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
-NameSpace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.File");
 
 class FilePage extends BasePage
 {

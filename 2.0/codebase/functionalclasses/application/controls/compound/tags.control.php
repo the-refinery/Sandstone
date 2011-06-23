@@ -12,7 +12,7 @@
  *
  */
 
-NameSpace::Using("Sandstone.Tag");
+SandstoneNamespace::Using("Sandstone.Tag");
 
 class TagsControl extends BaseControl
 {

@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PrimitiveToJson extends Service
 {

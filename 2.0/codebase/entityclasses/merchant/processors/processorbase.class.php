@@ -13,8 +13,8 @@
  * 
  */
 
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.CreditCard");
 
 class ProcessorBase extends Module
 {

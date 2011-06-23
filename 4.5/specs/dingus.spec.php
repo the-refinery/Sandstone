@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Dingus.Database");
+SandstoneNamespace::Using("Sandstone.Dingus.Database");
 
 class DingusSpec extends SpecBase
 {

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * State Class
  * 
@@ -13,7 +13,7 @@
  * 
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class State extends Module
 {

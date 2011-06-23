@@ -11,10 +11,10 @@
  * 
  */
 
-NameSpace::Using("Sandstone.SEO");
-NameSpace::Using("Sandstone.Smarty");
-NameSpace::Using("Sandstone.Traffic");
-NameSpace::Using("Sandstone.Utilities.Encryption");
+SandstoneNamespace::Using("Sandstone.SEO");
+SandstoneNamespace::Using("Sandstone.Smarty");
+SandstoneNamespace::Using("Sandstone.Traffic");
+SandstoneNamespace::Using("Sandstone.Utilities.Encryption");
 
 class BasePage extends ControlContainer
 {

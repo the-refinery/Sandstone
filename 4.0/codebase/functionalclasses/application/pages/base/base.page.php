@@ -6,9 +6,9 @@ Page Class File
 @subpackage Application
  */
 
-NameSpace::Using("Sandstone.SEO");
-NameSpace::Using("Sandstone.Smarty");
-NameSpace::Using("Sandstone.Utilities.Encryption");
+SandstoneNamespace::Using("Sandstone.SEO");
+SandstoneNamespace::Using("Sandstone.Smarty");
+SandstoneNamespace::Using("Sandstone.Utilities.Encryption");
 
 class BasePage extends ControlContainer
 {
@@ -147,7 +147,7 @@ class BasePage extends ControlContainer
 	{
 		if (is_set($this->_templateSearchPath) == false)
 		{
-			$target = NameSpace::NamespaceEnviromentBase("application") . Namespace::PageSpace(get_class($this)) . "templates/";
+			$target = SandstoneNamespace::NamespaceEnviromentBase("application") . SandstoneNamespace::PageSpace(get_class($this)) . "templates/";
 
 			$templateDirs = Template::FindDirectoriesWithTemplates($target);
 

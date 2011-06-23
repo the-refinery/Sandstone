@@ -6,7 +6,7 @@ FileVersion Class File
 @subpackage File
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class FileVersion extends EntityBase
 {

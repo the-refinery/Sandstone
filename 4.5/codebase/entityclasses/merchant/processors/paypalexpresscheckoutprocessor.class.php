@@ -6,9 +6,9 @@ PayPal Express Checkout Processor Class
 @subpackage Merchant
 */
 
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.CreditCard");
-NameSpace::Using("Sandstone.Utilities.String");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.Utilities.String");
 
 class PayPalExpressCheckoutProcessor extends Module
 {

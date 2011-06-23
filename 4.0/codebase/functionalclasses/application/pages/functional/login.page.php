@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Email.Mailer");
+SandstoneNamespace::Using("Sandstone.Email.Mailer");
 
 class LoginPage extends BasePage
 {
