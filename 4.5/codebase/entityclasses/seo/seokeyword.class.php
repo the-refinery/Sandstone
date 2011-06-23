@@ -6,7 +6,7 @@ SEO Keyword Class
 @subpackage SEO
 */
 
-NameSpace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Database");
 
 class SEOkeyword extends Module
 {

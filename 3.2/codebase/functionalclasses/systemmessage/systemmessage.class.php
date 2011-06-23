@@ -6,7 +6,7 @@ SystemMessage Class File
 @subpackage SystemMessgae
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class SystemMessage extends EntityBase
 {

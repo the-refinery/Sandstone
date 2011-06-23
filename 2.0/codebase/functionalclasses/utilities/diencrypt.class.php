@@ -12,7 +12,7 @@
  * 
  */
 
-NameSpace::Using("Sandstone.Registry");
+SandstoneNamespace::Using("Sandstone.Registry");
 
 class DIencrypt
 {

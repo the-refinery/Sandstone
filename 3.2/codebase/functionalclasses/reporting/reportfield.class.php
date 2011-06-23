@@ -6,7 +6,7 @@ ReportField Class File
 @subpackage Reporting
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class ReportField extends EntityBase
 {

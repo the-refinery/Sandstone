@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Search");
+SandstoneNamespace::Using("Sandstone.Search");
 
 class SearchResultsPage extends BasePage
 {

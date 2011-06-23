@@ -59,27 +59,27 @@ set_include_path(get_include_path() . PATH_SEPARATOR . $APPLICATION_ROOT_LOCATIO
 require("sandstone.inc.php");
 
 //Set the environment for the namespaces
-NameSpace::SetEnvironment($nameSpaceEnvironments);
+SandstoneNamespace::SetEnvironment($nameSpaceEnvironments);
 
 //Now that we have the sandstone base classes included, we can begin using Namespaces
 //for everything else.  We'll start by using the Sandstone Application namespaces
 //and the current application namespaces.
-NameSpace::Using("Sandstone.Application.*");
-NameSpace::Using("Sandstone.Routing");
+SandstoneNamespace::Using("Sandstone.Application.*");
+SandstoneNamespace::Using("Sandstone.Routing");
 
-NameSpace::Using("Application.*");
+SandstoneNamespace::Using("Application.*");
 
 //If Application.Page isn't in use yet, build it dynamically
-if (NameSpace::IsInUse("Application.Pages") == false)
+if (SandstoneNamespace::IsInUse("Application.Pages") == false)
 {
-	NameSpace::UseDynamicApplicationPages();
+	SandstoneNamespace::UseDynamicApplicationPages();
 }
 
 //Load the EntityBase classes to support the actual data entity objects
-NameSpace::Using("Sandstone.Entity");
+SandstoneNamespace::Using("Sandstone.Entity");
 
 //Next, pull in any development namespaces that may exist (for local box development)
-Namespace::Using("Development.*");
+SandstoneNamespace::Using("Development.*");
 
 //If this application has any default namespaces it should use,
 //include them here

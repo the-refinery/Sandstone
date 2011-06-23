@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 Data Navigation Control Class File
 

@@ -6,7 +6,7 @@ SQL Exception Class File
 @subpackage Database
 */
 
-Namespace::Using("Sandstone.Exception");
+SandstoneNamespace::Using("Sandstone.Exception");
 
 class SQLexception extends DIexception
 {

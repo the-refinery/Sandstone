@@ -6,7 +6,7 @@ CreditCardType Class File
 @subpackage CreditCard
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class CreditCardType extends EntityBase
 {

@@ -6,10 +6,10 @@ Credit Card Class
 @subpackage CreditCard
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.Date");
-NameSpace::Using("Sandstone.Merchant");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Merchant");
 
 class CreditCard extends Module
 {

@@ -5,8 +5,8 @@ Action Class File
 @subpackage Action
 */
 
-NameSpace::Using("Sandstone.Email");
-NameSpace::Using("Sandstone.Email.Message");
+SandstoneNamespace::Using("Sandstone.Email");
+SandstoneNamespace::Using("Sandstone.Email.Message");
 
 class Action extends EntityBase
 {

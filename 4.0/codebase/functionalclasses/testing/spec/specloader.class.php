@@ -30,7 +30,7 @@ class SpecLoader extends Module
 		{
 			if ($SpecName == 'sandstone')
 			{
-				$basePath = Namespace::NamespaceEnviromentBase('sandstone');
+				$basePath = SandstoneNamespace::NamespaceEnviromentBase('sandstone');
 			}
 			else
 			{

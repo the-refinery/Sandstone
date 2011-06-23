@@ -25,28 +25,28 @@ class Namespace extends BaseSingleton
 
 	static public function Using($Namespace)
 	{
-		$ns = Namespace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$ns->ProcessUsing($Namespace);
 	}
 
 	static public function AutoLoad($ClassName)
 	{
-		$ns = Namespace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$ns->ProcessAutoLoad($ClassName);
 	}
 
 	static public function Display()
 	{
-		$ns = Namespace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$ns->ProcessDisplay();
 	}
 
 	static public function Classes()
 	{
-		$ns = Namespace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		return $ns->Classes;
 	}
@@ -136,5 +136,5 @@ class Namespace extends BaseSingleton
 
 function __autoload($ClassName)
 {
-	Namespace::AutoLoad($ClassName);
+	SandstoneNamespace::AutoLoad($ClassName);
 }

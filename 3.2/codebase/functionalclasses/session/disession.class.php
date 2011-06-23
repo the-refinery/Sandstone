@@ -6,7 +6,7 @@ Session Handler Class File
 @subpackage Session
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class DISession
 {

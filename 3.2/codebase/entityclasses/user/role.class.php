@@ -6,7 +6,7 @@ Role Class File
 @subpackage User
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Role extends EntityBase
 {

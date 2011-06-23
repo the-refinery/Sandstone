@@ -7,7 +7,7 @@
 
  */
 
-Namespace::Using("Sandstone.Merchant.CIM");
+SandstoneNamespace::Using("Sandstone.Merchant.CIM");
 
 class BaseCreditCardTransaction extends EntityBase
 {

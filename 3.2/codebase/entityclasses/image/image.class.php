@@ -5,9 +5,9 @@ Image Class File
 @subpackage Image
 */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.File");
-NameSpace::Using("Sandstone.AWS");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.AWS");
 
 class Image extends EntityBase
 {

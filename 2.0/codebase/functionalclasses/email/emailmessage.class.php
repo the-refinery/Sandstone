@@ -12,7 +12,7 @@
  * 
  */
 
-NameSpace::Using("Sandstone.Email");
+SandstoneNamespace::Using("Sandstone.Email");
 
 class EmailMessage extends Module
 {

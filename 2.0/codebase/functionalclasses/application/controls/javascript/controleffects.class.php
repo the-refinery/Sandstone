@@ -12,7 +12,7 @@
  *
  */
 
-NameSpace::Using("Sandstone.Utilities.Javascript");
+SandstoneNamespace::Using("Sandstone.Utilities.Javascript");
 
 class ControlEffects extends Module
 {

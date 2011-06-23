@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Testing");
+SandstoneNamespace::Using("Sandstone.Testing");
 
 class SpecPage extends BasePage
 {

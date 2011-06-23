@@ -1,8 +1,8 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
-NameSpace::Using("Sandstone.File");
-NameSpace::Using("Sandstone.Image");
+SandstoneNamespace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.Image");
 
 class ImagePage extends BasePage
 {

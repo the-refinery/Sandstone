@@ -6,7 +6,7 @@ Date Picker Control Class File
 @subpackage Application
 */
 
-NameSpace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Date");
 
 class DatePickerControl extends BaseControl
 {

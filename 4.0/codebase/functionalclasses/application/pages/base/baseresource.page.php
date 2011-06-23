@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.Application");
 
 class BaseResourcePage extends BasePage
 {

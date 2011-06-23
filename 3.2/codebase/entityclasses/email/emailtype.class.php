@@ -6,7 +6,7 @@ EmailType Class File
 @subpackage Email
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class EmailType extends EntityBase
 {

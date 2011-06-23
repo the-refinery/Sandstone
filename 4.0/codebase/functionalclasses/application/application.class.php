@@ -6,11 +6,11 @@ Application Class File
 @subpackage Application
  */
 
-Namespace::Using("Sandstone.Database");
-Namespace::Using("Sandstone.Routing");
-NameSpace::Using("Sandstone.SEO");
-NameSpace::Using("Sandstone.User");
-NameSpace::Using("Sandstone.Benchmark");
+SandstoneNamespace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Routing");
+SandstoneNamespace::Using("Sandstone.SEO");
+SandstoneNamespace::Using("Sandstone.User");
+SandstoneNamespace::Using("Sandstone.Benchmark");
 
 class Application extends Module
 {

@@ -12,8 +12,8 @@
  *
  */
 
-NameSpace::Using("Sandstone.Message");
-NameSpace::Using("Sandstone.Markdown");
+SandstoneNamespace::Using("Sandstone.Message");
+SandstoneNamespace::Using("Sandstone.Markdown");
 
 class MessagesControl extends BaseControl
 {

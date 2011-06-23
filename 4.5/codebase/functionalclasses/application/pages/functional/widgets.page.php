@@ -14,7 +14,7 @@ class WidgetsPage extends ApplicationPage
         
         $widgetClassName = strtolower($EventParameters['widgetname']) . "widget";
 
-        if (array_search($widgetClassName, Namespace::ClassNames()) === false)
+        if (array_search($widgetClassName, SandstoneNamespace::ClassNames()) === false)
         {
             $this->SetResponseCode(404, $EventParameters);
         }

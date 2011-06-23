@@ -1,7 +1,7 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
-NameSpace::Using("Sandstone.Knowledgebase");
+SandstoneNamespace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.Knowledgebase");
 
 class KnowledgebaseViewPage extends BasePage
 {

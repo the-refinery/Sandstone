@@ -6,7 +6,7 @@ SearchEntity Class File
 @subpackage Search
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class SearchEntity extends EntityBase
 {
