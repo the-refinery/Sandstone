@@ -6,7 +6,7 @@ Country Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Country extends CodeTableEntityBase
 {

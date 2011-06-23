@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Utilities.String");
+SandstoneNamespace::Using("Sandstone.Utilities.String");
 
 class UtilitiesSpec extends SpecBase
 {

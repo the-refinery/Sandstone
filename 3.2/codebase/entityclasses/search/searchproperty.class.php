@@ -5,7 +5,7 @@ SearchProperty Class File
 @subpackage Search
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class SearchProperty extends EntityBase
 {

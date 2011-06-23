@@ -6,7 +6,7 @@ Graphic Widget Class File
 @subpackage Application
 */
 
-Namespace::Using("Sandstone.Chart");
+SandstoneNamespace::Using("Sandstone.Chart");
 
 class GraphicWidget extends WidgetBase
 {

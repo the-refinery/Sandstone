@@ -6,7 +6,7 @@ Messages Class
 @subpackage Message
 */
 
-NameSpace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Database");
 
 class Messages extends Module
 {

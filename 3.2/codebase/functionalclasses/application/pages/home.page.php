@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.Application");
 
 class HomePage extends BasePage
 {
@@ -17,7 +17,7 @@ class HomePage extends BasePage
 		echo "<h2>Desigining Interactive's Sandstone Foundation successfully installed.<h2>";
 		echo "<h3>Currently Available Pages</h3>";
 
-		$pageList = NameSpace::PageNames();
+		$pageList = SandstoneNamespace::PageNames();
 		asort($pageList);
 
 		$appPagesOutput = "<h4>Application Pages</h4><ul>";
@@ -30,7 +30,7 @@ class HomePage extends BasePage
 
 			if ($pageName != "home")
 			{
-				$pageSpace = NameSpace::PageSpace($tempPage);
+				$pageSpace = SandstoneNamespace::PageSpace($tempPage);
 
 				if (substr($pageSpace, 0, 5) == pages)
 				{

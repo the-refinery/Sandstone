@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PrimitiveToString extends Service
 {

@@ -39,7 +39,7 @@ class NameSpace extends Module
 
 	static public function SetEnvironment($NameSpaceEnvironments)
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->SetupNameSpaceEnvironments($NameSpaceEnvironments);
 
@@ -49,7 +49,7 @@ class NameSpace extends Module
 	static public function Using($NameSpace)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->UseNameSpace($NameSpace);
 
@@ -59,7 +59,7 @@ class NameSpace extends Module
 
 	static public function AddFiles($FileList)
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->IncludeNameSpaceFiles($FileList);
 
@@ -69,7 +69,7 @@ class NameSpace extends Module
 	static public function AutoLoad($ClassName)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->RequireClassFile($ClassName);
 
@@ -80,7 +80,7 @@ class NameSpace extends Module
 	static public function Display()
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$ns->ShowDisplay();
 

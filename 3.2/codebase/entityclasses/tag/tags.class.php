@@ -6,7 +6,7 @@ Tags Class File
 @subpackage Tag
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Tags extends CollectiveBase
 {

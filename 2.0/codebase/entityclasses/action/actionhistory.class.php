@@ -12,7 +12,7 @@
  *
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class ActionHistory extends Module
 {

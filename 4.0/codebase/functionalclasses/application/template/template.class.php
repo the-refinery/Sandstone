@@ -668,7 +668,7 @@ class Template extends Module
     }
 
     //Now add the path for the application, sandstone and any used top level namespaces
-    $returnValue .= Namespace::TemplateSearchPath();
+    $returnValue .= SandstoneNamespace::TemplateSearchPath();
 
     //If we have some additional path, add it to the end
     if (is_set($this->_additionalTemplatePath))

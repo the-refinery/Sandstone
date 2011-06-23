@@ -4,7 +4,7 @@ class NamespaceSpec extends DescribeBehavior
 {
 	public function ItShouldIncludeClasses()
 	{
-		Namespace::Using("lib.namespace.spec.utility");
+		SandstoneNamespace::Using("lib.namespace.spec.utility");
 
 		$condition = class_exists("NamespaceTest") && class_exists("NamespaceTest2");
 
@@ -13,7 +13,7 @@ class NamespaceSpec extends DescribeBehavior
 
 	public function ItShouldLazyLoadClass()
 	{
-		Namespace::Using("lib.namespace.spec.utility");
+		SandstoneNamespace::Using("lib.namespace.spec.utility");
 
 		$condition = false;
 		$before = class_exists("NamespaceLoadTest", false);
@@ -29,8 +29,8 @@ class NamespaceSpec extends DescribeBehavior
 
 	public function ItShouldAllowNamespacesToBeUsedMultipleTimes()
 	{
-		Namespace::Using("lib.namespace.spec.utility");
-		Namespace::Using("lib.namespace.spec.utility");
+		SandstoneNamespace::Using("lib.namespace.spec.utility");
+		SandstoneNamespace::Using("lib.namespace.spec.utility");
 
 		$condition = class_exists("NamespaceTest");
 
@@ -39,14 +39,14 @@ class NamespaceSpec extends DescribeBehavior
 
 	public function ItShouldIncludeWildcardNamespaces()
 	{
-		Namespace::Using("lib.namespace.spec.utility.wildcard.*");
+		SandstoneNamespace::Using("lib.namespace.spec.utility.wildcard.*");
 
 		return $this->Expects(class_exists("WildcardTest"))->ToBeEqualTo(true);
 	}
 
 	public function ItShouldOverwriteClassDefinitions()
 	{
-		Namespace::Using("lib.namespace.spec.utility.override");
+		SandstoneNamespace::Using("lib.namespace.spec.utility.override");
 
 		$test = new OverrideTest();
 
@@ -55,9 +55,9 @@ class NamespaceSpec extends DescribeBehavior
 
 	public function ItShouldGiveAListOfIncludedClasses()
 	{
-		Namespace::Using("lib.namespace.spec.utility");
+		SandstoneNamespace::Using("lib.namespace.spec.utility");
 
-		return $this->Expects(Namespace::Classes())->ToContain("wildcardtest");
+		return $this->Expects(SandstoneNamespace::Classes())->ToContain("wildcardtest");
 	}
 }
 

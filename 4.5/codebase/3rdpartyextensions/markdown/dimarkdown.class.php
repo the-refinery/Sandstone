@@ -6,8 +6,8 @@ DImarkDown Class File
 @subpackage 3rdPartyExtenstions
  */
 
-Namespace::Using("Sandstone.Image");
-Namespace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.Image");
+SandstoneNamespace::Using("Sandstone.File");
 
 class DImarkDown extends Module
 {

@@ -12,8 +12,8 @@
  * 
  */
 
-NameSpace::Using("Sandstone.SEO");
-NameSpace::Using("Sandstone.User");
+SandstoneNamespace::Using("Sandstone.SEO");
+SandstoneNamespace::Using("Sandstone.User");
 
 class Application extends Module
 {
@@ -33,7 +33,7 @@ class Application extends Module
 		//pages.
 		if (file_exists("namespaces/application.pages.ns"))
 		{
-			NameSpace::Using("Application.Pages");	
+			SandstoneNamespace::Using("Application.Pages");	
 		}
 		else 
 		{
@@ -654,7 +654,7 @@ class Application extends Module
 	{
 		$fileList = glob("pages/*.page.php");
 		
-		NameSpace::AddFiles($fileList);
+		SandstoneNamespace::AddFiles($fileList);
 		
 	}
 	

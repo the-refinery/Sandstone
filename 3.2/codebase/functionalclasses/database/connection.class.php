@@ -1,7 +1,7 @@
 <?php
 
-Namespace::Using("Sandstone.Date");
-Namespace::Using("Sandstone.Exception");
+SandstoneNamespace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.Exception");
 
 class Connection extends Module
 {

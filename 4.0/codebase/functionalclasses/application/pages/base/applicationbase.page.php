@@ -1,8 +1,8 @@
 <?php 
 
-NameSpace::Using("Sandstone.Application");
-Namespace::Using("Sandstone.Lookup");
-Namespace::Using("Sandstone.Utilities.String");
+SandstoneNamespace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.Lookup");
+SandstoneNamespace::Using("Sandstone.Utilities.String");
 
 class ApplicationBasePage extends BasePage
 {

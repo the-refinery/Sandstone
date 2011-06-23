@@ -6,7 +6,7 @@ ActionEmailNotification Class File
 @subpackage Action
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class ActionNotification extends EntityBase
 {

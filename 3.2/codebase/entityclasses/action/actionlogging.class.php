@@ -6,7 +6,7 @@ ActionLogging Class File
 @subpackage Action
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class ActionLogging extends EntityBase
 {

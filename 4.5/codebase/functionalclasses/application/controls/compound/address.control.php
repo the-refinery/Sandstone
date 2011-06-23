@@ -6,8 +6,8 @@ Address Control Class File
 @subpackage Application
 */
 
-Namespace::Using("Sandstone.Utilities.String");
-Namespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Utilities.String");
+SandstoneNamespace::Using("Sandstone.Address");
 
 class AddressControl extends BaseControl
 {

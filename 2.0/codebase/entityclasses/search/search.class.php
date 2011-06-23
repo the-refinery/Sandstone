@@ -266,7 +266,7 @@ class Search extends Module
     {
 
 		//Make sure we have the necessary namespace in use
-		Namespace::Using($CurrentType->RequiredNamespace);
+		SandstoneNamespace::Using($CurrentType->RequiredNamespace);
 
 		//Since we have a dynamic class name, we have to build the
 		//search statement then eval it.

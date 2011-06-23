@@ -1,6 +1,6 @@
 <?php
 
-Namespace::Using("Sandstone.Utilities.Conditional");
+SandstoneNamespace::Using("Sandstone.Utilities.Conditional");
 
 class ConditionalSpec extends SpecBase
 {

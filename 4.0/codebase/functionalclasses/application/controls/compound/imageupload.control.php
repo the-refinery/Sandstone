@@ -6,9 +6,9 @@ Image Upload Control Class File
 @subpackage Application
 */
 
-NameSpace::Using("Sandstone.Action");
-NameSpace::Using("Sandstone.File");
-NameSpace::Using("Sandstone.Image");
+SandstoneNamespace::Using("Sandstone.Action");
+SandstoneNamespace::Using("Sandstone.File");
+SandstoneNamespace::Using("Sandstone.Image");
 
 class ImageUploadControl extends FileUploadControl
 {

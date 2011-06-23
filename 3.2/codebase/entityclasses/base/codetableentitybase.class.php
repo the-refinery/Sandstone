@@ -6,8 +6,8 @@ CodeTables Entity Base Class File
 @subpackage EntityBase
 */
 
-NameSpace::Using("Sandstone.Tag");
-NameSpace::Using("Sandstone.Message");
+SandstoneNamespace::Using("Sandstone.Tag");
+SandstoneNamespace::Using("Sandstone.Message");
 
 class CodeTableEntityBase extends EntityBase
 {

@@ -13,8 +13,8 @@
  *
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.User");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.User");
 
 class Message extends Module
 {

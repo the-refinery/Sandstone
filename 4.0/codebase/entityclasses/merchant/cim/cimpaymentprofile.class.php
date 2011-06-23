@@ -6,7 +6,7 @@ CIM Payment Profile Class File
 @subpackage Merchant
  */
 
-Namespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Address");
 
 class CIMpaymentProfile extends CIMbase
 {

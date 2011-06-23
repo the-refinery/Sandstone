@@ -6,7 +6,7 @@ Registry Class
 @subpackage Registry
 */
 
-NameSpace::Using("Sandstone.Utilities.XML");
+SandstoneNamespace::Using("Sandstone.Utilities.XML");
 
 class Registry
 {

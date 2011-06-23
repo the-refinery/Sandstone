@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Message");
+SandstoneNamespace::Using("Sandstone.Message");
 
 class MessageBasePage extends ApplicationPage
 {

@@ -6,9 +6,9 @@ LinkPoint Processor Class
 @subpackage Merchant
 */
 
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.CreditCard");
-NameSpace::Using("Sandstone.Utilities.XML");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.Utilities.XML");
 
 class LinkPointProcessor extends ProcessorBase
 {

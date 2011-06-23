@@ -6,11 +6,11 @@ Entity Base Class File
 @subpackage EntityBase
 */
 
-NameSpace::Using("Sandstone.Database");
-NameSpace::Using("Sandstone.Lookup");
-NameSpace::Using("Sandstone.Message");
-NameSpace::Using("Sandstone.ObjectSet");
-NameSpace::Using("Sandstone.Tag");
+SandstoneNamespace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Lookup");
+SandstoneNamespace::Using("Sandstone.Message");
+SandstoneNamespace::Using("Sandstone.ObjectSet");
+SandstoneNamespace::Using("Sandstone.Tag");
 
 define("PROPERTY_READ_WRITE", 0);
 define("PROPERTY_READ_ONLY", 1);

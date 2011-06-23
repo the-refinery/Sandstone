@@ -6,7 +6,7 @@ Files Collective Class
 @subpackage File
 */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class Files extends CollectiveBase
 {

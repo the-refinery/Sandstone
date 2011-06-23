@@ -13,9 +13,9 @@
  * 
  */
 
-NameSpace::Using("Sandstone.ADOdb");
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.Date");
+SandstoneNamespace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Date");
 
 class CreditCardTransaction extends Module
 {

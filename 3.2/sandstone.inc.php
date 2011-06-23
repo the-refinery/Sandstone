@@ -30,7 +30,7 @@ require("codebase/functionalclasses/utilities/file.func.php");
 //class files as needed from the Namespaces.  This gives a major performance increase.
 function __autoload($ClassName)
 {	
-	NameSpace::AutoLoad($ClassName);
+	SandstoneNamespace::AutoLoad($ClassName);
 }
 
 ?>

@@ -6,7 +6,7 @@ Search Class File
 @subpackage Search
 */
 
-Namespace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Database");
 
 class Search extends Module
 {

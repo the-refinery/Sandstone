@@ -6,9 +6,9 @@ BilledLicense Class File
 @subpackage License
  */
 
-Namespace::Using("Sandstone.Address");
-Namespace::Using("Sandstone.Email");
-Namespace::Using("Sandstone.Merchant.CIM");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.Email");
+SandstoneNamespace::Using("Sandstone.Merchant.CIM");
 
 class BilledLicense extends BaseLicense
 {

@@ -6,8 +6,8 @@ PayPal Processor Class
 @subpackage Merchant
 */
 
-NameSpace::Using("Sandstone.Address");
-NameSpace::Using("Sandstone.CreditCard");
+SandstoneNamespace::Using("Sandstone.Address");
+SandstoneNamespace::Using("Sandstone.CreditCard");
 
 class PayPalProcessor extends MerchantAccountProcessor
 {

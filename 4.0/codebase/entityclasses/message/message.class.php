@@ -6,7 +6,7 @@ Message Class File
 @subpackage Message
 */
 
-NameSpace::Using("Sandstone.User");
+SandstoneNamespace::Using("Sandstone.User");
 
 class Message extends EntityBase
 {

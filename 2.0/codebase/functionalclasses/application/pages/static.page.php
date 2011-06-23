@@ -1,6 +1,6 @@
 <?php
 
-NameSpace::Using("Sandstone.Application");
+SandstoneNamespace::Using("Sandstone.Application");
 
 /* This page is used for displaying templates with no functionality, just static content */
 class StaticPage extends BasePage

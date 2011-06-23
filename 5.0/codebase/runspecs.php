@@ -4,7 +4,7 @@ include_once('setupspecs.php');
 
 $SpecRunner = new RunSpecsInBash();
 
-$classes = Namespace::Classes();
+$classes = SandstoneNamespace::Classes();
 foreach ($classes as $tempClass)
 {
 	if (strlen($tempClass) - stripos($tempClass,'spec') == 4)

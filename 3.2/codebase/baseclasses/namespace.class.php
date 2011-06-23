@@ -39,7 +39,7 @@ class NameSpace extends Module
 
 	static public function SetEnvironment($NameSpaceEnvironments)
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->SetupNameSpaceEnvironments($NameSpaceEnvironments);
 
@@ -49,7 +49,7 @@ class NameSpace extends Module
 	static public function Using($NameSpace)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->UseNameSpace($NameSpace);
 
@@ -59,7 +59,7 @@ class NameSpace extends Module
 
 	static public function AddFiles($FileList)
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->IncludeNameSpaceFiles($FileList);
 
@@ -69,7 +69,7 @@ class NameSpace extends Module
 	static public function AutoLoad($ClassName)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->RequireClassFile($ClassName);
 
@@ -79,7 +79,7 @@ class NameSpace extends Module
 
 	static public function PageSpace($PageClassName)
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetPageSpace($PageClassName);
 
@@ -89,7 +89,7 @@ class NameSpace extends Module
 	static public function IsInUse($NameSpace)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetIsInUse($NameSpace);
 
@@ -98,7 +98,7 @@ class NameSpace extends Module
 
 	static public function UseDynamicApplicationPages()
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->ProcessDynamicApplicationPages();
 
@@ -108,7 +108,7 @@ class NameSpace extends Module
 	static public function Display()
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$ns->ShowDisplay();
 
@@ -116,7 +116,7 @@ class NameSpace extends Module
 
 	static public function ClassNames()
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetClassNames();
 
@@ -125,7 +125,7 @@ class NameSpace extends Module
 
 	static public function PageNames()
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetPageNames();
 
@@ -134,7 +134,7 @@ class NameSpace extends Module
 
 	static public function ControlNames()
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetControlNames();
 
@@ -144,7 +144,7 @@ class NameSpace extends Module
 	static public function NamespaceEnviromentBase($NameSpace)
 	{
 
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetNamespaceEnviromentBase($NameSpace);
 
@@ -154,7 +154,7 @@ class NameSpace extends Module
 
 	static public function TemplateSearchPath()
 	{
-		$ns = NameSpace::Instance();
+		$ns = SandstoneNamespace::Instance();
 
 		$returnValue = $ns->GetTemplateSearchPath();
 

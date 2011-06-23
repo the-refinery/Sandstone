@@ -6,7 +6,7 @@ Action View Control Class File
 @subpackage Application
 */
 
-Namespace::Using("Sandstone.Database");
+SandstoneNamespace::Using("Sandstone.Database");
 
 class ActionViewControl extends BaseControl
 {

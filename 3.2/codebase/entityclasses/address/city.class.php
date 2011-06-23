@@ -6,7 +6,7 @@ City Class File
 @subpackage Address
  */
 
-NameSpace::Using("Sandstone.ADOdb");
+SandstoneNamespace::Using("Sandstone.ADOdb");
 
 class City extends CodeTableEntityBase
 {
