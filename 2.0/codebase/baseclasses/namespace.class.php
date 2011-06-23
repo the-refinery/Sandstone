@@ -12,7 +12,7 @@
  *
  */
 
-class NameSpace extends Module
+class SandstoneNamespace extends Module
 {
 
 	protected $_includedFiles = Array();
@@ -31,7 +31,7 @@ class NameSpace extends Module
 
 		if (isset($nameSpace) == false)
 		{
-			$nameSpace = new NameSpace();
+			$nameSpace = new SandstoneNamespace();
 		}
 
 		return $nameSpace;
