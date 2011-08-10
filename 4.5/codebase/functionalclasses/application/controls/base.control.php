@@ -478,7 +478,7 @@ class BaseControl extends ControlContainer
 		//Is there a value for the current name?
 		if (is_set($this->_eventParameters[strtolower($this->Name)]))
 		{
-			if (strlen($this->_eventParameters[strtolower($this->Name)])> 0)
+			if (is_array($this->_eventParameters[strtolower($this->Name)]) || strlen($this->_eventParameters[strtolower($this->Name)])> 0)
 			{
 				$this->_value = DIunescape($this->_eventParameters[strtolower($this->Name)]);
 			}
