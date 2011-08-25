@@ -109,7 +109,7 @@ class s3
 		// get with "pear install Crypt_HMAC"
 		require_once 'Crypt/HMAC.php';
 
-		$this->hasher =& new Crypt_HMAC(Application::Registry()->AWSsecretAccessKey, "sha1");
+		$this->hasher = new Crypt_HMAC(Application::Registry()->AWSsecretAccessKey, "sha1");
 
 		// REQUIRES PEAR PACKAGE
 		// get with "pear install --onlyreqdeps HTTP_Request"
@@ -270,7 +270,7 @@ class s3
 
 		$this->debug_text("HTTP Request sent to: " . $this->S3_URL . $resource . $paramstring);
 
-		$req =& new HTTP_Request($this->S3_URL . $resource . $paramstring);
+		$req = new HTTP_Request($this->S3_URL . $resource . $paramstring);
 		$req->setMethod($verb);
 
 		if (($objectdata != NULL) && ($objectdata != "")) {
