@@ -2,14 +2,14 @@
 
 class Code39barcode extends BarCodeBase
 {
-  public function __construct()
+  public function __construct($InitialParameterValues)
   {
 
     $this->_typeName = "Code 39";
 
     $this->_allowedCharactersString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 
-    parent::__construct();
+    parent::__construct($InitialParameterValues);
   }
 
   protected function SetupCharacterCodesArray()

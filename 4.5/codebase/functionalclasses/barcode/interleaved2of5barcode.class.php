@@ -2,14 +2,14 @@
 
 class Interleaved2of5barcode extends BarCodeBase
 {
-  public function __construct()
+  public function __construct($InitialPropertyValues)
   {
 
     $this->_typeName = "Interleaved 2 of 5";
 
     $this->_allowedCharactersString = "0123456789";
 
-    parent::__construct();
+    parent::__construct($InitialPropertyValues);
   }
 
   protected function SetupCharacterCodesArray()

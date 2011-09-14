@@ -22,41 +22,13 @@ class BarcodePage extends BasePage
 
     if (is_set($className) && $isFileTypeValid && strlen($EventParameters['value']) > 0)
     {
-      $this->SetupBarcodeObject($className, $EventParameters);
+      $this->_barcode = new $className ($EventParameters);
       $this->_value = $EventParameters['value'];
     }
     else
     {
       $EventParameters['filetype'] = "htm";
       $EventParameters['help'] = true;
-    }
-  }
-
-  protected function SetupBarcodeObject($className, $EventParameters)
-  {
-    $this->_barcode = new $className ();
-    $this->_barcode->Width = $EventParameters['width'];
-    $this->_barcode->Height = $EventParameters['height'];
-    $this->_barcode->Resolution = $EventParameters['resolution'];
-
-    if (is_set($EventParameters['istextdrawn']))
-    {
-      $this->_barcode->IsTextDrawn = true;
-
-      if (is_set($EventParameters['textsize']))
-      {
-        $this->_barcode->FontSize = $EventParameters['textsize'];
-      }
-    }
-
-    if (is_set($EventParameters['isborderdrawn']))
-    {
-      $this->_barcode->IsBorderDrawn = true;
-    }
-
-    if (is_set($EventParameters['isreversecolor']))
-    {
-      $this->_barcode->IsReverseColor = true;
     }
   }
 

@@ -42,7 +42,7 @@ class BarCodeBase extends Module
 
   protected $_characterCodes;
 
-  public function __construct()
+  public function __construct($InitialPropertyValues = Array())
   {
 
     $this->_width = self::DEFAULT_WIDTH;
@@ -56,11 +56,45 @@ class BarCodeBase extends Module
     $this->_isTextDrawn = false;
     $this->_fontSize = self::DEFAULT_FONT_SIZE;
 
+    $this->ProcessInitialPropertyValues($InitialPropertyValues);
+
     //Setup our valid characters array
     $this->_validCharacters = str_split($this->_allowedCharactersString);
 
     $this->SetupCharacterCodesArray();
 
+  }
+
+  protected function ProcessInitialPropertyValues($Values)
+  {
+    $this->SetPropertyValueFromArray("width", $Values);
+    $this->SetPropertyValueFromArray("height", $Values);
+    $this->SetPropertyValueFromArray("resolution", $Values);
+
+    $this->SetBooleanPropertyValueFromArray("isBorderDrawn", $Values);
+    $this->SetBooleanPropertyValueFromArray("isTransparent", $Values);
+    $this->SetBooleanPropertyValueFromArray("isReverseColor", $Values);
+
+    $this->SetBooleanPropertyValueFromArray("isTextDrawn", $Values);
+    $this->SetPropertyValueFromArray("fontSize", $Values);
+  }
+
+  protected function SetPropertyValueFromArray($Key, $Array)
+  {
+    if (is_set($Array[strtolower($Key)]))
+    {
+      $propertyName = "_" . $Key;
+      $this->$propertyName = $Array[strtolower($Key)];
+    }
+  }
+
+  protected function SetBooleanPropertyValueFromArray($Key, $Array)
+  {
+    if (is_set($Array[strtolower($Key)]))
+    {
+      $propertyName = "_" . $Key;
+      $this->$propertyName = $Array[strtolower($Key)];
+    }
   }
 
   public function Destroy()
@@ -161,17 +195,24 @@ class BarCodeBase extends Module
 
   public function setFontSize($Value)
   {
-    if ($Value < 1)
+    if (is_set($Value))
     {
-      $this->_fontSize = 1;
-    }
-    else if ($Value > 5)
-    {
-      $this->_fontSize = 5;
+      if ($Value < 1)
+      {
+        $this->_fontSize = 1;
+      }
+      else if ($Value > 5)
+      {
+        $this->_fontSize = 5;
+      }
+      else
+      {
+        $this->_fontSize = $Value;
+      }
     }
     else
     {
-      $this->_fontSize = $Value;
+      $this->_fontSize = self::DEFAULT_FONT_SIZE;
     }
   }
 

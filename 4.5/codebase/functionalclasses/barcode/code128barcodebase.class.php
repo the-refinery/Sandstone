@@ -8,9 +8,9 @@ class Code128barcodeBase extends BarCodeBase
   protected $_startCode;
   protected $_endCode;
 
-  public function __construct()
+  public function __construct($InitialPropertyValues)
   {
-    parent::__construct();
+    parent::__construct($InitialPropertyValues);
 
     $this->_endCode = Array(2,3,3,1,1,1,2);
   }

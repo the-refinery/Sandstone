@@ -3,7 +3,7 @@
 class Code128Cbarcode extends Code128barcodeBase
 {
 
-  public function __construct()
+  public function __construct($InitialPropertyValues)
   {
     $this->_typeName = "Code 128-C";
 
@@ -12,7 +12,7 @@ class Code128Cbarcode extends Code128barcodeBase
     $this->_checkCodeSumStart = 105;
     $this->_startCode = Array(2,1,1,2,3,2);
 
-    parent::__construct();
+    parent::__construct($InitialPropertyValues);
   }
 
   protected function CalculateCodeForCharacter($Character)
