@@ -1,4 +1,5 @@
 codebase/functionalclasses/barcode/barcodebase.class.php
+codebase/functionalclasses/barcode/simplebarcodebase.class.php
 codebase/functionalclasses/barcode/code39barcode.class.php
 codebase/functionalclasses/barcode/code128barcodebase.class.php
 codebase/functionalclasses/barcode/code128abarcode.class.php

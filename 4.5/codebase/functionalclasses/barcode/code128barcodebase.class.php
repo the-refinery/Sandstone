@@ -1,6 +1,6 @@
 <?php
 
-class Code128barcodeBase extends BarCodeBase
+class Code128barcodeBase extends SimpleBarCodeBase
 {
   protected $_checkCodeSumStart;
   protected $_checkCode;

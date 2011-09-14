@@ -1,6 +1,6 @@
 <?php
 
-class Interleaved2of5barcode extends BarCodeBase
+class Interleaved2of5barcode extends SimpleBarCodeBase
 {
   public function __construct($InitialPropertyValues)
   {

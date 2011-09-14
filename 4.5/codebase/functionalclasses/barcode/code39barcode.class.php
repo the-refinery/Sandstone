@@ -1,6 +1,6 @@
 <?php
 
-class Code39barcode extends BarCodeBase
+class Code39barcode extends SimpleBarCodeBase
 {
   public function __construct($InitialParameterValues)
   {
