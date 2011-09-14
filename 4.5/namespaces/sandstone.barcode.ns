@@ -5,3 +5,4 @@ codebase/functionalclasses/barcode/code128abarcode.class.php
 codebase/functionalclasses/barcode/code128bbarcode.class.php
 codebase/functionalclasses/barcode/code128cbarcode.class.php
 codebase/functionalclasses/barcode/interleaved2of5barcode.class.php
+codebase/functionalclasses/barcode/qrcodebarcode.class.php
