@@ -3,7 +3,7 @@
 class QRcodeBarcode extends BarCodeBase
 {
 
-  protected $_level;
+  protected $_eccLevel;
   protected $_size;
   protected $_margin;
 
@@ -17,21 +17,21 @@ class QRcodeBarcode extends BarCodeBase
 
   protected function SetupPropertyDefaults()
   {
-    $this->_level = QR_ECLEVEL_L;
+    $this->_eccLevel = QR_ECLEVEL_L;
     $this->_size = 3;
     $this->_margin = 4;
   }
 
   protected function ProcessInitialPropertyValues($Values)
   {
-    $this->SetPropertyValueFromArray("level", $Values);
+    $this->SetPropertyValueFromArray("eccLevel", $Values);
     $this->SetPropertyValueFromArray("size", $Values);
     $this->SetPropertyValueFromArray("margin", $Values);
   }
 
   public function GenerateBarcode($Value)
   {
-    $enc = QRencode::factory($this->_level, $this->_size, $this->_margin);
+    $enc = QRencode::factory($this->_eccLevel, $this->_size, $this->_margin);
     $this->_image = $enc->encodeRawImage($Value);
 
     return $this->_image;
