@@ -2,14 +2,13 @@
 
 class QRcodeBarcode extends BarCodeBase
 {
-  public function __construct($Width = null, $Height = null, $Resolution = null)
+  public function __construct()
   {
-
     $this->_typeName = "QR Code";
 
     $this->_allowedCharactersString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
 
-    parent::__construct($Width, $Height, $Resolution);
+    parent::__construct();
   }
 
   protected function SetupCharacterCodesArray()

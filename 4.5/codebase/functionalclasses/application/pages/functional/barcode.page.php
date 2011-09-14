@@ -15,6 +15,53 @@ class BarcodePage extends BasePage
   protected function Generic_PreProcessor(&$EventParameters)
   {
 
+    $this->SetupCallbackParameters($EventParameters);
+
+    $className = $this->DetermineBarcodeClass($EventParameters['type']);
+    $isFileTypeValid = $this->ValidateFileType($EventParameters['filetype']);
+
+    if (is_set($className) && $isFileTypeValid && strlen($EventParameters['value']) > 0)
+    {
+      $this->SetupBarcodeObject($className, $EventParameters);
+      $this->_value = $EventParameters['value'];
+    }
+    else
+    {
+      $EventParameters['filetype'] = "htm";
+      $EventParameters['help'] = true;
+    }
+  }
+
+  protected function SetupBarcodeObject($className, $EventParameters)
+  {
+    $this->_barcode = new $className ();
+    $this->_barcode->Width = $EventParameters['width'];
+    $this->_barcode->Height = $EventParameters['height'];
+    $this->_barcode->Resolution = $EventParameters['resolution'];
+
+    if (is_set($EventParameters['istextdrawn']))
+    {
+      $this->_barcode->IsTextDrawn = true;
+
+      if (is_set($EventParameters['textsize']))
+      {
+        $this->_barcode->FontSize = $EventParameters['textsize'];
+      }
+    }
+
+    if (is_set($EventParameters['isborderdrawn']))
+    {
+      $this->_barcode->IsBorderDrawn = true;
+    }
+
+    if (is_set($EventParameters['isreversecolor']))
+    {
+      $this->_barcode->IsReverseColor = true;
+    }
+  }
+
+  protected function SetupCallbackParameters($EventParameters)
+  {
     $this->_callbackQueryParms = Array();
 
     if (is_set($EventParameters['width']))
@@ -35,46 +82,26 @@ class BarcodePage extends BasePage
       $this->_callbackQueryParms[] = "resolution={$resolution}";
     }
 
-    $className = $this->DetermineBarcodeClass($EventParameters['type']);
-    $isFileTypeValid = $this->ValidateFileType($EventParameters['filetype']);
-
-    if (is_set($className) && $isFileTypeValid && strlen($EventParameters['value']) > 0)
+    if (is_set($EventParameters['istextdrawn']))
     {
-      //Setup the barcode object
-      $this->_barcode = new $className ($width, $height, $resolution);
+      $this->_callbackQueryParms[] = "istextdrawn=1";
 
-      if (is_set($EventParameters['istextdrawn']))
+      if (is_set($EventParameters['textsize']))
       {
-        $this->_barcode->IsTextDrawn = true;
-        $this->_callbackQueryParms[] = "istextdrawn=1";
-
-        if (is_set($EventParameters['textsize']))
-        {
-          $this->_barcode->FontSize = $EventParameters['textsize'];
-          $this->_callbackQueryParms[] = "textsize={$EventParameters['textsize']}";
-        }
+        $this->_callbackQueryParms[] = "textsize={$EventParameters['textsize']}";
       }
-
-      if (is_set($EventParameters['isborderdrawn']))
-      {
-        $this->_barcode->IsBorderDrawn = true;
-        $this->_callbackQueryParms[] = "isborderdrawn=1";
-      }
-
-      if (is_set($EventParameters['isreversecolor']))
-      {
-        $this->_barcode->IsReverseColor = true;
-        $this->_callbackQueryParms[] = "isreversecolor=1";
-      }
-
-      $this->_value = $EventParameters['value'];
-
     }
-    else
+
+    if (is_set($EventParameters['isborderdrawn']))
     {
-      $EventParameters['filetype'] = "htm";
-      $EventParameters['help'] = true;
+      $this->_callbackQueryParms[] = "isborderdrawn=1";
     }
+
+    if (is_set($EventParameters['isreversecolor']))
+    {
+      $this->_callbackQueryParms[] = "isreversecolor=1";
+    }
+
   }
 
   protected function DetermineBarcodeClass($TypeCode)
@@ -195,5 +222,4 @@ class BarcodePage extends BasePage
     }
 
   }
-
 }
