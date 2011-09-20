@@ -19,7 +19,7 @@ class QRcodeBarcode extends BarCodeBase
   {
     $this->_eccLevel = QR_ECLEVEL_L;
     $this->_size = 3;
-    $this->_margin = 4;
+    $this->_margin = 0;
   }
 
   protected function ProcessInitialPropertyValues($Values)
