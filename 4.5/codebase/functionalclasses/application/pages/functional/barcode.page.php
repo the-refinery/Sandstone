@@ -170,10 +170,10 @@ class BarcodePage extends BasePage
     if ($EventParameters['help'])
     {
       $this->_template->FileName = "barcode_help";
-      $this->_template->DefaultWidth = BarCodeBase::DEFAULT_WIDTH;
-      $this->_template->DefaultHeight = BarCodeBase::DEFAULT_HEIGHT;
-      $this->_template->DefaultResolution = BarCodeBase::DEFAULT_RESOLUTION;
-      $this->_template->DefaultTextSize = BarCodeBase::DEFAULT_FONT_SIZE;
+      $this->_template->DefaultWidth = SimpleBarCodeBase::DEFAULT_WIDTH;
+      $this->_template->DefaultHeight = SimpleBarCodeBase::DEFAULT_HEIGHT;
+      $this->_template->DefaultResolution = SimpleBarCodeBase::DEFAULT_RESOLUTION;
+      $this->_template->DefaultTextSize = SimpleBarCodeBase::DEFAULT_FONT_SIZE;
     }
     else
     {
