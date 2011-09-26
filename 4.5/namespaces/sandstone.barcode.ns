@@ -1,7 +1,9 @@
 codebase/functionalclasses/barcode/barcodebase.class.php
+codebase/functionalclasses/barcode/simplebarcodebase.class.php
 codebase/functionalclasses/barcode/code39barcode.class.php
 codebase/functionalclasses/barcode/code128barcodebase.class.php
 codebase/functionalclasses/barcode/code128abarcode.class.php
 codebase/functionalclasses/barcode/code128bbarcode.class.php
 codebase/functionalclasses/barcode/code128cbarcode.class.php
 codebase/functionalclasses/barcode/interleaved2of5barcode.class.php
+codebase/functionalclasses/barcode/qrcodebarcode.class.php
